@@ -1,0 +1,19 @@
+{
+  "NavBar": {
+    "login": "Log in",
+    "alerts": "Alerts",
+    "listings": "Listings",
+    "newListing": "New Listing",
+    "myListings": "My Listings",
+    "messages": "Messages",
+    "accountSettings": "Settings",
+    "logOut": "Log Out",
+    "youHaveANewMessage": "You have a new message",
+    "bookmarkedListings": "My Favorites",
+    "test": "Listing details",
+    "language": {
+      "english": "English",
+      "norwegian": "Norwegian"
+    }
+  }
+}

@@ -1,0 +1,53 @@
+image: node:18
+
+stages:
+  - install
+  - build
+  - test
+
+install:
+  stage: install
+  script:
+    - npm ci
+  cache:
+    key: ${CI_COMMIT_REF_SLUG}
+    paths:
+      - node_modules/
+  artifacts:
+    paths:
+      - node_modules/
+
+build:
+  stage: build
+  dependencies:
+    - install
+  script:
+    - npm run build
+  artifacts:
+    paths:
+      - dist/
+
+unit:
+  stage: test
+  dependencies:
+    - install
+  script:
+    - npm run test:unit
+
+e2e:
+  stage: test
+  image: cypress/browsers:node18.12.0-chrome106-ff106
+  dependencies:
+    - install
+  script:
+    - npx cypress install
+    - npm run test:e2e
+  artifacts:
+    when: always
+    paths:
+      - cypress/videos/
+      - cypress/screenshots/
+  cache:
+    key: ${CI_COMMIT_REF_SLUG}
+    paths:
+      - /root/.cache/Cypress

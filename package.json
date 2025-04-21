@@ -1,0 +1,33 @@
+{
+  "name": "idatt2106-v25-01-frontend",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "test:unit": "vitest run",
+    "test:e2e": "start-server-and-test 'vite --host' http://localhost:5173 'cypress run --e2e'"
+  },
+  "dependencies": {
+    "axios": "^1.8.4",
+    "pinia": "^3.0.2",
+    "pinia-plugin-persistedstate": "^4.2.0",
+    "vue": "^3.5.13",
+    "vue-i18n": "^11.1.3",
+    "vue-router": "^4.5.0"
+  },
+  "devDependencies": {
+    "@pinia/testing": "^1.0.1",
+    "@vitejs/plugin-vue": "^5.2.3",
+    "@vitest/coverage-v8": "^3.1.2",
+    "@vue/test-utils": "^2.4.6",
+    "cypress": "^14.3.1",
+    "jsdom": "^26.1.0",
+    "start-server-and-test": "^2.0.11",
+    "vite": "^6.2.4",
+    "vite-plugin-vue-devtools": "^7.7.2",
+    "vitest": "^3.1.2"
+  }
+}
