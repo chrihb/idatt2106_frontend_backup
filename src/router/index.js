@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import Base from "@/views/Base.vue";
 import HomeView from "@/views/HomeView.vue";
+import EmergencyStorage from "@/views/EmergencyStorage.vue";
 
 const BASE_URL = import.meta.env.BASE_URL;
 
@@ -11,6 +12,7 @@ const router = createRouter({
             path: "/", component: Base,
             children: [
                 { path: "", component: HomeView },
+                { path: "emergency-storage", component: EmergencyStorage },
             ],
         },
     ],
