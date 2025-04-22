@@ -11,11 +11,10 @@
     "test:e2e": "start-server-and-test 'vite --host' http://localhost:5173 'cypress run --e2e'"
   },
   "dependencies": {
-    "@tailwindcss/postcss": "^4.1.4",
+    "@tailwindcss/vite": "^4.1.4",
     "axios": "^1.8.4",
     "pinia": "^3.0.2",
     "pinia-plugin-persistedstate": "^4.2.0",
-    "postcss": "^8.5.3",
     "tailwindcss": "^4.1.4",
     "vue": "^3.5.13",
     "vue-i18n": "^11.1.3",

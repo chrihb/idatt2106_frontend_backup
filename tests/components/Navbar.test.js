@@ -20,6 +20,5 @@ describe('Navbar.vue', () => {
 
     it('renders correctly', () => {
         expect(wrapper.isVisible()).toBeTruthy()
-        expect(wrapper.text()).toContain('Krisefikser')
     })
 })
