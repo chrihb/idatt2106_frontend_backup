@@ -1,0 +1,10 @@
+{
+  "navbar": {
+    "menu": "Menu",
+    "account": "Account",
+    "language": {
+        "en": "English",
+        "nb": "Norwegian"
+        }
+  }
+}

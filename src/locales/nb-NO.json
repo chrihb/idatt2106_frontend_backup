@@ -1,0 +1,10 @@
+{
+  "navbar": {
+    "menu": "Meny",
+    "account": "Bruker",
+    "language": {
+      "en": "Engelsk",
+      "nb": "Norsk"
+    }
+  }
+}
