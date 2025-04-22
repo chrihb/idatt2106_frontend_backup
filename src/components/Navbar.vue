@@ -2,10 +2,11 @@
 import { RouterLink } from 'vue-router';
 import { useI18n } from "vue-i18n";
 
+
 const { locale, t } = useI18n();
-const langOptions = [
-  { code: 'en-US', nameKey: t("navbar.language.en")},
-  { code: 'nb-NO', nameKey: t("navbar.language.nb")},
+const localeOptions = [
+  { code: 'en-US', nameKey: "navbar.language.en"},
+  { code: 'nb-NO', nameKey: "navbar.language.nb"},
 ]
 </script>
 
@@ -17,9 +18,9 @@ const langOptions = [
     </RouterLink>
     <label>{{ t("navbar.menu") }}</label>
     <RouterLink to="/account">{{ t("navbar.account") }}</RouterLink>
-    <select v-model="locale">
-      <option v-for="option in langOptions" :key="option.code" :value="option.code">
-        {{ option.nameKey }}
+    <select v-model="locale" id="localeSelect">
+      <option v-for="option in localeOptions" :key="option.code" :value="option.code">
+        {{ t(option.nameKey) }}
       </option>
     </select>
   </nav>
