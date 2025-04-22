@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import {onMounted} from 'vue';
-import {getEmergencyItems} from '../../services/emergencyItemService';
+import {onMounted, ref} from 'vue';
+import {emergencyItemService} from '../../services/emergencyItemService';
 import StorageItemMinimized from "@/components/emergencyStorage/StorageItemMinimized.vue";
 
 // Define interface for the emergency item
@@ -11,13 +11,13 @@ interface emergencyItem {
   expirationDate: string;
 }
 
-let items: emergencyItem[] = [];
+const items = ref<emergencyItem[]>([]);
 
 // Fetch emergency items from the API when the component is mounted
 onMounted(() => {
-  getEmergencyItems()
+  emergencyItemService().getEmergencyItems()
   .then((response) => {
-    items = response.data;
+    items.value = response.data;
   })
   .catch((error) => {
     console.error(error);
