@@ -22,6 +22,9 @@ const localeOptions = [
       <RouterLink to="/account" class="text-black hover:text-blue-600">
         {{ t("navbar.account") }}
       </RouterLink>
+      <RouterLink to="/emergency-storage" class="text-black hover:text-blue-600">
+        {{ t("navbar.emergencyStorage") }}
+      </RouterLink>
       <select v-model="locale" class="border border-gray-300 rounded px-2 py-1 text-black">
         <option v-for="option in localeOptions" :key="option.code" :value="option.code">
           {{ t(option.nameKey) }}

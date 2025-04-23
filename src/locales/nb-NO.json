@@ -2,6 +2,7 @@
   "navbar": {
     "menu": "Meny",
     "account": "Bruker",
+    "emergencyStorage": "Beredskapslager",
     "language": {
       "en": "Engelsk",
       "nb": "Norsk"
