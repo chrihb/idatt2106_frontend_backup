@@ -11,20 +11,27 @@ const localeOptions = [
 </script>
 
 <template>
-  <nav class="navbar">
-    <RouterLink to="/" class="homeButton">
-      <img src="../assets/logo.png" alt="Logo" class="logo" />
-      <h1>Krisefikser</h1>
+  <nav class="bg-white shadow-md w-full flex items-center justify-between px-4 h-20">
+    <!-- Logo -->
+    <RouterLink to="/" class="flex h-full">
+      <img src="../assets/logo.png" alt="Logo" />
     </RouterLink>
-    <label>{{ t("navbar.menu") }}</label>
-    <RouterLink to="/account">{{ t("navbar.account") }}</RouterLink>
-    <select v-model="locale" id="localeSelect">
-      <option v-for="option in localeOptions" :key="option.code" :value="option.code">
-        {{ t(option.nameKey) }}
-      </option>
-    </select>
+
+    <!-- Right-side -->
+    <div class="flex items-center gap-4">
+      <RouterLink to="/account" class="text-black hover:text-blue-600">
+        {{ t("navbar.account") }}
+      </RouterLink>
+      <select v-model="locale" class="border border-gray-300 rounded px-2 py-1 text-black">
+        <option v-for="option in localeOptions" :key="option.code" :value="option.code">
+          {{ t(option.nameKey) }}
+        </option>
+      </select>
+    </div>
   </nav>
 </template>
+
+
 
 <style scoped>
 
