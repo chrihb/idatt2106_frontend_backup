@@ -9,6 +9,7 @@ interface EmergencyCategory {
   id: number;
   name: string;
   amount: number;
+  unit: string;
   expirationDate: string;
 }
 
@@ -24,6 +25,7 @@ interface EmergencyItem {
   id: number;
   name: string;
   amount: number;
+  unit: string;
   expirationDate: string;
 }
 
@@ -66,6 +68,7 @@ const closeModal = () => {
       :key="category.id"
       :name="category.name"
       :amount="category.amount"
+      :unit="category.unit"
       :expirationDate="category.expirationDate"
       :id="category.id"
       @click="openModal(category)"/>
