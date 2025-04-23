@@ -62,6 +62,7 @@ export function emergencyItemService() {
 
   return {
     getEmergencyItems,
+    getEmergencyItemByCategoryId,
     createEmergencyItem,
     updateEmergencyItem,
     deleteEmergencyItem,
