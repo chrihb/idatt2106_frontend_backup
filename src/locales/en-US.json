@@ -2,9 +2,18 @@
   "navbar": {
     "menu": "Menu",
     "account": "Account",
+    "login": "Login",
+    "logout": "Logout",
+    "settings": "Settings",
+    "storage": "Storage",
+    "news": "News",
     "language": {
-        "en": "English",
-        "nb": "Norwegian"
+        "en": "EN",
+        "nb": "NO"
         }
-  }
+  },
+    "footer": {
+        "about-us": "About Us",
+        "privacy-policy": "Privacy Policy"
+    }
 }

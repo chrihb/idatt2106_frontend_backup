@@ -3,7 +3,6 @@
 </script>
 
 <template>
-  <p>Welcome</p>
 </template>
 
 <style scoped>

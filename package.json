@@ -11,6 +11,7 @@
     "test:e2e": "start-server-and-test 'vite --host' http://localhost:5173 'cypress run --e2e'"
   },
   "dependencies": {
+    "@heroicons/vue": "^2.2.0",
     "@tailwindcss/vite": "^4.1.4",
     "axios": "^1.8.4",
     "pinia": "^3.0.2",
