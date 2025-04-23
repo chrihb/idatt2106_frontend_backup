@@ -17,7 +17,7 @@ const items = ref<emergencyItem[]>([]);
 onMounted(() => {
   emergencyItemService().getEmergencyItems()
   .then((response) => {
-    items.value = response.data;
+    items.value = response;
   })
   .catch((error) => {
     console.error(error);
