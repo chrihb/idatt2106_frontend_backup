@@ -122,6 +122,7 @@ const handleItemSaved = async () => {
       :unit="category.unit"
       :expirationDate="category.expirationDate"
       :id="category.id"
+      :possibleUpdate="false"
       @click="openModal(category)"
       @update="openUpdateModal"/>
 

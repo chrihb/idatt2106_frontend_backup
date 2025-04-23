@@ -76,6 +76,7 @@ export default defineComponent({
               :unit="item.unit"
               :expirationDate="item.expirationDate"
               :id="item.id"
+              :possibleUpdate="true"
               @update="handleUpdate"/>
         </div>
 
