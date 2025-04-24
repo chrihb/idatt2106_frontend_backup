@@ -118,6 +118,25 @@ export const useMapStore = defineStore('mapStore', {
             this.markers.push(marker);
         },
 
+        // Remove a marker from the map
+        removeMarker(id) {
+            const markerIndex = this.markers.find(m => m.options.id === id);
+            if (!markerIndex !== -1) {
+                const marker = this.markers[markerIndex];
+                // Remove the marker from the layerGroup
+                for (const type in this.layerGroup) {
+                    if (this.layerGroup[type].hasLayer(marker)) {
+                        this.layerGroup[type].removeLayer(marker);
+                        break;
+                    }
+                }
+                // Remove the marker from the markers array
+                this.markers.splice(markerIndex, 1);
+            } else {
+                console.error(`Marker with ${id} not found.`);
+            }
+        },
+
         // Set the coordinates of the user's location
         setCoordinates(latitude, longitude) {
             this.latitude = latitude;
