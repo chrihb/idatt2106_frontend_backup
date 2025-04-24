@@ -2,7 +2,13 @@
 @theme {
     --color-kf-red: #ed5035;
     --color-kf-orange: #fa7918;
-    --color-kf-white: #ffffff;
-    --color-kf-grey: #e5e7eb;
     --color-kf-blue: #082e47;
+    --color-kf-grey: #e5e7eb;
+    --color-kf-green: #2e7d32;
+    --color-kf-white: #ffffff;
+    --color-kf-white-contrast-1: #f9f9f9;  /* soft, almost white */
+    --color-kf-white-contrast-2: #f2f2f2;  /* gentle gray tint */
+    --color-kf-white-contrast-3: #eaeaea;  /* noticeable soft gray */
+    --color-kf-white-contrast-4: #e0e0e0;  /* more distinct contrast */
+
 }
