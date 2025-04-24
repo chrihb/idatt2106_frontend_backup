@@ -2,8 +2,8 @@ import { mount } from '@vue/test-utils'
 import {describe, it, expect, beforeEach} from 'vitest'
 import HomeView from '@/views/HomeView.vue'
 import i18n from "@/i18n.js";
-import mockRouter from "../MockRouter.js";
-import mockPinia from "../MockPinia.js";
+import mockRouter from "../mocks/MockRouter.js";
+import mockPinia from "../mocks/MockPinia.js";
 
 describe('HomeView.vue', () => {
     let wrapper

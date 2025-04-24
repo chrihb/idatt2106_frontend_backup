@@ -1,15 +1,11 @@
-import {createRouter, createWebHistory} from "vue-router";
+import { createRouter, createWebHistory } from "vue-router";
 
 const mockRouter = (options = {}) => {
-    const router = createRouter({
+    return createRouter({
         history: createWebHistory(),
         routes: [],
-        ...options // Merge additional options
+        ...options,
     });
-
-    router.isReady = () => Promise.resolve();
-
-    return router;
 };
 
 export default mockRouter;
