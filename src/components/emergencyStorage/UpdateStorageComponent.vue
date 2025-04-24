@@ -60,10 +60,27 @@ export default defineComponent({
     const selectedCategory = ref<number | null>(props.categoryId || 0);
     const selectedUnit = ref<number | null>(props.unitId || 0);
     const formIncomplete = ref<boolean>(false);
+    const showConfirmation = ref<boolean>(false); // New ref for confirmation dialog
 
     const close = () => {
       resetForm();
       emit('close');
+    };
+
+    // New method to handle cancel button click
+    const handleCancel = () => {
+      showConfirmation.value = true;
+    };
+
+    // New method to confirm cancel
+    const confirmCancel = () => {
+      showConfirmation.value = false;
+      close();
+    };
+
+    // New method to cancel the confirmation
+    const cancelConfirmation = () => {
+      showConfirmation.value = false;
     };
 
     const resetForm = () => {
@@ -147,7 +164,11 @@ export default defineComponent({
       itemData,
       saveItem,
       isUpdate,
-      formIncomplete
+      formIncomplete,
+      showConfirmation, // Expose new ref
+      handleCancel,     // Expose new methods
+      confirmCancel,
+      cancelConfirmation
     };
   }
 });
@@ -165,7 +186,7 @@ export default defineComponent({
           </h1>
           <button
               class="text-gray-500 hover:text-gray-800 focus:outline-none transition-colors duration-200 p-2 rounded-full hover:bg-gray-100"
-              @click="close"
+              @click="handleCancel"
           >
             ✖
           </button>
@@ -216,10 +237,30 @@ export default defineComponent({
           </p>
           <button
               class="px-4 py-2 bg-gray-200 hover:bg-gray-300 rounded-lg text-gray-800 font-medium transition-colors duration-200"
-              @click="close"
+              @click="handleCancel"
           >
             Cancel
           </button>
+        </div>
+
+        <div v-if="showConfirmation"
+             class="fixed inset-0 flex items-center justify-center bg-opacity-50 z-[60]">
+          <div class="bg-white rounded-lg p-6 shadow-xl max-w-md w-full">
+            <h2 class="text-xl font-bold mb-4">Confirm</h2>
+            <p class="mb-6">Do you want to quit? Any unsaved changes will be lost.</p>
+            <div class="flex justify-end space-x-3">
+              <button
+                  class="px-4 py-2 bg-gray-200 hover:bg-gray-300 rounded-lg text-gray-800 font-medium transition-colors duration-200"
+                  @click="cancelConfirmation">
+                Stay
+              </button>
+              <button
+                  class="px-4 py-2 bg-red-500 hover:bg-red-600 rounded-lg text-white font-medium transition-colors duration-200"
+                  @click="confirmCancel">
+                Quit
+              </button>
+            </div>
+          </div>
         </div>
       </div>
     </div>
