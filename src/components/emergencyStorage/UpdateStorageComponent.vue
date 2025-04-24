@@ -6,7 +6,7 @@ interface EmergencyItem {
   id?: number;
   name: string;
   amount: string | number;
-  unit: string;
+  unitId?: number;
   expirationDate: string;
   categoryId?: number;
 }
@@ -17,7 +17,12 @@ export default defineComponent({
     categoryId: {
       type: Number,
       required: false,
-      default: null
+      default: 0
+    },
+    unitId: {
+      type: Number,
+      required: false,
+      default: 0
     },
     itemId: {
       type: Number,
@@ -35,9 +40,9 @@ export default defineComponent({
     const itemData = ref<EmergencyItem>({
       name: '',
       amount: '',
-      unit: '',
+      unitId: props.unitId || 0,
       expirationDate: '',
-      categoryId: props.categoryId || null
+      categoryId: props.categoryId || 0
     });
 
     const categories = ref([
@@ -46,7 +51,14 @@ export default defineComponent({
       {id: 3, name: 'Medicine'},
     ]);
 
-    const selectedCategory = ref<number | null>(props.categoryId || null);
+    const units = ref([
+      {id: 1, name: 'kg'},
+      {id: 2, name: 'L'},
+      {id: 3, name: 'pcs'},
+    ]);
+
+    const selectedCategory = ref<number | null>(props.categoryId || 0);
+    const selectedUnit = ref<number | null>(props.unitId || 0);
 
     const close = () => {
       resetForm();
@@ -57,11 +69,13 @@ export default defineComponent({
       itemData.value = {
         name: '',
         amount: '',
-        unit: '',
+        unitId: 0,
         expirationDate: '',
-        categoryId: null
+        categoryId: 0
       };
+
       selectedCategory.value = null;
+      selectedUnit.value = null;
     };
 
     const loadItemData = async () => {
@@ -73,19 +87,26 @@ export default defineComponent({
           if (item) {
             itemData.value = { ...item };
             selectedCategory.value = props.categoryId;
+            selectedUnit.value = props.unitId;
           }
         } catch (error) {
           console.error("Error fetching item:", error);
         }
-      } else if (props.categoryId) {
-        selectedCategory.value = props.categoryId;
-        itemData.value.categoryId = props.categoryId;
+      } else if (props.categoryId || props.unitId) {
+        if(props.unitId) {
+          selectedUnit.value = props.unitId;
+          itemData.value.unitId = props.unitId;
+        } else {
+          selectedCategory.value = props.categoryId;
+          itemData.value.categoryId = props.categoryId;
+        }
       }
     };
 
     const saveItem = async () => {
       try {
         itemData.value.categoryId = selectedCategory.value as number;
+        itemData.value.unitId = selectedUnit.value as number;
 
         if (isUpdate.value) {
           await emergencyItemService().updateEmergencyItem(itemData.value);
@@ -108,6 +129,8 @@ export default defineComponent({
       close,
       categories,
       selectedCategory,
+      units,
+      selectedUnit,
       itemData,
       saveItem,
       isUpdate
@@ -140,7 +163,8 @@ export default defineComponent({
               type="text"
               placeholder="Item name"
               class="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
-          <select v-model="selectedCategory" class="border border-gray-300 w-5/5 rounded px-2 py-1 text-black">
+          <select v-model="selectedCategory" class="border border-gray-300 w-5/5 rounded-lg p-2 text-black focus:ring-2 focus:ring-blue-500">
+            <option disabled value="">Select category</option>
             <option v-for="category in categories" :key="category.id" :value="category.id">
               {{ category.name }}
             </option>
@@ -150,12 +174,13 @@ export default defineComponent({
                 v-model="itemData.amount"
                 type="number"
                 placeholder="Item amount"
-                class="w-3/5 p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
-            <input
-                v-model="itemData.unit"
-                type="text"
-                placeholder="Unit"
-                class="w-2/5 p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                class="w-4/5 p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+            <select v-model="selectedUnit" class="border border-gray-300 w-1/5 rounded-lg px-2 py-1 text-black focus:ring-2 focus:ring-blue-500">
+              <option disabled value="">Select unit</option>
+              <option v-for="unit in units" :key="unit.id" :value="unit.id">
+                {{ unit.name }}
+              </option>
+            </select>
           </div>
           <input
               v-model="itemData.expirationDate"
