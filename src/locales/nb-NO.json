@@ -2,10 +2,20 @@
   "navbar": {
     "menu": "Meny",
     "account": "Bruker",
+    "login": "Logg Inn",
+    "logout": "Logg Ut",
+    "settings": "Innstillinger",
+    "news": "Nyheter",
+    "storage": "Lager",
     "language": {
-      "en": "Engelsk",
-      "nb": "Norsk"
+      "en": "EN",
+      "nb": "NO"
     }
+  },
+  "footer": {
+    "about-us": "Om Oss",
+    "privacy-policy": "Personvernserklæring"
+  }
   },
     "login": {
         "title": "Logg inn",

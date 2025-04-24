@@ -1,1 +1,8 @@
 @import "tailwindcss";
+@theme {
+    --color-kf-red: #ed5035;
+    --color-kf-orange: #fa7918;
+    --color-kf-white: #ffffff;
+    --color-kf-grey: #e5e7eb;
+    --color-kf-blue: #082e47;
+}

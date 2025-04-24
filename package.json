@@ -8,9 +8,13 @@
     "build": "vite build",
     "preview": "vite preview",
     "test:unit": "vitest run",
-    "test:e2e": "start-server-and-test 'vite --host' http://localhost:5173 'cypress run --e2e'"
+    "test:e2e": "start-server-and-test 'vite --host' http://localhost:5173 'cypress run --e2e'",
+    "coverage:e2e": "npx cypress run && open coverage/lcov-report/index.html",
+    "coverage:unit": "npx vitest run --coverage && open coverage/unit/index.html"
+
   },
   "dependencies": {
+    "@heroicons/vue": "^2.2.0",
     "@vee-validate/rules": "^4.15.0",
     "vee-validate": "^4.15.0",
     "@tailwindcss/vite": "^4.1.4",
@@ -23,14 +27,17 @@
     "vue-router": "^4.5.0"
   },
   "devDependencies": {
+    "@cypress/code-coverage": "^3.14.0",
     "@pinia/testing": "^1.0.1",
     "@vitejs/plugin-vue": "^5.2.3",
+    "@vitest/coverage-istanbul": "^3.1.2",
     "@vitest/coverage-v8": "^3.1.2",
     "@vue/test-utils": "^2.4.6",
     "cypress": "^14.3.1",
     "jsdom": "^26.1.0",
     "start-server-and-test": "^2.0.11",
     "vite": "^6.2.4",
+    "vite-plugin-istanbul": "^7.0.0",
     "vite-plugin-vue-devtools": "^7.7.2",
     "vitest": "^3.1.2"
   }
