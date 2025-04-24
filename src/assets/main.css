@@ -1,4 +1,15 @@
 @import "tailwindcss";
+
+.prose h1,
+.prose h2,
+.prose h3,
+.prose h4,
+.prose h5,
+.prose h6 {
+  font-size: revert;
+  font-weight: revert;
+}
+
 @theme {
     --color-kf-red: #ed5035;
     --color-kf-orange: #fa7918;
