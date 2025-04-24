@@ -8,20 +8,17 @@ import {requestLogin} from '@/services/loginService';
 import {useI18n} from "vue-i18n";
 
 const { t } = useI18n();
-const localeOptions = [
-  { code: 'en-US', nameKey: "navbar.language.en"},
-  { code: 'nb-NO', nameKey: "navbar.language.nb"},
-]
+
 const {validate, values: form, resetForm} = useForm({
   validationSchema: {
     email: (value) => {
-      if (!value) return 'Email is required';
-      if (!rules.email(value)) return 'Invalid email format';
+      if (!value) return  t('login.emailRequired') ;
+      if (!rules.email(value)) return t('login.emailError');
       return true;
     },
     password: (value) => {
-      if (!value) return 'Password is required';
-      if (value.length < 8) return 'Password must be at least 8 characters';
+      if (!value) return t('login.passwordRequired');
+      if (value.length < 8) return t('login.passwordLengthError');
       return true;
     },
   },
@@ -61,24 +58,66 @@ const handleSubmit = async () => {
 </script>
 
 <template>
-  <form @submit.prevent="handleSubmit">
-    <div v-if="successMessage" aria-live="polite" class="success-message">
-      {{ successMessage }}
+  <div class="min-h-screen flex items-center justify-center bg-gray-100">
+    <div class="bg-white p-8 rounded-lg shadow-lg w-full max-w-sm">
+      <!-- Logo (You can replace this with an actual image) -->
+      <div class="flex justify-center mb-4">
+        <div class="w-16 h-16 bg-gray-200 rounded-full flex items-center justify-center">
+          <!-- Placeholder for logo; replace with your image -->
+          <span class="text-2xl">🛡️</span>
+        </div>
+      </div>
+
+      <!-- Title -->
+      <h1 class="text-2xl font-bold text-center mb-6">Krisefikser</h1>
+
+      <!-- Form -->
+      <form @submit.prevent="handleSubmit">
+        <!-- Success/Error Messages -->
+        <div v-if="successMessage" aria-live="polite" class="text-green-600 text-center mb-4">
+          {{ successMessage }}
+        </div>
+        <div v-if="errorMessage" aria-live="polite" class="text-red-600 text-center mb-4">
+          {{ errorMessage }}
+        </div>
+
+        <!-- Email Field -->
+        <div class="mb-4">
+          <FormField
+              field-name="email"
+              :label="t('login.email')"
+              type="email"
+              class="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+        </div>
+
+        <!-- Password Field -->
+        <div class="mb-6">
+          <PasswordField
+              field-name="password"
+              :label="t('login.password')"
+              class="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+        </div>
+
+        <!-- Submit Button -->
+        <button
+            :disabled="isSubmitting"
+            type="submit"
+            class="w-full bg-pink-400 text-white p-2 rounded hover:bg-pink-500 transition disabled:opacity-50"
+        >
+          {{ t('login.login') }}
+        </button>
+
+        <!-- Create User Link -->
+        <div class="mt-4 text-center">
+          <router-link to="/register-account" class="text-blue-600 hover:underline">
+            {{ t('login.createUser') }}
+          </router-link>
+        </div>
+      </form>
     </div>
-    <div v-if="errorMessage" aria-live="polite" class="error-message">
-      {{ errorMessage }}
-    </div>
-    <FormField
-        field-name="email"
-        label= "{{t('login.email')}}"
-        type="email"
-    />
-    <PasswordField
-        field-name="password"
-        label="t('login.password')"
-    />
-    <button :disabled="isSubmitting" type="submit">Login</button>
-  </form>
+  </div>
 </template>
 
 <style scoped>

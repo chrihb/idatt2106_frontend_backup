@@ -15,14 +15,45 @@
   "footer": {
     "about-us": "Om Oss",
     "privacy-policy": "Personvernserklæring"
-  }
   },
-    "login": {
-        "title": "Logg inn",
-        "email": "Epost",
-        "password": "Passord",
-        "login": "Logg inn",
-        "forgotPassword": "Glemt passord?",
-        "register": "Registrer deg"
-    }
+  "login": {
+    "title": "Logg Inn",
+    "email": "E-post",
+    "password": "Passord",
+    "login": "Logg Inn",
+    "forgotPassword": "Glemt passord?",
+    "createUser": "Registrer bruker",
+    "passwordLengthError": "Passordet må være 8 tegn langt.",
+    "passwordRequired": "Skriv inn passord.",
+    "emailError": "E-post må være på et gyldig format.",
+    "emailRequired": "Skriv inn e-post.",
+    "loginError": "Ugyldig e-post eller passord."
+  },
+  "password": {
+    "show": "Vis",
+    "hide": "Skjul"
+  },
+  "register": {
+    "title": "Registrer",
+    "email": "E-post",
+    "firstName": "Fornavn",
+    "lastName": "Etternavn",
+    "phone": "Telefonnummer",
+    "password": "Passord",
+    "confirmPassword": "Bekreft Passord",
+    "register": "Registrer Bruker",
+    "passwordLengthError": "Passordet må være 8 tegn langt.",
+    "passwordRequired": "Passord er påkrevd.",
+    "emailError": "E-post må være på et gyldig format.",
+    "emailRequired": "E-post er påkrevd.",
+    "firstNameRequired": "Fornavn er påkrevd.",
+    "lastNameRequired": "Etternavn er påkrevd.",
+    "phoneRequired": "Telefonnummer er påkrevd.",
+    "confirmPasswordRequired": "Bekreft passord er påkrevd.",
+    "confirmPasswordError": "Passordene stemmer ikke overens.",
+    "registerError": "Registrering mislyktes. Vennligst prøv igjen.",
+    "registerSuccess": "Registrering vellykket. Vennligst sjekk e-posten din for å bekrefte kontoen din.",
+    "privacyPolicyText": "Jeg godtar ",
+    "privacyPolicyRequired": "Du må godta personvernserklæringen."
+  }
 }

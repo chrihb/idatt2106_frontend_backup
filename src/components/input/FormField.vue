@@ -1,49 +1,38 @@
 <script setup>
-import {useField} from 'vee-validate';
+import { useField } from 'vee-validate';
 
 const props = defineProps({
-  fieldName: {type: String, required: true},
-  label: {type: String, required: true},
-  type: {type: String, default: 'text'},
-  modelValue: {type: String, default: ''},
+  fieldName: { type: String, required: true },
+  label: { type: String, required: true },
+  type: { type: String, default: 'text' },
 });
 
-const emit = defineEmits(['update:modelValue']);
-const {value, errorMessage, validate} = useField(props.fieldName);
-
-if (props.modelValue) {
-  value.value = props.modelValue;
-}
-
-const handleInput = (event) => {
-  value.value = event.target.value;
-  emit('update:modelValue', event.target.value);
-};
-
-const validateField = () => {
-  validate();
-};
+// Use vee-validate's useField to get the value, error, and handle input
+const { value, errorMessage, handleChange } = useField(() => props.fieldName);
 </script>
 
 <template>
   <div class="form-field">
-    <label :for="fieldName">{{ label }}</label>
+    <label :for="fieldName" class="block text-sm font-medium text-gray-700 mb-1">
+      {{ label }}
+    </label>
     <input
-        :type="type"
         :id="fieldName"
+        :type="type"
         :name="fieldName"
         :value="value"
-    @input="handleInput"
-    @blur="validateField"
-    :class="{ 'error-input': errorMessage }"
-    :aria-describedby="errorMessage ? `${fieldName}-error` : null"
+        @input="handleChange"
+        class="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+        :class="{ 'border-red-600': errorMessage }"
+        :aria-describedby="errorMessage ? `${fieldName}-error` : null"
     />
-    <span v-if="errorMessage" :id="`${fieldName}-error`" class="error" aria-live="polite">
+    <span
+        v-if="errorMessage"
+        :id="`${fieldName}-error`"
+        class="error-message block text-red-600 text-sm mt-1"
+        aria-live="polite"
+    >
       {{ errorMessage }}
     </span>
   </div>
 </template>
-
-<style scoped>
-
-</style>

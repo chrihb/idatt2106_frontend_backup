@@ -5,34 +5,36 @@ import * as rules from '@vee-validate/rules';
 import FormField from '@/components/input/FormField.vue';
 import PasswordField from "@/components/input/PasswordField.vue";
 import { requestRegister } from "@/services/registerService.js";
+import {useI18n} from "vue-i18n";
 
+const { t } = useI18n();
 
 const { validate, values: form, errors, setFieldError, resetForm } = useForm({
   validationSchema: {
     email: (value) => {
-      if (!value) return 'Email is required';
-      if (!rules.email(value)) return 'Invalid email format';
+      if (!value) return t('register.emailRequired');
+      if (!rules.email(value)) return t('register.emailError');
       return true;
     },
     password: (value) => {
-      if (!value) return 'Password is required';
-      if (value.length < 8) return 'Password must be at least 8 characters';
+      if (!value) return t('register.passwordRequired');
+      if (value.length < 8) return t('register.passwordLengthError');
       return true;
     },
     firstName: (value) => {
-      if (!value) return 'First name is required';
+      if (!value) return t('register.firstNameRequired');
       return true;
     },
     surname: (value) => {
-      if (!value) return 'Surname is required';
+      if (!value) return t('register.surnameRequired');
       return true;
     },
     privacyAccepted: (value) => {
-      if (!value) return 'You must accept the privacy policy';
+      if (!value) return t('register.privacyPolicyRequired');
       return true;
     },
     recaptcha: (value) => {
-      if (!value) return 'Please complete the ReCAPTCHA';
+      if (!value) return t('register.recaptchaRequired');
       return true;
     },
   },
@@ -45,9 +47,8 @@ const isSubmitting = ref(false);
 const recaptchaToken = ref('');
 const successMessage = ref('');
 const errorMessage = ref('');
-/**
- * Function to handle the ReCAPTCHA validation
- */
+
+
 onMounted(() => {
   if (recaptchaToken.value) return;
   const script = document.createElement('script');
@@ -105,7 +106,7 @@ const handleSubmit = async () => {
     const response = await requestRegister(registerForm);
 
     if (response.success) {
-      successMessage.value = 'Registration successful!';
+      successMessage.value = t('register.successMessage');
       resetForm();
       recaptchaToken.value = '';
     } else {
@@ -129,68 +130,131 @@ const handleSubmit = async () => {
 </script>
 
 <template>
-  <form @submit.prevent="handleSubmit">
-    <div v-if="successMessage" class="success-message" aria-live="polite">
-      {{ successMessage }}
+  <div class="min-h-screen flex items-center justify-center bg-gray-100">
+    <div class="bg-white p-8 rounded-lg shadow-lg w-full max-w-sm">
+      <!-- Logo -->
+      <div class="flex justify-center mb-4">
+        <div class="w-16 h-16 bg-gray-200 rounded-full flex items-center justify-center">
+          <span class="text-2xl">🛡️</span>
+        </div>
+      </div>
+
+      <!-- Title -->
+      <h1 class="text-2xl font-bold text-center mb-6">Krisefikser</h1>
+
+      <!-- Form -->
+      <form @submit.prevent="handleSubmit">
+        <!-- Success/Error Messages -->
+        <div v-if="successMessage" class="text-green-600 text-center mb-4" aria-live="polite">
+          {{ successMessage }}
+        </div>
+        <div v-if="errorMessage" class="text-red-600 text-center mb-4" aria-live="polite">
+          {{ errorMessage }}
+        </div>
+
+        <!-- Email Field -->
+        <div class="mb-4">
+          <FormField
+              field-name="email"
+              :label="t('register.email')"
+              type="email"
+              class="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+        </div>
+
+        <!-- Password Field -->
+        <div class="mb-4">
+          <PasswordField
+              field-name="password"
+              :label="t('register.password')"
+              class="w-full p-2 pr-20 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+        </div>
+
+        <!-- Repeat Password Field -->
+        <div class="mb-4">
+          <PasswordField
+              field-name="repeatPassword"
+              :label="t('register.confirmPassword')"
+              class="w-full p-2 pr-20 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+        </div>
+
+        <!-- First Name Field -->
+        <div class="mb-4">
+          <FormField
+              field-name="firstName"
+              :label="t('register.firstName')"
+              type="text"
+              class="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+        </div>
+
+        <!-- Last Name Field -->
+        <div class="mb-4">
+          <FormField
+              field-name="lastName"
+              :label="t('register.lastName')"
+              type="text"
+              class="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+        </div>
+
+        <!-- Privacy Policy Checkbox -->
+        <div class="form-field mb-4">
+          <label class="flex items-center text-sm text-gray-700">
+            <input
+                v-model="privacyAccepted"
+                name="privacyAccepted"
+                type="checkbox"
+                @change="validatePrivacy"
+                class="mr-2 h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+            />
+            <span>
+              {{ t('register.privacyPolicyText') }}
+              <a
+                  href="/privacy-policy"
+                  rel="noopener noreferrer"
+                  target="_blank"
+                  class="text-blue-600 hover:underline"
+              >
+                {{ t('footer.privacy-policy') }}
+              </a>
+            </span>
+          </label>
+          <span
+              v-if="privacyError"
+              id="privacyAccepted-error"
+              class="error-message block text-red-600 text-sm mt-1"
+              aria-live="polite"
+          >
+            {{ privacyError }}
+          </span>
+        </div>
+
+        <!-- ReCAPTCHA Error -->
+        <div class="form-field mb-4">
+          <span
+              v-if="recaptchaError"
+              id="recaptcha-error"
+              class="error-message block text-red-600 text-sm"
+              aria-live="polite"
+          >
+            {{ recaptchaError }}
+          </span>
+        </div>
+
+        <!-- Submit Button -->
+        <button
+            :disabled="isSubmitting"
+            type="submit"
+            class="w-full bg-pink-400 text-white p-2 rounded hover:bg-pink-500 transition disabled:opacity-50"
+        >
+          {{ t('register.register') }}
+        </button>
+      </form>
     </div>
-    <div v-if="errorMessage" class="error-message" aria-live="polite">
-      {{ errorMessage }}
-    </div>
-    <FormField
-        field-name="email"
-        label="Email"
-        type="email"
-    />
-    <PasswordField
-        field-name="password"
-        label="Password"
-    />
-    <FormField
-        field-name="firstName"
-    label="First Name"
-    type="text"
-    />
-    <FormField
-        field-name="surname"
-    label="Surname"
-    type="text"
-    />
-    <div class="form-field">
-      <label>
-        <input
-            v-model="privacyAccepted"
-            name="privacyAccepted"
-            type="checkbox"
-            @change="validatePrivacy"
-        />
-        I accept the
-        <a
-            href="/privacy-policy"
-            rel="noopener noreferrer"
-            target="_blank">
-          Privacy Policy</a>
-      </label>
-      <span
-          v-if="privacyError"
-          id="privacyAccepted-error"
-          aria-live="polite"
-          class="error"
-      >
-        {{ privacyError }}
-      </span>
-    </div>
-    <div class="form-field">
-      <span
-          v-if="recaptchaError"
-          id="recaptcha-error"
-          class="error"
-          aria-live="polite"
-      >
-        {{ recaptchaError }}
-      </span>
-    </div>
-    <button :disabled="isSubmitting" type="submit">Register</button>
-  </form>
+  </div>
 </template>
 
 <style scoped>
