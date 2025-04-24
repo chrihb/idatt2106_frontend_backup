@@ -1,10 +1,20 @@
 @import "tailwindcss";
+
+.prose h1,
+.prose h2,
+.prose h3,
+.prose h4,
+.prose h5,
+.prose h6 {
+  font-size: revert;
+  font-weight: revert;
+}
+
 @theme {
     --color-kf-red: #ed5035;
     --color-kf-orange: #fa7918;
     --color-kf-white: #ffffff;
     --color-kf-blue: #082e47;
-    --color-kf-dim-blue: #1c4560;
     --color-kf-grey: #e5e7eb;
     --color-kf-green: #2e7d32;
     --color-kf-white-contrast-1: #f9f9f9;

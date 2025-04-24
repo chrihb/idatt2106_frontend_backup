@@ -1,12 +1,19 @@
+const files = import.meta.glob('/src/locales/files/*.md', {
+    query: '?raw',
+    import: 'default'
+  })
+  
 const fileImport = async (props, locale) => {
+  const lang = locale.value
+  const filename = `/src/locales/files/${props.file}.${lang}.md`
+  const importer = files[filename]
 
-    const lang = locale.value
-    try {
-        const imported = await import(`@/locales/files/${props.file}.${lang}.txt?raw`)
-        return imported.default
-    } catch (err) {
-        console.error(`@/locales/files/${props.file}.${lang}.txt?raw`, err)
-    }
+  if (importer) {
+    return await importer()
+  } else {
+    console.error('Filen finnes ikke:', filename)
+    return 'Content not available.'
+  }
 }
 
 export default fileImport
