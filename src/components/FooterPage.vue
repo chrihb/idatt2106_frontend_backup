@@ -29,8 +29,8 @@ watchEffect(async () => {
 
 <template>
   <div class="flex flex-col items-center justify-center p-4 space-y-4">
-    <h1 class="text-4xl">{{ props.title }}</h1>
-    <div class="" v-if="text">{{ text }}</div>
+    <h1 class="text-4xl text-kf-blue">{{ props.title }}</h1>
+    <div class="text-kf-blue" v-if="text">{{ text }}</div>
   </div>
 
 </template>
