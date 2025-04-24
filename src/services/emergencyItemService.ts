@@ -22,6 +22,14 @@ export function emergencyItemService() {
     return response.json();
   }
 
+  async function getEmergencyItemById(id) {
+    const response = await fetch(`${baseUrl}/${id}`);
+    if (!response.ok) {
+      throw new Error('Failed to fetch emergency item by ID');
+    }
+    return response.json();
+  }
+
   async function createEmergencyItem(item) {
     const response = await fetch(baseUrl, {
       method: 'POST',

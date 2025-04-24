@@ -124,7 +124,7 @@ export default defineComponent({
           class="bg-white rounded-lg shadow-xl w-4/5 md:w-3/5 max-h-4/5 overflow-auto p-6 max-w-3xl">
         <div class="flex flex-row justify-between items-center mb-6 border-b pb-4">
           <h1 class="text-2xl font-bold text-gray-800">
-            {{ isUpdate ? 'Update Item' : 'Create New Item' }}
+            {{ isUpdate ? 'Update Item' : 'Add New Item' }}
           </h1>
           <button
               class="text-gray-500 hover:text-gray-800 focus:outline-none transition-colors duration-200 p-2 rounded-full hover:bg-gray-100"
@@ -168,7 +168,7 @@ export default defineComponent({
           <button
               class="px-4 py-2 bg-blue-500 hover:bg-blue-600 rounded-lg text-white font-medium transition-colors duration-200"
               @click="saveItem">
-            {{ isUpdate ? 'Update' : 'Create' }}
+            {{ isUpdate ? 'Update' : 'Add' }}
           </button>
           <button
               class="px-4 py-2 bg-gray-200 hover:bg-gray-300 rounded-lg text-gray-800 font-medium transition-colors duration-200"
