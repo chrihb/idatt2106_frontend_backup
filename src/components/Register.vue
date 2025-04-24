@@ -6,6 +6,7 @@ import FormField from '@/components/input/FormField.vue';
 import PasswordField from "@/components/input/PasswordField.vue";
 import { requestRegister } from "@/services/registerService.js";
 
+
 const { validate, values: form, errors, setFieldError, resetForm } = useForm({
   validationSchema: {
     email: (value) => {
@@ -44,10 +45,11 @@ const isSubmitting = ref(false);
 const recaptchaToken = ref('');
 const successMessage = ref('');
 const errorMessage = ref('');
-
+/**
+ * Function to handle the ReCAPTCHA validation
+ */
 onMounted(() => {
   if (recaptchaToken.value) return;
-
   const script = document.createElement('script');
   script.src = 'https://www.google.com/recaptcha/api.js?render=6Le5biErAAAAAJi7PY0N8A-011kW48niKklfRhAb';
   script.async = true;
@@ -162,7 +164,11 @@ const handleSubmit = async () => {
             @change="validatePrivacy"
         />
         I accept the
-        <a href="/privacy-policy" rel="noopener noreferrer" target="_blank">Privacy Policy</a>
+        <a
+            href="/privacy-policy"
+            rel="noopener noreferrer"
+            target="_blank">
+          Privacy Policy</a>
       </label>
       <span
           v-if="privacyError"
@@ -188,19 +194,4 @@ const handleSubmit = async () => {
 </template>
 
 <style scoped>
-.success-message {
-  background-color: #d4edda;
-  color: #155724;
-  padding: 10px;
-  margin-bottom: 15px;
-  border-radius: 4px;
-}
-
-.error-message {
-  background-color: #f8d7da;
-  color: #721c24;
-  padding: 10px;
-  margin-bottom: 15px;
-  border-radius: 4px;
-}
 </style>

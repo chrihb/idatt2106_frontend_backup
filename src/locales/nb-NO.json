@@ -6,5 +6,13 @@
       "en": "Engelsk",
       "nb": "Norsk"
     }
-  }
+  },
+    "login": {
+        "title": "Logg inn",
+        "email": "Epost",
+        "password": "Passord",
+        "login": "Logg inn",
+        "forgotPassword": "Glemt passord?",
+        "register": "Registrer deg"
+    }
 }

@@ -5,7 +5,13 @@ import * as rules from '@vee-validate/rules';
 import FormField from '@/components/input/FormField.vue';
 import PasswordField from "@/components/input/PasswordField.vue";
 import {requestLogin} from '@/services/loginService';
+import {useI18n} from "vue-i18n";
 
+const { t } = useI18n();
+const localeOptions = [
+  { code: 'en-US', nameKey: "navbar.language.en"},
+  { code: 'nb-NO', nameKey: "navbar.language.nb"},
+]
 const {validate, values: form, resetForm} = useForm({
   validationSchema: {
     email: (value) => {
@@ -64,12 +70,12 @@ const handleSubmit = async () => {
     </div>
     <FormField
         field-name="email"
-        label="Email"
+        label= "{{t('login.email')}}"
         type="email"
     />
     <PasswordField
         field-name="password"
-        label="Password"
+        label="t('login.password')"
     />
     <button :disabled="isSubmitting" type="submit">Login</button>
   </form>
