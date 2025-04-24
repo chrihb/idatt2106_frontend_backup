@@ -4,10 +4,11 @@ import L from 'leaflet';
 
 export const useMapStore = defineStore('mapStore', {
     state: () => ({
-        map: ref(null),
-        latitude: 0,
-        longitude: 0,
+        map: null,
+        latitude: null,
+        longitude: null,
         canTrack: false,
+        layerGroup: {},
     }),
     getters: {
         getLatitude: (state) => state.latitude,
@@ -29,13 +30,14 @@ export const useMapStore = defineStore('mapStore', {
             // Add a markers to the map
             //TODO: Fetch markers from the server
             ///Example markers
-            this.addMarker(1, 63.446827, 10.421910, "Location 1", "Address 1", "Description 1");
-            this.addMarker(2, 63.446825, 10.431920, "Location 2", "Address 2", "Description 2");
-            this.addMarker(3, 63.446822, 10.441936, "Location 3", "Address 3", "Description 3");
+            this.addMarker(1, 63.446827, 10.421910, "Hjertestarter", "Location 1", "Address 1", "Description 1");
+            this.addMarker(2, 63.446825, 10.431920, "Bunker", "Location 2", "Address 2", "Description 2");
+            this.addMarker(3, 63.446822, 10.441936, "Hjertestarter", "Location 3", "Address 3", "Description 3");
 
         },
         // Start tracking the user's location
         startTracking() {
+            this.canTrack = true;
             let marker = null;
 
             if ("geolocation" in navigator) {
@@ -46,7 +48,7 @@ export const useMapStore = defineStore('mapStore', {
                             // Create a new marker at the user's location
                             marker = L.marker([this.latitude, this.longitude]).addTo(this.map);
                             // Center the map on the user's location
-                            this.map.setView([this.latitude, this.longitude], 15);
+                            this.centerMapOnUser()
                         } else {
                             // Update the marker's position
                             marker.setLatLng([this.latitude, this.longitude]);
@@ -61,15 +63,39 @@ export const useMapStore = defineStore('mapStore', {
             }
         },
 
-        addMarker(id, lat, lng, location, address, description) {
+        // Stop tracking the user's location
+        stopTracking() {
+            if (this.canTrack) {
+                this.canTrack = false;
+                this.setCoordinates(null, null);
+                this.map.eachLayer((layer) => {
+                    if (layer instanceof L.Marker) {
+                        this.map.removeLayer(layer);
+                    }
+                });
+            }
+        },
+
+        // Toggle tracking the user's location
+        toggleTracking() {
+            if (this.canTrack) {
+                this.stopTracking();
+            } else {
+                this.startTracking();
+            }
+        },
+
+        // Add a marker to the map
+        addMarker(id, lat, lng, type, location, address, description) {
             const marker = L.marker([lat, lng]).addTo(this.map);
             marker.bindPopup(`
                 <div class="popup">
+                    <h2>${type}</h2>
                     <h3>${location}</h3>
                     <p>${address}</p>
                     <p>${description}</p>
                 </div>
-            `).openPopup();
+            `);
         },
 
         // Set the coordinates of the user's location
@@ -77,9 +103,14 @@ export const useMapStore = defineStore('mapStore', {
             this.latitude = latitude;
             this.longitude = longitude;
         },
-        // Toggle the tracking state
-        toggleTracking() {
-            this.canTrack = !this.canTrack;
-        }
+
+        // Center the map on the user's location
+        centerMapOnUser() {
+            if (this.latitude && this.longitude) {
+                this.map.setView([this.latitude, this.longitude], 15);
+            } else {
+                console.error("User location is not available.");
+            }
+        },
     },
 });

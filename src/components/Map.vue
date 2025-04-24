@@ -1,5 +1,9 @@
 <template>
   <div id="map" ></div>
+  <div class ="controls">
+    <button @click="mapStore.centerMapOnUser()">Center on My Location</button>
+    <button @click="mapStore.toggleTracking">{{ mapStore.canTrack ? 'Stop Tracking' : 'Start Tracking' }}</button>
+  </div>
 </template>
 
 <script setup>
@@ -12,8 +16,6 @@ const mapStore = useMapStore();
 onMounted(async () => {
   // Initialize the map and store it in mapStore
   mapStore.initMap();
-  //Start tracking the user's position
-  mapStore.startTracking();
 });
 </script>
 
