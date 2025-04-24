@@ -1,5 +1,4 @@
 import {defineStore} from 'pinia';
-import {ref} from 'vue';
 import L from 'leaflet';
 
 export const useMapStore = defineStore('mapStore', {
@@ -99,7 +98,7 @@ export const useMapStore = defineStore('mapStore', {
 
         // Add a marker to the map
         addMarker(id, lat, lng, type, location, address, description) {
-            const marker = L.marker([lat, lng])
+            const marker = L.marker([lat, lng], {id})
                 .bindPopup(`
                 <div class="popup">
                     <h2>${type}</h2>
@@ -127,11 +126,16 @@ export const useMapStore = defineStore('mapStore', {
 
         // Center the map on the user's location
         centerMapOnUser() {
-            if (this.latitude !== null && this.longitude !== null) {
-                this.map.setView([this.latitude, this.longitude], 15);
+            if (this.canTrack) {
+                if (this.latitude !== null && this.longitude !== null) {
+                    this.map.setView([this.latitude, this.longitude], 15);
+                } else {
+                    console.error("User location is not available.");
+                }
             } else {
-                console.error("User location is not available.");
+                alert("Tracking is diabled. Please enable tracking to center the map on your location.");
             }
+
         }
     }
 });
