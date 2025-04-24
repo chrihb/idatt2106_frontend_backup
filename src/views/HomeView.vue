@@ -2,7 +2,7 @@
 
 import {ref} from "vue";
 
-const isAuthenticated = ref(false) // Replace with actual authentication logic
+const isAuthenticated = ref(true) // Replace with actual authentication logic
 
 
 </script>
