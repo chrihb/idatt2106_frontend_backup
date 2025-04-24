@@ -8,10 +8,8 @@ import AboutUsView from "@/views/AboutUsView.vue";
 import PrivacyPolicyView from "@/views/PrivacyPolicyView.vue";
 import RegisterAccountView from "@/views/RegisterAccountView.vue";
 
-const BASE_URL = import.meta.env.BASE_URL;
-
 const router = createRouter({
-    history: createWebHistory(BASE_URL),
+    history: createWebHistory(import.meta.env.BASE_URL),
     routes: [
         {
             path: "/", component: Base,

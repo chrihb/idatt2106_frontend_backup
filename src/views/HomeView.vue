@@ -7,7 +7,6 @@ import { ref } from "vue";
 
 const isAuthenticated = ref(true) // Replace with actual authentication logic
 
-
 </script>
 
 <template>

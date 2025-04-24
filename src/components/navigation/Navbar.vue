@@ -12,7 +12,7 @@ const localeOptions = [
   { code: 'nb-NO', nameKey: "navbar.language.nb" }
 ]
 
-const isAuthenticated = ref(true) // Replace with actual authentication logic
+const isAuthenticated = ref(false) // Replace with actual authentication logic
 
 const showAccountDropdown = ref(false)
 const showMenuDropdown = ref(false)
@@ -75,18 +75,18 @@ watchEffect(() => {
         <RouterLink to="/news" class="block px-4 py-2 hover:bg-grey-100">{{ t("navbar.news") }}</RouterLink>
       </div>
 
-      <UserCircleIcon @click="toggleAccountDropdown" class="size-10 text-kf-blue hover:bg-kf-grey rounded cursor-pointer transition-colors duration-150"/>
-
       <!-- Dropdown -->
-      <div v-if="showAccountDropdown" class="absolute top-12 right-14 bg-kf-white shadow-lg rounded-lg z-10">
-        <div v-if="isAuthenticated">
+      <div v-if="isAuthenticated">
+        <UserCircleIcon @click="toggleAccountDropdown" class="size-10 text-kf-blue hover:bg-kf-grey rounded cursor-pointer transition-colors duration-150"/>
+        <div v-if="showAccountDropdown" class="absolute top-12 right-14 bg-kf-white shadow-lg rounded-lg z-10">
           <RouterLink to="/settings" class="block px-4 py-2 text-kf-blue hover:bg-kf-grey">{{ t("navbar.settings") }}</RouterLink>
           <RouterLink to="/logout" class="block px-4 py-2 text-kf-blue hover:bg-kf-grey">{{ t("navbar.logout") }}</RouterLink>
         </div>
-        <div v-else>
-          <RouterLink to="/login" class="block px-4 py-2 text-kf-blue hover:bg-kf-grey">{{ t("navbar.login") }}</RouterLink>
-        </div>
       </div>
+      <div v-else>
+        <RouterLink to="/login" class="text-kf-blue text-lg hover:bg-kf-grey rounded cursor-pointer transition-colors duration-150 px-0.5">{{ t("navbar.login") }}</RouterLink>
+      </div>
+
 
       <select v-model="locale" class="border border-kf-blue rounded px-2 py-1 text-kf-blue">
         <option v-for="option in localeOptions" :key="option.code" :value="option.code">
