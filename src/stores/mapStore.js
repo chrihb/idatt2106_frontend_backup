@@ -118,6 +118,11 @@ export const useMapStore = defineStore('mapStore', {
             this.markers.push(marker);
         },
 
+        // Get a marker by its id
+        getMarker(id) {
+            return this.markers.find((marker) => marker.id === id || null);
+        },
+
         // Remove a marker from the map
         removeMarker(id) {
             const markerIndex = this.markers.find(m => m.options.id === id);
