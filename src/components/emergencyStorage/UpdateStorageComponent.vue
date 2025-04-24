@@ -140,6 +140,11 @@ export default defineComponent({
               type="text"
               placeholder="Item name"
               class="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+          <select v-model="selectedCategory" class="border border-gray-300 w-5/5 rounded px-2 py-1 text-black">
+            <option v-for="category in categories" :key="category.id" :value="category.id">
+              {{ category.name }}
+            </option>
+          </select>
           <div class="flex gap-2">
             <input
                 v-model="itemData.amount"
