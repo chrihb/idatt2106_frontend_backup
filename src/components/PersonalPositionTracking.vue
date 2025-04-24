@@ -4,12 +4,12 @@
 
 <script setup>
 import {onMounted} from "vue";
-import {startTracking} from "@/utils/mapUtils.js";
+import {useMapStore} from "@/stores/mapStore.js";
 
 const mapStore = useMapStore();
 
 onMounted(() => {
-  startTracking(mapStore.map, mapStore)
+  //mapStore.startTracking();
 })
 </script>
 

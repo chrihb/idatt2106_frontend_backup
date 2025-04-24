@@ -3,20 +3,17 @@
 </template>
 
 <script setup>
-import { onMounted, ref} from 'vue';
+import { onMounted} from 'vue';
 import 'leaflet/dist/leaflet.css';
-import L from 'leaflet';
 import { useMapStore } from '@/stores/mapStore.js';
-import {initMap, startTracking} from "@/utils/mapUtils.js";
 
-const map = ref(null);
 const mapStore = useMapStore();
 
-
-
 onMounted(async () => {
-  // Initialize the map
-  initMap(map, () => startTracking(map, mapStore));
+  // Initialize the map and store it in mapStore
+  mapStore.initMap();
+  //Start tracking the user's position
+  mapStore.startTracking();
 });
 </script>
 
