@@ -1,7 +1,7 @@
 import { mount } from '@vue/test-utils'
 import { describe, it, expect, beforeEach} from 'vitest'
 import i18n from "@/i18n.js"
-import Navbar from '@/components/Navbar.vue'
+import Navbar from '@/components/navigation/Navbar.vue'
 import mockRouter from '../MockRouter.js'
 
 

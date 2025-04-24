@@ -52,11 +52,11 @@ watchEffect(() => {
 </script>
 
 <template>
-  <nav class="bg-kf-white shadow-md w-full flex items-center justify-between px-4 h-20 rounded-b-lg relative">
+  <nav class="w-full flex items-center justify-between px-4 h-20 relative">
     <!-- Logo -->
     <RouterLink to="/">
       <div class="flex gap-2 items-center">
-        <img class="h-18" src="../assets/logo.png" alt="Logo" />
+        <img class="h-18" src="@/assets/logo.png" alt="Logo" />
         <h1 class="text-2xl text-kf-blue hidden md:block">Krisefikser</h1>
       </div>
     </RouterLink>
