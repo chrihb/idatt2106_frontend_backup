@@ -14,6 +14,8 @@
   },
   "dependencies": {
     "@heroicons/vue": "^2.2.0",
+    "@vee-validate/rules": "^4.15.0",
+    "vee-validate": "^4.15.0",
     "@tailwindcss/vite": "^4.1.4",
     "axios": "^1.8.4",
     "marked": "^15.0.10",
