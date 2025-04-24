@@ -59,6 +59,7 @@ export default defineComponent({
 
     const selectedCategory = ref<number | null>(props.categoryId || 0);
     const selectedUnit = ref<number | null>(props.unitId || 0);
+    const formIncomplete = ref<boolean>(false);
 
     const close = () => {
       resetForm();
@@ -76,6 +77,7 @@ export default defineComponent({
 
       selectedCategory.value = null;
       selectedUnit.value = null;
+      formIncomplete.value = false;
     };
 
     const loadItemData = async () => {
@@ -104,7 +106,18 @@ export default defineComponent({
     };
 
     const saveItem = async () => {
+      if (
+          !itemData.value.name.trim() ||
+          !itemData.value.amount ||
+          !selectedCategory.value ||
+          !selectedUnit.value ||
+          !itemData.value.expirationDate
+      ) {
+        formIncomplete.value = true;
+        return;
+      }
       try {
+        formIncomplete.value = false;
         itemData.value.categoryId = selectedCategory.value as number;
         itemData.value.unitId = selectedUnit.value as number;
 
@@ -133,7 +146,8 @@ export default defineComponent({
       selectedUnit,
       itemData,
       saveItem,
-      isUpdate
+      isUpdate,
+      formIncomplete
     };
   }
 });
@@ -195,6 +209,11 @@ export default defineComponent({
               @click="saveItem">
             {{ isUpdate ? 'Update' : 'Add' }}
           </button>
+          <p
+              v-if="formIncomplete"
+              class="text-red-600 text-sm">
+            Fill in all required fields
+          </p>
           <button
               class="px-4 py-2 bg-gray-200 hover:bg-gray-300 rounded-lg text-gray-800 font-medium transition-colors duration-200"
               @click="close"
