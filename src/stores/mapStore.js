@@ -9,13 +9,13 @@ export const useMapStore = defineStore('mapStore', {
         longitude: null,
         canTrack: false,
         layerGroup: {},
+        markers: []
     }),
     getters: {
         getLatitude: (state) => state.latitude,
         getLongitude: (state) => state.longitude,
     },
     actions: {
-
         // Initialize the map
         initMap() {
             // set its view to a specific location
@@ -35,18 +35,26 @@ export const useMapStore = defineStore('mapStore', {
             this.addMarker(3, 63.446822, 10.441936, "Hjertestarter", "Location 3", "Address 3", "Description 3");
 
         },
+
         // Start tracking the user's location
         startTracking() {
             this.canTrack = true;
             let marker = null;
 
             if ("geolocation" in navigator) {
-                navigator.geolocation.watchPosition(
+                this.watchId = navigator.geolocation.watchPosition(
                     (position) => {
                         this.setCoordinates(position.coords.latitude, position.coords.longitude)
                         if (marker === null) {
+
+                            // Create a new layer group for the user's location
+                            if (!this.layerGroup["UserLocation"]) {
+                                this.layerGroup["UserLocation"] = L.layerGroup().addTo(this.map);
+                            }
                             // Create a new marker at the user's location
-                            marker = L.marker([this.latitude, this.longitude]).addTo(this.map);
+                            marker = L.marker([this.latitude, this.longitude]);
+                            // Add the marker to the layer group
+                            this.layerGroup["UserLocation"].addLayer(marker);
                             // Center the map on the user's location
                             this.centerMapOnUser()
                         } else {
@@ -66,13 +74,17 @@ export const useMapStore = defineStore('mapStore', {
         // Stop tracking the user's location
         stopTracking() {
             if (this.canTrack) {
+                // Reset the user's location
                 this.canTrack = false;
                 this.setCoordinates(null, null);
-                this.map.eachLayer((layer) => {
-                    if (layer instanceof L.Marker) {
-                        this.map.removeLayer(layer);
-                    }
-                });
+                if (this.layerGroup["UserLocation"]) {
+                    this.layerGroup["UserLocation"].clearLayers();
+                }
+            }
+            // Clear the geolocation watch if it exists
+            if (this.watchId) {
+                navigator.geolocation.clearWatch(this.watchId);
+                this.watchId = null;
             }
         },
 
@@ -87,8 +99,8 @@ export const useMapStore = defineStore('mapStore', {
 
         // Add a marker to the map
         addMarker(id, lat, lng, type, location, address, description) {
-            const marker = L.marker([lat, lng]).addTo(this.map);
-            marker.bindPopup(`
+            const marker = L.marker([lat, lng])
+                .bindPopup(`
                 <div class="popup">
                     <h2>${type}</h2>
                     <h3>${location}</h3>
@@ -96,6 +108,15 @@ export const useMapStore = defineStore('mapStore', {
                     <p>${description}</p>
                 </div>
             `);
+
+            // Check if the layerGroup for the type exists, if not create it
+            if (!this.layerGroup[type]) {
+                this.layerGroup[type] = L.layerGroup().addTo(this.map);
+            }
+            // Add the marker to the appropriate layerGroup
+            this.layerGroup[type].addLayer(marker);
+
+            this.markers.push(marker);
         },
 
         // Set the coordinates of the user's location
@@ -106,11 +127,11 @@ export const useMapStore = defineStore('mapStore', {
 
         // Center the map on the user's location
         centerMapOnUser() {
-            if (this.latitude && this.longitude) {
+            if (this.latitude !== null && this.longitude !== null) {
                 this.map.setView([this.latitude, this.longitude], 15);
             } else {
                 console.error("User location is not available.");
             }
-        },
-    },
+        }
+    }
 });
