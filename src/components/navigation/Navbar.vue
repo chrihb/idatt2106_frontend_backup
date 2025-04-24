@@ -4,15 +4,15 @@ import { RouterLink } from 'vue-router'
 import { useI18n } from "vue-i18n"
 import { UserCircleIcon } from "@heroicons/vue/24/outline/index.js";
 import { Bars3Icon } from "@heroicons/vue/24/solid/index.js";
+import { useUserStore } from "@/stores/userStore.js";
 
+const userStore = useUserStore()
 const { locale, t } = useI18n()
 
 const localeOptions = [
   { code: 'en-US', nameKey: "navbar.language.en" },
   { code: 'nb-NO', nameKey: "navbar.language.nb" }
 ]
-
-const isAuthenticated = ref(false) // Replace with actual authentication logic
 
 const showAccountDropdown = ref(false)
 const showMenuDropdown = ref(false)
@@ -64,22 +64,26 @@ watchEffect(() => {
     <!-- Right-side -->
     <div class="flex items-center gap-4 relative">
       <div class="hidden md:flex gap-4 text-lg">
-        <RouterLink to="/storage" class="text-kf-blue hover:bg-kf-grey rounded cursor-pointer transition-colors duration-150 px-0.5" >{{ t("navbar.storage") }}</RouterLink>
+        <RouterLink v-if="userStore.isAuthenticated" to="/storage" class="text-kf-blue hover:bg-kf-grey rounded cursor-pointer transition-colors duration-150 px-0.5" >{{ t("navbar.storage") }}</RouterLink>
+        <RouterLink v-if="userStore.isAuthenticated" to="/my-home" class="text-kf-blue hover:bg-kf-grey rounded cursor-pointer transition-colors duration-150 px-0.5" >{{ t("navbar.my-home") }}</RouterLink>
         <RouterLink to="/news" class="text-kf-blue hover:bg-kf-grey rounded cursor-pointer transition-colors duration-150 px-0.5" >{{ t("navbar.news") }}</RouterLink>
+        <RouterLink to="/map" class="text-kf-blue hover:bg-kf-grey rounded cursor-pointer transition-colors duration-150 px-0.5" >{{ t("navbar.map") }}</RouterLink>
       </div>
 
       <Bars3Icon @click="toggleMenuDropdown" class="block md:hidden size-10 text-kf-blue hover:bg-kf-grey rounded cursor-pointer transition-colors duration-150" />
 
       <div v-if="showMenuDropdown" class="absolute top-12 right-28 bg-kf-white shadow-lg rounded-lg z-10">
-        <RouterLink to="/storage" class="block px-4 py-2 hover:bg-kf-grey">{{ t("navbar.storage") }}</RouterLink>
-        <RouterLink to="/news" class="block px-4 py-2 hover:bg-grey-100">{{ t("navbar.news") }}</RouterLink>
+        <RouterLink v-if="userStore.isAuthenticated" to="/storage" class="block px-4 py-2 hover:bg-kf-grey">{{ t("navbar.storage") }}</RouterLink>
+        <RouterLink v-if="userStore.isAuthenticated" to="/my-home" class="block px-4 py-2 hover:bg-kf-grey">{{ t("navbar.my-home") }}</RouterLink>
+        <RouterLink to="/news" class="block px-4 py-2 hover:bg-kf-grey">{{ t("navbar.news") }}</RouterLink>
+        <RouterLink to="/map" class="block px-4 py-2 hover:bg-kf-grey">{{ t("navbar.map") }}</RouterLink>
       </div>
 
       <!-- Dropdown -->
-      <div v-if="isAuthenticated">
+      <div v-if="userStore.isAuthenticated">
         <UserCircleIcon @click="toggleAccountDropdown" class="size-10 text-kf-blue hover:bg-kf-grey rounded cursor-pointer transition-colors duration-150"/>
         <div v-if="showAccountDropdown" class="absolute top-12 right-14 bg-kf-white shadow-lg rounded-lg z-10">
-          <RouterLink to="/settings" class="block px-4 py-2 text-kf-blue hover:bg-kf-grey">{{ t("navbar.settings") }}</RouterLink>
+          <RouterLink to="/account" class="block px-4 py-2 text-kf-blue hover:bg-kf-grey">{{ t("navbar.account") }}</RouterLink>
           <RouterLink to="/logout" class="block px-4 py-2 text-kf-blue hover:bg-kf-grey">{{ t("navbar.logout") }}</RouterLink>
         </div>
       </div>

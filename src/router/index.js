@@ -7,6 +7,9 @@ import AccountView from "@/views/AccountView.vue";
 import AboutUsView from "@/views/AboutUsView.vue";
 import PrivacyPolicyView from "@/views/PrivacyPolicyView.vue";
 import RegisterAccountView from "@/views/RegisterAccountView.vue";
+import StorageView from "@/views/StorageView.vue";
+import MapView from "@/views/MapView.vue";
+import MyHomeView from "@/views/MyHomeView.vue";
 
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
@@ -19,6 +22,9 @@ const router = createRouter({
                 { path: "/account", component: AccountView },
                 { path: "/about-us", component: AboutUsView },
                 { path: "/privacy-policy", component: PrivacyPolicyView },
+                { path: "/storage", component: StorageView },
+                { path: "/map", component: MapView },
+                { path: "/my-home", component: MyHomeView },
             ],
         },
 

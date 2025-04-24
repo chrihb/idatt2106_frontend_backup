@@ -3,10 +3,12 @@
     "menu": "Menu",
     "account": "Account",
     "login": "Login",
-    "logout": "Logout",
+    "logout": "Log Out",
     "settings": "Settings",
     "storage": "Storage",
     "news": "News",
+    "map": "Map",
+    "my-home": "My Home",
     "language": {
         "en": "EN",
         "nb": "NO"
