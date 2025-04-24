@@ -1,25 +1,18 @@
+import axios from 'axios';
 import { useUserStore } from '@/stores/userStore';
+import { inject } from 'vue';
 
-const baseUrl = 'http://localhost:8088';
+const baseUrl = inject("backendURL");
 
 export const requestLogin = async (loginForm) => {
     const userStore = useUserStore();
 
     try {
-        const response = await fetch(`${baseUrl}/user/login`, {
-            method: 'POST',
+        const response = await axios.post(`${baseUrl}/user/login`, loginForm, {
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(loginForm),
         });
 
-        if (!response.ok) {
-            if (response.status === 400) {
-                return { error: 'Invalid credentials' };
-            }
-            return { error: 'An error occurred. Please try again.' };
-        }
-
-        const data = await response.json();
+        const data = response.data;
         if (data.token) {
             userStore.setCredentials(data.token, loginForm.email);
             return { success: true };
@@ -27,6 +20,12 @@ export const requestLogin = async (loginForm) => {
 
         return { error: 'Unexpected response format.' };
     } catch (error) {
+        if (error.response) {
+            if (error.response.status === 400) {
+                return { error: 'Invalid credentials' };
+            }
+            return { error: 'An error occurred. Please try again.' };
+        }
         console.error('Error submitting login:', error);
         return { error: 'Network error. Please try again later.' };
     }

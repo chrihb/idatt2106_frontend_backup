@@ -1,28 +1,18 @@
 import { useUserStore } from '@/stores/userStore';
+import { inject } from "vue";
+import axios from 'axios';
 
-const baseUrl = 'http://localhost:8088';
+const baseUrl = inject("backendURL");
 
 export const requestRegister = async (registerForm) => {
     const userStore = useUserStore();
 
     try {
-        const response = await fetch(`${baseUrl}/user/register`, {
-            method: 'POST',
+        const response = await axios.post(`${baseUrl}/user/register`, registerForm, {
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(registerForm),
         });
 
-        if (!response.ok) {
-            if (response.status === 400) {
-                return { error: 'Invalid registration data' };
-            }
-            if (response.status === 409) {
-                return { error: 'Email already registered' };
-            }
-            return { error: 'An error occurred. Please try again.' };
-        }
-
-        const data = await response.json();
+        const data = response.data;
         if (data.token) {
             userStore.setCredentials(data.token, registerForm.email);
             return { success: true };
@@ -30,7 +20,17 @@ export const requestRegister = async (registerForm) => {
 
         return { error: 'Unexpected response format.' };
     } catch (error) {
-        console.error('Error submitting registration:', error);
-        return { error: 'Network error. Please try again later.' };
+        if (error.response) {
+            if (error.response.status === 400) {
+                return { error: 'Invalid registration data' };
+            }
+            if (error.response.status === 409) {
+                return { error: 'Email already registered' };
+            }
+            return { error: 'An error occurred. Please try again.' };
+        } else {
+            console.error('Error submitting registration:', error);
+            return { error: 'Network error. Please try again later.' };
+        }
     }
 };
