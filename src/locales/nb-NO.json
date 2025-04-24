@@ -16,6 +16,14 @@
     "about-us": "Om Oss",
     "privacy-policy": "Personvernserklæring"
   },
+  "storage-status": {
+    "title": "Lager Status",
+    "desc": "Du har lagringsartikler som krever oppmerksomhet",
+    "ok": "Lageret ditt ser bra ut!"
+  },
+  "my-home": {
+    "title": "Mitt Hjem"
+  },
   "login": {
     "title": "Logg Inn",
     "email": "E-post",

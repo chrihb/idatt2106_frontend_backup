@@ -16,6 +16,15 @@
         "about-us": "About Us",
         "privacy-policy": "Privacy Policy"
     },
+    "storage-status": {
+        "title": "Storage Status",
+        "desc": "You have storage items that requires attention",
+        "ok": "Your storage looks good!"
+    },
+    "my-home": {
+      "title": "My Home"
+    }
+    },
   "login": {
     "title": "Login",
     "email": "Email",

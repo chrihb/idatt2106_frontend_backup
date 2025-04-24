@@ -2,6 +2,7 @@
 import { ref, watchEffect } from 'vue'
 import { useI18n } from 'vue-i18n'
 import fileImport from "@/utils/txtFileImport.js";
+import { marked } from 'marked'
 
 const { locale } = useI18n()
 const text = ref('')
@@ -19,7 +20,8 @@ const props = defineProps({
 
 watchEffect(async () => {
   try {
-    text.value = await fileImport(props, locale)
+    const markdown = await fileImport(props, locale)
+    text.value = marked.parse(markdown)
   } catch (err) {
     text.value = 'Content not available in this language.'
   }
@@ -30,7 +32,8 @@ watchEffect(async () => {
 <template>
   <div class="flex flex-col items-center justify-center p-4 space-y-4">
     <h1 class="text-4xl text-kf-blue">{{ props.title }}</h1>
-    <div class="text-kf-blue" v-if="text">{{ text }}</div>
+    <div class="prose prose-kf max-w-full" v-html="text"></div>
+
   </div>
 
 </template>
