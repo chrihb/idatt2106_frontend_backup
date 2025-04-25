@@ -22,7 +22,7 @@ export const useMapStore = defineStore('mapStore', {
         initMap() {
             const markerStore = useMarkerStore();
             // set its view to a specific location
-            this.map = L.map('map').setView([63.446827, 10.421906], 15);
+            this.map = L.map('map').setView([63.422464, 10.410394], 15);
 
             // Add a tile layer to the map
             L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -33,9 +33,9 @@ export const useMapStore = defineStore('mapStore', {
 
             //TODO: Fetch markers from the server
             ///Example markers
-            markerStore.addMarker(1, 63.446827, 10.421910, "Hjertestarter", "Location 1", "Address 1", "Description 1");
-            markerStore.addMarker(2, 63.446825, 10.431920, "Bunker", "Location 2", "Address 2", "Description 2");
-            markerStore.addMarker(3, 63.446822, 10.441936, "Hjertestarter", "Location 3", "Address 3", "Description 3");
+            markerStore.addMarker(1, 63.423494,  10.424354, "Hjertestarter", "Location 1", "Address 1", "Description 1");
+            markerStore.addMarker(2, 63.421424, 10.400834, "Bunker", "Location 2", "Address 2", "Description 2");
+            markerStore.addMarker(3, 63.421434, 10.440124, "Hjertestarter", "Location 3", "Address 3", "Description 3");
         },
         // Start tracking the user's location
         startTracking() {
