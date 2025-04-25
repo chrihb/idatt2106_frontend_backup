@@ -1,6 +1,7 @@
 import L from "leaflet";
 import { defineStore } from "pinia";
 import { useMapStore } from "@/stores/mapStore.js";
+import {watchUserPosition} from "@/services/geoLocationService.js";
 
 export const usePositionTrackingStore = defineStore("positionTrackingStore", {
     state: () => ({
@@ -22,34 +23,30 @@ export const usePositionTrackingStore = defineStore("positionTrackingStore", {
             this.canTrack = true;
             let marker = null;
 
-            if ("geolocation" in navigator) {
-                this.watchId = navigator.geolocation.watchPosition(
-                    (position) => {
-                        this.setCoordinates(position.coords.latitude, position.coords.longitude)
-                        if (marker === null) {
+            this.watchId = watchUserPosition(
+                (position) => {
+                    this.setCoordinates(position.coords.latitude, position.coords.longitude)
+                    if (marker === null) {
 
-                            // Create a new layer group for the user's location
-                            if (!mapStore.layerGroup["UserLocation"]) {
-                                mapStore.layerGroup["UserLocation"] = L.layerGroup().addTo(mapStore.map);
-                            }
-                            // Create a new marker at the user's location
-                            marker = L.marker([this.latitude, this.longitude]);
-                            // Add the marker to the layer group
-                            mapStore.layerGroup["UserLocation"].addLayer(marker);
-                            // Center the map on the user's location
-                            this.centerMapOnUser()
-                        } else {
-                            // Update the marker's position
-                            marker.setLatLng([this.latitude, this.longitude]);
+                        // Create a new layer group for the user's location
+                        if (!mapStore.layerGroup["UserLocation"]) {
+                            mapStore.layerGroup["UserLocation"] = L.layerGroup().addTo(mapStore.map);
                         }
-                    },
-                    (error) => {
-                        console.error('Geolocation error:', error);
+                        // Create a new marker at the user's location
+                        marker = L.marker([this.latitude, this.longitude]);
+                        // Add the marker to the layer group
+                        mapStore.layerGroup["UserLocation"].addLayer(marker);
+                        // Center the map on the user's location
+                        this.centerMapOnUser()
+                    } else {
+                        // Update the marker's position
+                        marker.setLatLng([this.latitude, this.longitude]);
                     }
-                );
-            } else {
-                console.error("Geolocation is not supported by your browser.");
-            }
+                },
+                (error) => {
+                    console.error('Geolocation error:', error);
+                }
+            );
         },
 
         // Stop tracking the user's location
