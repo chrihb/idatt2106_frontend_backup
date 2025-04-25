@@ -64,6 +64,8 @@
     "registerError": "Registration failed. Please try again.",
     "registerSuccess": "Registration successful. Please check your email to verify your account.",
     "privacyPolicyText": "I accept the ",
-    "privacyPolicyRequired": "You must accept the privacy policy."
+    "privacyPolicyRequired": "You must accept the privacy policy.",
+    "hasAccount": "Already have an account?",
+    "loginHere": "Login here"
   }
 }
