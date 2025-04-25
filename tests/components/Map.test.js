@@ -54,9 +54,7 @@ describe('Map.vue', () => {
     });
 
     it('calls watchPosition and updates coordinates', () => {
-       const wrapper = shallowMount(Map);
        mockMapStore.startTracking();
-
        expect(navigator.geolocation.watchPosition).toHaveBeenCalled();
        expect(mockMapStore.setCoordinates).toHaveBeenCalledWith(63.422464, 10.410394);
     });
