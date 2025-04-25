@@ -1,7 +1,3 @@
-<template>
-  <div id="map" ></div>
-</template>
-
 <script setup>
 import {onMounted, onUnmounted} from 'vue';
 import 'leaflet/dist/leaflet.css';
@@ -47,11 +43,9 @@ onUnmounted(() => {
 })
 </script>
 
+<template>
+  <div id="map" class="min-h-140 h-full w-full z-0 rounded-2xl"></div>
+</template>
+
 <style scoped>
-#map {
-  min-height: 30vh;
-  min-width: 30vh;
-  height: 100%;
-  width: 100%;
-}
 </style>
