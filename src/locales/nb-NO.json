@@ -23,6 +23,9 @@
     "desc": "Du har lagringsartikler som krever oppmerksomhet",
     "ok": "Lageret ditt ser bra ut!"
   },
+  "news": {
+    "title": "Nyheter"
+  },
   "my-home": {
     "title": "Mitt Hjem"
   },
