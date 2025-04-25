@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia';
 import L from 'leaflet';
 import { useMapStore } from "@/stores/mapStore.js";
+import {createMarkerPopup} from "@/utils/markerUtils.js";
 
 export const useMarkerStore = defineStore('markerStore', {
     state:
@@ -27,14 +28,7 @@ export const useMarkerStore = defineStore('markerStore', {
         addMarker(id, lat, lng, type, location, address, description) {
             const mapStore = useMapStore();
             const marker = L.marker([lat, lng], {id})
-                .bindPopup(`
-                <div class="popup">
-                    <h2>${type}</h2>
-                    <h3>${location}</h3>
-                    <p>${address}</p>
-                    <p>${description}</p>
-                </div>
-            `);
+                .bindPopup(createMarkerPopup(type, location, address, description))
 
             // Check if the layerGroup for the type exists, if not create it
             if (!mapStore.layerGroup[type]) {
