@@ -48,13 +48,13 @@ const toggleShowPassword = () => {
           :value="value"
           @input="handleInput"
           @blur="validateField"
-          class="w-full p-2 pr-20 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+          class="w-full p-2 pr-12 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
           :class="{ 'border-red-600': errorMessage }"
           :aria-describedby="errorMessage ? `${fieldName}-error` : null"
       />
       <button
           type="button"
-          class="toggle-password absolute inset-y-0 right-0 pr-3 flex items-center text-gray-500 text-sm"
+          class="toggle-password absolute inset-y-0 right-0 pr-3 flex items-center text-gray-500 text-sm cursor-pointer"
           @click="toggleShowPassword"
           :aria-label="showPassword ? t('password.hide') : t('password.show')"
       >

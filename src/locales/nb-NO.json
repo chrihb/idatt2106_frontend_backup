@@ -81,6 +81,8 @@
     "registerError": "Registrering mislyktes. Vennligst prøv igjen.",
     "registerSuccess": "Registrering vellykket. Vennligst sjekk e-posten din for å bekrefte kontoen din.",
     "privacyPolicyText": "Jeg godtar ",
-    "privacyPolicyRequired": "Du må godta personvernserklæringen."
+    "privacyPolicyRequired": "Du må godta personvernserklæringen.",
+    "hasAccount": "Har du allerede en bruker?",
+    "loginHere": "Logg inn her"
   }
 }

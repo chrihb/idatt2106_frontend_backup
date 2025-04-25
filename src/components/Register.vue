@@ -1,5 +1,5 @@
 <script setup>
-import { onMounted, ref } from 'vue';
+import {onMounted, onUnmounted, ref} from 'vue';
 import { useField, useForm } from 'vee-validate';
 import * as rules from '@vee-validate/rules';
 import FormField from '@/components/input/FormField.vue';
@@ -7,6 +7,7 @@ import PasswordField from "@/components/input/PasswordField.vue";
 import { requestRegister } from "@/services/registerService.js";
 import {useI18n} from "vue-i18n";
 import HomeButton from "@/components/HomeButton.vue";
+import router from "@/router/index.js";
 
 const { t } = useI18n();
 
@@ -22,12 +23,22 @@ const { validate, values: form, errors, setFieldError, resetForm } = useForm({
       if (value.length < 8) return t('register.passwordLengthError');
       return true;
     },
+    repeatPassword: (value) => {
+      if (!value) return t('register.confirmPasswordRequired');
+      if (value !== form.password) return t('register.confirmPasswordError');
+      return true;
+    },
     firstName: (value) => {
       if (!value) return t('register.firstNameRequired');
       return true;
     },
-    surname: (value) => {
-      if (!value) return t('register.surnameRequired');
+    lastName: (value) => {
+      if (!value) return t('register.lastNameRequired');
+      return true;
+    },
+    phoneNumber: (value) => {
+      if (!value) return t('register.phoneRequired');
+      if (!rules.regex(value, /^\+?[0-9]{7,15}$/)) return t('register.phoneRequired');
       return true;
     },
     privacyAccepted: (value) => {
@@ -48,21 +59,43 @@ const isSubmitting = ref(false);
 const recaptchaToken = ref('');
 const successMessage = ref('');
 const errorMessage = ref('');
+const recaptchaScript = ref(null);
 
+// Function to clean up reCAPTCHA
+const cleanupRecaptcha = () => {
+  // Remove the reCAPTCHA script
+  if (recaptchaScript.value && document.head.contains(recaptchaScript.value)) {
+    document.head.removeChild(recaptchaScript.value);
+  }
+
+  // Remove the reCAPTCHA badge
+  const badge = document.querySelector('.grecaptcha-badge');
+  if (badge && badge.parentNode) {
+    badge.parentNode.removeChild(badge);
+  }
+
+  // Reset reCAPTCHA-related state
+  recaptchaToken.value = '';
+  recaptchaValue.value = '';
+  if (window.grecaptcha) {
+    window.grecaptcha = undefined; // Optional: Clear grecaptcha object
+  }
+};
 
 onMounted(() => {
   if (recaptchaToken.value) return;
-  const script = document.createElement('script');
-  script.src = 'https://www.google.com/recaptcha/api.js?render=6Le5biErAAAAAJi7PY0N8A-011kW48niKklfRhAb';
-  script.async = true;
-  script.defer = true;
-  document.head.appendChild(script);
 
-  script.onload = () => {
+  recaptchaScript.value = document.createElement('script');
+  recaptchaScript.value.src = 'https://www.google.com/recaptcha/api.js?render=6Le5biErAAAAAJi7PY0N8A-011kW48niKklfRhAb';
+  recaptchaScript.value.async = true;
+  recaptchaScript.value.defer = true;
+  document.head.appendChild(recaptchaScript.value);
+
+  recaptchaScript.value.onload = () => {
     if (window.grecaptcha) {
       window.grecaptcha.ready(() => {
         window.grecaptcha
-            .execute('6Le5biErAAAAAJi7PY0N8A-011kW48niKklfRhAb', {action: 'register'})
+            .execute('6Le5biErAAAAAJi7PY0N8A-011kW48niKklfRhAb', { action: 'register' })
             .then((token) => {
               recaptchaToken.value = token;
               recaptchaValue.value = token;
@@ -78,11 +111,16 @@ onMounted(() => {
     }
   };
 
-  script.onerror = () => {
+  recaptchaScript.value.onerror = () => {
     console.error('Failed to load ReCAPTCHA script');
     setFieldError('recaptcha', 'ReCAPTCHA failed to load');
   };
 });
+
+onUnmounted(() => {
+  cleanupRecaptcha(); // Clean up reCAPTCHA on component unmount
+});
+
 
 const handleSubmit = async () => {
   const result = await validate();
@@ -100,7 +138,8 @@ const handleSubmit = async () => {
       email: form.email,
       password: form.password,
       firstName: form.firstName,
-      surname: form.surname,
+      lastName: form.lastName,
+      phoneNumber: form.phoneNumber,
       recaptchaToken: recaptchaToken.value,
     };
     console.log('Submitting registration form:', registerForm); // Debug the form data
@@ -116,7 +155,9 @@ const handleSubmit = async () => {
       } else if (response.error.includes('First name')) {
         setFieldError('firstName', response.error);
       } else if (response.error.includes('Surname')) {
-        setFieldError('surname', response.error);
+        setFieldError('lastName', response.error);
+      }else if (response.error.includes('PhoneNumber')) {
+          setFieldError('phoneNumber', response.error);
       } else {
         errorMessage.value = response.error || 'Registration failed';
       }
@@ -135,11 +176,8 @@ const handleSubmit = async () => {
     <div class="bg-white p-8 rounded-lg shadow-lg w-full max-w-sm">
       <!-- Logo -->
       <div class="flex justify-center mb-4">
-        <div class="w-16 h-16 bg-gray-200 rounded-full flex items-center justify-center">
-          <span class="text-2xl">🛡️</span>
-        </div>
+        <img src="@/assets/logo.png" alt="Logo" class="w-16 h-16" />
       </div>
-
       <!-- Title -->
       <h1 class="text-2xl font-bold text-center mb-6">Krisefikser</h1>
 
@@ -159,7 +197,7 @@ const handleSubmit = async () => {
               field-name="email"
               :label="t('register.email')"
               type="email"
-              class="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+              class="w-full p-2"
           />
         </div>
 
@@ -168,7 +206,7 @@ const handleSubmit = async () => {
           <PasswordField
               field-name="password"
               :label="t('register.password')"
-              class="w-full p-2 pr-20 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+              class="w-full p-2"
           />
         </div>
 
@@ -177,7 +215,7 @@ const handleSubmit = async () => {
           <PasswordField
               field-name="repeatPassword"
               :label="t('register.confirmPassword')"
-              class="w-full p-2 pr-20 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+              class="w-full p-2"
           />
         </div>
 
@@ -187,7 +225,7 @@ const handleSubmit = async () => {
               field-name="firstName"
               :label="t('register.firstName')"
               type="text"
-              class="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+              class="w-full p-2"
           />
         </div>
 
@@ -197,7 +235,17 @@ const handleSubmit = async () => {
               field-name="lastName"
               :label="t('register.lastName')"
               type="text"
-              class="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+              class="w-full p-2"
+          />
+        </div>
+
+        <!-- Phone number Field -->
+        <div class="mb-4">
+          <FormField
+              field-name="phoneNumber"
+              :label="t('register.phone')"
+              type="text"
+              class="w-full p-2"
           />
         </div>
 
@@ -249,11 +297,20 @@ const handleSubmit = async () => {
         <button
             :disabled="isSubmitting"
             type="submit"
-            class="w-full bg-pink-400 text-white p-2 rounded hover:bg-pink-500 transition disabled:opacity-50"
+            class="w-full bg-kf-red text-white p-2 rounded transition disabled:opacity-50 cursor-pointer"
         >
           {{ t('register.register') }}
         </button>
       </form>
+      <!-- Toggle Link to Login -->
+      <div class="mt-4 text-center">
+        <p class="text-gray-600">
+          {{ t('register.hasAccount') }}
+          <router-link to="/login" class="text-blue-600 hover:underline">
+            {{ t('register.loginHere') }}
+          </router-link>
+        </p>
+      </div>
       <HomeButton />
     </div>
   </div>
