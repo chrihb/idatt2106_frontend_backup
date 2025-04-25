@@ -14,6 +14,11 @@
         "nb": "NO"
         }
   },
+  "account-settings": {
+    "title": "Account Settings",
+    "household": "Manage Household",
+    "notifications": "Notifications"
+  },
     "footer": {
         "about-us": "About Us",
         "privacy-policy": "Privacy Policy"
