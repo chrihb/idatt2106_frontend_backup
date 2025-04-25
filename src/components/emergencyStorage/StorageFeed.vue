@@ -1,63 +1,50 @@
 <script setup lang="ts">
 import {onMounted, ref} from 'vue';
-import {emergencyItemService} from '@/services/emergencyItemService';
 import StorageItemMinimized from "@/components/emergencyStorage/StorageItemMinimized.vue";
 import StorageItemMaximized from "@/components/emergencyStorage/StorageItemMaximized.vue";
 import UpdateStorageComponent from "@/components/emergencyStorage/UpdateStorageComponent.vue";
+import {useCategoriesStore} from '@/stores/categoriesStore';
+import {useUnitsStore} from '@/stores/unitsStore';
+import {useEmergencyItemsStore} from '@/stores/emergencyItemsStore';
+import {emergencyItemService} from '@/services/emergencyItemService';
 
-// Define interface for the emergency category (shown in feed)
-interface EmergencyCategory {
-  id: number;
-  name: string;
-  amount: number;
-  unit: string;
-  expirationDate: string;
-}
+const categoriesStore = useCategoriesStore();
+const unitsStore = useUnitsStore();
+const itemsStore = useEmergencyItemsStore();
 
-// Define interface for modal state
-interface CategoryModal {
-  id: number;
-  display: boolean;
-  items: EmergencyItem[];
-}
-
-// Define interface for individual emergency items (shown in modal)
-interface EmergencyItem {
-  id?: number;
-  name: string;
-  amount: number;
-  unit: string;
-  expirationDate: string;
-}
-
-const categories = ref<EmergencyCategory[]>([]);
-const modalData = ref<CategoryModal>({
+const itemCategories = ref<any[]>([]);
+const modalData = ref({
   id: 0,
   display: false,
-  items: []
+  items: [] as any[]
 });
 
 const updateModalData = ref({
   display: false,
-  categoryId: null as number | null,
-  itemId: null as number | null
-});
-
-// Fetch emergency categories from the API when the component is mounted
-onMounted(() => {
-  fetchCategories();
+  categoryId: null,
+  itemId: null
 });
 
 const fetchCategories = async () => {
   try {
-    const response = await emergencyItemService().getEmergencyItems();
-    categories.value = response;
+    if (categoriesStore.categories.length === 0) {
+      await categoriesStore.fetchCategories();
+    }
+
+    if (unitsStore.units.length === 0) {
+      await unitsStore.fetchUnits();
+    }
+
+    const allItems = await itemsStore.fetchAllItems();
+    itemCategories.value = allItems.map(item => ({
+      ...item,
+      unit: unitsStore.getUnitName(item.unitId)
+    }));
   } catch (error) {
-    console.error(error);
+    console.error('Error fetching categories:');
   }
 };
 
-// Function to open the update modal for creating a new item
 const openCreateModal = (categoryId: number | null = null) => {
   updateModalData.value = {
     display: true,
@@ -66,7 +53,6 @@ const openCreateModal = (categoryId: number | null = null) => {
   };
 };
 
-// Function to open the update modal for updating an existing item
 const openUpdateModal = (itemId: number) => {
   updateModalData.value = {
     display: true,
@@ -75,69 +61,72 @@ const openUpdateModal = (itemId: number) => {
   };
 };
 
-// Function to open the modal and fetch items for the selected category
-const openModal = async (category: EmergencyCategory) => {
+const openModal = async (category: any) => {
+  const service = emergencyItemService();
+  const items = await service.getEmergencyItemByCategoryId(category.id);
+
   modalData.value = {
-    id: category.id,
+    id: category.categoryId,
     display: true,
-    items: await emergencyItemService().getEmergencyItemByCategoryId(category.id)
+    items
   };
 };
 
-// Function to close the modal
 const closeModal = () => {
   modalData.value.display = false;
 };
 
-// Function to close the update modal
 const closeUpdateModal = () => {
   updateModalData.value.display = false;
 };
 
-// Function to handle item saved (created or updated)
 const handleItemSaved = async () => {
   await fetchCategories();
 
   if (modalData.value.display) {
-    modalData.value.items = await emergencyItemService().getEmergencyItemByCategoryId(modalData.value.id);
+    const service = emergencyItemService();
+    modalData.value.items = await service.getEmergencyItemByCategoryId(modalData.value.id);
   }
 };
+
+onMounted(async () => {
+  await fetchCategories();
+});
 </script>
 
 <template>
-  <div class="mb-4 flex justify-end">
-    <button
-        class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition-colors duration-200"
-        @click="openCreateModal()"
-    >
-      Create New Item
-    </button>
+  <div class="container mx-auto px-4 py-8">
+    <div class="mb-4 flex justify-end">
+      <button
+          class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition-colors duration-200"
+          @click="openCreateModal()"
+      >
+        Create New Item
+      </button>
+    </div>
+    <StorageItemMinimized
+        v-for="categoryItem in itemCategories"
+        :key="categoryItem.id"
+        :name="categoryItem.name"
+        :amount="categoryItem.amount"
+        :unit="categoryItem.unit"
+        :expirationDate="categoryItem.expirationDate"
+        :id="categoryItem.id"
+        :possibleUpdate="false"
+        @click="openModal(categoryItem)"/>
+
+    <StorageItemMaximized
+        :categoryId="modalData.id"
+        :display="modalData.display"
+        @close="closeModal"
+        @update="openUpdateModal"
+        @create="openCreateModal"/>
+
+    <UpdateStorageComponent
+        :display="updateModalData.display"
+        :categoryId="updateModalData.categoryId"
+        :itemId="updateModalData.itemId"
+        @close="closeUpdateModal"
+        @itemSaved="handleItemSaved"/>
   </div>
-
-  <StorageItemMinimized
-      v-for="category in categories"
-      :key="category.id"
-      :name="category.name"
-      :amount="category.amount"
-      :unit="category.unit"
-      :expirationDate="category.expirationDate"
-      :id="category.id"
-      :possibleUpdate="false"
-      @click="openModal(category)"
-      @update="openUpdateModal"/>
-
-  <StorageItemMaximized
-      :categoryId="modalData.id"
-      :display="modalData.display"
-      :items="modalData.items"
-      @close="closeModal"
-      @update="openUpdateModal"
-      @create="openCreateModal"/>
-
-  <UpdateStorageComponent
-      :display="updateModalData.display"
-      :categoryId="updateModalData.categoryId"
-      :itemId="updateModalData.itemId"
-      @close="closeUpdateModal"
-      @itemSaved="handleItemSaved"/>
 </template>

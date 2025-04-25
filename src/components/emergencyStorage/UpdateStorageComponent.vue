@@ -1,13 +1,16 @@
 <script lang="ts">
-import {defineComponent, ref, computed} from 'vue';
+import {defineComponent, ref, computed, onMounted, watch} from 'vue';
 import {emergencyItemService} from '@/services/emergencyItemService';
+import {useCategoriesStore} from '@/stores/categoriesStore';
+import {useUnitsStore} from '@/stores/unitsStore';
+import {storeToRefs} from 'pinia';
 
 interface EmergencyItem {
   id?: number;
   name: string;
   amount: string | number;
   unitId?: number;
-  expirationDate: string;
+  expirationDate: Date | string;
   categoryId?: number;
 }
 
@@ -37,6 +40,12 @@ export default defineComponent({
   emits: ['close', 'itemSaved'],
   setup(props, {emit}) {
     const isUpdate = computed(() => props.itemId !== null);
+    const categoriesStore = useCategoriesStore();
+    const unitsStore = useUnitsStore();
+
+    const {categories} = storeToRefs(categoriesStore);
+    const {units} = storeToRefs(unitsStore);
+
     const itemData = ref<EmergencyItem>({
       name: '',
       amount: '',
@@ -45,40 +54,25 @@ export default defineComponent({
       categoryId: props.categoryId || 0
     });
 
-    const categories = ref([
-      {id: 1, name: 'Food'},
-      {id: 2, name: 'Water'},
-      {id: 3, name: 'Medicine'},
-    ]);
-
-    const units = ref([
-      {id: 1, name: 'kg'},
-      {id: 2, name: 'L'},
-      {id: 3, name: 'pcs'},
-    ]);
-
     const selectedCategory = ref<number | null>(props.categoryId || 0);
     const selectedUnit = ref<number | null>(props.unitId || 0);
     const formIncomplete = ref<boolean>(false);
-    const showConfirmation = ref<boolean>(false); // New ref for confirmation dialog
+    const showConfirmation = ref<boolean>(false);
 
     const close = () => {
       resetForm();
       emit('close');
     };
 
-    // New method to handle cancel button click
     const handleCancel = () => {
       showConfirmation.value = true;
     };
 
-    // New method to confirm cancel
     const confirmCancel = () => {
       showConfirmation.value = false;
       close();
     };
 
-    // New method to cancel the confirmation
     const cancelConfirmation = () => {
       showConfirmation.value = false;
     };
@@ -98,24 +92,45 @@ export default defineComponent({
     };
 
     const loadItemData = async () => {
+      if (categories.value.length === 0) {
+        await categoriesStore.fetchCategories();
+      }
+
+      if (units.value.length === 0) {
+        await unitsStore.fetchUnits();
+      }
+
       if (props.itemId) {
         try {
-          const fetchedItems = await emergencyItemService().getEmergencyItemByCategoryId(props.categoryId);
-          const item = fetchedItems.find((item: EmergencyItem) => item.id === props.itemId);
+          let item;
+          const service = emergencyItemService();
+
+          if (props.categoryId) {
+            const items = await service.getEmergencyItemByCategoryId(props.categoryId);
+            item = items.find((i) => i.id === props.itemId);
+          } else {
+            item = await service.getEmergencyItemById(props.itemId);
+          }
 
           if (item) {
-            itemData.value = { ...item };
-            selectedCategory.value = props.categoryId;
-            selectedUnit.value = props.unitId;
+            if (item.expirationDate && typeof item.expirationDate === 'string') {
+              item.expirationDate = new Date(item.expirationDate);
+            }
+
+            itemData.value = {...item};
+            selectedCategory.value = item.categoryId;
+            selectedUnit.value = item.unitId;
           }
         } catch (error) {
           console.error("Error fetching item:", error);
         }
       } else if (props.categoryId || props.unitId) {
-        if(props.unitId) {
+        if (props.unitId) {
           selectedUnit.value = props.unitId;
           itemData.value.unitId = props.unitId;
-        } else {
+        }
+
+        if (props.categoryId) {
           selectedCategory.value = props.categoryId;
           itemData.value.categoryId = props.categoryId;
         }
@@ -135,13 +150,23 @@ export default defineComponent({
       }
       try {
         formIncomplete.value = false;
-        itemData.value.categoryId = selectedCategory.value as number;
-        itemData.value.unitId = selectedUnit.value as number;
 
+        const saveData = {
+          id: itemData.value.id,
+          name: itemData.value.name,
+          amount: itemData.value.amount,
+          categoryId: selectedCategory.value as number,
+          unitId: selectedUnit.value as number,
+          expirationDate: typeof itemData.value.expirationDate === 'string'
+              ? itemData.value.expirationDate
+              : itemData.value.expirationDate.toISOString().split('T')[0]
+        };
+
+        const service = emergencyItemService();
         if (isUpdate.value) {
-          await emergencyItemService().updateEmergencyItem(itemData.value);
+          await service.updateEmergencyItem(saveData);
         } else {
-          await emergencyItemService().createEmergencyItem(itemData.value);
+          await service.createEmergencyItem(saveData);
         }
 
         emit('itemSaved');
@@ -151,9 +176,17 @@ export default defineComponent({
       }
     };
 
-    if (props.display) {
-      loadItemData();
-    }
+    watch(() => props.display, (newVal) => {
+      if (newVal) {
+        loadItemData();
+      }
+    });
+
+    onMounted(async () => {
+      if (props.display) {
+        await loadItemData();
+      }
+    });
 
     return {
       close,
@@ -165,8 +198,8 @@ export default defineComponent({
       saveItem,
       isUpdate,
       formIncomplete,
-      showConfirmation, // Expose new ref
-      handleCancel,     // Expose new methods
+      showConfirmation,
+      handleCancel,
       confirmCancel,
       cancelConfirmation
     };
@@ -177,7 +210,7 @@ export default defineComponent({
 <template>
   <Teleport to="body">
     <div v-if="display"
-         class="fixed inset-0 flex items-center justify-center bg-opacity-50 z-50">
+         class="fixed inset-0 flex items-center justify-center z-50">
       <div
           class="bg-white rounded-lg shadow-xl w-4/5 md:w-3/5 max-h-4/5 overflow-auto p-6 max-w-3xl">
         <div class="flex flex-row justify-between items-center mb-6 border-b pb-4">
@@ -198,7 +231,8 @@ export default defineComponent({
               type="text"
               placeholder="Item name"
               class="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
-          <select v-model="selectedCategory" class="border border-gray-300 w-5/5 rounded-lg p-2 text-black focus:ring-2 focus:ring-blue-500">
+          <select v-model="selectedCategory"
+                  class="border border-gray-300 w-5/5 rounded-lg p-2 text-black focus:ring-2 focus:ring-blue-500">
             <option disabled value="">Select category</option>
             <option v-for="category in categories" :key="category.id" :value="category.id">
               {{ category.name }}
@@ -210,7 +244,8 @@ export default defineComponent({
                 type="number"
                 placeholder="Item amount"
                 class="w-4/5 p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
-            <select v-model="selectedUnit" class="border border-gray-300 w-1/5 rounded-lg px-2 py-1 text-black focus:ring-2 focus:ring-blue-500">
+            <select v-model="selectedUnit"
+                    class="border border-gray-300 w-1/5 rounded-lg px-2 py-1 text-black focus:ring-2 focus:ring-blue-500">
               <option disabled value="">Select unit</option>
               <option v-for="unit in units" :key="unit.id" :value="unit.id">
                 {{ unit.name }}
@@ -244,7 +279,7 @@ export default defineComponent({
         </div>
 
         <div v-if="showConfirmation"
-             class="fixed inset-0 flex items-center justify-center bg-opacity-50 z-[60]">
+             class="fixed inset-0 flex items-center justify-center z-[60]">
           <div class="bg-white rounded-lg p-6 shadow-xl max-w-md w-full">
             <h2 class="text-xl font-bold mb-4">Confirm</h2>
             <p class="mb-6">Do you want to quit? Any unsaved changes will be lost.</p>

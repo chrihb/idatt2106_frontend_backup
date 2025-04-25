@@ -1,11 +1,14 @@
 <script lang="ts">
-import {defineComponent} from 'vue';
+import {defineComponent, ref, onMounted, watch} from 'vue';
 import StorageItemMinimized from "@/components/emergencyStorage/StorageItemMinimized.vue";
+import {emergencyItemService} from '@/services/emergencyItemService';
+import {useCategoriesStore} from '@/stores/categoriesStore';
+import {useUnitsStore} from '@/stores/unitsStore';
 
 interface EmergencyItem {
   id?: number;
   name: string;
-  amount: string | number;
+  amount: number;
   unit?: string;
   expirationDate: string;
 }
@@ -21,15 +24,30 @@ export default defineComponent({
     display: {
       type: Boolean,
       default: false
-    },
-    items: {
-      type: Array as () => EmergencyItem[],
-      required: true
-    },
+    }
   },
   emits: ['close', 'update', 'create'],
   setup(props, {emit}) {
-    console.log("open");
+    const items = ref<EmergencyItem[]>([]);
+    const unitsStore = useUnitsStore();
+    const categoriesStore = useCategoriesStore();
+
+    const loadItems = async () => {
+      if (props.display && props.categoryId) {
+        try {
+          const service = emergencyItemService();
+          const categoryItems = await service.getEmergencyItemByCategoryId(props.categoryId);
+
+          items.value = categoryItems.map(item => ({
+            ...item,
+            unit: unitsStore.getUnitName(item.unitId)
+          }));
+        } catch (error) {
+          console.error('Error loading items for category');
+        }
+      }
+    };
+
     const close = () => {
       emit('close');
     };
@@ -42,10 +60,40 @@ export default defineComponent({
       emit('create', props.categoryId);
     };
 
+    const handleDelete = async (id: number) => {
+      try {
+        const service = emergencyItemService();
+        await service.deleteEmergencyItem(id);
+        await loadItems();
+      } catch (error) {
+        console.error('Error deleting item');
+      }
+    };
+
+    onMounted(async () => {
+      if (categoriesStore.categories.length === 0) {
+        await categoriesStore.fetchCategories();
+      }
+
+      if (unitsStore.units.length === 0) {
+        await unitsStore.fetchUnits();
+      }
+
+      await loadItems();
+    });
+
+    watch(() => props.display, async (newValue) => {
+      if (newValue === true) {
+        await loadItems();
+      }
+    }, { immediate: false });
+
     return {
       close,
       handleUpdate,
-      handleCreate
+      handleCreate,
+      handleDelete,
+      items
     };
   }
 });
@@ -67,7 +115,11 @@ export default defineComponent({
           </button>
         </div>
 
-        <div class="space-y-3">
+        <div v-if="items.length === 0" class="py-10 text-center text-gray-500">
+          No items found in this category
+        </div>
+
+        <div v-else class="space-y-3">
           <StorageItemMinimized
               v-for="item in items"
               :key="item.id"
@@ -77,7 +129,8 @@ export default defineComponent({
               :expirationDate="item.expirationDate"
               :id="item.id"
               :possibleUpdate="true"
-              @update="handleUpdate"/>
+              @update="handleUpdate"
+              @delete="handleDelete"/>
         </div>
 
         <div class="mt-6 pt-4 border-t flex justify-between">
