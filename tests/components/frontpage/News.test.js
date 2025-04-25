@@ -1,18 +1,17 @@
 import { mount } from '@vue/test-utils'
-import { describe, it, expect, beforeEach} from 'vitest'
+import { describe, it, expect, beforeEach } from 'vitest'
 import i18n from "@/i18n.js"
-import Navbar from '@/components/navigation/Navbar.vue'
-import mockRouter from '../mocks/MockRouter.js'
-import mockPinia from "../mocks/MockPinia.js";
+import mockRouter from "../../mocks/MockRouter.js";
+import mockPinia from "../../mocks/MockPinia.js";
+import News from "@/components/frontpage/News.vue";
 
-
-describe('Navbar.vue', () => {
+describe('News.vue', () => {
     let wrapper
 
     beforeEach(async () => {
         const router = mockRouter();
 
-        wrapper = mount(Navbar, {
+        wrapper = mount(News, {
             global: {
                 plugins: [i18n, router, mockPinia]
             }

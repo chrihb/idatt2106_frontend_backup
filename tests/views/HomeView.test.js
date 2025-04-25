@@ -18,7 +18,7 @@ describe('HomeView.vue', () => {
         });
     });
 
-    it('renders "Welcome"', () => {
+    it('renders', () => {
         expect(wrapper.isVisible()).toBeTruthy();
     });
 });
