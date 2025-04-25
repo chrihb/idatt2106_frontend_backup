@@ -60,7 +60,7 @@
     "lastNameRequired": "Last name is required.",
     "phoneRequired": "Phone number is required.",
     "confirmPasswordRequired": "Confirm password is required.",
-    "confirmPasswordError": "Passwords do not match.",
+    "confirmPasswordError": "Passwords does not match.",
     "registerError": "Registration failed. Please try again.",
     "registerSuccess": "Registration successful. Please check your email to verify your account.",
     "privacyPolicyText": "I accept the ",

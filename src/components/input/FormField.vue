@@ -7,7 +7,6 @@ const props = defineProps({
   type: { type: String, default: 'text' },
 });
 
-// Use vee-validate's useField to get the value, error, and handle input
 const { value, errorMessage, handleChange } = useField(() => props.fieldName);
 </script>
 

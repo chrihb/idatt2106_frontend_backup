@@ -61,12 +61,9 @@ const handleSubmit = async () => {
 <template>
   <div class="min-h-screen flex items-center justify-center bg-gray-100">
     <div class="bg-white p-8 rounded-lg shadow-lg w-full max-w-sm">
-      <!-- Logo (You can replace this with an actual image) -->
+      <!-- Logo -->
       <div class="flex justify-center mb-4">
-        <div class="w-16 h-16 bg-gray-200 rounded-full flex items-center justify-center">
-          <!-- Placeholder for logo; replace with your image -->
-          <span class="text-2xl">🛡️</span>
-        </div>
+          <img src="@/assets/logo.png" alt="Logo" class="w-16 h-16" />
       </div>
 
       <!-- Title -->
@@ -105,7 +102,7 @@ const handleSubmit = async () => {
         <button
             :disabled="isSubmitting"
             type="submit"
-            class="w-full bg-pink-400 text-white p-2 rounded hover:bg-pink-500 transition disabled:opacity-50"
+            class="w-full bg-kf-red text-white p-2 rounded disabled:opacity-50 cursor-pointer"
         >
           {{ t('login.login') }}
         </button>
