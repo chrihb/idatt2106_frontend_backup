@@ -7,7 +7,7 @@
 </template>
 
 <script setup>
-import {onMounted} from 'vue';
+import {onMounted, onUnmounted} from 'vue';
 import 'leaflet/dist/leaflet.css';
 import { useMapStore } from '@/stores/mapStore.js';
 
@@ -29,6 +29,12 @@ onMounted(async () => {
     console.error('Error initializing map:', error);
   }
 });
+
+onUnmounted(() => {
+  if (navigator.geolocation && mapStore.watchId) {
+    navigator.geolocation.clearWatch(mapStore.watchId);
+  }
+})
 </script>
 
 <style scoped>
