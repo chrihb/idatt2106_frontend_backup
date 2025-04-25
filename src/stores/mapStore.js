@@ -1,5 +1,6 @@
 import {defineStore} from 'pinia';
 import L from 'leaflet';
+import {usePositionTrackingStore} from "@/stores/positionTrackingStore.js";
 
 export const useMapStore = defineStore('mapStore', {
     state: () => ({
@@ -13,6 +14,7 @@ export const useMapStore = defineStore('mapStore', {
     actions: {
         // Initialize the map
         initMap() {
+            const positionTrackingStore = usePositionTrackingStore()
             // set its view to a specific location
             this.map = L.map('map').setView([63.422464, 10.410394], 15);
 
@@ -21,6 +23,9 @@ export const useMapStore = defineStore('mapStore', {
                 maxZoom: 19,
                 attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
             }).addTo(this.map);
+
+            //Mock tracking
+            positionTrackingStore.startTracking();
         }
     }
 });

@@ -25,17 +25,20 @@ export const useMarkerStore = defineStore('markerStore', {
     },
     actions: {
         // Add a marker to the map
-        addMarker(id, lat, lng, type, location, address, description) {
+        addMarker(markerData) {
             const mapStore = useMapStore();
-            const marker = L.marker([lat, lng], {id})
-                .bindPopup(createMarkerPopup(type, location, address, description))
+            if (this.getMarkerById(markerData.id)) {
+                return;
+            }
+            const marker = L.marker([markerData.lat, markerData.lng], {id: markerData.id})
+                .bindPopup(createMarkerPopup(markerData.type, markerData.location, markerData.address, markerData.description));
 
             // Check if the layerGroup for the type exists, if not create it
-            if (!mapStore.layerGroup[type]) {
-                mapStore.layerGroup[type] = L.layerGroup().addTo(mapStore.map);
+            if (!mapStore.layerGroup[markerData.type]) {
+                mapStore.layerGroup[markerData.type] = L.layerGroup().addTo(mapStore.map);
             }
             // Add the marker to the appropriate layerGroup
-            mapStore.layerGroup[type].addLayer(marker);
+            mapStore.layerGroup[markerData.type].addLayer(marker);
             //Add the marker to markers array
             this.markers.push(marker);
         },
