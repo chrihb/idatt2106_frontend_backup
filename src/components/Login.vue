@@ -85,7 +85,7 @@ const handleSubmit = async () => {
               field-name="email"
               :label="t('login.email')"
               type="email"
-              class="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+              class="w-full p-2 "
           />
         </div>
 
@@ -94,7 +94,7 @@ const handleSubmit = async () => {
           <PasswordField
               field-name="password"
               :label="t('login.password')"
-              class="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+              class="w-full p-2 "
           />
         </div>
 

@@ -116,11 +116,6 @@ onUnmounted(() => {
   cleanupRecaptcha(); // Clean up reCAPTCHA on component unmount
 });
 
-// Optional: Handle navigation from HomeButton
-const handleHomeNavigation = () => {
-  cleanupRecaptcha(); // Clean up reCAPTCHA before navigating
-  router.push('/'); // Adjust the route as needed
-};
 
 const handleSubmit = async () => {
   const result = await validate();
@@ -194,7 +189,7 @@ const handleSubmit = async () => {
               field-name="email"
               :label="t('register.email')"
               type="email"
-              class="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+              class="w-full p-2"
           />
         </div>
 
@@ -203,7 +198,7 @@ const handleSubmit = async () => {
           <PasswordField
               field-name="password"
               :label="t('register.password')"
-              class="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+              class="w-full p-2"
           />
         </div>
 
@@ -212,7 +207,7 @@ const handleSubmit = async () => {
           <PasswordField
               field-name="repeatPassword"
               :label="t('register.confirmPassword')"
-              class="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+              class="w-full p-2"
           />
         </div>
 
@@ -222,7 +217,7 @@ const handleSubmit = async () => {
               field-name="firstName"
               :label="t('register.firstName')"
               type="text"
-              class="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+              class="w-full p-2"
           />
         </div>
 
@@ -232,7 +227,7 @@ const handleSubmit = async () => {
               field-name="lastName"
               :label="t('register.lastName')"
               type="text"
-              class="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+              class="w-full p-2"
           />
         </div>
 
