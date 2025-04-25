@@ -14,6 +14,32 @@ export function emergencyItemService() {
     return response.json();
   }
 
+  async function getEmergencyItemCategories() {
+    const response = await fetch(`${baseUrl}/categories`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+    if (!response.ok) {
+      throw new Error('Failed to fetch emergency item categories');
+    }
+    return response.json();
+  }
+
+  async function getEmergencyItemUnits() {
+    const response = await fetch(`${baseUrl}/units`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+    if (!response.ok) {
+      throw new Error('Failed to fetch emergency item units');
+    }
+    return response.json();
+  }
+
   async function getEmergencyItemByCategoryId(categoryId) {
     const response = await fetch(`${baseUrl}/category/${categoryId}`);
     if (!response.ok) {
@@ -70,7 +96,10 @@ export function emergencyItemService() {
 
   return {
     getEmergencyItems,
+    getEmergencyItemById,
     getEmergencyItemByCategoryId,
+    getEmergencyItemCategories,
+    getEmergencyItemUnits,
     createEmergencyItem,
     updateEmergencyItem,
     deleteEmergencyItem,
