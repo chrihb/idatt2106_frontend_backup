@@ -28,6 +28,9 @@
         "desc": "You have storage items that requires attention",
         "ok": "Your storage looks good!"
     },
+    "news": {
+        "title": "News"
+    },
     "my-home": {
       "title": "My Home"
     },

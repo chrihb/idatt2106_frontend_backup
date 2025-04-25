@@ -1,43 +1,26 @@
 <script setup>
-import { ref } from "vue";
+import { useNewsStore } from "@/stores/newsStore.js";
+import { useI18n } from "vue-i18n";
+import NewsFull from "@/components/news/NewsFull.vue";
 
-const news = ref([
-  {
-    title: "Breaking News: Major Event Happens",
-    content: "Details about the major event that just happened.",
-    date: "2023-10-01",
-    time: "10:00",
-    severity: "high",
-  },
-  {
-    title: "Local News: Community Event Announced",
-    content: "Information about an upcoming community event.",
-    date: "2023-10-02",
-    time: "12:00",
-    severity: "high",
-  },
-  {
-    title: "Community Event Announced",
-    content: "Details about a community event that is happening soon.",
-    date: "2023-10-03",
-    time: "15.26",
-    severity: "medium",
-  }
-]);
+const { t } = useI18n();
+const newsStore = useNewsStore();
 </script>
 
 <template>
-  <div id="news-page" class="flex flex-col p-4">
-    <div id="title" class="flex flex-row">
-      <h1 class="text-2xl font-bold mb-4 text-kf-blue">News</h1>
-    </div>
-    <div id="news-container" class="flex flex-col justify-center gap-1">
-      <div v-for="(publishing, index) in news" :key="index" class="bg-kf-white-contrast-1 shadow-md rounded-lg p-2 mb-4
-              grid grid-cols-5 grid-rows-2">
-        <h2 class="text-xl font-bold text-kf-blue col-start-1 col-span-4 row-start-1">{{ publishing.title }}</h2>
-        <p class="text-gray-700 col-start-1 col-span-4 row-start-2">{{ publishing.content }}</p>
-        <p class="text-sm col-start-5 row-start-2">Date: {{ publishing.date }} | Time: {{ publishing.time }}</p>
+  <div class="py-2 px-2">
+    <div class=" bg-kf-white flex flex-col gap-2 items-center shadow-lg rounded-2xl py-2 px-2">
+      <h1 class="text-2xl text-kf-blue">{{ t("news.title") }}</h1>
+      <div class="flex flex-col gap-1 w-full">
+        <div v-for="(publishing, index) in newsStore.articles.slice(0, 6)" :key="index" class="">
+          <NewsFull :date="publishing.date" :time="publishing.time" :title="publishing.title" :content="publishing.content" :location="publishing.location"/>
+        </div>
       </div>
     </div>
   </div>
+
 </template>
+
+<style scoped>
+
+</style>
