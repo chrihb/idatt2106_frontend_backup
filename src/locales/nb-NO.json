@@ -14,6 +14,20 @@
       "nb": "NO"
     }
   },
+  "account-settings": {
+    "title": "Brukerinnstillinger",
+    "manage-storages": "Administrer lager",
+    "manage-households": "Administrer husstander",
+    "find-assembling-areas": "Finn møteplasser",
+    "manage-emergency-groups": "Administrer beredskapsgrupper",
+    "experience-journal": "Erfaringsjournal",
+    "enable-notifications": "Aktiver varslinger",
+    "enable-position-sharing": "Skru på posisjonsdeling",
+    "show-storage-on-frontpage": "Vis lagerstatus på forsiden",
+    "show-household-on-frontpage": "Vis husstandsstatus på forsiden",
+    "admin-settings": "Administrator innstillinger",
+    "invite-admins": "Inviter administratorer"
+  },
   "footer": {
     "about-us": "Om Oss",
     "privacy-policy": "Personvernserklæring"

@@ -14,6 +14,20 @@
         "nb": "NO"
         }
   },
+  "account-settings": {
+    "title": "Account Settings",
+    "manage-storages": "Manage Storages",
+    "manage-households": "Manage Households",
+    "find-assembling-areas": "Find Assembling Areas",
+    "manage-emergency-groups": "Manage Emergency Groups",
+    "experience-journal": "Experience Journal",
+    "enable-notifications": "Enable Notifications",
+    "enable-position-sharing": "Enable Location Sharing",
+    "show-storage-on-frontpage": "Show Storage Status on Frontpage",
+    "show-household-on-frontpage": "Show Household Status on Frontpage",
+    "admin-settings": "Admin Settings",
+    "invite-admins": "Invite Admins"
+  },
     "footer": {
         "about-us": "About Us",
         "privacy-policy": "Privacy Policy"
