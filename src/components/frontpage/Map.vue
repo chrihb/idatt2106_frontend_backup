@@ -1,25 +1,15 @@
 <template>
   <div id="map" ></div>
-  <div class ="controls">
-    <button @click="centerMapOnUser()">Center on My Location</button>
-    <button @click="toggleTracking">{{ mapStore.canTrack ? 'Stop Tracking' : 'Start Tracking' }}</button>
-  </div>
 </template>
 
 <script setup>
 import {onMounted, onUnmounted} from 'vue';
 import 'leaflet/dist/leaflet.css';
 import { useMapStore } from '@/stores/mapStore.js';
+import { usePositionTrackingStore } from '@/stores/positionTrackingStore.js';
 
 const mapStore = useMapStore();
-
-const centerMapOnUser = () => {
-  mapStore.centerMapOnUser();
-};
-
-const toggleTracking = () => {
-  mapStore.toggleTracking();
-};
+const positionTrackingStore = usePositionTrackingStore();
 
 onMounted(async () => {
   // Initialize the map
@@ -31,6 +21,7 @@ onMounted(async () => {
 });
 
 onUnmounted(() => {
+  // Stop watch position when component is unmounted
   if (navigator.geolocation && mapStore.watchId) {
     navigator.geolocation.clearWatch(mapStore.watchId);
   }
