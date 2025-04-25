@@ -6,10 +6,8 @@
 import {onMounted, onUnmounted} from 'vue';
 import 'leaflet/dist/leaflet.css';
 import { useMapStore } from '@/stores/mapStore.js';
-import { usePositionTrackingStore } from '@/stores/positionTrackingStore.js';
 
 const mapStore = useMapStore();
-const positionTrackingStore = usePositionTrackingStore();
 
 onMounted(async () => {
   // Initialize the map
