@@ -1,6 +1,5 @@
 import {defineStore} from 'pinia';
 import L from 'leaflet';
-import {useMarkerStore} from "@/stores/markerStore.js";
 
 export const useMapStore = defineStore('mapStore', {
     state: () => ({
@@ -14,7 +13,6 @@ export const useMapStore = defineStore('mapStore', {
     actions: {
         // Initialize the map
         initMap() {
-            const markerStore = useMarkerStore();
             // set its view to a specific location
             this.map = L.map('map').setView([63.422464, 10.410394], 15);
 
