@@ -4,18 +4,20 @@ import Map from '@/components/frontpage/Map.vue';
 import {useMapStore} from '@/stores/mapStore';
 
 
-vi.mock('@/stores/mapStore', () => ({
-    useMapStore: vi.fn(),
-}));
 
 describe('Map.vue', () => {
     let mockMapStore;
+
+    vi.mock('@/stores/mapStore', () => ({
+        useMapStore: vi.fn(),
+    }));
 
     beforeEach(() => {
         mockMapStore = {
             initMap: vi.fn(() => {
                 mockMapStore.map = {
-                    on: vi.fn(() => ({
+                    on: vi.fn(),
+                    getBounds: vi.fn(() => ({
                         getNorthEast: vi.fn(),
                         getSouthWest: vi.fn(),
                     })),
