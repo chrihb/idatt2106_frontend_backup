@@ -3,7 +3,8 @@
 </script>
 
 <template>
-  <p>Map</p>
+  <div class="w-full border rounded h-60">
+  </div>
 </template>
 
 <style scoped>
