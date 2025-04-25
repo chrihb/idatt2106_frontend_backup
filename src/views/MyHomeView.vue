@@ -1,9 +1,9 @@
 <script setup>
-import Login from "@/components/Login.vue";
+
 </script>
 
 <template>
-  <Login/>
+  <p>My Home</p>
 </template>
 
 <style scoped>

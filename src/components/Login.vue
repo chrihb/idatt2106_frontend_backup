@@ -6,6 +6,7 @@ import FormField from '@/components/input/FormField.vue';
 import PasswordField from "@/components/input/PasswordField.vue";
 import {requestLogin} from '@/services/loginService';
 import {useI18n} from "vue-i18n";
+import HomeButton from "@/components/HomeButton.vue";
 
 const { t } = useI18n();
 
@@ -116,6 +117,7 @@ const handleSubmit = async () => {
           </router-link>
         </div>
       </form>
+      <HomeButton />
     </div>
   </div>
 </template>

@@ -2,7 +2,9 @@
 import { ExclamationTriangleIcon, CheckCircleIcon } from "@heroicons/vue/24/solid/index.js";
 import { useI18n } from "vue-i18n";
 import {computed, ref} from "vue";
+import { useRouter } from "vue-router";
 
+const router = useRouter()
 const { t } = useI18n();
 
 const isWarning = ref(true); // Replace with actual logic to determine if there is a warning
@@ -23,7 +25,7 @@ const progressColor = computed(() => {
 </script>
 
 <template>
-  <div class="bg-kf-white flex flex-col gap-2 items-center shadow-lg rounded-2xl py-2 px-2">
+  <div @click="router.push('/storage')" class="cursor-pointer bg-kf-white flex flex-col gap-2 items-center shadow-lg rounded-2xl py-2 px-2">
     <h1 class="text-2xl text-kf-blue">{{ t("storage-status.title") }}</h1>
     <div class="flex-grow justify-center items-center flex flex-col gap-2">
       <div class="w-sm">
@@ -36,9 +38,9 @@ const progressColor = computed(() => {
         </div>
       </div>
 
-      <button v-if="isWarning" @click="console.log('clicked')" class="flex items-center gap-1 cursor-pointer hover:bg-kf-grey rounded-lg px-1">
+      <button v-if="isWarning" @click="console.log('clicked')" class="flex items-center gap-1 cursor-pointer rounded-lg px-1">
         <ExclamationTriangleIcon class="size-8 text-kf-red"></ExclamationTriangleIcon>
-        <label class="cursor-pointer text-1xl text-kf-red">{{ t('storage-status.desc') }}</label>
+        <label class="text-1xl cursor-pointer text-kf-red">{{ t('storage-status.desc') }}</label>
       </button>
       <div v-else class="flex items-center gap-1 px-1">
         <CheckCircleIcon class="size-8 text-kf-green"/>

@@ -6,7 +6,6 @@ import Login from "@/components/Register.vue";
 
 <template>
   <RouterView />
-  <Login/>
 </template>
 
 <style scoped>

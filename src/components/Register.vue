@@ -6,6 +6,7 @@ import FormField from '@/components/input/FormField.vue';
 import PasswordField from "@/components/input/PasswordField.vue";
 import { requestRegister } from "@/services/registerService.js";
 import {useI18n} from "vue-i18n";
+import HomeButton from "@/components/HomeButton.vue";
 
 const { t } = useI18n();
 
@@ -253,6 +254,7 @@ const handleSubmit = async () => {
           {{ t('register.register') }}
         </button>
       </form>
+      <HomeButton />
     </div>
   </div>
 </template>
