@@ -36,6 +36,11 @@ const { validate, values: form, errors, setFieldError, resetForm } = useForm({
       if (!value) return t('register.lastNameRequired');
       return true;
     },
+    phoneNumber: (value) => {
+      if (!value) return t('register.phoneRequired');
+      if (!rules.regex(value, /^\+?[0-9]{7,15}$/)) return t('register.phoneRequired');
+      return true;
+    },
     privacyAccepted: (value) => {
       if (!value) return t('register.privacyPolicyRequired');
       return true;
@@ -134,6 +139,7 @@ const handleSubmit = async () => {
       password: form.password,
       firstName: form.firstName,
       lastName: form.lastName,
+      phoneNumber: form.phoneNumber,
       recaptchaToken: recaptchaToken.value,
     };
     console.log('Submitting registration form:', registerForm); // Debug the form data
@@ -150,6 +156,8 @@ const handleSubmit = async () => {
         setFieldError('firstName', response.error);
       } else if (response.error.includes('Surname')) {
         setFieldError('lastName', response.error);
+      }else if (response.error.includes('PhoneNumber')) {
+          setFieldError('phoneNumber', response.error);
       } else {
         errorMessage.value = response.error || 'Registration failed';
       }
@@ -231,6 +239,16 @@ const handleSubmit = async () => {
           />
         </div>
 
+        <!-- Phone number Field -->
+        <div class="mb-4">
+          <FormField
+              field-name="phoneNumber"
+              :label="t('register.phone')"
+              type="text"
+              class="w-full p-2"
+          />
+        </div>
+
         <!-- Privacy Policy Checkbox -->
         <div class="form-field mb-4">
           <label class="flex items-center text-sm text-gray-700">
@@ -284,6 +302,15 @@ const handleSubmit = async () => {
           {{ t('register.register') }}
         </button>
       </form>
+      <!-- Toggle Link to Login -->
+      <div class="mt-4 text-center">
+        <p class="text-gray-600">
+          {{ t('register.hasAccount') }}
+          <router-link to="/login" class="text-blue-600 hover:underline">
+            {{ t('register.loginHere') }}
+          </router-link>
+        </p>
+      </div>
       <HomeButton />
     </div>
   </div>
