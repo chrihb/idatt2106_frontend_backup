@@ -1,5 +1,5 @@
-<script lang="ts">
-import {defineComponent, ref, computed, onMounted, watch} from 'vue';
+<script setup lang="ts">
+import {defineComponent, ref, computed, onMounted, watch, defineProps, defineEmits} from 'vue';
 import {emergencyItemService} from '@/services/emergencyItemService';
 import {useCategoriesStore} from '@/stores/categoriesStore';
 import {useUnitsStore} from '@/stores/unitsStore';
@@ -14,195 +14,154 @@ interface EmergencyItem {
   categoryId?: number;
 }
 
-export default defineComponent({
-  name: 'UpdateStorageComponent',
-  props: {
-    categoryId: {
-      type: Number,
-      required: false,
-      default: 0
-    },
-    unitId: {
-      type: Number,
-      required: false,
-      default: 0
-    },
-    itemId: {
-      type: Number,
-      required: false,
-      default: null
-    },
-    display: {
-      type: Boolean,
-      default: false
-    },
-  },
-  emits: ['close', 'itemSaved'],
-  setup(props, {emit}) {
-    const isUpdate = computed(() => props.itemId !== null);
-    const categoriesStore = useCategoriesStore();
-    const unitsStore = useUnitsStore();
+const isUpdate = computed(() => props.itemId !== null);
+const categoriesStore = useCategoriesStore();
+const unitsStore = useUnitsStore();
+const props = defineProps(['categoryId', 'unitId', 'itemId', 'display']);
+const emit = defineEmits(['close', 'itemSaved']);
 
-    const {categories} = storeToRefs(categoriesStore);
-    const {units} = storeToRefs(unitsStore);
+const {categories} = storeToRefs(categoriesStore);
+const {units} = storeToRefs(unitsStore);
 
-    const itemData = ref<EmergencyItem>({
-      name: '',
-      amount: '',
-      unitId: props.unitId || 0,
-      expirationDate: '',
-      categoryId: props.categoryId || 0
-    });
+const itemData = ref<EmergencyItem>({
+  name: '',
+  amount: '',
+  unitId: props.unitId || 0,
+  expirationDate: '',
+  categoryId: props.categoryId || 0
+});
 
-    const selectedCategory = ref<number | null>(props.categoryId || 0);
-    const selectedUnit = ref<number | null>(props.unitId || 0);
-    const formIncomplete = ref<boolean>(false);
-    const showConfirmation = ref<boolean>(false);
+const selectedCategory = ref<number | null>(props.categoryId || 0);
+const selectedUnit = ref<number | null>(props.unitId || 0);
+const formIncomplete = ref<boolean>(false);
+const showConfirmation = ref<boolean>(false);
 
-    const close = () => {
-      resetForm();
-      emit('close');
-    };
+const close = () => {
+  resetForm();
+  emit('close');
+};
 
-    const handleCancel = () => {
-      showConfirmation.value = true;
-    };
+const handleCancel = () => {
+  showConfirmation.value = true;
+};
 
-    const confirmCancel = () => {
-      showConfirmation.value = false;
-      close();
-    };
+const confirmCancel = () => {
+  showConfirmation.value = false;
+  close();
+};
 
-    const cancelConfirmation = () => {
-      showConfirmation.value = false;
-    };
+const cancelConfirmation = () => {
+  showConfirmation.value = false;
+};
 
-    const resetForm = () => {
-      itemData.value = {
-        name: '',
-        amount: '',
-        unitId: 0,
-        expirationDate: '',
-        categoryId: 0
-      };
+const resetForm = () => {
+  itemData.value = {
+    name: '',
+    amount: '',
+    unitId: 0,
+    expirationDate: '',
+    categoryId: 0
+  };
 
-      selectedCategory.value = null;
-      selectedUnit.value = null;
-      formIncomplete.value = false;
-    };
+  selectedCategory.value = null;
+  selectedUnit.value = null;
+  formIncomplete.value = false;
+};
 
-    const loadItemData = async () => {
-      if (categories.value.length === 0) {
-        await categoriesStore.fetchCategories();
+const loadItemData = async () => {
+  if (categories.value.length === 0) {
+    await categoriesStore.fetchCategories();
+  }
+
+  if (units.value.length === 0) {
+    await unitsStore.fetchUnits();
+  }
+
+  if (props.itemId) {
+    try {
+      let item;
+      const service = emergencyItemService();
+
+      if (props.categoryId) {
+        const items = await service.getEmergencyItemByCategoryId(props.categoryId);
+        item = items.find((i) => i.id === props.itemId);
+      } else {
+        item = await service.getEmergencyItemById(props.itemId);
       }
 
-      if (units.value.length === 0) {
-        await unitsStore.fetchUnits();
-      }
-
-      if (props.itemId) {
-        try {
-          let item;
-          const service = emergencyItemService();
-
-          if (props.categoryId) {
-            const items = await service.getEmergencyItemByCategoryId(props.categoryId);
-            item = items.find((i) => i.id === props.itemId);
-          } else {
-            item = await service.getEmergencyItemById(props.itemId);
-          }
-
-          if (item) {
-            if (item.expirationDate && typeof item.expirationDate === 'string') {
-              item.expirationDate = new Date(item.expirationDate);
-            }
-
-            itemData.value = {...item};
-            selectedCategory.value = item.categoryId;
-            selectedUnit.value = item.unitId;
-          }
-        } catch (error) {
-          console.error("Error fetching item:", error);
-        }
-      } else if (props.categoryId || props.unitId) {
-        if (props.unitId) {
-          selectedUnit.value = props.unitId;
-          itemData.value.unitId = props.unitId;
+      if (item) {
+        if (item.expirationDate && typeof item.expirationDate === 'string') {
+          item.expirationDate = new Date(item.expirationDate);
         }
 
-        if (props.categoryId) {
-          selectedCategory.value = props.categoryId;
-          itemData.value.categoryId = props.categoryId;
-        }
+        itemData.value = {...item};
+        selectedCategory.value = item.categoryId;
+        selectedUnit.value = item.unitId;
       }
+    } catch (error) {
+      console.error("Error fetching item:", error);
+    }
+  } else if (props.categoryId || props.unitId) {
+    if (props.unitId) {
+      selectedUnit.value = props.unitId;
+      itemData.value.unitId = props.unitId;
+    }
+
+    if (props.categoryId) {
+      selectedCategory.value = props.categoryId;
+      itemData.value.categoryId = props.categoryId;
+    }
+  }
+};
+
+const saveItem = async () => {
+  if (
+      !itemData.value.name.trim() ||
+      !itemData.value.amount ||
+      !selectedCategory.value ||
+      !selectedUnit.value ||
+      !itemData.value.expirationDate
+  ) {
+    formIncomplete.value = true;
+    return;
+  }
+  try {
+    formIncomplete.value = false;
+
+    const saveData = {
+      id: itemData.value.id,
+      name: itemData.value.name,
+      amount: itemData.value.amount,
+      categoryId: selectedCategory.value as number,
+      unitId: selectedUnit.value as number,
+      expirationDate: typeof itemData.value.expirationDate === 'string'
+          ? itemData.value.expirationDate
+          : itemData.value.expirationDate.toISOString().split('T')[0]
     };
 
-    const saveItem = async () => {
-      if (
-          !itemData.value.name.trim() ||
-          !itemData.value.amount ||
-          !selectedCategory.value ||
-          !selectedUnit.value ||
-          !itemData.value.expirationDate
-      ) {
-        formIncomplete.value = true;
-        return;
-      }
-      try {
-        formIncomplete.value = false;
+    const service = emergencyItemService();
+    if (isUpdate.value) {
+      await service.updateEmergencyItem(saveData);
+    } else {
+      await service.createEmergencyItem(saveData);
+    }
 
-        const saveData = {
-          id: itemData.value.id,
-          name: itemData.value.name,
-          amount: itemData.value.amount,
-          categoryId: selectedCategory.value as number,
-          unitId: selectedUnit.value as number,
-          expirationDate: typeof itemData.value.expirationDate === 'string'
-              ? itemData.value.expirationDate
-              : itemData.value.expirationDate.toISOString().split('T')[0]
-        };
+    emit('itemSaved');
+    close();
+  } catch (error) {
+    console.error("Error saving item:", error);
+  }
+};
 
-        const service = emergencyItemService();
-        if (isUpdate.value) {
-          await service.updateEmergencyItem(saveData);
-        } else {
-          await service.createEmergencyItem(saveData);
-        }
+watch(() => props.display, (newVal) => {
+  if (newVal) {
+    loadItemData();
+  }
+});
 
-        emit('itemSaved');
-        close();
-      } catch (error) {
-        console.error("Error saving item:", error);
-      }
-    };
-
-    watch(() => props.display, (newVal) => {
-      if (newVal) {
-        loadItemData();
-      }
-    });
-
-    onMounted(async () => {
-      if (props.display) {
-        await loadItemData();
-      }
-    });
-
-    return {
-      close,
-      categories,
-      selectedCategory,
-      units,
-      selectedUnit,
-      itemData,
-      saveItem,
-      isUpdate,
-      formIncomplete,
-      showConfirmation,
-      handleCancel,
-      confirmCancel,
-      cancelConfirmation
-    };
+onMounted(async () => {
+  if (props.display) {
+    await loadItemData();
   }
 });
 </script>
