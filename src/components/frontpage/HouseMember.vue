@@ -1,7 +1,6 @@
 <script setup>
 import { CheckCircleIcon, XCircleIcon } from "@heroicons/vue/24/solid/index.js";
 
-
 const props = defineProps({
   name: {
     type: String,
