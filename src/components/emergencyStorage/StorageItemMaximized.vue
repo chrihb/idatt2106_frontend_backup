@@ -1,17 +1,9 @@
-<script lang="ts">
+<script lang="js">
 import {defineComponent, ref, onMounted, watch} from 'vue';
 import StorageItemMinimized from "@/components/emergencyStorage/StorageItemMinimized.vue";
-import {emergencyItemService} from '@/services/emergencyItemService';
+import {emergencyItemService} from '@/services/emergencyItemService.js';
 import {useCategoriesStore} from '@/stores/categoriesStore';
 import {useUnitsStore} from '@/stores/unitsStore';
-
-interface EmergencyItem {
-  id?: number;
-  name: string;
-  amount: number;
-  unit?: string;
-  expirationDate: string;
-}
 
 export default defineComponent({
   name: 'StorageItemMaximized',
@@ -28,7 +20,7 @@ export default defineComponent({
   },
   emits: ['close', 'update', 'create'],
   setup(props, {emit}) {
-    const items = ref<EmergencyItem[]>([]);
+    const items = ref([]);
     const unitsStore = useUnitsStore();
     const categoriesStore = useCategoriesStore();
 
@@ -52,7 +44,7 @@ export default defineComponent({
       emit('close');
     };
 
-    const handleUpdate = (id: number) => {
+    const handleUpdate = (id) => {
       emit('update', id);
     };
 
@@ -60,7 +52,7 @@ export default defineComponent({
       emit('create', props.categoryId);
     };
 
-    const handleDelete = async (id: number) => {
+    const handleDelete = async (id) => {
       try {
         const service = emergencyItemService();
         await service.deleteEmergencyItem(id);

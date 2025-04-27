@@ -1,18 +1,9 @@
-<script setup lang="ts">
+<script setup lang="js">
 import {defineComponent, ref, computed, onMounted, watch, defineProps, defineEmits} from 'vue';
-import {emergencyItemService} from '@/services/emergencyItemService';
+import {emergencyItemService} from '@/services/emergencyItemService.js';
 import {useCategoriesStore} from '@/stores/categoriesStore';
 import {useUnitsStore} from '@/stores/unitsStore';
 import {storeToRefs} from 'pinia';
-
-interface EmergencyItem {
-  id?: number;
-  name: string;
-  amount: string | number;
-  unitId?: number;
-  expirationDate: Date | string;
-  categoryId?: number;
-}
 
 const isUpdate = computed(() => props.itemId !== null);
 const categoriesStore = useCategoriesStore();
@@ -20,10 +11,10 @@ const unitsStore = useUnitsStore();
 const props = defineProps(['categoryId', 'unitId', 'itemId', 'display']);
 const emit = defineEmits(['close', 'itemSaved']);
 
-const categories = ref<any[]>([]);
-const units = ref<any[]>([]);
+const categories = ref([]);
+const units = ref([]);
 
-const itemData = ref<EmergencyItem>({
+const itemData = ref({
   name: '',
   amount: '',
   unitId: props.unitId || 0,
@@ -31,10 +22,10 @@ const itemData = ref<EmergencyItem>({
   categoryId: props.categoryId || 0
 });
 
-const selectedCategory = ref<number | null>(props.categoryId || 0);
-const selectedUnit = ref<number | null>(props.unitId || 0);
-const formIncomplete = ref<boolean>(false);
-const showConfirmation = ref<boolean>(false);
+const selectedCategory = ref(props.categoryId || 0);
+const selectedUnit = ref(props.unitId || 0);
+const formIncomplete = ref(false);
+const showConfirmation = ref(false);
 
 const close = () => {
   resetForm();
@@ -134,8 +125,8 @@ const saveItem = async () => {
       id: itemData.value.id,
       name: itemData.value.name,
       amount: itemData.value.amount,
-      categoryId: selectedCategory.value as number,
-      unitId: selectedUnit.value as number,
+      categoryId: selectedCategory.value,
+      unitId: selectedUnit.value,
       expirationDate: typeof itemData.value.expirationDate === 'string'
           ? itemData.value.expirationDate
           : itemData.value.expirationDate.toISOString().split('T')[0]

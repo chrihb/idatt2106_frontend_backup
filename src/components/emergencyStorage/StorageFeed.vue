@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<script setup lang="js">
 import {onMounted, ref} from 'vue';
 import StorageItemMinimized from "@/components/emergencyStorage/StorageItemMinimized.vue";
 import StorageItemMaximized from "@/components/emergencyStorage/StorageItemMaximized.vue";
@@ -6,17 +6,17 @@ import UpdateStorageComponent from "@/components/emergencyStorage/UpdateStorageC
 import {useCategoriesStore} from '@/stores/categoriesStore';
 import {useUnitsStore} from '@/stores/unitsStore';
 import {useEmergencyItemsStore} from '@/stores/emergencyItemsStore';
-import {emergencyItemService} from '@/services/emergencyItemService';
+import {emergencyItemService} from '@/services/emergencyItemService.js';
 
 const categoriesStore = useCategoriesStore();
 const unitsStore = useUnitsStore();
 const itemsStore = useEmergencyItemsStore();
 
-const itemCategories = ref<any[]>([]);
+const itemCategories = ref([]);
 const modalData = ref({
   id: 0,
   display: false,
-  items: [] as any[]
+  items: []
 });
 
 const updateModalData = ref({
@@ -45,7 +45,7 @@ const fetchCategories = async () => {
   }
 };
 
-const openCreateModal = (categoryId: number | null = null) => {
+const openCreateModal = (categoryId = null) => {
   updateModalData.value = {
     display: true,
     categoryId,
@@ -53,7 +53,7 @@ const openCreateModal = (categoryId: number | null = null) => {
   };
 };
 
-const openUpdateModal = (itemId: number) => {
+const openUpdateModal = (itemId) => {
   updateModalData.value = {
     display: true,
     categoryId: modalData.value.id,
@@ -61,7 +61,7 @@ const openUpdateModal = (itemId: number) => {
   };
 };
 
-const openModal = async (category: any) => {
+const openModal = async (category) => {
   const service = emergencyItemService();
   const items = await service.getEmergencyItemByCategoryId(category.id);
 
