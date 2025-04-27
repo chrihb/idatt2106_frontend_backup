@@ -2,7 +2,7 @@
 import {defineComponent, ref, computed, onMounted, watch, defineProps, defineEmits} from 'vue';
 import {emergencyItemService} from '@/services/emergencyItemService.js';
 import {useCategoriesStore} from '@/stores/categoriesStore';
-import {useUnitsStore} from '@/stores/unitsStore';
+import {useUnitsStore} from '@/stores/unitsStore.js';
 import {storeToRefs} from 'pinia';
 
 const isUpdate = computed(() => props.itemId !== null);

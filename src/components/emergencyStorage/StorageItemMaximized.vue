@@ -3,7 +3,7 @@ import {defineComponent, ref, onMounted, watch} from 'vue';
 import StorageItemMinimized from "@/components/emergencyStorage/StorageItemMinimized.vue";
 import {emergencyItemService} from '@/services/emergencyItemService.js';
 import {useCategoriesStore} from '@/stores/categoriesStore';
-import {useUnitsStore} from '@/stores/unitsStore';
+import {useUnitsStore} from '@/stores/unitsStore.js';
 
 export default defineComponent({
   name: 'StorageItemMaximized',

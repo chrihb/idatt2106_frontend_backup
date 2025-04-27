@@ -4,7 +4,7 @@ import StorageItemMinimized from "@/components/emergencyStorage/StorageItemMinim
 import StorageItemMaximized from "@/components/emergencyStorage/StorageItemMaximized.vue";
 import UpdateStorageComponent from "@/components/emergencyStorage/UpdateStorageComponent.vue";
 import {useCategoriesStore} from '@/stores/categoriesStore';
-import {useUnitsStore} from '@/stores/unitsStore';
+import {useUnitsStore} from '@/stores/unitsStore.js';
 import {useEmergencyItemsStore} from '@/stores/emergencyItemsStore';
 import {emergencyItemService} from '@/services/emergencyItemService.js';
 
