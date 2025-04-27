@@ -20,8 +20,8 @@ const unitsStore = useUnitsStore();
 const props = defineProps(['categoryId', 'unitId', 'itemId', 'display']);
 const emit = defineEmits(['close', 'itemSaved']);
 
-const {categories} = storeToRefs(categoriesStore);
-const {units} = storeToRefs(unitsStore);
+const categories = ref<any[]>([]);
+const units = ref<any[]>([]);
 
 const itemData = ref<EmergencyItem>({
   name: '',
@@ -69,13 +69,15 @@ const resetForm = () => {
 };
 
 const loadItemData = async () => {
-  if (categories.value.length === 0) {
+  if (categoriesStore.categories.length === 0) {
     await categoriesStore.fetchCategories();
   }
+  categories.value = categoriesStore.categories;
 
-  if (units.value.length === 0) {
+  if (unitsStore.units.length === 0) {
     await unitsStore.fetchUnits();
   }
+  units.value = unitsStore.units;
 
   if (props.itemId) {
     try {
@@ -152,6 +154,14 @@ const saveItem = async () => {
     console.error("Error saving item:", error);
   }
 };
+
+watch(() => categoriesStore.categories, (newCategories) => {
+  categories.value = newCategories;
+}, {deep: true});
+
+watch(() => unitsStore.units, (newUnits) => {
+  units.value = newUnits;
+}, {deep: true});
 
 watch(() => props.display, (newVal) => {
   if (newVal) {
