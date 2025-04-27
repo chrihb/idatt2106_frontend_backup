@@ -1,4 +1,4 @@
-import {emergencyItemService} from '@/services/emergencyItemService';
+import {emergencyItemService} from '@/services/emergencyItemService.js';
 import {defineStore} from "pinia";
 
 export const useUnitsStore = defineStore("units", {

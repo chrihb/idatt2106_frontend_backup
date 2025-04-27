@@ -3,9 +3,9 @@ import {onMounted, ref} from 'vue';
 import StorageItemMinimized from "@/components/emergencyStorage/StorageItemMinimized.vue";
 import StorageItemMaximized from "@/components/emergencyStorage/StorageItemMaximized.vue";
 import UpdateStorageComponent from "@/components/emergencyStorage/UpdateStorageComponent.vue";
-import {useCategoriesStore} from '@/stores/categoriesStore';
+import {useCategoriesStore} from '@/stores/categoriesStore.js';
 import {useUnitsStore} from '@/stores/unitsStore.js';
-import {useEmergencyItemsStore} from '@/stores/emergencyItemsStore';
+import {useEmergencyItemsStore} from '@/stores/emergencyItemsStore.js';
 import {emergencyItemService} from '@/services/emergencyItemService.js';
 
 const categoriesStore = useCategoriesStore();

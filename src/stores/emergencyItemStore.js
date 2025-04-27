@@ -1,4 +1,4 @@
-import {emergencyItemService} from '@/services/emergencyItemService';
+import {emergencyItemService} from '@/services/emergencyItemService.js';
 import {defineStore} from "pinia";
 
 // Define the store for a single emergency item (active/current item)
@@ -9,7 +9,7 @@ export const useEmergencyItemStore = defineStore("emergencyItem", {
     amount: 0,
     categoryId: 0,
     unitId: 0,
-    expirationDate: null as Date | null,
+    expirationDate: null,
   }),
 
   actions: {
@@ -33,7 +33,8 @@ export const useEmergencyItemStore = defineStore("emergencyItem", {
       this.amount = item.amount;
       this.categoryId = item.categoryId;
       this.unitId = item.unitId;
-      this.expirationDate = item.expirationDate ? new Date(item.expirationDate) : null;
+      this.expirationDate = item.expirationDate ? new Date(item.expirationDate)
+          : null;
     },
 
     resetState() {
