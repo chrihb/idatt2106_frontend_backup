@@ -2,7 +2,7 @@ export function emergencyItemService() {
   const baseUrl = `${window.backendURL}/api/emergency/items`;
 
   async function getEmergencyItems() {
-    const response = await fetch(baseUrl, {
+    const response = await fetch(`${baseUrl}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -41,7 +41,7 @@ export function emergencyItemService() {
   }
 
   async function getEmergencyItemByCategoryId(categoryId) {
-    const response = await fetch(`${baseUrl}/category/${categoryId}`);
+    const response = await fetch(`${baseUrl}/categories/${categoryId}`);
     if (!response.ok) {
       throw new Error('Failed to fetch emergency items by category');
     }
