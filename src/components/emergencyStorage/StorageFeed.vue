@@ -7,6 +7,9 @@ import {useCategoriesStore} from '@/stores/categoriesStore.js';
 import {useUnitsStore} from '@/stores/unitsStore.js';
 import {useEmergencyItemsStore} from '@/stores/emergencyItemsStore.js';
 import {emergencyItemService} from '@/services/emergencyItemService.js';
+import {useI18n} from "vue-i18n";
+
+const { t } = useI18n()
 
 const categoriesStore = useCategoriesStore();
 const unitsStore = useUnitsStore();
@@ -133,7 +136,7 @@ onMounted(async () => {
           class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition-colors duration-200"
           @click="openCreateModal()"
       >
-        Create New Item
+        {{ t("storage.new-item") }}
       </button>
     </div>
     <StorageItemMinimized

@@ -4,6 +4,7 @@ import StorageItemMinimized from "@/components/emergencyStorage/StorageItemMinim
 import {emergencyItemService} from '@/services/emergencyItemService.js';
 import {useCategoriesStore} from '@/stores/categoriesStore.js';
 import {useUnitsStore} from '@/stores/unitsStore.js';
+import {useI18n} from "vue-i18n";
 
 export default defineComponent({
   name: 'StorageItemMaximized',
@@ -20,6 +21,7 @@ export default defineComponent({
   },
   emits: ['close', 'update', 'create'],
   setup(props, {emit}) {
+    const { t } = useI18n();
     const items = ref([]);
     const unitsStore = useUnitsStore();
     const categoriesStore = useCategoriesStore();
@@ -87,7 +89,9 @@ export default defineComponent({
       handleUpdate,
       handleCreate,
       handleDelete,
-      items
+      items,
+      categoriesStore,
+      t
     };
   }
 });
@@ -100,7 +104,7 @@ export default defineComponent({
       <div
           class="bg-white rounded-lg shadow-xl w-4/5 md:w-3/5 max-h-4/5 overflow-auto p-6 max-w-3xl">
         <div class="flex flex-row justify-between items-center mb-6 border-b pb-4">
-          <h1 class="text-2xl font-bold text-gray-800">Category Details</h1>
+          <h1 class="text-2xl font-bold text-gray-800">{{categoriesStore.getCategoryName(categoryId)}}</h1>
           <button
               class="text-gray-500 hover:text-gray-800 focus:outline-none transition-colors duration-200 p-2 rounded-full hover:bg-gray-100"
               @click="close"
@@ -110,7 +114,7 @@ export default defineComponent({
         </div>
 
         <div v-if="items.length === 0" class="py-10 text-center text-gray-500">
-          No items found in this category
+          {{ t("storage.no-items-in-category") }}
         </div>
 
         <div v-else class="space-y-3">
@@ -132,13 +136,13 @@ export default defineComponent({
               class="px-4 py-2 bg-blue-500 hover:bg-blue-600 rounded-lg text-white font-medium transition-colors duration-200"
               @click="handleCreate"
           >
-            Create New Item
+            {{ t("storage.new-item") }}
           </button>
           <button
               class="px-4 py-2 bg-gray-200 hover:bg-gray-300 rounded-lg text-gray-800 font-medium transition-colors duration-200"
               @click="close"
           >
-            Close
+            {{ t("storage.close") }}
           </button>
         </div>
       </div>
