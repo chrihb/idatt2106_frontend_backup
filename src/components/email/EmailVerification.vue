@@ -25,11 +25,10 @@ const handleAccept = async () => {
 onMounted( async () => {
 
   const verificationToken = route.params.token;
-  const checkEmailVerification = await requestEmailVerification(verificationToken);
-
-  if (checkEmailVerification) {
-    successMessage.value = checkEmailVerification.response.data.message;
-  } else {
+  try {
+    const checkEmailVerification = await requestEmailVerification(verificationToken);
+    successMessage.value = checkEmailVerification.success;
+  } catch {
     errorMessage.value = "error";
   }
 });

@@ -27,15 +27,15 @@ export const requestPasswordReset = async (email) => {
     }
 }
 
-export const requestEmailVerification = async (email, token) => {
+export const requestEmailVerification = async (token) => {
     try {
-        const response = await axios.post(`${window.backendURL}/api/users/verify/`, {token}, {
+        const response = await axios.put(`${window.backendURL}/api/users/verify/`+token, {
             headers: { 'Content-Type': 'application/json' },
         });
 
         const data = response.data;
-        if (data.success) {
-            return { success: true };
+        if (response) {
+            return { success: data };
         }
         return { error: 'Unexpected response format.' };
     } catch (error) {
