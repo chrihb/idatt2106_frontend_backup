@@ -18,15 +18,12 @@ onMounted(async () => {
 
     // Re-add existing markers from the store
     if (markerStore.markers) {
-      console.log('re adding markerStore.markers');
       markerStore.markers.forEach(marker => {
         const type = marker.options.type;
         if (!mapStore.layerGroup[type]) {
           mapStore.layerGroup[type] = L.layerGroup().addTo(mapStore.map);
-          console.log('Layer group created:', type);
         }
         mapStore.layerGroup[type].addLayer(marker);
-        console.log('Marker added to layer group:', type);
       });
     }
 
