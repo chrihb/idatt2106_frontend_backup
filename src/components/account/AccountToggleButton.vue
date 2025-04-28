@@ -19,18 +19,26 @@ const emits = defineEmits(["toggle"]);
 </script>
 
 <template>
-  <div class="flex flex-row items-center">
-    <label class="text-left text-kf-blue font-semibold col-span-2">{{ t(setting.description) }}</label>
-    <span
-        @click="emits('toggle', setting.id)"
-        class="cursor-pointer w-16 h-8 mt-2 rounded-full flex items-center col-span-1"
-        :class="setting.toggleState ? 'bg-green-500' : 'bg-kf-blue'">
-      <span
-          class="w-6 h-6 bg-white rounded-full shadow-md transform transition-transform"
-          :class="setting.toggleState ? 'translate-x-9' : 'translate-x-1'"/>
-    </span>
-  </div>
+  <div class="flex justify-between items-center w-full">
+    <label class="text-kf-blue font-semibold text-sm">
+      {{ t(setting.description) }}
+    </label>
 
+    <label class="relative inline-flex items-center cursor-pointer">
+      <input
+          type="checkbox"
+          class="sr-only peer"
+          :checked="setting.toggleState"
+          @change="emits('toggle', setting.id)"
+      />
+      <span
+          class="w-14 h-8 bg-kf-blue rounded-full peer peer-checked:bg-green-500 transition-colors duration-300"
+      ></span>
+      <span
+          class="absolute left-1 top-1 bg-white w-6 h-6 rounded-full shadow-md transform transition-transform duration-300 peer-checked:translate-x-6"
+      ></span>
+    </label>
+  </div>
 </template>
 
 <style scoped>

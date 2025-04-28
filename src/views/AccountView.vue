@@ -17,26 +17,34 @@ const toggleSetting = (id) => {
 
 <template>
   <div class="flex flex-col p-4">
-    <div class="flex flex-row">
-      <h1 class="text-2xl font-bold mb-4 text-kf-blue">{{t("account-settings.title")}}</h1>
+    <div class="flex flex-col mb-4">
+      <h1 class="text-2xl font-bold text-kf-blue">{{ t("account-settings.title") }}</h1>
     </div>
-    <div class="flex flex-row justify-between items-center gap-4 mb-4">
-      <div class="flex col-span-1 flex-col justify-center items-center bg-kf-white-contrast-1 shadow-md rounded-lg p-4 h-40">
-        <AccountToggleButton v-for="(setting, index) in toggleableSettings"
-          :key="index"
-          :setting="setting"
-          @toggle="toggleSetting"/>
+
+    <div class="grid grid-cols-1 lg:grid-cols-4 gap-4">
+      <!-- Toggle Section -->
+      <div class="bg-kf-white-contrast-1 shadow-md rounded-lg p-6 flex flex-col gap-4 col-span-1">
+        <AccountToggleButton
+            v-for="(setting, index) in toggleableSettings"
+            :key="index"
+            :setting="setting"
+            @toggle="toggleSetting"
+        />
       </div>
-      <div class="grid col-span-3 gap-4 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+
+      <!-- Routed Links -->
+      <div class="grid col-span-1 lg:col-span-3 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
         <AccountRouterLink
-          v-for="(setting, index) in routedSettings"
-          :key="index"
-          :setting="setting"
-          :iconMap="iconMap"/>
+            v-for="(setting, index) in routedSettings"
+            :key="index"
+            :setting="setting"
+            :iconMap="iconMap"
+        />
       </div>
     </div>
   </div>
 </template>
+
 
 <style scoped>
 
