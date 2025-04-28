@@ -15,8 +15,6 @@ const progress = ref(0)
 const statusMessage = ref('');
 const householdId = 1; // Sett dette dynamisk senere, hent fra userStore
 
-const baseUrl = inject("backendURL");
-
 
 const progressColor = computed(() => {
   if (progress.value > 75) return 'bg-kf-green'
@@ -26,7 +24,7 @@ const progressColor = computed(() => {
 
 onMounted(async () => {
   try {
-    const status = await getPreparednessStatus(householdId, baseUrl);
+    const status = await getPreparednessStatus(householdId);
     progress.value = status.preparednessPercent;
     isWarning.value = status.isWarning;
     statusMessage.value = status.message;

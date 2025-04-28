@@ -17,7 +17,7 @@ app.use(i18n)
 app.use(pinia)
 app.use(router)
 
-app.provide('backendURL', 'http://localhost:8080');
+window.backendURL = `http://localhost:8080` // Set the backend URL here
 
 app.mount('#app')
 
