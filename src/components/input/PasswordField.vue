@@ -40,7 +40,7 @@ const toggleShowPassword = () => {
     <label :for="fieldName" class="block text-sm font-medium text-gray-700 mb-1">
       {{ label }}
     </label>
-    <div class="input-wrapper relative">
+    <div class="relative">
       <input
           :type="inputType"
           :id="fieldName"
@@ -73,8 +73,4 @@ const toggleShowPassword = () => {
 </template>
 
 <style scoped>
-
-.input-wrapper {
-  position: relative;
-}
 </style>
