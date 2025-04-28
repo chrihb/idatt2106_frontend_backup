@@ -9,6 +9,19 @@
   font-size: revert;
   font-weight: revert;
 }
+.prose ul {
+    list-style-type: disc;
+    margin-left: 1.5rem;
+    padding-left: 0;
+}
+
+.prose li {
+    margin-bottom: 0.5rem;
+}
+
+.prose-kf {
+    width: 100%;
+}
 
 @theme {
     --color-kf-red: #ed5035;

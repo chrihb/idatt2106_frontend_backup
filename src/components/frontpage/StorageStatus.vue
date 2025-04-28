@@ -1,26 +1,38 @@
 <script setup>
 import { ExclamationTriangleIcon, CheckCircleIcon } from "@heroicons/vue/24/solid/index.js";
 import { useI18n } from "vue-i18n";
-import {computed, ref} from "vue";
+import {computed, ref, onMounted, inject} from "vue";
 import { useRouter } from "vue-router";
+import { getPreparednessStatus } from '@/services/storageService';
 
 const router = useRouter()
 const { t } = useI18n();
 
-const isWarning = ref(true); // Replace with actual logic to determine if there is a warning
+const isWarning = ref(false); // Replace with actual logic to determine if there is a warning
 
 const progress = ref(0)
 
-// Example: simulate progress
-setInterval(() => {
-  if (progress.value < 100) progress.value += 10
-}, 1000)
+const statusMessage = ref('');
+const householdId = 1; // Sett dette dynamisk senere, hent fra userStore
+
 
 const progressColor = computed(() => {
   if (progress.value > 75) return 'bg-kf-green'
   if (progress.value > 25) return 'bg-kf-orange'
   return 'bg-kf-red'
 })
+
+onMounted(async () => {
+  try {
+    const status = await getPreparednessStatus(householdId);
+    progress.value = status.preparednessPercent;
+    isWarning.value = status.isWarning;
+    statusMessage.value = status.message;
+  } catch (error) {
+    isWarning.value = true;
+    statusMessage.value = "Kunne ikke hente beredskapsstatus";
+  }
+});
 
 </script>
 
@@ -37,6 +49,8 @@ const progressColor = computed(() => {
           ></div>
         </div>
       </div>
+
+      <p class="text-xs text-center text-gray-500">{{ statusMessage }}</p>
 
       <button v-if="isWarning" @click="console.log('clicked')" class="flex items-center gap-1 cursor-pointer rounded-lg px-1">
         <ExclamationTriangleIcon class="size-8 text-kf-red"></ExclamationTriangleIcon>

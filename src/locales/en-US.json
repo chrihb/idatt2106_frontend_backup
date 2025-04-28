@@ -2,6 +2,7 @@
   "navbar": {
     "menu": "Menu",
     "account": "Account",
+    "emergencyStorage": "Emergency Storage",
     "login": "Login",
     "logout": "Log Out",
     "settings": "Settings",
@@ -13,6 +14,20 @@
         "en": "EN",
         "nb": "NO"
         }
+  },
+  "account-settings": {
+    "title": "Account Settings",
+    "manage-storages": "Manage Storages",
+    "manage-households": "Manage Households",
+    "find-assembling-areas": "Find Assembling Areas",
+    "manage-emergency-groups": "Manage Emergency Groups",
+    "experience-journal": "Experience Journal",
+    "enable-notifications": "Enable Notifications",
+    "enable-position-sharing": "Enable Location Sharing",
+    "show-storage-on-frontpage": "Show Storage Status on Frontpage",
+    "show-household-on-frontpage": "Show Household Status on Frontpage",
+    "admin-settings": "Admin Settings",
+    "invite-admins": "Invite Admins"
   },
     "footer": {
         "about-us": "About Us",
@@ -63,10 +78,12 @@
     "lastNameRequired": "Last name is required.",
     "phoneRequired": "Phone number is required.",
     "confirmPasswordRequired": "Confirm password is required.",
-    "confirmPasswordError": "Passwords do not match.",
+    "confirmPasswordError": "Passwords does not match.",
     "registerError": "Registration failed. Please try again.",
     "registerSuccess": "Registration successful. Please check your email to verify your account.",
     "privacyPolicyText": "I accept the ",
-    "privacyPolicyRequired": "You must accept the privacy policy."
+    "privacyPolicyRequired": "You must accept the privacy policy.",
+    "hasAccount": "Already have an account?",
+    "loginHere": "Login here"
   }
 }
