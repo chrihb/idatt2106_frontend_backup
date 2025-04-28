@@ -42,7 +42,15 @@
         "title": "News"
     },
     "my-home": {
-      "title": "My Home"
+      "title": "My Home",
+      "address": "Address",
+      "nearest": "Nearest",
+      "shelter": "Shelter",
+      "defib": "Defibrillator",
+      "hospital": "Hospital",
+      "distance": "Distance",
+      "coordinates": "Coordinates",
+      "manage-storage": "Manage Storage"
     },
   "login": {
     "title": "Login",
