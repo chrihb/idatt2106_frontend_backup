@@ -144,7 +144,7 @@ const handleSubmit = async () => {
       reCaptchaToken: recaptchaToken.value,
     };
     console.log('Submitting registration form:', registerForm); // Debug the form data
-    const response = await requestRegister(registerForm);
+    const response = await requestRegister(registerForm, t);
 
     if (response.success) {
       successMessage.value = t('register.successMessage');

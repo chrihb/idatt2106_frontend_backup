@@ -2,7 +2,8 @@ import { useUserStore } from '@/stores/userStore';
 import { inject } from "vue";
 import axios from 'axios';
 
-export const requestRegister = async (registerForm) => {
+
+export const requestRegister = async (registerForm, t) => {
     const userStore = useUserStore();
 
     try {
@@ -20,18 +21,21 @@ export const requestRegister = async (registerForm) => {
     } catch (error) {
         if (error.response) {
             if (error.response.status === 400) {
-                return { error: 'Invalid registration data' };
+                if (error.response.data.error === "Email is already in use") {
+                    return { error: t('register-service.emailInUse') };
+                }
+                if (error.response.data.error === "Phone number is already in use") {
+                    return { error: t('register-service.phoneInUse') };
+                }
+                if (error.response.data.error === "Failed to send verification email") {
+                    return { error: t('register-service.failedToSendEmail') };
+                }
+                return { error: t('register-service.invalidData') };
             }
-            if (error.response.status === 409) {
-                return { error: 'Email already registered' };
-            }
-            if (error.response.status === 400) {
-                return { error: 'Bad request. Please try again later.' };
-            }
-            return { error: 'An error occurred. Please try again.' };
+            return { error: t('register-service.error') };
         } else {
             console.error('Error submitting registration:', error);
-            return { error: 'Network error. Please try again later.' };
+            return { error: t('register-service.networkError') };
         }
     }
 };
