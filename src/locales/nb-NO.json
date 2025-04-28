@@ -38,6 +38,24 @@
     "desc": "Du har lagringsartikler som krever oppmerksomhet",
     "ok": "Lageret ditt ser bra ut!"
   },
+  "storage":{
+    "title": "Beredskapslager",
+    "new-item": "Ny Artikkel",
+    "update-item": "Oppdater",
+    "delete-item": "Slett",
+    "close": "Lukk",
+    "select-category": "Velg kategori",
+    "select-unit": "Velg Enhet",
+    "no-items-in-category": "Ingen artikler funnet i denne kategorien",
+    "expiration-date": "Utløpsdato",
+    "fill-all-fields": "Vennligst fyll ut alle felt",
+    "leave-message": "Er du sikker på at du vil forlate denne siden? Endringer vil ikke bli lagret.",
+    "quit": "Avslutt",
+    "stay": "Bli",
+    "item-name": "Navn",
+    "item-amount": "Mengde",
+    "item-expiration": "Utløpsdato"
+  },
   "news": {
     "title": "Nyheter"
   },
