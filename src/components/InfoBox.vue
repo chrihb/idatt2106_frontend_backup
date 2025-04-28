@@ -37,7 +37,4 @@ watchEffect(async () => {
 </template>
 
 <style scoped>
-.prose-kf {
-  max-width: 100%;
-}
 </style>
