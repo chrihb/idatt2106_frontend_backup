@@ -111,5 +111,16 @@
     "privacyPolicyRequired": "You must accept the privacy policy.",
     "hasAccount": "Already have an account?",
     "loginHere": "Login here"
+  },
+  "register-service": {
+    "emailInUse": "Email is already in use.",
+    "phoneInUse": "Phone number is already in use.",
+    "failedToSendEmail": "Failed to send verification email. Please try again later.",
+    "invalidData": "Invalid data. Please check your input and try again.",
+    "error": "An error occurred KYS. Please try again later.",
+    "networkError": "Network error. Please check your internet connection and try again."
+  },
+  "login-service": {
+    "invalidCredentials": "Invalid email or password."
   }
 }

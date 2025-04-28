@@ -7,6 +7,7 @@ import PasswordField from "@/components/input/PasswordField.vue";
 import {requestLogin} from '@/services/loginService';
 import {useI18n} from "vue-i18n";
 import HomeButton from "@/components/HomeButton.vue";
+import router from "@/router/index.js";
 
 const { t } = useI18n();
 
@@ -42,16 +43,17 @@ const handleSubmit = async () => {
       email: form.email,
       password: form.password,
     };
-    const response = await requestLogin(loginForm);
+    const response = await requestLogin(loginForm, t);
 
     if (response.success) {
       successMessage.value = 'Login successful! Welcome, ' + form.email + '.';
+      await router.push('/');
       resetForm();
     } else {
       errorMessage.value = response.error || 'Login failed';
     }
   } catch (error) {
-    errorMessage.value = 'An unexpected error occurred. Please try again.';
+    errorMessage.value = error.message;
   } finally {
     isSubmitting.value = false;
   }
