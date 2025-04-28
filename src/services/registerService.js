@@ -2,13 +2,11 @@ import { useUserStore } from '@/stores/userStore';
 import { inject } from "vue";
 import axios from 'axios';
 
-const baseUrl = inject("backendURL");
-
 export const requestRegister = async (registerForm) => {
     const userStore = useUserStore();
 
     try {
-        const response = await axios.post(`${baseUrl}/user/register`, registerForm, {
+        const response = await axios.post(`${window.backendURL}/api/users/register`, registerForm, {
             headers: { 'Content-Type': 'application/json' },
         });
 
@@ -26,6 +24,9 @@ export const requestRegister = async (registerForm) => {
             }
             if (error.response.status === 409) {
                 return { error: 'Email already registered' };
+            }
+            if (error.response.status === 400) {
+                return { error: 'Bad request. Please try again later.' };
             }
             return { error: 'An error occurred. Please try again.' };
         } else {

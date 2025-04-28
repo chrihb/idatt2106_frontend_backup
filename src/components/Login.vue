@@ -7,6 +7,7 @@ import PasswordField from "@/components/input/PasswordField.vue";
 import {requestLogin} from '@/services/loginService';
 import {useI18n} from "vue-i18n";
 import HomeButton from "@/components/HomeButton.vue";
+import router from "@/router/index.js";
 
 const { t } = useI18n();
 
@@ -46,6 +47,7 @@ const handleSubmit = async () => {
 
     if (response.success) {
       successMessage.value = 'Login successful! Welcome, ' + form.email + '.';
+      await router.push('/');
       resetForm();
     } else {
       errorMessage.value = response.error || 'Login failed';
