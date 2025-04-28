@@ -13,7 +13,8 @@ import AuthBase from "@/views/AuthBase.vue";
 import Login from "@/components/Login.vue";
 import Register from "@/components/Register.vue";
 import PasswordReset from "@/components/PasswordReset.vue";
-import PasswordResetView from "@/views/PasswordResetView.vue";
+import EmailVerification from "@/components/email/EmailVerification.vue";
+import SimpleCenteredComponent from "@/views/SimpleCenteredComponent.vue";
 
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
@@ -40,9 +41,11 @@ const router = createRouter({
             ],
         },
         {
-            path: "/password-reset", component: PasswordResetView,
+            path: "/", component: SimpleCenteredComponent,
             children: [
                 { path: "/password-reset", name: "PasswordReset", component: PasswordReset },
+                { path: "/email-verification/:token", name: "EmailVerification", component: EmailVerification },
+
             ]
         },
     ],
