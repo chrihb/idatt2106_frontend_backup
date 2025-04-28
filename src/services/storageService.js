@@ -5,7 +5,7 @@ import axios from 'axios';
  * @param householdId
  * @returns {Promise<PreparednessStatus>} preparednessPercent, isWarning, message
  */
-export const getPreparednessStatus = async (householdId, baseUrl) => {
-    const response = await axios.get(`${baseUrl}/households/${householdId}/preparedness`);
+export const getPreparednessStatus = async (householdId) => {
+    const response = await axios.get(`${window.backendURL}/households/${householdId}/preparedness`);
     return response.data;
   };
