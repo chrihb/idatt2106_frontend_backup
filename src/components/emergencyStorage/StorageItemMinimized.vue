@@ -12,6 +12,11 @@ const handleUpdate = (event) => {
   event.stopPropagation();
   emit('update', props.id);
 };
+
+const handleDelete = (event) => {
+  event.stopPropagation();
+  emit('delete', props.id);
+};
 </script>
 
 <template>
