@@ -67,6 +67,10 @@
         "resetLinkSent": "Password reset link sent to your email.",
         "resetLinkError": "Failed to send password reset link. Please try again."
     },
+  "email-verification": {
+    "title": "Email Verification",
+    "emailVerificationAcceptButton": "Ok"
+  },
   "password": {
     "show": "show",
     "hide": "Hide"

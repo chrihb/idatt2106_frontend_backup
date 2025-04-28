@@ -58,7 +58,7 @@ onMounted( async () => {
       <button
           @click ="handleAccept"
           class="w-full bg-kf-red text-white p-2 rounded disabled:opacity-50 cursor-pointer">
-        {{ t('password-reset.sendResetLink') }}
+        {{ t('email-verification.emailVerificationAcceptButton') }}
       </button>
     </div>
   </div>
