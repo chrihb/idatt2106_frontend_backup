@@ -1,3 +1,5 @@
+import L from 'leaflet';
+
 export const createMarkerPopup = (type, location,  address, description) =>
     `
                 <div class="popup">
@@ -9,11 +11,10 @@ export const createMarkerPopup = (type, location,  address, description) =>
     `;
 
 export const createCustomMarkerIcon = (type) => {
-    const iconUrl = `/assets/icons/${type}.png`;
+    const iconUrl = `/mapIcons/${type}.png`;
+    console.log(iconUrl);
     return L.icon({
         iconUrl: iconUrl,
-        iconSize: [25, 41], // size of the icon
-        iconAnchor: [12, 41], // point of the icon which will correspond to marker's location
-        popupAnchor: [1, -34], // point from which the popup should open relative to the iconAnchor
+        iconSize: [40, 40], // size of the icon
     });
 }
