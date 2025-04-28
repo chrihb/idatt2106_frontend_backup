@@ -107,6 +107,13 @@ const handleSubmit = async () => {
           {{ t('login.login') }}
         </button>
 
+        <!-- Forgot Password Link -->
+        <div class="mt-4 text-center">
+          <router-link to="/forgot-password" class="text-blue-600 hover:underline">
+            {{ t('login.forgotPassword') }}
+          </router-link>
+        </div>
+
         <!-- Create User Link -->
         <div class="mt-4 text-center">
           <router-link to="/register-account" class="text-blue-600 hover:underline">
