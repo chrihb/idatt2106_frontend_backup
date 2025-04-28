@@ -15,6 +15,8 @@ export const requestRegister = async (registerForm, t) => {
         if (data.token) {
             userStore.setCredentials(data.token, registerForm.email);
             return { success: true };
+        } else {
+            return { success: true };
         }
 
         return { error: 'Unexpected response format.' };
