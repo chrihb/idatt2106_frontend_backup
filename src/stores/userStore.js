@@ -8,7 +8,7 @@ export const useUserStore = defineStore('user', {
     getters: {
         isAuthenticated() {
            // return !!this.token;
-            return true;
+            return false;
         },
     },
     actions: {

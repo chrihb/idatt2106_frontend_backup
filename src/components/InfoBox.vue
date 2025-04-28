@@ -31,8 +31,7 @@ watchEffect(async () => {
 <template>
 
 <div class="">
-  <div class="prose prose-kf max-w-full" v-html="text"></div>
-
+  <div class="prose w-full" v-html="text"></div>
 </div>
 </template>
 

@@ -93,5 +93,9 @@
     "privacyPolicyRequired": "Du må godta personvernserklæringen.",
     "hasAccount": "Har du allerede en bruker?",
     "loginHere": "Logg inn her"
+  },
+  "auth":{
+    "login": "Logg Inn",
+    "register": "Registrer"
   }
 }

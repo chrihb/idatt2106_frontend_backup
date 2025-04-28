@@ -93,5 +93,9 @@
     "privacyPolicyRequired": "You must accept the privacy policy.",
     "hasAccount": "Already have an account?",
     "loginHere": "Login here"
+  },
+  "auth":{
+    "login": "Login",
+    "register": "Register"
   }
 }

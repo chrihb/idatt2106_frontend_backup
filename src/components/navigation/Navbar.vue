@@ -5,14 +5,10 @@ import { useI18n } from "vue-i18n"
 import { UserCircleIcon } from "@heroicons/vue/24/outline/index.js";
 import { Bars3Icon } from "@heroicons/vue/24/solid/index.js";
 import { useUserStore } from "@/stores/userStore.js";
+import LocaleSelection from "@/components/navigation/LocaleSelection.vue";
 
 const userStore = useUserStore()
-const { locale, t } = useI18n()
-
-const localeOptions = [
-  { code: 'en-US', nameKey: "navbar.language.en" },
-  { code: 'nb-NO', nameKey: "navbar.language.nb" }
-]
+const { t } = useI18n()
 
 const showAccountDropdown = ref(false)
 const showMenuDropdown = ref(false)
@@ -92,11 +88,7 @@ watchEffect(() => {
       </div>
 
 
-      <select v-model="locale" class="border border-kf-blue rounded px-2 py-1 text-kf-blue">
-        <option v-for="option in localeOptions" :key="option.code" :value="option.code">
-          {{ t(option.nameKey) }}
-        </option>
-      </select>
+      <LocaleSelection />
     </div>
   </nav>
 </template>
