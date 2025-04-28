@@ -27,5 +27,13 @@ export const useMapStore = defineStore('mapStore', {
             //Mock tracking
             positionTrackingStore.startTracking();
         }
+    },
+    persist: {
+        enabled: true,
+        strategies: [
+            {
+                storage: localStorage,
+            },
+        ],
     }
 });

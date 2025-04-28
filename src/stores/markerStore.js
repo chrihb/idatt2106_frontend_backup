@@ -62,5 +62,13 @@ export const useMarkerStore = defineStore('markerStore', {
                 console.error(`Marker with ${id} not found.`);
             }
         },
+    },
+    persist: {
+        enabled: true,
+        strategies: [
+            {
+                storage: localStorage,
+            },
+        ],
     }
 });

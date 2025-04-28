@@ -96,5 +96,13 @@ export const usePositionTrackingStore = defineStore("positionTrackingStore", {
             }
 
         },
+    },
+    persist: {
+        enabled: true,
+        strategies: [
+            {
+                storage: localStorage,
+            },
+        ],
     }
 });
