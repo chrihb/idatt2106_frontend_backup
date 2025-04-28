@@ -40,7 +40,7 @@ onMounted(async () => {
   <div @click="router.push('/storage')" class="cursor-pointer bg-kf-white flex flex-col gap-2 items-center shadow-lg rounded-2xl py-2 px-2">
     <h1 class="text-2xl text-kf-blue">{{ t("storage-status.title") }}</h1>
     <div class="flex-grow justify-center items-center flex flex-col gap-2">
-      <div class="w-sm">
+      <div class="w-full max-w-xs">
         <div class="bg-kf-white-contrast-4 rounded-sm h-10 overflow-hidden">
           <div
               class="h-10 rounded-sm transition-all duration-500 ease-in-out"
