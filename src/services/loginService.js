@@ -22,9 +22,11 @@ export const requestLogin = async (loginForm) => {
     } catch (error) {
         if (error.response) {
             if (error.response.status === 400) {
-                return { error: 'Invalid credentials' };
+                return { error: 'Invalid password' };
             }
             return { error: 'An error occurred. Please try again.' };
+        }   else if (error.response.status === 404) {
+            return { error: 'User does not exist' };
         }
         console.error('Error submitting login:', error);
         return { error: 'Network error. Please try again later.' };
