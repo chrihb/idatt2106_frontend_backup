@@ -57,9 +57,7 @@ export const requestEmailVerification = async (token) => {
 export const executePasswordReset = async (token, password) => {
     try {
         const response = await axios.put(`${window.backendURL}/api/users/reset-password/`+token, {
-            headers: { 'Content-Type': 'application/json' },
             password
-
         });
 
         const data = response.data;

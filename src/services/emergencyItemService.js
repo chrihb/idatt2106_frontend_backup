@@ -2,7 +2,7 @@ export function emergencyItemService() {
   const baseUrl = `${window.backendURL}/api/emergency/items`;
 
   async function getEmergencyItems() {
-    const response = await fetch(baseUrl, {
+    const response = await fetch(`${baseUrl}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -41,7 +41,7 @@ export function emergencyItemService() {
   }
 
   async function getEmergencyItemByCategoryId(categoryId) {
-    const response = await fetch(`${baseUrl}/category/${categoryId}`);
+    const response = await fetch(`${baseUrl}/categories/${categoryId}`);
     if (!response.ok) {
       throw new Error('Failed to fetch emergency items by category');
     }
@@ -67,11 +67,11 @@ export function emergencyItemService() {
     if (!response.ok) {
       throw new Error('Failed to create emergency item');
     }
-    return response.json();
+    return response.body;
   }
 
   async function updateEmergencyItem(item) {
-    const response = await fetch(`${baseUrl}/${item.id}`, {
+    const response = await fetch(`${baseUrl}`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
@@ -81,7 +81,7 @@ export function emergencyItemService() {
     if (!response.ok) {
       throw new Error('Failed to update emergency item');
     }
-    return response.json();
+    return response.body;
   }
 
   async function deleteEmergencyItem(id) {
@@ -91,7 +91,7 @@ export function emergencyItemService() {
     if (!response.ok) {
       throw new Error('Failed to delete emergency item');
     }
-    return response.json();
+    return response.body;
   }
 
   return {

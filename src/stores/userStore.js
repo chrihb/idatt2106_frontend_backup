@@ -7,13 +7,12 @@ export const useUserStore = defineStore('user', {
     }),
     getters: {
         isAuthenticated() {
-           // return !!this.token;
-            return false;
+            return this.token;
         },
     },
     actions: {
-        setToken(newToken) {
-            this.token = newToken;
+        setCredentials(token, email) {
+            this.token = token;
         },
         clearToken() {
             this.token = null;

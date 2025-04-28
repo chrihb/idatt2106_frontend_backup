@@ -1,6 +1,8 @@
 <script setup lang="js">
 import { defineProps, defineEmits } from 'vue';
+import {useI18n} from "vue-i18n";
 
+const { t } = useI18n()
 const props = defineProps(["name", "amount", "unit", "expirationDate", "id", "possibleUpdate"]);
 const emit = defineEmits(['update', 'click']);
 
@@ -12,6 +14,11 @@ const handleUpdate = (event) => {
   event.stopPropagation();
   emit('update', props.id);
 };
+
+const handleDelete = (event) => {
+  event.stopPropagation();
+  emit('delete', props.id);
+};
 </script>
 
 <template>
@@ -19,18 +26,18 @@ const handleUpdate = (event) => {
     <div class="font-bold text-lg text-gray-700">{{amount}} {{unit}}</div>
     <div class="text-lg text-gray-800">{{name}}</div>
     <div class="flex items-center gap-1">
-      <div class="text-sm text-gray-500 mr-3">Utløpsdato: {{expirationDate}}</div>
+      <div class="text-sm text-gray-500 mr-3">{{ t("storage.expiration-date") }}: {{expirationDate}}</div>
       <button
           v-if="possibleUpdate"
           @click="handleUpdate"
           class="px-3 py-1 bg-yellow-500 hover:bg-yellow-600 rounded text-white text-sm font-medium transition-colors duration-200">
-        Oppdater
+        {{ t("storage.update-item") }}
       </button>
       <button
         v-if="possibleUpdate"
         @click="handleDelete"
         class="px-3 py-1 bg-red-500 hover:bg-red-600 rounded text-white text-sm font-medium transition-colors duration-200">
-        Slett
+        {{ t("storage.delete-item") }}
       </button>
     </div>
   </div>

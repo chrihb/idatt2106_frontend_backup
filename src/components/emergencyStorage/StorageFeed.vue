@@ -7,6 +7,9 @@ import {useCategoriesStore} from '@/stores/categoriesStore.js';
 import {useUnitsStore} from '@/stores/unitsStore.js';
 import {useEmergencyItemsStore} from '@/stores/emergencyItemsStore.js';
 import {emergencyItemService} from '@/services/emergencyItemService.js';
+import {useI18n} from "vue-i18n";
+
+const { t } = useI18n()
 
 const categoriesStore = useCategoriesStore();
 const unitsStore = useUnitsStore();
@@ -36,12 +39,44 @@ const fetchCategories = async () => {
     }
 
     const allItems = await itemsStore.fetchAllItems();
-    itemCategories.value = allItems.map(item => ({
-      ...item,
-      unit: unitsStore.getUnitName(item.unitId)
-    }));
+
+    const groupedCategories = allItems.reduce((acc, item) => {
+      const category = acc[item.categoryId] || {
+        id: item.categoryId,
+        name: categoriesStore.getCategoryName(item.categoryId),
+        units: new Set(),
+        unit: null,
+        amount: 0,
+        expirationDate: null,
+      };
+
+      category.units.add(unitsStore.getUnitName(item.unitId));
+
+      if (category.units.size > 1) {
+        category.unit = "Inconsistent units";
+        category.amount = null;
+      } else {
+        category.unit = [...category.units][0];
+        category.amount += item.amount;
+      }
+
+      if (
+          !category.expirationDate ||
+          new Date(item.expirationDate) < new Date(category.expirationDate)
+      ) {
+        category.expirationDate = item.expirationDate;
+      }
+
+      acc[item.categoryId] = category;
+      return acc;
+    }, {});
+
+    itemCategories.value = Object.values(groupedCategories).map(category => {
+      delete category.units;
+      return category;
+    });
   } catch (error) {
-    console.error('Error fetching categories:');
+    g.error("Error fetching categories");
   }
 };
 
@@ -66,7 +101,7 @@ const openModal = async (category) => {
   const items = await service.getEmergencyItemByCategoryId(category.id);
 
   modalData.value = {
-    id: category.categoryId,
+    id: category.id,
     display: true,
     items
   };
@@ -101,7 +136,7 @@ onMounted(async () => {
           class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition-colors duration-200"
           @click="openCreateModal()"
       >
-        Create New Item
+        {{ t("storage.new-item") }}
       </button>
     </div>
     <StorageItemMinimized

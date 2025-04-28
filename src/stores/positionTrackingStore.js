@@ -2,6 +2,7 @@ import L from "leaflet";
 import { defineStore } from "pinia";
 import { useMapStore } from "@/stores/mapStore.js";
 import {watchUserPosition} from "@/services/geoLocationService.js";
+import {createCustomMarkerIcon} from "@/utils/markerUtils.js";
 
 export const usePositionTrackingStore = defineStore("positionTrackingStore", {
     state: () => ({
@@ -11,9 +12,11 @@ export const usePositionTrackingStore = defineStore("positionTrackingStore", {
         watchId: null,
     }),
     getters : {
+        getMap: (state) => state.map,
         getLatitude: (state) => state.latitude,
         getLongitude: (state) => state.longitude,
         getCanTrack: (state) => state.canTrack,
+        getWatchId: (state) => state.watchId,
     },
     actions: {
         // Start tracking the user's location
@@ -24,15 +27,15 @@ export const usePositionTrackingStore = defineStore("positionTrackingStore", {
                 (position) => {
                     this.setCoordinates(position.coords.latitude, position.coords.longitude)
                     if (marker === null) {
-
                         // Create a new layer group for the user's location
-                        if (!mapStore.layerGroup["UserLocation"]) {
-                            mapStore.layerGroup["UserLocation"] = L.layerGroup().addTo(mapStore.map);
+                        if (!mapStore.layerGroup["PersonligPlassering"] || !(mapStore.layerGroup["PersonligPlassering"] instanceof L.LayerGroup)) {
+                            mapStore.layerGroup["PersonligPlassering"] = L.layerGroup().addTo(mapStore.map);
                         }
                         // Create a new marker at the user's location
-                        marker = L.marker([this.latitude, this.longitude]);
+                        marker = L.marker([this.latitude, this.longitude],
+                            {icon : createCustomMarkerIcon("PersonligPlassering")});
                         // Add the marker to the layer group
-                        mapStore.layerGroup["UserLocation"].addLayer(marker);
+                        mapStore.layerGroup["PersonligPlassering"].addLayer(marker);
                         // Center the map on the user's location
                         this.centerMapOnUser()
                     } else {
@@ -52,10 +55,10 @@ export const usePositionTrackingStore = defineStore("positionTrackingStore", {
 
             // Reset the user's location
             this.setCoordinates(null, null);
-            if (mapStore.layerGroup["UserLocation"]) {
-                mapStore.layerGroup["UserLocation"].clearLayers();
-                mapStore.map.removeLayer(mapStore.layerGroup["UserLocation"]);
-                delete mapStore.layerGroup["UserLocation"];
+            if (mapStore.layerGroup["PersonligPlassering"]) {
+                mapStore.layerGroup["PersonligPlassering"].clearLayers();
+                mapStore.map.removeLayer(mapStore.layerGroup["PersonligPlassering"]);
+                delete mapStore.layerGroup["PersonligPlassering"];
             }
 
             // Clear the geolocation watch if it exists

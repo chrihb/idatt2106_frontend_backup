@@ -3,8 +3,9 @@ import {defineComponent, ref, computed, onMounted, watch, defineProps, defineEmi
 import {emergencyItemService} from '@/services/emergencyItemService.js';
 import {useCategoriesStore} from '@/stores/categoriesStore.js';
 import {useUnitsStore} from '@/stores/unitsStore.js';
-import {storeToRefs} from 'pinia';
+import {useI18n} from "vue-i18n";
 
+const { t } = useI18n();
 const isUpdate = computed(() => props.itemId !== null);
 const categoriesStore = useCategoriesStore();
 const unitsStore = useUnitsStore();
@@ -189,11 +190,11 @@ onMounted(async () => {
           <input
               v-model="itemData.name"
               type="text"
-              placeholder="Item name"
+              :placeholder="t('storage.item-name')"
               class="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
           <select v-model="selectedCategory"
                   class="border border-gray-300 w-5/5 rounded-lg p-2 text-black focus:ring-2 focus:ring-blue-500">
-            <option disabled value="">Select category</option>
+            <option disabled value="">{{ t("storage.select-category") }}</option>
             <option v-for="category in categories" :key="category.id" :value="category.id">
               {{ category.name }}
             </option>
@@ -202,11 +203,11 @@ onMounted(async () => {
             <input
                 v-model="itemData.amount"
                 type="number"
-                placeholder="Item amount"
+                :placeholder="t('storage.item-amount')"
                 class="w-4/5 p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
             <select v-model="selectedUnit"
                     class="border border-gray-300 w-1/5 rounded-lg px-2 py-1 text-black focus:ring-2 focus:ring-blue-500">
-              <option disabled value="">Select unit</option>
+              <option disabled value="">{{ t("storage.select-unit") }}</option>
               <option v-for="unit in units" :key="unit.id" :value="unit.id">
                 {{ unit.name }}
               </option>
@@ -215,7 +216,7 @@ onMounted(async () => {
           <input
               v-model="itemData.expirationDate"
               type="date"
-              placeholder="Item expiration date"
+              :placeholder="t('storage.expiration-date')"
               class="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
         </div>
 
@@ -223,36 +224,35 @@ onMounted(async () => {
           <button
               class="px-4 py-2 bg-blue-500 hover:bg-blue-600 rounded-lg text-white font-medium transition-colors duration-200"
               @click="saveItem">
-            {{ isUpdate ? 'Update' : 'Add' }}
+            {{ isUpdate ? t("storage.update-item") : t("storage.new-item") }}
           </button>
           <p
               v-if="formIncomplete"
               class="text-red-600 text-sm">
-            Fill in all required fields
+            {{ t("storage.fill-all-fields") }}
           </p>
           <button
               class="px-4 py-2 bg-gray-200 hover:bg-gray-300 rounded-lg text-gray-800 font-medium transition-colors duration-200"
               @click="handleCancel"
           >
-            Cancel
+            {{ t("storage.close") }}
           </button>
         </div>
 
         <div v-if="showConfirmation"
              class="fixed inset-0 flex items-center justify-center z-[60]">
           <div class="bg-white rounded-lg p-6 shadow-xl max-w-md w-full">
-            <h2 class="text-xl font-bold mb-4">Confirm</h2>
-            <p class="mb-6">Do you want to quit? Any unsaved changes will be lost.</p>
+            <p class="mb-6">{{ t("storage.leave-message") }}</p>
             <div class="flex justify-end space-x-3">
               <button
                   class="px-4 py-2 bg-gray-200 hover:bg-gray-300 rounded-lg text-gray-800 font-medium transition-colors duration-200"
                   @click="cancelConfirmation">
-                Stay
+                {{ t("storage.stay") }}
               </button>
               <button
                   class="px-4 py-2 bg-red-500 hover:bg-red-600 rounded-lg text-white font-medium transition-colors duration-200"
                   @click="confirmCancel">
-                Quit
+                {{ t("storage.quit") }}
               </button>
             </div>
           </div>
