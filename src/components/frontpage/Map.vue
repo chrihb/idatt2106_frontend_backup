@@ -20,7 +20,7 @@ onMounted(async () => {
     if (markerStore.markers) {
       markerStore.markers.forEach(marker => {
         const type = marker.options.type;
-        if (!mapStore.layerGroup[type]) {
+        if (!mapStore.layerGroup[type] || !(mapStore.layerGroup[type] instanceof L.LayerGroup)) {
           mapStore.layerGroup[type] = L.layerGroup().addTo(mapStore.map);
         }
         mapStore.layerGroup[type].addLayer(marker);
@@ -67,13 +67,17 @@ onUnmounted(() => {
   positionTrackingStore.stopTracking();
 
   // Remove all markers from the map
+
   if (mapStore.layerGroup) {
     Object.keys(mapStore.layerGroup).forEach(type => {
-      mapStore.layerGroup[type].clearLayers();
-      mapStore.map.removeLayer(mapStore.layerGroup[type]);
-      delete mapStore.layerGroup[type];
+      if (mapStore.layerGroup[type] instanceof L.LayerGroup) {
+        mapStore.layerGroup[type].clearLayers();
+        mapStore.map.removeLayer(mapStore.layerGroup[type]);
+        delete mapStore.layerGroup[type];
+      }
     });
   }
+
 
   //
 })

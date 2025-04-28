@@ -30,12 +30,13 @@ export const useMarkerStore = defineStore('markerStore', {
             if (this.getMarkerById(markerData.id)) {
                 return;
             }
+            // Create a custom icon for the marker
             const mapIcon = createCustomMarkerIcon(markerData.type)
 
             // Create a marker with the given data
             const marker = L.marker(
                 [markerData.lat, markerData.lng],
-                {icon: mapIcon})
+                {id: markerData.id, icon: mapIcon})
                 .bindPopup(createMarkerPopup(
                     markerData.type,
                     markerData.location,
@@ -44,7 +45,7 @@ export const useMarkerStore = defineStore('markerStore', {
                 ));
 
             // Check if the layerGroup for the type exists, if not create it
-            if (!mapStore.layerGroup[markerData.type]) {
+            if (!mapStore.layerGroup[markerData.type] || !(mapStore.layerGroup[markerData.type] instanceof L.LayerGroup)) {
                 mapStore.layerGroup[markerData.type] = L.layerGroup().addTo(mapStore.map);
             }
             // Add the marker to the appropriate layerGroup

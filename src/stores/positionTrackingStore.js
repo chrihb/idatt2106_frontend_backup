@@ -28,7 +28,7 @@ export const usePositionTrackingStore = defineStore("positionTrackingStore", {
                     this.setCoordinates(position.coords.latitude, position.coords.longitude)
                     if (marker === null) {
                         // Create a new layer group for the user's location
-                        if (!mapStore.layerGroup["PersonligPlassering"]) {
+                        if (!mapStore.layerGroup["PersonligPlassering"] || !(mapStore.layerGroup["PersonligPlassering"] instanceof L.LayerGroup)) {
                             mapStore.layerGroup["PersonligPlassering"] = L.layerGroup().addTo(mapStore.map);
                         }
                         // Create a new marker at the user's location
