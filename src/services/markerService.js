@@ -37,7 +37,7 @@ export const mockMarkersData = async () => {
             id: 4,
             lat: 63.425434,
             lng: 10.442124,
-            type: 'Bunker',
+            type: 'Møteplass',
             location: 'Location 4',
             address: 'Address 4',
             description: 'Description 4'
@@ -46,7 +46,7 @@ export const mockMarkersData = async () => {
             id: 5,
             lat: 63.424434,
             lng: 10.439124,
-            type: 'Hjertestarter',
+            type: 'Matstasjon',
             location: 'Location 5',
             address: 'Address 5',
             description: 'Description 5'
