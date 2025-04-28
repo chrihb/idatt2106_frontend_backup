@@ -7,10 +7,14 @@ import {mockMarkersData} from "@/services/markerService.js";
 const mapStore = useMapStore();
 
 onMounted(async () => {
-  // Initialize the map
+
   try {
+    // Initialize the map
     mapStore.initMap();
 
+
+
+    // Add event listenr for map movement
     mapStore.map.on('moveend', async () => {
       const bounds = mapStore.map.getBounds();
       const markersData = {
