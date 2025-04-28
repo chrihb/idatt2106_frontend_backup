@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import Base from "@/views/Base.vue";
 import HomeView from "@/views/HomeView.vue";
+import EmergencyStorage from "@/views/EmergencyStorage.vue";
 import NewsView from "@/views/NewsView.vue";
 import AccountView from "@/views/AccountView.vue";
 import AboutUsView from "@/views/AboutUsView.vue";
@@ -21,6 +22,7 @@ const router = createRouter({
                 { path: "", component: HomeView },
                 { path: "/news", component: NewsView },
                 { path: "/account", component: AccountView },
+                { path: "/emergency-storage", component: EmergencyStorage },
                 { path: "/about-us", component: AboutUsView },
                 { path: "/privacy-policy", component: PrivacyPolicyView },
                 { path: "/storage", component: StorageView },

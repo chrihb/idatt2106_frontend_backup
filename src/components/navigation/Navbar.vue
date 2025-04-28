@@ -64,7 +64,7 @@ watchEffect(() => {
     <!-- Right-side -->
     <div class="flex items-center gap-4 relative">
       <div class="hidden md:flex gap-4 text-lg">
-        <RouterLink v-if="userStore.isAuthenticated" to="/storage" class="text-kf-blue hover:bg-kf-grey rounded cursor-pointer transition-colors duration-150 px-0.5" >{{ t("navbar.storage") }}</RouterLink>
+        <RouterLink v-if="userStore.isAuthenticated" to="/emergency-storage" class="text-kf-blue hover:bg-kf-grey rounded cursor-pointer transition-colors duration-150 px-0.5" >{{ t("navbar.storage") }}</RouterLink>
         <RouterLink v-if="userStore.isAuthenticated" to="/my-home" class="text-kf-blue hover:bg-kf-grey rounded cursor-pointer transition-colors duration-150 px-0.5" >{{ t("navbar.my-home") }}</RouterLink>
         <RouterLink to="/news" class="text-kf-blue hover:bg-kf-grey rounded cursor-pointer transition-colors duration-150 px-0.5" >{{ t("navbar.news") }}</RouterLink>
         <RouterLink to="/map" class="text-kf-blue hover:bg-kf-grey rounded cursor-pointer transition-colors duration-150 px-0.5" >{{ t("navbar.map") }}</RouterLink>
@@ -73,7 +73,7 @@ watchEffect(() => {
       <Bars3Icon @click="toggleMenuDropdown" class="block md:hidden size-10 text-kf-blue hover:bg-kf-grey rounded cursor-pointer transition-colors duration-150" />
 
       <div v-if="showMenuDropdown" @mouseleave="toggleMenuDropdown" class="absolute top-12 right-28 bg-kf-white shadow-lg rounded-lg z-10">
-        <RouterLink v-if="userStore.isAuthenticated" to="/storage" class="block px-4 py-2 hover:bg-kf-grey">{{ t("navbar.storage") }}</RouterLink>
+        <RouterLink v-if="userStore.isAuthenticated" to="/emergency-storage" class="block px-4 py-2 hover:bg-kf-grey">{{ t("navbar.storage") }}</RouterLink>
         <RouterLink v-if="userStore.isAuthenticated" to="/my-home" class="block px-4 py-2 hover:bg-kf-grey">{{ t("navbar.my-home") }}</RouterLink>
         <RouterLink to="/news" class="block px-4 py-2 hover:bg-kf-grey">{{ t("navbar.news") }}</RouterLink>
         <RouterLink to="/map" class="block px-4 py-2 hover:bg-kf-grey">{{ t("navbar.map") }}</RouterLink>

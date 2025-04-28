@@ -2,6 +2,7 @@
   "navbar": {
     "menu": "Menu",
     "account": "Account",
+    "emergencyStorage": "Emergency Storage",
     "login": "Login",
     "logout": "Log Out",
     "settings": "Settings",
