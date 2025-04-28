@@ -12,7 +12,6 @@ export const createMarkerPopup = (type, location,  address, description) =>
 
 export const createCustomMarkerIcon = (type) => {
     const iconUrl = `/icons/map/${type}.png`;
-    console.log(iconUrl);
     return L.icon({
         iconUrl: iconUrl,
         iconSize: [40, 40], // size of the icon
