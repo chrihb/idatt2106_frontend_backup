@@ -3,8 +3,12 @@ import {onMounted, onUnmounted} from 'vue';
 import 'leaflet/dist/leaflet.css';
 import { useMapStore } from '@/stores/mapStore.js';
 import {mockMarkersData} from "@/services/markerService.js";
+import { useMarkerStore} from "@/stores/markerStore.js";
+import {usePositionTrackingStore} from "@/stores/positionTrackingStore.js";
 
 const mapStore = useMapStore();
+const markerStore = useMarkerStore();
+const positionTrackingStore = usePositionTrackingStore();
 
 onMounted(async () => {
 
@@ -12,7 +16,22 @@ onMounted(async () => {
     // Initialize the map
     mapStore.initMap();
 
+    // Re-add existing markers from the store
+    if (markerStore.markers) {
+      console.log('re adding markerStore.markers');
+      markerStore.markers.forEach(marker => {
+        const type = marker.options.type;
+        if (!mapStore.layerGroup[type]) {
+          mapStore.layerGroup[type] = L.layerGroup().addTo(mapStore.map);
+          console.log('Layer group created:', type);
+        }
+        mapStore.layerGroup[type].addLayer(marker);
+        console.log('Marker added to layer group:', type);
+      });
+    }
 
+    // Start position tracking
+    positionTrackingStore.startTracking();
 
     // Add event listenr for map movement
     mapStore.map.on('moveend', async () => {
@@ -22,7 +41,9 @@ onMounted(async () => {
         southWest: bounds.getSouthWest(),
       };
 
+
       try {
+        //TODO: Add request to fetch markers from the backend
         const result = await mockMarkersData()
         //const result = await requestMarkers(markersData);
         if (result.success) {
@@ -40,10 +61,24 @@ onMounted(async () => {
 });
 
 onUnmounted(() => {
-  // Stop watch position when component is unmounted
-  if (navigator.geolocation && mapStore.watchId) {
-    navigator.geolocation.clearWatch(mapStore.watchId);
+  // Remove event listener for map movement
+  if (mapStore.map) {
+    mapStore.map.off('moveend');
   }
+
+  // Stop position tracking
+  positionTrackingStore.stopTracking();
+
+  // Remove all markers from the map
+  if (mapStore.layerGroup) {
+    Object.keys(mapStore.layerGroup).forEach(type => {
+      mapStore.layerGroup[type].clearLayers();
+      mapStore.map.removeLayer(mapStore.layerGroup[type]);
+      delete mapStore.layerGroup[type];
+    });
+  }
+
+  //
 })
 </script>
 
