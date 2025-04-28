@@ -1,25 +1,18 @@
 <script setup>
-import {onMounted, ref} from 'vue';
-import {useI18n} from "vue-i18n";
-import {requestEmailVerification} from "@/services/emailService.js";
-import {useRoute} from "vue-router";
+import { onMounted, ref } from 'vue';
+import { useI18n } from "vue-i18n";
+import { requestEmailVerification } from "@/services/emailService.js";
+import { useRoute, useRouter } from "vue-router";
 
 const { t } = useI18n();
 
 const route = useRoute();
+const router = useRouter();
 const successMessage = ref('');
 const errorMessage = ref('');
 
 const handleAccept = async () => {
-
-  successMessage.value = '';
-  errorMessage.value = '';
-
-  try {
-
-  } catch (error) {
-    errorMessage.value = 'An unexpected error occurred. Please try again.';
-  }
+  router.push('/')
 };
 
 onMounted( async () => {
