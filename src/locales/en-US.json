@@ -65,7 +65,8 @@
         "emailError": "Email must be a valid email address.",
         "emailRequired": "Email is required.",
         "resetLinkSent": "Password reset link sent to your email.",
-        "resetLinkError": "Failed to send password reset link. Please try again."
+        "resetLinkError": "Failed to send password reset link. Please try again.",
+        "setNewPassword": "Change Password"
     },
   "email-verification": {
     "title": "Email Verification",

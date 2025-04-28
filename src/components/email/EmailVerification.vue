@@ -12,7 +12,7 @@ const successMessage = ref('');
 const errorMessage = ref('');
 
 const handleAccept = async () => {
-  router.push('/')
+  await router.push('/')
 };
 
 onMounted( async () => {

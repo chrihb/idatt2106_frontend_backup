@@ -55,7 +55,7 @@ const handleSubmit = async () => {
     <div class="bg-white p-8 rounded-lg shadow-lg w-full max-w-sm">
       <!-- Logo -->
       <div class="flex justify-center mb-4">
-        <img src="@/assets/logo.png" alt="Logo" class="w-16 h-16" />
+        <img src="../../../assets/logo.png" alt="Logo" class="w-16 h-16" />
       </div>
 
       <!-- Title -->

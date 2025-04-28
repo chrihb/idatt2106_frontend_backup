@@ -65,7 +65,8 @@
     "emailError": "E-post må være på et gyldig format.",
     "emailRequired": "E-post er påkrevd.",
     "resetLinkSent": "Tilbakestillingslenke sendt til e-posten din.",
-    "resetLinkError": "Feil ved sending til epost. Vennligst prøv igjen."
+    "resetLinkError": "Feil ved sending til epost. Vennligst prøv igjen.",
+    "setNewPassword": "Bytt passord"
   },
   "email-verification": {
     "title": "Email Verification",
