@@ -57,6 +57,16 @@
     "emailRequired": "Skriv inn e-post.",
     "loginError": "Ugyldig e-post eller passord."
   },
+  "password-reset": {
+    "title": "Tilbakestill Passord",
+    "email": "E-post",
+    "sendResetLabel": "Oppgi din e-postadresse for å tilbakestille passordet ditt.",
+    "sendResetLink": "Send Epost",
+    "emailError": "E-post må være på et gyldig format.",
+    "emailRequired": "E-post er påkrevd.",
+    "resetLinkSent": "Tilbakestillingslenke sendt til e-posten din.",
+    "resetLinkError": "Feil ved sending til epost. Vennligst prøv igjen."
+  },
   "password": {
     "show": "Vis",
     "hide": "Skjul"
