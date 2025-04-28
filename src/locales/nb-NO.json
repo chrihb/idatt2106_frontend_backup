@@ -67,6 +67,10 @@
     "resetLinkSent": "Tilbakestillingslenke sendt til e-posten din.",
     "resetLinkError": "Feil ved sending til epost. Vennligst prøv igjen."
   },
+  "email-verification": {
+    "title": "Email Verification",
+    "emailVerificationAcceptButton": "Ok"
+  },
   "password": {
     "show": "Vis",
     "hide": "Skjul"
