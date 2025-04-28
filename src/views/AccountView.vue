@@ -1,14 +1,15 @@
 <script setup>
 import { useI18n } from "vue-i18n";
-import AccountSetting from "@/components/account/AccountSetting.vue";
-import { settings, iconMap } from "@/utils/settings.js";
+import AccountRouterLink from "@/components/account/AccountRouterLink.vue";
+import { iconMap, routedSettings, toggleableSettings } from "@/utils/settings.js";
+import AccountToggleButton from "@/components/account/AccountToggleButton.vue";
 
 
 const { t } = useI18n();
 
 const toggleSetting = (id) => {
-  const setting = settings.value.find((s) => s.id === id);
-  if (setting && setting.type === "toggleButton") {
+  const setting = toggleableSettings.value.find((s) => s.id === id);
+  if (setting) {
     setting.toggleState = !setting.toggleState;
   }
 };
@@ -19,14 +20,20 @@ const toggleSetting = (id) => {
     <div class="flex flex-row">
       <h1 class="text-2xl font-bold mb-4 text-kf-blue">{{t("account-settings.title")}}</h1>
     </div>
-    <div class="grid gap-4 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-      <AccountSetting
-        v-for="(setting, index) in settings"
-        :key="index"
-        :setting="setting"
-        :iconMap="iconMap"
-        @toggle="toggleSetting"
-      />
+    <div class="flex flex-row justify-between items-center gap-4 mb-4">
+      <div class="flex col-span-1 flex-col justify-center items-center bg-kf-white-contrast-1 shadow-md rounded-lg p-4 h-40">
+        <AccountToggleButton v-for="(setting, index) in toggleableSettings"
+          :key="index"
+          :setting="setting"
+          @toggle="toggleSetting"/>
+      </div>
+      <div class="grid col-span-3 gap-4 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+        <AccountRouterLink
+          v-for="(setting, index) in routedSettings"
+          :key="index"
+          :setting="setting"
+          :iconMap="iconMap"/>
+      </div>
     </div>
   </div>
 </template>
