@@ -71,7 +71,7 @@ export function emergencyItemService() {
   }
 
   async function updateEmergencyItem(item) {
-    const response = await fetch(`${baseUrl}/${item.id}`, {
+    const response = await fetch(`${baseUrl}`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
@@ -81,7 +81,7 @@ export function emergencyItemService() {
     if (!response.ok) {
       throw new Error('Failed to update emergency item');
     }
-    return response.json();
+    return response.body;
   }
 
   async function deleteEmergencyItem(id) {
@@ -91,7 +91,7 @@ export function emergencyItemService() {
     if (!response.ok) {
       throw new Error('Failed to delete emergency item');
     }
-    return response.json();
+    return response.body;
   }
 
   return {
