@@ -42,7 +42,15 @@
     "title": "Nyheter"
   },
   "my-home": {
-    "title": "Mitt Hjem"
+    "title": "Mitt Hjem",
+    "address": "Adresse",
+    "nearest": "Nærmeste",
+    "shelter": "Tilfluktsrom",
+    "defib": "Hjertestarter",
+    "hospital": "Sykehus",
+    "distance": "Distanse",
+    "coordinates": "Koordinater",
+    "manage-storage": "Administrer lager"
   },
   "login": {
     "title": "Logg Inn",
