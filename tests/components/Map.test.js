@@ -2,6 +2,7 @@ import {shallowMount} from "@vue/test-utils";
 import {describe, it, expect, beforeEach, vi} from 'vitest';
 import Map from '@/components/frontpage/Map.vue';
 import {useMapStore} from '@/stores/mapStore';
+import mockPinia from "../mocks/MockPinia.js";
 
 
 
@@ -13,6 +14,8 @@ describe('Map.vue', () => {
     }));
 
     beforeEach(() => {
+        mockPinia();
+
         mockMapStore = {
             initMap: vi.fn(() => {
                 mockMapStore.map = {

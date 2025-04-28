@@ -8,7 +8,6 @@ export const usePositionTrackingStore = defineStore("positionTrackingStore", {
         map: null,
         latitude: null,
         longitude: null,
-        canTrack: false,
         watchId: null,
     }),
     getters : {
@@ -20,9 +19,7 @@ export const usePositionTrackingStore = defineStore("positionTrackingStore", {
         // Start tracking the user's location
         startTracking() {
             const mapStore = useMapStore();
-            this.canTrack = true;
             let marker = null;
-
             this.watchId = watchUserPosition(
                 (position) => {
                     this.setCoordinates(position.coords.latitude, position.coords.longitude)
@@ -52,14 +49,15 @@ export const usePositionTrackingStore = defineStore("positionTrackingStore", {
         // Stop tracking the user's location
         stopTracking() {
             const mapStore = useMapStore();
-            if (this.canTrack) {
-                // Reset the user's location
-                this.canTrack = false;
-                this.setCoordinates(null, null);
-                if (mapStore.layerGroup["UserLocation"]) {
-                    mapStore.layerGroup["UserLocation"].clearLayers();
-                }
+
+            // Reset the user's location
+            this.setCoordinates(null, null);
+            if (mapStore.layerGroup["UserLocation"]) {
+                mapStore.layerGroup["UserLocation"].clearLayers();
+                mapStore.map.removeLayer(mapStore.layerGroup["UserLocation"]);
+                delete mapStore.layerGroup["UserLocation"];
             }
+
             // Clear the geolocation watch if it exists
             if (this.watchId) {
                 navigator.geolocation.clearWatch(this.watchId);
@@ -85,16 +83,19 @@ export const usePositionTrackingStore = defineStore("positionTrackingStore", {
         // Center the map on the user's location
         centerMapOnUser() {
             const mapStore = useMapStore();
-            if (this.canTrack) {
-                if (this.latitude !== null && this.longitude !== null) {
-                    mapStore.map.setView([this.latitude, this.longitude], 15);
-                } else {
-                    console.error("User location is not available.");
-                }
+            if (this.latitude !== null && this.longitude !== null) {
+                mapStore.map.setView([this.latitude, this.longitude], 15);
             } else {
-                alert("Tracking is diabled. Please enable tracking to center the map on your location.");
+                console.error("User location is not available.");
             }
-
         },
+    },
+    persist: {
+        enabled: true,
+        strategies: [
+            {
+                storage: localStorage,
+            },
+        ],
     }
 });
