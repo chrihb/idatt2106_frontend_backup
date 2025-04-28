@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { useUserStore } from '@/stores/userStore';
 
-export const requestLogin = async (loginForm) => {
+export const requestLogin = async (loginForm, t) => {
     const userStore = useUserStore();
 
     try {
@@ -22,10 +22,8 @@ export const requestLogin = async (loginForm) => {
         console.error('Error submitting login:', error);
 
         if (error.response) {
-            if (error.response.status === 400) {
-                return { error: 'Invalid password' };
-            } else if (error.response.status === 404) {
-                return { error: 'User does not exist' };
+            if (error.response.status === 400 || error.response.status === 404) {
+                return { error: t('login-service.invalidCredentials') };
             }
             return { error: 'An error occurred. Please try again.' };
         }

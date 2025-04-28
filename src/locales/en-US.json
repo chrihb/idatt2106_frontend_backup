@@ -93,5 +93,8 @@
     "invalidData": "Invalid data. Please check your input and try again.",
     "error": "An error occurred KYS. Please try again later.",
     "networkError": "Network error. Please check your internet connection and try again."
+  },
+  "login-service": {
+    "invalidCredentials": "Invalid email or password."
   }
 }

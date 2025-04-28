@@ -93,6 +93,9 @@
     "invalidData": "Ugyldige data. Vennligst sjekk inndataene dine og prøv igjen.",
     "error": "Det oppstod en feil. Vennligst prøv igjen senere.",
     "networkError": "Nettverksfeil. Vennligst sjekk internettilkoblingen din og prøv igjen."
+  },
+  "login-service": {
+    "invalidCredentials": "Ugyldig brukernavn eller passord."
   }
 
 }
