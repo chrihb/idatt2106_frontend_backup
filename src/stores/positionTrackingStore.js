@@ -27,7 +27,6 @@ export const usePositionTrackingStore = defineStore("positionTrackingStore", {
                 (position) => {
                     this.setCoordinates(position.coords.latitude, position.coords.longitude)
                     if (marker === null) {
-
                         // Create a new layer group for the user's location
                         if (!mapStore.layerGroup["PersonligPlassering"]) {
                             mapStore.layerGroup["PersonligPlassering"] = L.layerGroup().addTo(mapStore.map);
@@ -56,10 +55,10 @@ export const usePositionTrackingStore = defineStore("positionTrackingStore", {
 
             // Reset the user's location
             this.setCoordinates(null, null);
-            if (mapStore.layerGroup["personligPlassering"]) {
-                mapStore.layerGroup["personligPlassering"].clearLayers();
-                mapStore.map.removeLayer(mapStore.layerGroup["personligPlassering"]);
-                delete mapStore.layerGroup["personligPlassering"];
+            if (mapStore.layerGroup["PersonligPlassering"]) {
+                mapStore.layerGroup["PersonligPlassering"].clearLayers();
+                mapStore.map.removeLayer(mapStore.layerGroup["PersonligPlassering"]);
+                delete mapStore.layerGroup["PersonligPlassering"];
             }
 
             // Clear the geolocation watch if it exists
