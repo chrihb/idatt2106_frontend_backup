@@ -1,5 +1,5 @@
 export function emergencyItemService() {
-  const baseUrl = 'http://localhost:8080/api/emergency-items';
+  const baseUrl = `${window.backendURL}/api/emergency/items`;
 
   async function getEmergencyItems() {
     const response = await fetch(baseUrl, {
