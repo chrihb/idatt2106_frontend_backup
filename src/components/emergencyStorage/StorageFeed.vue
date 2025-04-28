@@ -41,29 +41,39 @@ const fetchCategories = async () => {
       const category = acc[item.categoryId] || {
         id: item.categoryId,
         name: categoriesStore.getCategoryName(item.categoryId),
-        unit: unitsStore.getUnitName(item.unitId),
+        units: new Set(),
+        unit: null,
         amount: 0,
         expirationDate: null,
       };
 
-      if (category.unit === unitsStore.getUnitName(item.unitId)) {
-        category.amount += item.amount;
+      category.units.add(unitsStore.getUnitName(item.unitId));
 
-        if (
-            !category.expirationDate ||
-            new Date(item.expirationDate) < new Date(category.expirationDate)
-        ) {
-          category.expirationDate = item.expirationDate;
-        }
+      if (category.units.size > 1) {
+        category.unit = "Inconsistent units";
+        category.amount = null;
+      } else {
+        category.unit = [...category.units][0];
+        category.amount += item.amount;
+      }
+
+      if (
+          !category.expirationDate ||
+          new Date(item.expirationDate) < new Date(category.expirationDate)
+      ) {
+        category.expirationDate = item.expirationDate;
       }
 
       acc[item.categoryId] = category;
       return acc;
     }, {});
 
-    itemCategories.value = Object.values(groupedCategories);
+    itemCategories.value = Object.values(groupedCategories).map(category => {
+      delete category.units;
+      return category;
+    });
   } catch (error) {
-    g.error('Error fetching categories');
+    g.error("Error fetching categories");
   }
 };
 
