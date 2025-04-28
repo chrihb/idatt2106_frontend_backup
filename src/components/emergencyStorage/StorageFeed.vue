@@ -36,12 +36,34 @@ const fetchCategories = async () => {
     }
 
     const allItems = await itemsStore.fetchAllItems();
-    itemCategories.value = allItems.map(item => ({
-      ...item,
-      unit: unitsStore.getUnitName(item.unitId)
-    }));
+
+    const groupedCategories = allItems.reduce((acc, item) => {
+      const category = acc[item.categoryId] || {
+        id: item.categoryId,
+        name: categoriesStore.getCategoryName(item.categoryId),
+        unit: unitsStore.getUnitName(item.unitId),
+        amount: 0,
+        expirationDate: null,
+      };
+
+      if (category.unit === unitsStore.getUnitName(item.unitId)) {
+        category.amount += item.amount;
+
+        if (
+            !category.expirationDate ||
+            new Date(item.expirationDate) < new Date(category.expirationDate)
+        ) {
+          category.expirationDate = item.expirationDate;
+        }
+      }
+
+      acc[item.categoryId] = category;
+      return acc;
+    }, {});
+
+    itemCategories.value = Object.values(groupedCategories);
   } catch (error) {
-    console.error('Error fetching categories:');
+    g.error('Error fetching categories');
   }
 };
 
@@ -66,7 +88,7 @@ const openModal = async (category) => {
   const items = await service.getEmergencyItemByCategoryId(category.id);
 
   modalData.value = {
-    id: category.categoryId,
+    id: category.id,
     display: true,
     items
   };
