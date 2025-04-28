@@ -19,6 +19,9 @@
     margin-bottom: 0.5rem;
 }
 
+.prose-kf {
+    width: 100%;
+}
 
 @theme {
     --color-kf-red: #ed5035;
