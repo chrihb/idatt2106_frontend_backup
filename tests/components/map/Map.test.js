@@ -1,7 +1,8 @@
 import {shallowMount} from "@vue/test-utils";
 import {describe, it, expect, beforeEach, vi} from 'vitest';
 import Map from '@/components/frontpage/Map.vue';
-import {useMapStore} from '@/stores/mapStore';
+import {useMapStore} from '@/stores/mapStore.js';
+import {createCustomMarkerIcon} from "@/utils/markerUtils.js";
 
 
 
@@ -37,6 +38,22 @@ describe('Map.vue', () => {
     it('calls initMap on mounted', () => {
         shallowMount(Map);
         expect(mockMapStore.initMap).toHaveBeenCalled();
+    });
+
+    it('should create a custom marker icon with the correct URL and size', () => {
+        const type = 'Hjertestarter';
+        const icon = createCustomMarkerIcon(type);
+
+        expect(icon.options.iconUrl).toBe('/icons/map/Hjertestarter.png');
+        expect(icon.options.iconSize).toEqual([40, 40]);
+    });
+
+    it('should create a custom marker icon with the correct URL and size', () => {
+        const type = 'Hjertestarter';
+        const icon = createCustomMarkerIcon(type);
+
+        expect(icon.options.iconUrl).toBe('/icons/map/Hjertestarter.png');
+        expect(icon.options.iconSize).toEqual([40, 40]);
     });
 
 })
