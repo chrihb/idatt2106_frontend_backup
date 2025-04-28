@@ -67,7 +67,7 @@ export function emergencyItemService() {
     if (!response.ok) {
       throw new Error('Failed to create emergency item');
     }
-    return response.json();
+    return response.body;
   }
 
   async function updateEmergencyItem(item) {
