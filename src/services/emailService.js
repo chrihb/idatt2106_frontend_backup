@@ -2,13 +2,14 @@ import axios from "axios";
 
 export const requestPasswordReset = async (email) => {
     try {
-        const response = await axios.post(`${window.backendURL}/api/email/reset-password/`, { email }, {
+        const response = await axios.post(`${window.backendURL}/api/email/reset-password/`+email.email, {
             headers: { 'Content-Type': 'application/json' },
         });
 
         const data = response.data;
-        if (data.success) {
-            return { success: true };
+
+        if (response) {
+            return { success: data };
         }
 
         return { error: 'Unexpected response format.' };
@@ -55,8 +56,10 @@ export const requestEmailVerification = async (token) => {
 
 export const executePasswordReset = async (token, password) => {
     try {
-        const response = await axios.put(`${window.backendURL}/api/email/reset-password/`+token+"?newPassword="+password, {
+        const response = await axios.put(`${window.backendURL}/api/users/reset-password/`+token, {
             headers: { 'Content-Type': 'application/json' },
+            password
+
         });
 
         const data = response.data;
