@@ -46,10 +46,12 @@ export default defineComponent({
 
     const handleUpdate = (id) => {
       emit('update', id);
+      close();
     };
 
     const handleCreate = () => {
       emit('create', props.categoryId);
+      close();
     };
 
     const handleDelete = async (id) => {
