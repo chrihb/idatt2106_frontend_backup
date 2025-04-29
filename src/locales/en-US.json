@@ -38,6 +38,24 @@
         "desc": "You have storage items that requires attention",
         "ok": "Your storage looks good!"
     },
+    "storage":{
+      "title": "Emergency Storage",
+      "new-item": "Create New Item",
+      "update-item": "Update",
+      "delete-item": "Delete",
+      "close": "Close",
+      "select-category": "Select Category",
+      "select-unit": "Select Unit",
+      "no-items-in-category": "No items found in this category",
+      "expiration-date": "Expiration Date",
+      "fill-all-fields": "Please fill in all fields",
+      "leave-message": "Are you sure you want to leave this page? Unsaved changes will be deleted.",
+      "quit": "Quit",
+      "stay": "Stay",
+      "item-name": "Item Name",
+      "item-amount": "Item Amount",
+      "item-expiration": "Item Expiration"
+    },
     "news": {
         "title": "News"
     },
@@ -93,6 +111,17 @@
     "privacyPolicyRequired": "You must accept the privacy policy.",
     "hasAccount": "Already have an account?",
     "loginHere": "Login here"
+  },
+  "register-service": {
+    "emailInUse": "Email is already in use.",
+    "phoneInUse": "Phone number is already in use.",
+    "failedToSendEmail": "Failed to send verification email. Please try again later.",
+    "invalidData": "Invalid data. Please check your input and try again.",
+    "error": "An error occurred KYS. Please try again later.",
+    "networkError": "Network error. Please check your internet connection and try again."
+  },
+  "login-service": {
+    "invalidCredentials": "Invalid email or password."
   },
   "auth":{
     "login": "Login",

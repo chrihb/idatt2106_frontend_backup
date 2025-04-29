@@ -2,13 +2,12 @@ import { useUserStore } from '@/stores/userStore';
 import { inject } from "vue";
 import axios from 'axios';
 
-const baseUrl = inject("backendURL");
 
-export const requestRegister = async (registerForm) => {
+export const requestRegister = async (registerForm, t) => {
     const userStore = useUserStore();
 
     try {
-        const response = await axios.post(`${baseUrl}/user/register`, registerForm, {
+        const response = await axios.post(`${window.backendURL}/api/users/register`, registerForm, {
             headers: { 'Content-Type': 'application/json' },
         });
 
@@ -22,15 +21,21 @@ export const requestRegister = async (registerForm) => {
     } catch (error) {
         if (error.response) {
             if (error.response.status === 400) {
-                return { error: 'Invalid registration data' };
+                if (error.response.data.error === "Email is already in use") {
+                    return { error: t('register-service.emailInUse') };
+                }
+                if (error.response.data.error === "Phone number is already in use") {
+                    return { error: t('register-service.phoneInUse') };
+                }
+                if (error.response.data.error === "Failed to send verification email") {
+                    return { error: t('register-service.failedToSendEmail') };
+                }
+                return { error: t('register-service.invalidData') };
             }
-            if (error.response.status === 409) {
-                return { error: 'Email already registered' };
-            }
-            return { error: 'An error occurred. Please try again.' };
+            return { error: t('register-service.error') };
         } else {
             console.error('Error submitting registration:', error);
-            return { error: 'Network error. Please try again later.' };
+            return { error: t('register-service.networkError') };
         }
     }
 };

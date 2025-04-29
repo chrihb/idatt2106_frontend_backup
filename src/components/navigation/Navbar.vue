@@ -5,7 +5,6 @@ import { useI18n } from "vue-i18n"
 import { UserCircleIcon } from "@heroicons/vue/24/outline/index.js";
 import { Bars3Icon } from "@heroicons/vue/24/solid/index.js";
 import { useUserStore } from "@/stores/userStore.js";
-import LocaleSelection from "@/components/navigation/LocaleSelection.vue";
 
 const userStore = useUserStore()
 const { t } = useI18n()
@@ -27,6 +26,11 @@ const isMobile = ref(window.innerWidth < 768)
 
 const updateIsMobile = () => {
   isMobile.value = window.innerWidth < 768
+}
+
+const logout = () => {
+  userStore.clearToken()
+  router.push('/')
 }
 
 // keep it updated
@@ -80,7 +84,7 @@ watchEffect(() => {
         <UserCircleIcon @click="toggleAccountDropdown" class="size-10 text-kf-blue hover:bg-kf-grey rounded cursor-pointer transition-colors duration-150"/>
         <div v-if="showAccountDropdown" @mouseleave="toggleAccountDropdown" class="absolute top-12 right-14 bg-kf-white shadow-lg rounded-lg z-10">
           <RouterLink to="/account" class="block px-4 py-2 text-kf-blue hover:bg-kf-grey">{{ t("navbar.account") }}</RouterLink>
-          <RouterLink to="/logout" class="block px-4 py-2 text-kf-blue hover:bg-kf-grey">{{ t("navbar.logout") }}</RouterLink>
+          <RouterLink to="/logout" @click.prevent="logout" class="block px-4 py-2 text-kf-blue hover:bg-kf-grey">{{ t("navbar.logout") }}</RouterLink>
         </div>
       </div>
       <div v-else>

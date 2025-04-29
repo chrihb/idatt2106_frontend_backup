@@ -19,7 +19,9 @@ export const useMapStore = defineStore('mapStore', {
             // Add a tile layer to the map
             L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
                 maxZoom: 19,
-                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors' +
+                    ' ' +
+                    '&copy; <a href="https://www.flaticon.com/free-icons/" title="Icons">Icons created by Freepik - Flaticon</a>'
             }).addTo(this.map);
         }
     },

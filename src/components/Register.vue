@@ -36,7 +36,9 @@ const { validate, values: form, errors, setFieldError, resetForm } = useForm({
     },
     phoneNumber: (value) => {
       if (!value) return t('register.phoneRequired');
-      if (!rules.regex(value, /^\+?[0-9]{7,15}$/)) return t('register.phoneRequired');
+      if (typeof value !== 'string') return t('register.phoneRequired');
+      const phoneRegex = /^\+?[0-9]{7,15}$/;
+      if (!phoneRegex.test(value)) return t('register.phoneRequired');
       return true;
     },
     privacyAccepted: (value) => {
@@ -135,13 +137,13 @@ const handleSubmit = async () => {
     const registerForm = {
       email: form.email,
       password: form.password,
-      firstName: form.firstName,
-      lastName: form.lastName,
+      firstname: form.firstName,
+      lastname: form.lastName,
       phoneNumber: form.phoneNumber,
-      recaptchaToken: recaptchaToken.value,
+      reCaptchaToken: recaptchaToken.value,
     };
     console.log('Submitting registration form:', registerForm); // Debug the form data
-    const response = await requestRegister(registerForm);
+    const response = await requestRegister(registerForm, t);
 
     if (response.success) {
       successMessage.value = t('register.successMessage');
