@@ -6,10 +6,9 @@ import UpdateStorageComponent from "@/components/emergencyStorage/UpdateStorageC
 import {useCategoriesStore} from '@/stores/categoriesStore.js';
 import {useUnitsStore} from '@/stores/unitsStore.js';
 import {useEmergencyItemsStore} from '@/stores/emergencyItemsStore.js';
-import {emergencyItemService} from '@/services/emergencyItemService.js';
 import {useI18n} from "vue-i18n";
 
-const { t } = useI18n()
+const { t } = useI18n();
 
 const categoriesStore = useCategoriesStore();
 const unitsStore = useUnitsStore();
@@ -18,8 +17,7 @@ const itemsStore = useEmergencyItemsStore();
 const itemCategories = ref([]);
 const modalData = ref({
   id: 0,
-  display: false,
-  items: []
+  display: false
 });
 
 const updateModalData = ref({
@@ -38,7 +36,8 @@ const fetchCategories = async () => {
       await unitsStore.fetchUnits();
     }
 
-    const allItems = await itemsStore.fetchAllItems();
+    await itemsStore.fetchAllItems();
+    const allItems = itemsStore.items;
 
     const groupedCategories = allItems.reduce((acc, item) => {
       const category = acc[item.categoryId] || {
@@ -76,7 +75,7 @@ const fetchCategories = async () => {
       return category;
     });
   } catch (error) {
-    g.error("Error fetching categories");
+    console.error("Error fetching categories");
   }
 };
 
@@ -97,13 +96,11 @@ const openUpdateModal = (itemId) => {
 };
 
 const openModal = async (category) => {
-  const service = emergencyItemService();
-  const items = await service.getEmergencyItemByCategoryId(category.id);
+  await itemsStore.fetchItemsByCategory(category.id);
 
   modalData.value = {
     id: category.id,
-    display: true,
-    items
+    display: true
   };
 };
 
@@ -117,11 +114,6 @@ const closeUpdateModal = () => {
 
 const handleItemSaved = async () => {
   await fetchCategories();
-
-  if (modalData.value.display) {
-    const service = emergencyItemService();
-    modalData.value.items = await service.getEmergencyItemByCategoryId(modalData.value.id);
-  }
 };
 
 onMounted(async () => {

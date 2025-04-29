@@ -1,16 +1,21 @@
 <script setup lang="js">
-import {defineComponent, ref, computed, onMounted, watch, defineProps, defineEmits} from 'vue';
-import {emergencyItemService} from '@/services/emergencyItemService.js';
+import {ref, computed, onMounted, watch} from 'vue';
 import {useCategoriesStore} from '@/stores/categoriesStore.js';
 import {useUnitsStore} from '@/stores/unitsStore.js';
+import {useEmergencyItemsStore} from '@/stores/emergencyItemsStore.js';
+import {useEmergencyItemStore} from '@/stores/emergencyItemStore.js';
 import {useI18n} from "vue-i18n";
 
-const { t } = useI18n();
-const isUpdate = computed(() => props.itemId !== null);
-const categoriesStore = useCategoriesStore();
-const unitsStore = useUnitsStore();
+const {t} = useI18n();
 const props = defineProps(['categoryId', 'unitId', 'itemId', 'display']);
 const emit = defineEmits(['close', 'itemSaved']);
+
+const categoriesStore = useCategoriesStore();
+const unitsStore = useUnitsStore();
+const itemsStore = useEmergencyItemsStore();
+const currentItemStore = useEmergencyItemStore();
+
+const isUpdate = computed(() => props.itemId !== null);
 
 const categories = ref([]);
 const units = ref([]);
@@ -58,6 +63,8 @@ const resetForm = () => {
   selectedCategory.value = null;
   selectedUnit.value = null;
   formIncomplete.value = false;
+
+  currentItemStore.resetState();
 };
 
 const loadItemData = async () => {
@@ -74,13 +81,24 @@ const loadItemData = async () => {
   if (props.itemId) {
     try {
       let item;
-      const service = emergencyItemService();
 
       if (props.categoryId) {
-        const items = await service.getEmergencyItemByCategoryId(props.categoryId);
-        item = items.find((i) => i.id === props.itemId);
+        item = itemsStore.getItemById(props.itemId);
+
+        if (!item) {
+          await itemsStore.fetchItemsByCategory(props.categoryId);
+          item = itemsStore.getItemById(props.itemId);
+        }
       } else {
-        item = await service.getEmergencyItemById(props.itemId);
+        await currentItemStore.fetchItemById(props.itemId);
+        item = {
+          id: currentItemStore.itemId,
+          name: currentItemStore.name,
+          amount: currentItemStore.amount,
+          categoryId: currentItemStore.categoryId,
+          unitId: currentItemStore.unitId,
+          expirationDate: currentItemStore.expirationDate
+        };
       }
 
       if (item) {
@@ -91,6 +109,8 @@ const loadItemData = async () => {
         itemData.value = {...item};
         selectedCategory.value = item.categoryId;
         selectedUnit.value = item.unitId;
+
+        currentItemStore.setItemData(item);
       }
     } catch (error) {
       console.error("Error fetching item:", error);
@@ -119,6 +139,7 @@ const saveItem = async () => {
     formIncomplete.value = true;
     return;
   }
+
   try {
     formIncomplete.value = false;
 
@@ -133,12 +154,14 @@ const saveItem = async () => {
           : itemData.value.expirationDate.toISOString().split('T')[0]
     };
 
-    const service = emergencyItemService();
-    if (isUpdate.value) {
-      await service.updateEmergencyItem(saveData);
-    } else {
-      await service.createEmergencyItem(saveData);
-    }
+    currentItemStore.itemId = saveData.id;
+    currentItemStore.name = saveData.name;
+    currentItemStore.amount = saveData.amount;
+    currentItemStore.categoryId = saveData.categoryId;
+    currentItemStore.unitId = saveData.unitId;
+    currentItemStore.expirationDate = saveData.expirationDate;
+
+    await currentItemStore.saveItem();
 
     emit('itemSaved');
     close();
@@ -176,7 +199,7 @@ onMounted(async () => {
           class="bg-white rounded-lg shadow-xl w-4/5 md:w-3/5 max-h-4/5 overflow-auto p-6 max-w-3xl">
         <div class="flex flex-row justify-between items-center mb-6 border-b pb-4">
           <h1 class="text-2xl font-bold text-gray-800">
-            {{ isUpdate ? 'Update Item' : 'Add New Item' }}
+            {{ isUpdate ? t('storage.update-item') : t('storage.new-item') }}
           </h1>
           <button
               class="text-gray-500 hover:text-gray-800 focus:outline-none transition-colors duration-200 p-2 rounded-full hover:bg-gray-100"

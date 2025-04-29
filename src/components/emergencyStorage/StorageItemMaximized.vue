@@ -1,101 +1,87 @@
-<script lang="js">
-import {defineComponent, ref, onMounted, watch} from 'vue';
+<script setup lang="js">
+import {ref, onMounted, watch} from 'vue';
 import StorageItemMinimized from "@/components/emergencyStorage/StorageItemMinimized.vue";
-import {emergencyItemService} from '@/services/emergencyItemService.js';
 import {useCategoriesStore} from '@/stores/categoriesStore.js';
 import {useUnitsStore} from '@/stores/unitsStore.js';
+import {useEmergencyItemsStore} from '@/stores/emergencyItemsStore.js';
 import {useI18n} from "vue-i18n";
 
-export default defineComponent({
-  name: 'StorageItemMaximized',
-  components: {StorageItemMinimized},
-  props: {
-    categoryId: {
-      type: Number,
-      required: true
-    },
-    display: {
-      type: Boolean,
-      default: false
-    }
+const props = defineProps({
+  categoryId: {
+    type: Number,
+    required: true
   },
-  emits: ['close', 'update', 'create'],
-  setup(props, {emit}) {
-    const { t } = useI18n();
-    const items = ref([]);
-    const unitsStore = useUnitsStore();
-    const categoriesStore = useCategoriesStore();
-
-    const loadItems = async () => {
-      if (props.display && props.categoryId) {
-        try {
-          const service = emergencyItemService();
-          const categoryItems = await service.getEmergencyItemByCategoryId(props.categoryId);
-
-          items.value = categoryItems.map(item => ({
-            ...item,
-            unit: unitsStore.getUnitName(item.unitId)
-          }));
-        } catch (error) {
-          console.error('Error loading items for category');
-        }
-      }
-    };
-
-    const close = () => {
-      items.value = [];
-      emit('close');
-    };
-
-    const handleUpdate = (id) => {
-      emit('update', id);
-      close();
-    };
-
-    const handleCreate = () => {
-      emit('create', props.categoryId);
-      close();
-    };
-
-    const handleDelete = async (id) => {
-      try {
-        const service = emergencyItemService();
-        await service.deleteEmergencyItem(id);
-        await loadItems();
-      } catch (error) {
-        console.error('Error deleting item');
-      }
-    };
-
-    onMounted(async () => {
-      if (categoriesStore.categories.length === 0) {
-        await categoriesStore.fetchCategories();
-      }
-
-      if (unitsStore.units.length === 0) {
-        await unitsStore.fetchUnits();
-      }
-
-      await loadItems();
-    });
-
-    watch(() => props.display, async (newValue) => {
-      if (newValue === true) {
-        await loadItems();
-      }
-    }, { immediate: false });
-
-    return {
-      close,
-      handleUpdate,
-      handleCreate,
-      handleDelete,
-      items,
-      categoriesStore,
-      t
-    };
+  display: {
+    type: Boolean,
+    default: false
   }
 });
+
+const emit = defineEmits(['close', 'update', 'create']);
+const {t} = useI18n();
+
+const unitsStore = useUnitsStore();
+const categoriesStore = useCategoriesStore();
+const itemsStore = useEmergencyItemsStore();
+
+const items = ref([]);
+
+const loadItems = async () => {
+  if (props.display && props.categoryId) {
+    try {
+      const categoryItems = await itemsStore.fetchItemsByCategory(props.categoryId);
+
+      items.value = categoryItems.map(item => ({
+        ...item,
+        unit: unitsStore.getUnitName(item.unitId)
+      }));
+    } catch (error) {
+      console.error('Error loading items for category', error);
+    }
+  }
+};
+
+const close = () => {
+  items.value = [];
+  emit('close');
+};
+
+const handleUpdate = (id) => {
+  emit('update', id);
+  close();
+};
+
+const handleCreate = () => {
+  emit('create', props.categoryId);
+  close();
+};
+
+const handleDelete = async (id) => {
+  try {
+    await itemsStore.deleteItem(id);
+    await loadItems();
+  } catch (error) {
+    console.error('Error deleting item', error);
+  }
+};
+
+onMounted(async () => {
+  if (categoriesStore.categories.length === 0) {
+    await categoriesStore.fetchCategories();
+  }
+
+  if (unitsStore.units.length === 0) {
+    await unitsStore.fetchUnits();
+  }
+
+  await loadItems();
+});
+
+watch(() => props.display, async (newValue) => {
+  if (newValue === true) {
+    await loadItems();
+  }
+}, {immediate: false});
 </script>
 
 <template>
@@ -105,7 +91,9 @@ export default defineComponent({
       <div
           class="bg-white rounded-lg shadow-xl w-4/5 md:w-3/5 max-h-4/5 overflow-auto p-6 max-w-3xl">
         <div class="flex flex-row justify-between items-center mb-6 border-b pb-4">
-          <h1 class="text-2xl font-bold text-gray-800">{{categoriesStore.getCategoryName(categoryId)}}</h1>
+          <h1 class="text-2xl font-bold text-gray-800">{{
+              categoriesStore.getCategoryName(categoryId)
+            }}</h1>
           <button
               class="text-gray-500 hover:text-gray-800 focus:outline-none transition-colors duration-200 p-2 rounded-full hover:bg-gray-100"
               @click="close"
