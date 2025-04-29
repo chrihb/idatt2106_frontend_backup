@@ -1,10 +1,10 @@
 <script setup>
-import FullMap from "@/components/map/FullMap.vue";
+import CompleteMap from "@/components/map/CompleteMap.vue";
 </script>
 
 <template>
   <div class="relative flex flex-col h-full w-full">
-    <FullMap />
+    <CompleteMap />
   </div>
 </template>
 
