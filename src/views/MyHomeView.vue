@@ -1,5 +1,5 @@
 <script setup>
-import Map from '@/components/frontpage/Map.vue'
+import MinimalMap from '@/components/map/MinimalMap.vue';
 import HouseStatus from "@/components/frontpage/HouseStatus.vue";
 import Address from "@/components/myHome/Address.vue";
 import Nearest from "@/components/myHome/Nearest.vue";
@@ -24,7 +24,9 @@ const homeStore = useHomeStore();
       </div>
       <div class="flex flex-col gap-2">
         <HouseStatus class="" />
-        <Map class="" />
+        <div class="relative h-full w-full rounded-2xl shadow-lg overflow-hidden">
+          <MinimalMap class="h-full w-full" />
+        </div>
       </div>
     </div>
   </div>

@@ -84,7 +84,7 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <div id="map" class="min-h-140 h-full w-full z-0 rounded-2xl"></div>
+  <div id="map" class="relative min-h-140 h-full w-full z-0 rounded-2xl"></div>
 </template>
 
 <style scoped>
