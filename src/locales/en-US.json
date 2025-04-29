@@ -55,7 +55,8 @@
       "stay": "Stay",
       "item-name": "Item Name",
       "item-amount": "Item Amount",
-      "item-expiration": "Expiry"
+      "item-expiration": "Expiry",
+      "more-info": "Click for More Info"
     },
     "news": {
         "title": "News"

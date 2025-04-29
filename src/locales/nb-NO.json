@@ -55,7 +55,8 @@
     "stay": "Bli",
     "item-name": "Navn",
     "item-amount": "Mengde",
-    "item-expiration": "Utløpsdato"
+    "item-expiration": "Utløpsdato",
+    "more-info": "Trykk for mer info"
   },
   "news": {
     "title": "Nyheter"

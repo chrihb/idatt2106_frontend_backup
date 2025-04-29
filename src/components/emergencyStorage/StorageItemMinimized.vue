@@ -48,7 +48,7 @@ const handleDelete = (event) => {
     <p
         v-if="!possibleUpdate"
         class="flex justify-center items-center text-gray-500">
-      Click for more info
+      {{ t("storage.more-info") }}
     </p>
   </div>
 </template>
