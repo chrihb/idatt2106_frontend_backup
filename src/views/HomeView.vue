@@ -1,6 +1,6 @@
 <script setup>
 import HouseStatus from "@/components/frontpage/HouseStatus.vue";
-import BasicMap from "@/components/map/Map.vue";
+import BasicMap from "@/components/map/BasicMap.vue";
 import News from "@/components/frontpage/News.vue";
 import StorageStatus from "@/components/frontpage/StorageStatus.vue";
 import { useUserStore} from "@/stores/userStore.js";
