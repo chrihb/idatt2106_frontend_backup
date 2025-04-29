@@ -1,9 +1,11 @@
 <script setup>
-import Map from '../components/frontpage/Map.vue'
+import FullMap from "@/components/map/FullMap.vue";
 </script>
 
 <template>
-  <Map />
+  <div class="relative flex flex-col h-full w-full">
+    <FullMap />
+  </div>
 </template>
 
 <style scoped>
