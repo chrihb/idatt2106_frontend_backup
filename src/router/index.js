@@ -57,14 +57,18 @@ const router = createRouter({
 
 router.beforeEach(async (to, from, next) => {
     const userStore = useUserStore();
+    console.log("running auth check in router...");
 
     if (to.meta.requiresAuth) {
-        const isAuth = await userStore.isAuthenticated();
-        if (!isAuth) {
+        console.log("Requires auth");
+        await userStore.isAuthenticated();
+        console.log("isAuth:", userStore.authenticated);
+        if (!userStore.authenticated) {
+            console.log("Not authenticated, redirecting to login");
             return next('/login');
         }
     }
-
+    console.log("Route ok, proceeding...");
     next();
 });
 

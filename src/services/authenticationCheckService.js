@@ -8,11 +8,14 @@ export const requestAuthenticationCheck = async () => {
 
     try {
         console.log("Sending Request...")
-        const response = await axios.get(`${window.backendURL}/api/users/is-auth`, {
-            headers: {
-                Authorization: `Bearer ${userStore.token}`
+        const response = await axios.post(`${window.backendURL}/api/users/is-auth`, {},
+            {
+                headers: {
+                    Authorization: `Bearer ${userStore.token}`
+                }
             }
-        });
+        );
+
 
         console.log("Response data:", response.status);
         if (response.status === 404) {
