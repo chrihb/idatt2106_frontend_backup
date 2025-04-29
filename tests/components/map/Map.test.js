@@ -1,6 +1,6 @@
 import {shallowMount} from "@vue/test-utils";
 import {describe, it, expect, beforeEach, vi} from 'vitest';
-import Map from '@/components/frontpage/Map.vue';
+import Map from '@/components/map/Map.vue';
 import mockPinia from "../../mocks/MockPinia.js";
 import {useMapStore} from '@/stores/mapStore.js';
 import {createCustomMarkerIcon} from "@/utils/markerUtils.js";

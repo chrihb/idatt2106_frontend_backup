@@ -102,7 +102,7 @@ const handleSubmit = async () => {
 
         <!-- Forgot Password Link -->
         <div class="text-center">
-          <router-link to="/forgot-password" class="text-kf-link-blue hover:underline">
+          <router-link to="/password-reset-request" class="text-kf-link-blue hover:underline">
             {{ t('login.forgotPassword') }}
           </router-link>
         </div>

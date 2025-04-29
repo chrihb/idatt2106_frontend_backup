@@ -21,7 +21,7 @@ export const useMapStore = defineStore('mapStore', {
                 maxZoom: 19,
                 attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors' +
                     ' ' +
-                    '&copy; <a href="https://www.flaticon.com/free-icons/" title="Icons">Icons created by Freepik - Flaticon</a>'
+                    '&copy; <a href="https://www.flaticon.com/" title="Icons">Icons created by Freepik - Flaticon</a>'
             }).addTo(this.map);
         }
     },

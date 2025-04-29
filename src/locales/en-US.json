@@ -83,6 +83,21 @@
     "emailRequired": "Email is required.",
     "loginError": "Invalid email or password."
   },
+    "password-reset": {
+        "title": "Password Reset",
+        "email": "Email",
+        "sendResetLabel": "Enter your email address to reset your password.",
+        "sendResetLink": "Send Email",
+        "emailError": "Email must be a valid email address.",
+        "emailRequired": "Email is required.",
+        "resetLinkSent": "Password reset link sent to your email.",
+        "resetLinkError": "Failed to send password reset link. Please try again.",
+        "setNewPassword": "Change Password"
+    },
+  "email-verification": {
+    "title": "Email Verification",
+    "emailVerificationAcceptButton": "Ok"
+  },
   "password": {
     "show": "show",
     "hide": "Hide"
