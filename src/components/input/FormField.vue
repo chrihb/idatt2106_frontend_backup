@@ -12,7 +12,7 @@ const { value, errorMessage, handleChange } = useField(() => props.fieldName);
 
 <template>
   <div class="form-field">
-    <label :for="fieldName" class="block text-sm font-medium text-gray-700 mb-1">
+    <label :for="fieldName" class="block text-sm font-medium text-kf-blue mb-1">
       {{ label }}
     </label>
     <input
@@ -21,14 +21,14 @@ const { value, errorMessage, handleChange } = useField(() => props.fieldName);
         :name="fieldName"
         :value="value"
         @input="handleChange"
-        class="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
-        :class="{ 'border-red-600': errorMessage }"
+        class="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-kf-link-blue"
+        :class="{ 'border-kf-red': errorMessage }"
         :aria-describedby="errorMessage ? `${fieldName}-error` : null"
     />
     <span
         v-if="errorMessage"
         :id="`${fieldName}-error`"
-        class="error-message block text-red-600 text-sm mt-1"
+        class="error-message block text-kf-red text-sm mt-1"
         aria-live="polite"
     >
       {{ errorMessage }}

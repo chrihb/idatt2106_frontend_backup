@@ -6,7 +6,6 @@ import FormField from '@/components/input/FormField.vue';
 import PasswordField from "@/components/input/PasswordField.vue";
 import {requestLogin} from '@/services/loginService';
 import {useI18n} from "vue-i18n";
-import HomeButton from "@/components/HomeButton.vue";
 import router from "@/router/index.js";
 
 const { t } = useI18n();
@@ -61,42 +60,34 @@ const handleSubmit = async () => {
 </script>
 
 <template>
-  <div class="min-h-screen flex items-center justify-center bg-gray-100">
-    <div class="bg-white p-8 rounded-lg shadow-lg w-full max-w-sm">
-      <!-- Logo -->
-      <div class="flex justify-center mb-4">
-          <img src="@/assets/logo.png" alt="Logo" class="w-16 h-16" />
-      </div>
-
-      <!-- Title -->
-      <h1 class="text-2xl font-bold text-center mb-6">Krisefikser</h1>
-
+  <div class="flex items-center justify-center">
+    <div class="w-full max-w-sm">
       <!-- Form -->
-      <form @submit.prevent="handleSubmit">
+      <form class="flex flex-col gap-2" @submit.prevent="handleSubmit">
         <!-- Success/Error Messages -->
-        <div v-if="successMessage" aria-live="polite" class="text-green-600 text-center mb-4">
+        <div v-if="successMessage" aria-live="polite" class="text-kf-green text-center mb-4">
           {{ successMessage }}
         </div>
-        <div v-if="errorMessage" aria-live="polite" class="text-red-600 text-center mb-4">
+        <div v-if="errorMessage" aria-live="polite" class="text-kf-red text-center mb-4">
           {{ errorMessage }}
         </div>
 
         <!-- Email Field -->
-        <div class="mb-4">
+        <div class="">
           <FormField
               field-name="email"
               :label="t('login.email')"
               type="email"
-              class="w-full p-2 "
+              class="w-full"
           />
         </div>
 
         <!-- Password Field -->
-        <div class="mb-6">
+        <div class="">
           <PasswordField
               field-name="password"
               :label="t('login.password')"
-              class="w-full p-2 "
+              class="w-full"
           />
         </div>
 
@@ -104,26 +95,25 @@ const handleSubmit = async () => {
         <button
             :disabled="isSubmitting"
             type="submit"
-            class="w-full bg-kf-red text-white p-2 rounded disabled:opacity-50 cursor-pointer"
+            class="w-full bg-kf-red text-kf-white py-2 rounded disabled:opacity-50 cursor-pointer"
         >
           {{ t('login.login') }}
         </button>
 
         <!-- Forgot Password Link -->
-        <div class="mt-4 text-center">
-          <router-link to="/password-reset-request" class="text-blue-600 hover:underline">
+        <div class="text-center">
+          <router-link to="/password-reset-request" class="text-kf-link-blue hover:underline">
             {{ t('login.forgotPassword') }}
           </router-link>
         </div>
 
         <!-- Create User Link -->
-        <div class="mt-4 text-center">
-          <router-link to="/register-account" class="text-blue-600 hover:underline">
+        <div class="text-center">
+          <router-link to="/register-account" class="text-kf-link-blue hover:underline">
             {{ t('login.createUser') }}
           </router-link>
         </div>
       </form>
-      <HomeButton />
     </div>
   </div>
 </template>

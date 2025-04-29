@@ -6,7 +6,6 @@ import FormField from '@/components/input/FormField.vue';
 import PasswordField from "@/components/input/PasswordField.vue";
 import { requestRegister } from "@/services/registerService.js";
 import {useI18n} from "vue-i18n";
-import HomeButton from "@/components/HomeButton.vue";
 
 const { t } = useI18n();
 
@@ -173,100 +172,97 @@ const handleSubmit = async () => {
 </script>
 
 <template>
-  <div class="min-h-screen flex items-center justify-center bg-gray-100">
-    <div class="bg-white p-8 rounded-lg shadow-lg w-full max-w-sm">
-      <!-- Logo -->
-      <div class="flex justify-center mb-4">
-        <img src="@/assets/logo.png" alt="Logo" class="w-16 h-16" />
-      </div>
-      <!-- Title -->
-      <h1 class="text-2xl font-bold text-center mb-6">Krisefikser</h1>
+  <div class="flex items-center justify-center">
+    <div class="w-full max-w-sm">
 
       <!-- Form -->
-      <form @submit.prevent="handleSubmit">
+      <form class="flex flex-col gap-2" @submit.prevent="handleSubmit">
         <!-- Success/Error Messages -->
-        <div v-if="successMessage" class="text-green-600 text-center mb-4" aria-live="polite">
+        <div v-if="successMessage" class="text-kf-green text-center" aria-live="polite">
           {{ successMessage }}
         </div>
-        <div v-if="errorMessage" class="text-red-600 text-center mb-4" aria-live="polite">
+        <div v-if="errorMessage" class="text-kf-red text-center" aria-live="polite">
           {{ errorMessage }}
         </div>
 
+        <div class="flex gap-2">
+          <!-- First Name Field -->
+          <div class="">
+            <FormField
+                field-name="firstName"
+                :label="t('register.firstName')"
+                type="text"
+                class="w-full"
+            />
+          </div>
+
+          <!-- Last Name Field -->
+          <div class="">
+            <FormField
+                field-name="lastName"
+                :label="t('register.lastName')"
+                type="text"
+                class="w-full"
+            />
+          </div>
+        </div>
+
         <!-- Email Field -->
-        <div class="mb-4">
+        <div class="">
           <FormField
               field-name="email"
               :label="t('register.email')"
               type="email"
-              class="w-full p-2"
-          />
-        </div>
-
-        <!-- Password Field -->
-        <div class="mb-4">
-          <PasswordField
-              field-name="password"
-              :label="t('register.password')"
-              class="w-full p-2"
-          />
-        </div>
-
-        <!-- Repeat Password Field -->
-        <div class="mb-4">
-          <PasswordField
-              field-name="repeatPassword"
-              :label="t('register.confirmPassword')"
-              class="w-full p-2"
-          />
-        </div>
-
-        <!-- First Name Field -->
-        <div class="mb-4">
-          <FormField
-              field-name="firstName"
-              :label="t('register.firstName')"
-              type="text"
-              class="w-full p-2"
-          />
-        </div>
-
-        <!-- Last Name Field -->
-        <div class="mb-4">
-          <FormField
-              field-name="lastName"
-              :label="t('register.lastName')"
-              type="text"
-              class="w-full p-2"
+              class="w-full"
           />
         </div>
 
         <!-- Phone number Field -->
-        <div class="mb-4">
+        <div class="">
           <FormField
               field-name="phoneNumber"
               :label="t('register.phone')"
               type="text"
-              class="w-full p-2"
+              class="w-full"
+          />
+        </div>
+
+        <!-- Password Field -->
+        <div class="">
+          <PasswordField
+              field-name="password"
+              :label="t('register.password')"
+              class="w-full"
+          />
+        </div>
+
+        <!-- Repeat Password Field -->
+        <div class="">
+          <PasswordField
+              field-name="repeatPassword"
+              :label="t('register.confirmPassword')"
+              class="w-full"
           />
         </div>
 
         <!-- Privacy Policy Checkbox -->
-        <div class="form-field mb-4">
-          <label class="flex items-center text-sm text-gray-700">
+        <div class="">
+          <label class="flex items-center text-sm text-kf-blue gap-2">
             <input
                 v-model="privacyAccepted"
                 name="privacyAccepted"
                 type="checkbox"
                 @change="validatePrivacy"
-                class="mr-2 h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+                class="size-4 text-kf-link-blue focus:ring-kf-link-blue border-kf-grey rounded"
             />
             <span>
               {{ t('register.privacyPolicyText') }}
               <a
                   href="/privacy-policy"
+
                   rel="noopener noreferrer"
                   target="_blank"
-                  class="text-blue-600 hover:underline"
+                  class="text-kf-link-blue hover:underline"
               >
                 {{ t('footer.privacy-policy') }}
               </a>
@@ -275,7 +271,7 @@ const handleSubmit = async () => {
           <span
               v-if="privacyError"
               id="privacyAccepted-error"
-              class="error-message block text-red-600 text-sm mt-1"
+              class="error-message block text-kf-red text-sm "
               aria-live="polite"
           >
             {{ privacyError }}
@@ -283,11 +279,11 @@ const handleSubmit = async () => {
         </div>
 
         <!-- ReCAPTCHA Error -->
-        <div class="form-field mb-4">
+        <div class="form-field">
           <span
               v-if="recaptchaError"
               id="recaptcha-error"
-              class="error-message block text-red-600 text-sm"
+              class="error-message block text-kf-red text-sm"
               aria-live="polite"
           >
             {{ recaptchaError }}
@@ -298,21 +294,21 @@ const handleSubmit = async () => {
         <button
             :disabled="isSubmitting"
             type="submit"
-            class="w-full bg-kf-red text-white p-2 rounded transition disabled:opacity-50 cursor-pointer"
+            class="w-full bg-kf-red text-white py-2 rounded transition disabled:opacity-50 cursor-pointer"
         >
           {{ t('register.register') }}
         </button>
+        <!-- Toggle Link to Login -->
+        <div class="text-center">
+          <p class="text-kf-blue">
+            {{ t('register.hasAccount') }}
+            <router-link to="/login" class="text-kf-link-blue hover:underline">
+              {{ t('register.loginHere') }}
+            </router-link>
+          </p>
+        </div>
       </form>
-      <!-- Toggle Link to Login -->
-      <div class="mt-4 text-center">
-        <p class="text-gray-600">
-          {{ t('register.hasAccount') }}
-          <router-link to="/login" class="text-blue-600 hover:underline">
-            {{ t('register.loginHere') }}
-          </router-link>
-        </p>
-      </div>
-      <HomeButton />
+
     </div>
   </div>
 </template>

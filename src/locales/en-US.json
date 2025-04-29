@@ -137,5 +137,9 @@
   },
   "login-service": {
     "invalidCredentials": "Invalid email or password."
+  },
+  "auth":{
+    "login": "Login",
+    "register": "Register"
   }
 }

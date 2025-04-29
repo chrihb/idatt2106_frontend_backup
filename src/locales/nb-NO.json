@@ -137,6 +137,9 @@
   },
   "login-service": {
     "invalidCredentials": "Ugyldig brukernavn eller passord."
+  },
+  "auth":{
+    "login": "Logg Inn",
+    "register": "Registrer"
   }
-
 }

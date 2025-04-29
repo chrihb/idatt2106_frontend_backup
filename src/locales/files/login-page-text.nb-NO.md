@@ -1,5 +1,3 @@
-# Logg inn på Krisefikser.no
-
 Registrer deg for å få full kontroll over din egenberedskap! Som registrert bruker kan du:
 
 - Administrere husstandens beredskapslager med oversikt over varer og utløpsdatoer.
