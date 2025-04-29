@@ -34,7 +34,13 @@
     "privacy-policy": "Personvernserklæring"
   },
   "storage-status": {
-    "title": "Lager Status",
+    "level": {
+      "low": "Lageret ditt dekker ikke 3 dagers behov",
+      "medium": "Lageret ditt dekker 3-7 dagers behov",
+      "high": "Lageret ditt dekker mer enn 7 dagers behov",
+      "unknown": "Lagerstatus er ukjent"
+    },
+    "title": "Beredskapsstatus",
     "desc": "Du har lagringsartikler som krever oppmerksomhet",
     "ok": "Lageret ditt ser bra ut!"
   },

@@ -34,7 +34,13 @@
         "privacy-policy": "Privacy Policy"
     },
     "storage-status": {
-        "title": "Storage Status",
+        "level": {
+          "low": "Your storage does not cover 3 days of needs",
+          "medium": "Your storage covers 3-7 days of needs",
+          "high": "Your storage covers more than 7 days of needs",
+          "unknown": "Storage status is unknown"
+        },
+        "title": "Emergency Storage Status",
         "desc": "You have storage items that requires attention",
         "ok": "Your storage looks good!"
     },
