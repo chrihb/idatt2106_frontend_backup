@@ -133,7 +133,7 @@ export default defineComponent({
 
         <div class="mt-6 pt-4 border-t flex justify-between">
           <button
-              class="px-4 py-2 bg-blue-500 hover:bg-blue-600 rounded-lg text-white font-medium transition-colors duration-200"
+              class="px-4 py-2 bg-kf-blue rounded-lg text-white font-medium transition-colors duration-200"
               @click="handleCreate"
           >
             {{ t("storage.new-item") }}

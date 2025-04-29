@@ -34,20 +34,20 @@ const handleDelete = (event) => {
         <button
             v-if="possibleUpdate"
             @click="handleUpdate"
-            class="px-3 py-1 bg-yellow-500 hover:bg-yellow-600 rounded text-white text-sm font-medium transition-colors duration-200">
+            class="px-3 py-1 bg-kf-orange rounded text-white text-sm font-medium transition-colors duration-200">
           {{ t("storage.update-item") }}
         </button>
         <button
             v-if="possibleUpdate"
             @click="handleDelete"
-            class="px-3 py-1 bg-red-500 hover:bg-red-600 rounded text-white text-sm font-medium transition-colors duration-200">
+            class="px-3 py-1 bg-kf-red rounded text-white text-sm font-medium transition-colors duration-200">
           {{ t("storage.delete-item") }}
         </button>
       </div>
     </div>
     <p
         v-if="!possibleUpdate"
-        class="flex justify-center items-center dark:color-gray-500">
+        class="flex justify-center items-center text-gray-500">
       Click for more info
     </p>
   </div>

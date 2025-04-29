@@ -135,7 +135,7 @@ onMounted(async () => {
       <p>warning</p>
       <h2 class="text-2xl">Categories:</h2>
       <button
-          class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition-colors duration-200"
+          class="bg-kf-blue text-white px-4 py-2 rounded transition-colors duration-200"
           @click="openCreateModal()"
       >
         {{ t("storage.new-item") }}
