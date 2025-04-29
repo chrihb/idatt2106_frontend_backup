@@ -43,6 +43,7 @@ export default defineComponent({
     };
 
     const close = () => {
+      items.value = [];
       emit('close');
     };
 
