@@ -80,7 +80,7 @@ export const emergencyZoneStore = defineStore('emergencyZone', {
             // Delete the emergency zone from the API
         },
 
-        clearEmergencyZone() {
+        clearEmergencyZoneState() {
             this.emergencyZone = {
                 zoneId: null,
                 name: '',
