@@ -121,8 +121,8 @@
     "networkError": "Nettverksfeil. Vennligst sjekk internettilkoblingen din og prøv igjen."
   },
   "login-service": {
-    "invalidCredentials": "Ugyldig brukernavn eller passord.",
-    },
+    "invalidCredentials": "Ugyldig brukernavn eller passord."
+  },
   "auth":{
     "login": "Logg Inn",
     "register": "Registrer"

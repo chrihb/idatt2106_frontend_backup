@@ -4,7 +4,7 @@ import {ref, watchEffect} from "vue";
 import fileImport from "@/utils/txtFileImport.js";
 import { marked } from 'marked'
 
-const { locale, t } = useI18n()
+const { locale } = useI18n()
 const text = ref('')
 
 const props = defineProps({
@@ -31,7 +31,7 @@ watchEffect(async () => {
 <template>
 
 <div class="">
-  <div class="prose w-full" v-html="text"></div>
+  <div class="prose w-full" v-html="text" />
 </div>
 </template>
 

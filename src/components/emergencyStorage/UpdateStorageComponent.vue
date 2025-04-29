@@ -1,5 +1,5 @@
 <script setup lang="js">
-import {defineComponent, ref, computed, onMounted, watch, defineProps, defineEmits} from 'vue';
+import {defineComponent, ref, computed, onMounted, watch} from 'vue';
 import {emergencyItemService} from '@/services/emergencyItemService.js';
 import {useCategoriesStore} from '@/stores/categoriesStore.js';
 import {useUnitsStore} from '@/stores/unitsStore.js';

@@ -12,6 +12,7 @@ import MyHomeView from "@/views/MyHomeView.vue";
 import AuthBase from "@/views/AuthBase.vue";
 import Login from "@/components/Login.vue";
 import Register from "@/components/Register.vue";
+import {useUserStore} from "@/stores/userStore.js";
 
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
@@ -21,13 +22,13 @@ const router = createRouter({
             children: [
                 { path: "", component: HomeView },
                 { path: "/news", component: NewsView },
-                { path: "/account", component: AccountView },
-                { path: "/emergency-storage", component: EmergencyStorage },
+                { path: "/account", component: AccountView, meta: { requiresAuth: true } },
+                { path: "/storage", component: EmergencyStorage, meta: { requiresAuth: true } },
                 { path: "/about-us", component: AboutUsView },
                 { path: "/privacy-policy", component: PrivacyPolicyView },
-                { path: "/storage", component: StorageView },
                 { path: "/map", component: MapView },
-                { path: "/my-home", component: MyHomeView },
+                { path: "/my-home", component: MyHomeView, meta: { requiresAuth: true } },
+
             ],
         },
             {path: "/login", component: AuthBase,
@@ -41,8 +42,13 @@ const router = createRouter({
 });
 
 router.beforeEach((to, from, next) => {
-    // Perform any global navigation guards here
-    next();
+    const userStore = useUserStore();
+
+    if (to.meta.requiresAuth && !userStore.isAuthenticated) {
+        next('/login');
+    } else {
+        next();
+    }
 });
 
 export default router

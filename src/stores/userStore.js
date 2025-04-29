@@ -3,11 +3,11 @@ import { defineStore } from 'pinia';
 export const useUserStore = defineStore('user', {
     state: () => ({
         token: null,
-        username: null,
+        email: null,
     }),
     getters: {
         isAuthenticated() {
-            return this.token;
+            return false;
         },
     },
     actions: {
