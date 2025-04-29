@@ -152,6 +152,10 @@ onMounted(async () => {
         :possibleUpdate="false"
         @click="openModal(categoryItem)"/>
 
+    <div v-if="itemCategories.length === 0" class="py-10 text-center text-gray-500">
+      {{ t("storage.no-items-in-category") }}
+    </div>
+
     <StorageItemMaximized
         :categoryId="modalData.id"
         :display="modalData.display"
