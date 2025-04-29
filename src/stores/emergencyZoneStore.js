@@ -10,6 +10,7 @@ export const emergencyZoneStore = defineStore('emergencyZone', {
             lat: 0,
             lng: 0,
             type: '',
+            level: 0,
             description: '',
             geojson: {
                 type: 'Polygon',
@@ -37,6 +38,7 @@ export const emergencyZoneStore = defineStore('emergencyZone', {
                 lat: emergencyZoneData.lat,
                 lng: emergencyZoneData.lng,
                 type: emergencyZoneData.type,
+                level: emergencyZoneData.level,
                 geojson: {
                     type: 'Polygon',
                     coordinates: emergencyZoneData.geojson.coordinates,
@@ -61,12 +63,21 @@ export const emergencyZoneStore = defineStore('emergencyZone', {
                 lat: emergencyZoneData.lat,
                 lng: emergencyZoneData.lng,
                 type: emergencyZoneData.type,
+                level: emergencyZoneData.level,
                 description: emergencyZoneData.description,
                 geojson: {
                     type: 'Polygon',
                     coordinates: emergencyZoneData.geojson.coordinates,
                 },
             };
+        },
+
+        async saveEmergencyZone() {
+            // Save the emergency zone data to the API
+        },
+
+        async deleteEmergencyZone() {
+            // Delete the emergency zone from the API
         },
 
         clearEmergencyZone() {
@@ -77,6 +88,7 @@ export const emergencyZoneStore = defineStore('emergencyZone', {
                 lat: 0,
                 lng: 0,
                 type: '',
+                level: 0,
                 description: '',
                 geojson: {
                     type: 'Polygon',
