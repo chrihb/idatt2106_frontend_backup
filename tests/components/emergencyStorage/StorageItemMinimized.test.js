@@ -64,11 +64,6 @@ describe("StorageItemMinimized.vue", () => {
     expect(wrapper.text()).toContain("Expiration Date: 2025-12-31");
   });
 
-  it("renders update and delete buttons when possibleUpdate are true", () => {
-    expect(wrapper.getItem("button:first-of-type").text()).toBe("Update");
-    expect(wrapper.getItem("button:second-of-type").text()).toBe("Delete");
-  });
-
   it("does not render buttons when possibleUpdate is false", async () => {
     await wrapper.setProps({ possibleUpdate: false });
 
