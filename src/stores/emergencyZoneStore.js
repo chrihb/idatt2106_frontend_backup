@@ -96,5 +96,13 @@ export const emergencyZoneStore = defineStore('emergencyZone', {
                 },
             };
         },
-    }
+    },
+    persist: {
+        enabled: true,
+        strategies: [
+            {
+                storage: localStorage,
+            },
+        ],
+    },
 })
