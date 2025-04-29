@@ -15,7 +15,7 @@ export function emergencyItemService() {
   }
 
   async function getEmergencyItemCategories() {
-    const response = await fetch(`${baseUrl}/categories`, {
+    const response = await fetch(`${window.backendURL}/api/categories/categories`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -28,7 +28,7 @@ export function emergencyItemService() {
   }
 
   async function getEmergencyItemUnits() {
-    const response = await fetch(`${baseUrl}/units`, {
+    const response = await fetch(`${window.backendURL}/api/units`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
