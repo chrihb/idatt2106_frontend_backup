@@ -92,7 +92,7 @@ export const emergencyZoneStore = defineStore('emergencyZone', {
                 description: '',
                 geojson: {
                     type: 'Polygon',
-                    coordinates: {}
+                    coordinates: []
                 },
             };
         },
