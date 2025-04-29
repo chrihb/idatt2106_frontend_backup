@@ -3,11 +3,8 @@ import {ref} from 'vue';
 import {useForm} from 'vee-validate';
 import * as rules from '@vee-validate/rules';
 import FormField from '@/components/input/FormField.vue';
-import PasswordField from "@/components/input/PasswordField.vue";
-import {requestLogin} from '@/services/loginService';
 import {useI18n} from "vue-i18n";
-import HomeButton from "@/components/HomeButton.vue";
-import router from "@/router/index.js";
+import {requestPasswordReset} from "@/services/emailService.js";
 
 const { t } = useI18n();
 
@@ -18,15 +15,10 @@ const {validate, values: form, resetForm} = useForm({
       if (!rules.email(value)) return t('login.emailError');
       return true;
     },
-    password: (value) => {
-      if (!value) return t('login.passwordRequired');
-      if (value.length < 8) return t('login.passwordLengthError');
-      return true;
-    },
   },
 });
 
-const isSubmitting = ref(false);
+const isRequesting = ref(false);
 const successMessage = ref('');
 const errorMessage = ref('');
 
@@ -34,28 +26,26 @@ const handleSubmit = async () => {
   const result = await validate();
   if (!result.valid) return;
 
-  isSubmitting.value = true;
+  isRequesting.value = true;
   successMessage.value = '';
   errorMessage.value = '';
 
   try {
-    const loginForm = {
+    const passwordResetRequest = {
       email: form.email,
-      password: form.password,
     };
-    const response = await requestLogin(loginForm, t);
+    const response = await requestPasswordReset(passwordResetRequest);
 
     if (response.success) {
-      successMessage.value = 'Login successful! Welcome, ' + form.email + '.';
-      await router.push('/');
+      successMessage.value = 'Password reset link sent to ' + form.email + '.';
       resetForm();
     } else {
-      errorMessage.value = response.error || 'Login failed';
+      errorMessage.value = response.error || 'Failed to send password reset link';
     }
   } catch (error) {
-    errorMessage.value = error.message;
+    errorMessage.value = 'An unexpected error occurred. Please try again.';
   } finally {
-    isSubmitting.value = false;
+    isRequesting.value = false;
   }
 };
 </script>
@@ -65,11 +55,16 @@ const handleSubmit = async () => {
     <div class="bg-white p-8 rounded-lg shadow-lg w-full max-w-sm">
       <!-- Logo -->
       <div class="flex justify-center mb-4">
-          <img src="@/assets/logo.png" alt="Logo" class="w-16 h-16" />
+        <img src="../../../assets/logo.png" alt="Logo" class="w-16 h-16" />
       </div>
 
       <!-- Title -->
       <h1 class="text-2xl font-bold text-center mb-6">Krisefikser</h1>
+
+      <!-- Request Reset Link Label -->
+      <h2 class="text-lg font-semibold text-center mb-4">
+        {{ t('password-reset.sendResetLabel') }}
+      </h2>
 
       <!-- Form -->
       <form @submit.prevent="handleSubmit">
@@ -91,39 +86,15 @@ const handleSubmit = async () => {
           />
         </div>
 
-        <!-- Password Field -->
-        <div class="mb-6">
-          <PasswordField
-              field-name="password"
-              :label="t('login.password')"
-              class="w-full p-2 "
-          />
-        </div>
-
-        <!-- Submit Button -->
+        <!-- Request Button -->
         <button
-            :disabled="isSubmitting"
+            :disabled="isRequesting"
             type="submit"
             class="w-full bg-kf-red text-white p-2 rounded disabled:opacity-50 cursor-pointer"
         >
-          {{ t('login.login') }}
+          {{ t('password-reset.sendResetLink') }}
         </button>
-
-        <!-- Forgot Password Link -->
-        <div class="mt-4 text-center">
-          <router-link to="/password-reset-request" class="text-blue-600 hover:underline">
-            {{ t('login.forgotPassword') }}
-          </router-link>
-        </div>
-
-        <!-- Create User Link -->
-        <div class="mt-4 text-center">
-          <router-link to="/register-account" class="text-blue-600 hover:underline">
-            {{ t('login.createUser') }}
-          </router-link>
-        </div>
       </form>
-      <HomeButton />
     </div>
   </div>
 </template>

@@ -12,6 +12,10 @@ import MyHomeView from "@/views/MyHomeView.vue";
 import AuthBase from "@/views/AuthBase.vue";
 import Login from "@/components/Login.vue";
 import Register from "@/components/Register.vue";
+import PasswordResetRequest from "@/components/email/passwordReset/PasswordResetRequest.vue";
+import EmailVerification from "@/components/email/EmailVerification.vue";
+import PasswordResetNewPassword from "@/components/email/passwordReset/PasswordResetNewPassword.vue";
+import SimpleCenteredComponent from "@/views/SimpleCenteredComponent.vue";
 
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
@@ -30,12 +34,22 @@ const router = createRouter({
                 { path: "/my-home", component: MyHomeView },
             ],
         },
-            {path: "/login", component: AuthBase,
+        {
+            path: "/login", component: AuthBase,
             children: [
                 { path: "/login", name: "Login", component: Login,},
                 { path: "/register-account",name: "Register",component: Register },
-],
-},
+            ],
+        },
+        {
+            path: "/", component: SimpleCenteredComponent,
+            children: [
+                { path: "/password-reset-request", name: "PasswordResetRequest", component: PasswordResetRequest },
+                { path: "/password-reset/:token", name: "PasswordReset", component: PasswordResetNewPassword },
+                { path: "/email-verification/:token", name: "EmailVerification", component: EmailVerification },
+
+            ]
+        },
     ],
 
 });

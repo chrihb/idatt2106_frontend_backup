@@ -15,19 +15,21 @@ export const requestRegister = async (registerForm, t) => {
         if (data.token) {
             userStore.setCredentials(data.token, registerForm.email);
             return { success: true };
+        } else {
+            return { success: true };
         }
 
         return { error: 'Unexpected response format.' };
     } catch (error) {
         if (error.response) {
             if (error.response.status === 400) {
-                if (error.response.data.error === "Email is already in use") {
+                if (error.response.data === "Email already in use") {
                     return { error: t('register-service.emailInUse') };
                 }
-                if (error.response.data.error === "Phone number is already in use") {
+                if (error.response.data === "Phone number already in use") {
                     return { error: t('register-service.phoneInUse') };
                 }
-                if (error.response.data.error === "Failed to send verification email") {
+                if (error.response.data === "Failed to send verification email") {
                     return { error: t('register-service.failedToSendEmail') };
                 }
                 return { error: t('register-service.invalidData') };

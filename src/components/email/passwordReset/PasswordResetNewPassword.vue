@@ -1,26 +1,26 @@
 <script setup>
-import {ref} from 'vue';
+import {onMounted, ref} from 'vue';
 import {useForm} from 'vee-validate';
-import * as rules from '@vee-validate/rules';
-import FormField from '@/components/input/FormField.vue';
 import PasswordField from "@/components/input/PasswordField.vue";
-import {requestLogin} from '@/services/loginService';
+
 import {useI18n} from "vue-i18n";
-import HomeButton from "@/components/HomeButton.vue";
-import router from "@/router/index.js";
+import {executePasswordReset} from "@/services/emailService.js";
+import { useRoute, useRouter } from "vue-router";
 
 const { t } = useI18n();
+const router = useRouter();
+const route = useRoute();
 
 const {validate, values: form, resetForm} = useForm({
   validationSchema: {
-    email: (value) => {
-      if (!value) return  t('login.emailRequired') ;
-      if (!rules.email(value)) return t('login.emailError');
+    password: (value) => {
+      if (!value) return t('register.passwordRequired');
+      if (value.length < 8) return t('register.passwordLengthError');
       return true;
     },
-    password: (value) => {
-      if (!value) return t('login.passwordRequired');
-      if (value.length < 8) return t('login.passwordLengthError');
+    repeatPassword: (value) => {
+      if (!value) return t('register.confirmPasswordRequired');
+      if (value !== form.password) return t('register.confirmPasswordError');
       return true;
     },
   },
@@ -39,21 +39,22 @@ const handleSubmit = async () => {
   errorMessage.value = '';
 
   try {
-    const loginForm = {
-      email: form.email,
+    const newPasswordForm = {
       password: form.password,
+      repeatPassword: form.repeatPassword,
     };
-    const response = await requestLogin(loginForm, t);
+    const verificationToken = route.params.token;
+    const response = await executePasswordReset(verificationToken, newPasswordForm.password);
 
-    if (response.success) {
-      successMessage.value = 'Login successful! Welcome, ' + form.email + '.';
-      await router.push('/');
+    if (response) {
+      successMessage.value = 'Password reset successful! You can now log in with your new password.';
       resetForm();
+      await router.push('/login');
     } else {
-      errorMessage.value = response.error || 'Login failed';
+      errorMessage.value = response.error || 'Failed to reset password';
     }
   } catch (error) {
-    errorMessage.value = error.message;
+    errorMessage.value = 'An unexpected error occurred. Please try again.';
   } finally {
     isSubmitting.value = false;
   }
@@ -65,7 +66,7 @@ const handleSubmit = async () => {
     <div class="bg-white p-8 rounded-lg shadow-lg w-full max-w-sm">
       <!-- Logo -->
       <div class="flex justify-center mb-4">
-          <img src="@/assets/logo.png" alt="Logo" class="w-16 h-16" />
+        <img src="@/assets/logo.png" alt="Logo" class="w-16 h-16" />
       </div>
 
       <!-- Title -->
@@ -81,22 +82,21 @@ const handleSubmit = async () => {
           {{ errorMessage }}
         </div>
 
-        <!-- Email Field -->
+        <!-- Password Field -->
         <div class="mb-4">
-          <FormField
-              field-name="email"
-              :label="t('login.email')"
-              type="email"
-              class="w-full p-2 "
+          <PasswordField
+              field-name="password"
+              :label="t('register.password')"
+              class="w-full p-2"
           />
         </div>
 
-        <!-- Password Field -->
-        <div class="mb-6">
+        <!-- Repeat Password Field -->
+        <div class="mb-4">
           <PasswordField
-              field-name="password"
-              :label="t('login.password')"
-              class="w-full p-2 "
+              field-name="repeatPassword"
+              :label="t('register.confirmPassword')"
+              class="w-full p-2"
           />
         </div>
 
@@ -106,24 +106,9 @@ const handleSubmit = async () => {
             type="submit"
             class="w-full bg-kf-red text-white p-2 rounded disabled:opacity-50 cursor-pointer"
         >
-          {{ t('login.login') }}
+          {{ t('password-reset.setNewPassword') }}
         </button>
-
-        <!-- Forgot Password Link -->
-        <div class="mt-4 text-center">
-          <router-link to="/password-reset-request" class="text-blue-600 hover:underline">
-            {{ t('login.forgotPassword') }}
-          </router-link>
-        </div>
-
-        <!-- Create User Link -->
-        <div class="mt-4 text-center">
-          <router-link to="/register-account" class="text-blue-600 hover:underline">
-            {{ t('login.createUser') }}
-          </router-link>
-        </div>
       </form>
-      <HomeButton />
     </div>
   </div>
 </template>
