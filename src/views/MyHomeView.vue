@@ -24,7 +24,7 @@ const homeStore = useHomeStore();
       </div>
       <div class="flex flex-col gap-2">
         <HouseStatus class="" />
-        <div class="relative h-[500px] w-full rounded-2xl shadow-lg overflow-hidden">
+        <div class="relative h-full w-full rounded-2xl shadow-lg overflow-hidden">
           <BasicMap class="h-full w-full" />
         </div>
       </div>

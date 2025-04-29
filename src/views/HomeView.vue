@@ -15,7 +15,7 @@ const userStore = useUserStore();
     <StorageStatus v-if="userStore.isAuthenticated"/>
     <HouseStatus v-if="userStore.isAuthenticated"/>
     <News class="md:col-span-2 w-full"/>
-    <BasicMap class="md:col-span-2 w-full"/>
+    <BasicMap class="md:col-span-2 w-full h-full"/>
   </div>
 </template>
 
