@@ -44,21 +44,6 @@ onMounted(async () => {
         //TODO: Add request to fetch markers from the backend
         const result = await mockMarkersData()
 
-        const emergencyZone = {
-          type: 'Strømbrudd',
-          coordinates: [
-            [63.424494, 10.439154],
-            [63.424694, 10.448154],
-            [63.404494, 10.449154],
-            [63.394494, 10.439154],
-            [63.414494, 10.440154],
-            [63.413494, 10.442154]
-          ],
-          level: 3,
-          zoneId: 1,
-        };
-
-
         addEmergencyZoneToMap(emergencyZone);
 
         //const result = await requestMarkers(markersData);
