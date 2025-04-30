@@ -7,17 +7,20 @@ import { useMarkerStore} from "@/stores/markerStore.js";
 import {usePositionTrackingStore} from "@/stores/positionTrackingStore.js";
 import {addEmergencyZoneToMap} from "@/utils/markerUtils.js";
 import {emergencyZoneService} from "@/services/emergencyZoneService.js";
-
-const mapStore = useMapStore();
-const markerStore = useMarkerStore();
-const positionTrackingStore = usePositionTrackingStore();
+import {useEmergencyZonesStore} from "@/stores/emergencyZonesStore.js";
+import L from 'leaflet';
 
 onMounted(async () => {
 
   try {
+    const mapStore = useMapStore();
+    const markerStore = useMarkerStore();
+    const emergencyZonesStore = useEmergencyZonesStore();
+    const zoneService = emergencyZoneService();
+    const positionTrackingStore = usePositionTrackingStore();
+
     // Initialize the map
     mapStore.initMap();
-    const zoneService = emergencyZoneService()
 
     // Re-add existing markers from the store
     if (markerStore.markers) {
@@ -33,22 +36,21 @@ onMounted(async () => {
     // Start position tracking
     positionTrackingStore.startTracking();
 
-    // Add event listenr for map movement
+    // Add event listener for map movement
     mapStore.map.on('moveend', async () => {
       const bounds = mapStore.map.getBounds();
-      const markersData = {
-        northEast: bounds.getNorthEast(),
-        southWest: bounds.getSouthWest(),
-      };
-
 
       try {
         //TODO: Add request to fetch markers from the backend
         const result = await mockMarkersData();
-        const zoneResult = await zoneService.getEmergencyZonesMock(bounds, 1);
-        for (const zone of zoneResult.zones) {
-          addEmergencyZoneToMap(zone);
-        }
+
+
+        // Get emergency zones based on the current map bounds
+
+        // Get the zones in the cache
+
+        // Get the zones from the service
+        await emergencyZonesStore.fetchEmergencyZonesArea(bounds, 1)
 
         //const result = await requestMarkers(markersData);
         if (result.success) {
