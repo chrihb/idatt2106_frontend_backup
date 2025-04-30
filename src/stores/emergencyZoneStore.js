@@ -37,8 +37,6 @@ export const emergencyZoneStore = defineStore('emergencyZone', {
                 console.error('Error fetching emergency zone details:', error);
                 throw error;
             }
-
-
         },
 
         setBasicEmergencyZone(emergencyZoneData) {
@@ -70,7 +68,32 @@ export const emergencyZoneStore = defineStore('emergencyZone', {
         },
 
         async saveEmergencyZone() {
-            // Save the emergency zone data to the API
+            try {
+                const service = emergencyZoneService();
+
+                const emergencyZoneData = {
+                    zoneId: this.zoneId || undefined,
+                    name: this.name,
+                    address: this.address,
+                    lat: this.lat,
+                    lng: this.lng,
+                    type: this.type,
+                    level: this.level,
+                    description: this.description,
+                    coordinates: this.coordinates,
+                };
+                let result
+                if (this.zoneId) {
+                    result = await service.updateEmergencyZone(emergencyZoneData);
+                } else {
+                    result = await service.createEmergencyZone(emergencyZoneData);
+                    this.zoneId = result.zoneId;
+                }
+                return result;
+            } catch (error) {
+                console.error('Error saving emergency zone:', error);
+                throw error;
+            }
         },
 
         async deleteEmergencyZone() {
