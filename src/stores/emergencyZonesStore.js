@@ -20,8 +20,6 @@ export const useEmergencyZonesStore = defineStore('emergencyZonesStore', {
             this.error = null;
 
             try {
-                // Fetch emergency zones from the service
-
                 const service = emergencyZoneService();
                 // TODO: This is a placeholder for the actual service call
                 const zones = await service.getEmergencyZonesMock(mapAreaData, zoneIds);
@@ -39,24 +37,17 @@ export const useEmergencyZonesStore = defineStore('emergencyZonesStore', {
             }
         },
 
-        async addEmergencyZone(emergencyZoneData) {
-            this.error = null;
-
-            try {
-                const service = emergencyZoneService();
-                const newEmergencyZone = await service.createEmergencyZone(emergencyZoneData);
-
-            } catch (error) {
-                console.error('Error creating emergency zone');
-                throw error;
+        async addEmergencyZone(emergencyZone) {
+            if (!emergencyZone || !emergencyZone.zoneId || !emergencyZone.coordinates || emergencyZone.coordinates.length < 3) {
+                console.error('Invalid emergency zone data');
+                return;
             }
+            this.emergencyZones.push(emergencyZone);
         },
-
-
 
         clearEmergencyZones() {
             this.emergencyZones = [];
-        }
+        },
     },
 
 });
