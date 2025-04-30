@@ -8,7 +8,7 @@ import {useUnitsStore} from '@/stores/unitsStore.js';
 import {useEmergencyItemsStore} from '@/stores/emergencyItemsStore.js';
 import {useI18n} from "vue-i18n";
 
-const { t } = useI18n();
+const {t} = useI18n();
 
 const categoriesStore = useCategoriesStore();
 const unitsStore = useUnitsStore();
@@ -122,17 +122,19 @@ onMounted(async () => {
 </script>
 
 <template>
-  <div class="container mx-auto px-4 py-8">
-    <div class="mb-4 flex justify-between">
-      <p>warning</p>
-      <h2 class="text-2xl">Categories:</h2>
+  <div class="container mx-auto px-4 py-4 sm:py-8">
+    <div
+        class="mb-4 flex flex-col sm:flex-row items-start sm:items-center sm:justify-between gap-2 sm:gap-0">
+      <p class="">warning</p>
+      <h2 class="text-xl sm:text-2xl font-semibold">Categories:</h2>
       <button
-          class="bg-kf-blue text-white px-4 py-2 rounded transition-colors duration-200"
+          class="bg-kf-blue text-white px-3 py-2 rounded transition-colors duration-200 text-sm sm:text-base w-full sm:w-auto"
           @click="openCreateModal()"
       >
         {{ t("storage.new-item") }}
       </button>
     </div>
+
     <StorageItemMinimized
         v-for="categoryItem in itemCategories"
         :key="categoryItem.id"
@@ -144,7 +146,7 @@ onMounted(async () => {
         :possibleUpdate="false"
         @click="openModal(categoryItem)"/>
 
-    <div v-if="itemCategories.length === 0" class="py-10 text-center text-gray-500">
+    <div v-if="itemCategories.length === 0" class="py-8 text-center text-gray-500">
       {{ t("storage.no-items-in-category") }}
     </div>
 

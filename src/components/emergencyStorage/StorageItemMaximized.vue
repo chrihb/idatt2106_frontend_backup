@@ -87,13 +87,13 @@ watch(() => props.display, async (newValue) => {
 <template>
   <Teleport to="body">
     <div v-if="display"
-         class="fixed inset-0 flex items-center justify-center bg-opacity-50 z-50">
+         class="fixed inset-0 flex items-center justify-center  bg-opacity-50 z-50 p-3 sm:p-0">
       <div
-          class="bg-white rounded-lg shadow-xl w-4/5 md:w-3/5 max-h-4/5 overflow-auto p-6 max-w-3xl">
-        <div class="flex flex-row justify-between items-center mb-6 border-b pb-4">
-          <h1 class="text-2xl font-bold text-gray-800">{{
-              categoriesStore.getCategoryName(categoryId)
-            }}</h1>
+          class="bg-white rounded-lg shadow-xl w-full sm:w-11/12 md:w-4/5 lg:w-3/5 max-h-[90vh] overflow-auto p-4 sm:p-6 max-w-3xl">
+        <div class="flex flex-row justify-between items-center mb-4 sm:mb-6 border-b pb-3 sm:pb-4">
+          <h1 class="text-xl sm:text-2xl font-bold text-gray-800 truncate">
+            {{ categoriesStore.getCategoryName(categoryId) }}
+          </h1>
           <button
               class="text-gray-500 hover:text-gray-800 focus:outline-none transition-colors duration-200 p-2 rounded-full hover:bg-gray-100"
               @click="close"
@@ -102,11 +102,12 @@ watch(() => props.display, async (newValue) => {
           </button>
         </div>
 
-        <div v-if="items.length === 0" class="py-10 text-center text-gray-500">
+        <div v-if="items.length === 0" class="py-6 sm:py-10 text-center text-gray-500">
           {{ t("storage.no-items-in-category") }}
         </div>
 
-        <div v-else class="space-y-3">
+        <div v-else
+             class="space-y-2 sm:space-y-3 max-h-[50vh] sm:max-h-[60vh] overflow-y-auto pr-1">
           <StorageItemMinimized
               v-for="item in items"
               :key="item.id"
@@ -120,15 +121,16 @@ watch(() => props.display, async (newValue) => {
               @delete="handleDelete"/>
         </div>
 
-        <div class="mt-6 pt-4 border-t flex justify-between">
+        <div
+            class="mt-4 sm:mt-6 pt-3 sm:pt-4 border-t flex flex-col sm:flex-row justify-between gap-2 sm:gap-0">
           <button
-              class="px-4 py-2 bg-kf-blue rounded-lg text-white font-medium transition-colors duration-200"
+              class="w-full sm:w-auto px-4 py-2 bg-kf-blue rounded-lg text-white font-medium transition-colors duration-200 order-2 sm:order-1"
               @click="handleCreate"
           >
             {{ t("storage.new-item") }}
           </button>
           <button
-              class="px-4 py-2 bg-gray-200 hover:bg-gray-300 rounded-lg text-gray-800 font-medium transition-colors duration-200"
+              class="w-full sm:w-auto px-4 py-2 bg-gray-200 hover:bg-gray-300 rounded-lg text-gray-800 font-medium transition-colors duration-200 order-1 sm:order-2"
               @click="close"
           >
             {{ t("storage.close") }}
