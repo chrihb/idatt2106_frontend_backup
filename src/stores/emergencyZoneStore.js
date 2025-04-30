@@ -31,7 +31,7 @@ export const emergencyZoneStore = defineStore('emergencyZone', {
                 const service = emergencyZoneService();
                 //TODO: This is a placeholder for the actual service call
                 const details = service.getEmergencyZoneDetailsMock(zoneId);
-                setRestOfEmergencyZone(details);
+                this.setRestOfEmergencyZone(details);
                 return details;
             } catch (error) {
                 console.error('Error fetching emergency zone details:', error);
@@ -97,7 +97,22 @@ export const emergencyZoneStore = defineStore('emergencyZone', {
         },
 
         async deleteEmergencyZone() {
-            // Delete the emergency zone from the API
+            if (!this.zoneId) {
+                console.warn('Cannot delete: No item ID provided');
+                return;
+            }
+
+            this.error = null;
+            try {
+                const service = emergencyZoneService();
+                const result = await service.deleteEmergencyZone(this.zoneId);
+                this.clearEmergencyZoneState();
+                return result;
+
+            } catch (error) {
+                console.error('Error deleting emergency zone:', error);
+                throw error;
+            }
         },
 
         clearEmergencyZoneState() {
