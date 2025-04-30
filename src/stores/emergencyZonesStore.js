@@ -42,8 +42,8 @@ export const useEmergencyZonesStore = defineStore('emergencyZonesStore', {
             try {
                 const service = emergencyZoneService();
                 // TODO: This is a placeholder for the actual service call
-                const zones = await service.getEmergencyZonesMock(mapBounds, zoneIds);
-                for (const zone of zones) {
+                const result = await service.getEmergencyZonesMock(mapBounds, zoneIds);
+                for (const zone of result.zones) {
                     addEmergencyZoneToMap(zone);
                     this.addEmergencyZone(zone);
                 }
