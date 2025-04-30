@@ -6,6 +6,7 @@ import {mockMarkersData} from "@/services/markerService.js";
 import { useMarkerStore} from "@/stores/markerStore.js";
 import {usePositionTrackingStore} from "@/stores/positionTrackingStore.js";
 import {addEmergencyZoneToMap} from "@/utils/markerUtils.js";
+import {emergencyZoneService} from "@/services/emergencyZoneService.js";
 
 const mapStore = useMapStore();
 const markerStore = useMarkerStore();
@@ -16,6 +17,7 @@ onMounted(async () => {
   try {
     // Initialize the map
     mapStore.initMap();
+    const zoneService = emergencyZoneService()
 
     // Re-add existing markers from the store
     if (markerStore.markers) {
@@ -42,9 +44,11 @@ onMounted(async () => {
 
       try {
         //TODO: Add request to fetch markers from the backend
-        const result = await mockMarkersData()
-
-        addEmergencyZoneToMap(emergencyZone);
+        const result = await mockMarkersData();
+        const zoneResult = await zoneService.getEmergencyZonesMock(bounds, 1);
+        for (const zone of zoneResult.zones) {
+          addEmergencyZoneToMap(zone);
+        }
 
         //const result = await requestMarkers(markersData);
         if (result.success) {
