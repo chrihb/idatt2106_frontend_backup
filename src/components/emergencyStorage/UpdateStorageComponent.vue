@@ -194,7 +194,7 @@ onMounted(async () => {
 <template>
   <Teleport to="body">
     <div v-if="display"
-         class="fixed inset-0 flex items-center justify-center z-50 p-3 sm:p-0 bg-black bg-opacity-50">
+         class="fixed inset-0 flex items-center justify-center z-50 p-3 sm:p-0">
       <div
           class="bg-white rounded-lg shadow-xl w-full sm:w-11/12 md:w-4/5 lg:w-3/5 max-h-[90vh] overflow-auto p-4 sm:p-6 max-w-3xl">
         <div class="flex flex-row justify-between items-center mb-4 sm:mb-6 border-b pb-3 sm:pb-4">
@@ -291,7 +291,7 @@ onMounted(async () => {
         </div>
 
         <div v-if="showConfirmation"
-             class="fixed inset-0 flex items-center justify-center z-[60] p-4 bg-black bg-opacity-50">
+             class="fixed inset-0 flex items-center justify-center z-[60] p-4">
           <div class="bg-white rounded-lg p-4 sm:p-6 shadow-xl max-w-md w-full">
             <p class="mb-4 sm:mb-6 text-base sm:text-lg">{{ t("storage.leave-message") }}</p>
             <div class="flex flex-col sm:flex-row sm:justify-end gap-2 sm:space-x-3">
