@@ -3,7 +3,6 @@ import axios from 'axios';
 export const emergencyZoneService = () => {
     const baseUrl = `${window.backendURL}/api/emergency/zones`;
 
-
     async function getEmergencyZonesMock(mapAreaData, zoneIds) {
         return {
             success: true,
@@ -75,10 +74,7 @@ export const emergencyZoneService = () => {
                 'Content-Type': 'application/json',
             },
         });
-        if (!response.ok) {
-            throw new Error('Failed to fetch emergency zones');
-        }
-        return response.json;
+        return response.data;
     }
 
     async function getEmergencyZonesByArea(mapAreaData, zoneIds) {
@@ -90,36 +86,27 @@ export const emergencyZoneService = () => {
                 'Content-Type': 'application/json',
             },
         });
-        if (!response.ok) {
-            throw new Error('Failed to fetch emergency zones by area');
-        }
-        return response.json;
+        return response.data;
     }
 
-    async functuion getEmergencyZoneDetailsById(zoneIds) {
+    async function getEmergencyZoneDetailsById(zoneId) {
         const response = await axios.post(`${baseUrl}/details`, {
-            zoneIds,
+            zoneId,
         }, {
             headers: {
                 'Content-Type': 'application/json',
             },
         });
-        if (!response.ok) {
-            throw new Error('Failed to fetch emergency zone details by ID');
-        }
-        return response.json;
+        return response.data;
     }
 
-    async function getEmergencyZoneById(id) {
-        const response = await axios.get(`${baseUrl}/${id}`, {
+    async function getEmergencyZoneById(zoneId) {
+        const response = await axios.get(`${baseUrl}/${zoneId}`, {
             headers: {
                 'Content-Type': 'application/json',
             },
         });
-        if (!response.ok) {
-            throw new Error('Failed to fetch emergency zone by ID');
-        }
-        return response.json;
+        return response.data;
     }
 
     async function createEmergencyZone(zone) {
@@ -128,10 +115,7 @@ export const emergencyZoneService = () => {
                 'Content-Type': 'application/json',
             },
         });
-        if (!response.ok) {
-            throw new Error('Failed to create emergency zone');
-        }
-        return response.json;
+        return response.data;
     }
 
     async function updateEmergencyZone(zone) {
@@ -140,22 +124,16 @@ export const emergencyZoneService = () => {
                 'Content-Type': 'application/json',
             },
         });
-        if (!response.ok) {
-            throw new Error('Failed to update emergency zone');
-        }
-        return response.body;
+        return response.data;
     }
 
-    async function deleteEmergencyZone(id) {
-        const response = await axios.delete(`${baseUrl}/${id}`, {
+    async function deleteEmergencyZone(zoneId) {
+        const response = await axios.delete(`${baseUrl}/${zoneId}`, {
             headers: {
                 'Content-Type': 'application/json',
             },
         });
-        if (!response.ok) {
-            throw new Error('Failed to delete emergency zone');
-        }
-        return response.body;
+        return response.data;
     }
 
     return {
