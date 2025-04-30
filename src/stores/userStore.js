@@ -1,28 +1,38 @@
-import { defineStore } from 'pinia';
+import {defineStore} from 'pinia';
+import {requestAuthenticationCheck} from "@/services/authenticationCheckService.js";
 
 export const useUserStore = defineStore('user', {
     state: () => ({
         token: null,
-        username: null,
+        email: null,
+        authenticated: false,
     }),
-    getters: {
-        isAuthenticated() {
-            return this.token;
-        },
-    },
     actions: {
-        setCredentials(token, email) {
+        async isAuthenticated() {
+            console.log("checking...");
+            if (!this.token) {
+                console.log("no token");
+                this.authenticated = false;
+                return false;
+            }
+            this.authenticated = await requestAuthenticationCheck();
+        },
+        setCredentials(token, email, authenticated) {
             this.token = token;
+            this.email = email;
+            this.authenticated = authenticated;
         },
         clearToken() {
             this.token = null;
+            this.email = null;
+            this.authenticated = false;
         },
     },
     persist: {
         enabled: true,
         strategies: [
             {
-                storage: localStorage,
+                storage: sessionStorage,
             },
         ],
     }

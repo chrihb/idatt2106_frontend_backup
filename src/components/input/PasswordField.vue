@@ -37,7 +37,7 @@ const toggleShowPassword = () => {
 
 <template>
   <div class="form-field">
-    <label :for="fieldName" class="block text-sm font-medium text-gray-700 mb-1">
+    <label :for="fieldName" class="block text-sm font-medium text-kf-blue mb-1">
       {{ label }}
     </label>
     <div class="relative">
@@ -48,13 +48,13 @@ const toggleShowPassword = () => {
           :value="value"
           @input="handleInput"
           @blur="validateField"
-          class="w-full p-2 pr-12 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
-          :class="{ 'border-red-600': errorMessage }"
+          class="w-full p-2 pr-12 border rounded focus:outline-none focus:ring-2 focus:ring-kf-link-blue"
+          :class="{ 'border-kf-red': errorMessage }"
           :aria-describedby="errorMessage ? `${fieldName}-error` : null"
       />
       <button
           type="button"
-          class="toggle-password absolute inset-y-0 right-0 pr-3 flex items-center text-gray-500 text-sm cursor-pointer"
+          class="toggle-password absolute inset-y-0 right-0 pr-3 flex items-center text-kf-darkgrey text-sm cursor-pointer"
           @click="toggleShowPassword"
           :aria-label="showPassword ? t('password.hide') : t('password.show')"
       >
@@ -64,7 +64,7 @@ const toggleShowPassword = () => {
     <span
         v-if="errorMessage"
         :id="`${fieldName}-error`"
-        class="error-message block text-red-600 text-sm mt-1"
+        class="error-message block text-kf-red text-sm mt-1"
         aria-live="polite"
     >
       {{ errorMessage }}

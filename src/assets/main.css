@@ -19,15 +19,13 @@
     margin-bottom: 0.5rem;
 }
 
-.prose-kf {
-    width: 100%;
-}
-
 @theme {
     --color-kf-red: #ed5035;
     --color-kf-orange: #fa7918;
     --color-kf-blue: #082e47;
+    --color-kf-link-blue: #155dfc;
     --color-kf-grey: #e5e7eb;
+    --color-kf-darkgrey: #6a7282;
     --color-kf-green: #2e7d32;
     --color-kf-white: #ffffff;
     --color-kf-white-contrast-1: #f9f9f9;  /* soft, almost white */
