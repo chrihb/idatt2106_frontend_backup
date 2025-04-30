@@ -47,14 +47,16 @@
       "select-category": "Select Category",
       "select-unit": "Select Unit",
       "no-items-in-category": "No items found in this category",
-      "expiration-date": "Expiration Date",
+      "no-items": "No items found",
+      "expiration-date": "Expiry",
       "fill-all-fields": "Please fill in all fields",
       "leave-message": "Are you sure you want to leave this page? Unsaved changes will be deleted.",
       "quit": "Quit",
       "stay": "Stay",
       "item-name": "Item Name",
       "item-amount": "Item Amount",
-      "item-expiration": "Item Expiration"
+      "item-expiration": "Expiry",
+      "more-info": "Click for More Info"
     },
     "news": {
         "title": "News"

@@ -1,16 +1,21 @@
 <script setup lang="js">
-import {defineComponent, ref, computed, onMounted, watch} from 'vue';
-import {emergencyItemService} from '@/services/emergencyItemService.js';
+import {ref, computed, onMounted, watch} from 'vue';
 import {useCategoriesStore} from '@/stores/categoriesStore.js';
 import {useUnitsStore} from '@/stores/unitsStore.js';
+import {useEmergencyItemsStore} from '@/stores/emergencyItemsStore.js';
+import {useEmergencyItemStore} from '@/stores/emergencyItemStore.js';
 import {useI18n} from "vue-i18n";
 
-const { t } = useI18n();
-const isUpdate = computed(() => props.itemId !== null);
-const categoriesStore = useCategoriesStore();
-const unitsStore = useUnitsStore();
+const {t} = useI18n();
 const props = defineProps(['categoryId', 'unitId', 'itemId', 'display']);
 const emit = defineEmits(['close', 'itemSaved']);
+
+const categoriesStore = useCategoriesStore();
+const unitsStore = useUnitsStore();
+const itemsStore = useEmergencyItemsStore();
+const currentItemStore = useEmergencyItemStore();
+
+const isUpdate = computed(() => props.itemId !== null);
 
 const categories = ref([]);
 const units = ref([]);
@@ -58,6 +63,8 @@ const resetForm = () => {
   selectedCategory.value = null;
   selectedUnit.value = null;
   formIncomplete.value = false;
+
+  currentItemStore.resetState();
 };
 
 const loadItemData = async () => {
@@ -74,13 +81,24 @@ const loadItemData = async () => {
   if (props.itemId) {
     try {
       let item;
-      const service = emergencyItemService();
 
       if (props.categoryId) {
-        const items = await service.getEmergencyItemByCategoryId(props.categoryId);
-        item = items.find((i) => i.id === props.itemId);
+        item = itemsStore.getItemById(props.itemId);
+
+        if (!item) {
+          await itemsStore.fetchItemsByCategory(props.categoryId);
+          item = itemsStore.getItemById(props.itemId);
+        }
       } else {
-        item = await service.getEmergencyItemById(props.itemId);
+        await currentItemStore.fetchItemById(props.itemId);
+        item = {
+          id: currentItemStore.itemId,
+          name: currentItemStore.name,
+          amount: currentItemStore.amount,
+          categoryId: currentItemStore.categoryId,
+          unitId: currentItemStore.unitId,
+          expirationDate: currentItemStore.expirationDate
+        };
       }
 
       if (item) {
@@ -91,6 +109,8 @@ const loadItemData = async () => {
         itemData.value = {...item};
         selectedCategory.value = item.categoryId;
         selectedUnit.value = item.unitId;
+
+        currentItemStore.setItemData(item);
       }
     } catch (error) {
       console.error("Error fetching item:", error);
@@ -119,6 +139,7 @@ const saveItem = async () => {
     formIncomplete.value = true;
     return;
   }
+
   try {
     formIncomplete.value = false;
 
@@ -133,12 +154,14 @@ const saveItem = async () => {
           : itemData.value.expirationDate.toISOString().split('T')[0]
     };
 
-    const service = emergencyItemService();
-    if (isUpdate.value) {
-      await service.updateEmergencyItem(saveData);
-    } else {
-      await service.createEmergencyItem(saveData);
-    }
+    currentItemStore.itemId = saveData.id;
+    currentItemStore.name = saveData.name;
+    currentItemStore.amount = saveData.amount;
+    currentItemStore.categoryId = saveData.categoryId;
+    currentItemStore.unitId = saveData.unitId;
+    currentItemStore.expirationDate = saveData.expirationDate;
+
+    await currentItemStore.saveItem();
 
     emit('itemSaved');
     close();
@@ -171,12 +194,12 @@ onMounted(async () => {
 <template>
   <Teleport to="body">
     <div v-if="display"
-         class="fixed inset-0 flex items-center justify-center z-50">
+         class="fixed inset-0 flex items-center justify-center z-50 p-3 sm:p-0">
       <div
-          class="bg-white rounded-lg shadow-xl w-4/5 md:w-3/5 max-h-4/5 overflow-auto p-6 max-w-3xl">
-        <div class="flex flex-row justify-between items-center mb-6 border-b pb-4">
-          <h1 class="text-2xl font-bold text-gray-800">
-            {{ isUpdate ? 'Update Item' : 'Add New Item' }}
+          class="bg-white rounded-lg shadow-xl w-full sm:w-11/12 md:w-4/5 lg:w-3/5 max-h-[90vh] overflow-auto p-4 sm:p-6 max-w-3xl">
+        <div class="flex flex-row justify-between items-center mb-4 sm:mb-6 border-b pb-3 sm:pb-4">
+          <h1 class="text-xl sm:text-2xl font-bold text-gray-800">
+            {{ isUpdate ? t('storage.update-item') : t('storage.new-item') }}
           </h1>
           <button
               class="text-gray-500 hover:text-gray-800 focus:outline-none transition-colors duration-200 p-2 rounded-full hover:bg-gray-100"
@@ -187,52 +210,81 @@ onMounted(async () => {
         </div>
 
         <div class="space-y-3">
-          <input
-              v-model="itemData.name"
-              type="text"
-              :placeholder="t('storage.item-name')"
-              class="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
-          <select v-model="selectedCategory"
-                  class="border border-gray-300 w-5/5 rounded-lg p-2 text-black focus:ring-2 focus:ring-blue-500">
-            <option disabled value="">{{ t("storage.select-category") }}</option>
-            <option v-for="category in categories" :key="category.id" :value="category.id">
-              {{ category.name }}
-            </option>
-          </select>
-          <div class="flex gap-2">
+          <div class="mb-3">
+            <label for="item-name" class="block text-sm font-medium text-gray-700 mb-1">
+              {{ t('storage.item-name') }}
+            </label>
             <input
-                v-model="itemData.amount"
-                type="number"
-                :placeholder="t('storage.item-amount')"
-                class="w-4/5 p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
-            <select v-model="selectedUnit"
-                    class="border border-gray-300 w-1/5 rounded-lg px-2 py-1 text-black focus:ring-2 focus:ring-blue-500">
-              <option disabled value="">{{ t("storage.select-unit") }}</option>
-              <option v-for="unit in units" :key="unit.id" :value="unit.id">
-                {{ unit.name }}
+                id="item-name"
+                v-model="itemData.name"
+                type="text"
+                :placeholder="t('storage.item-name')"
+                class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-base">
+          </div>
+
+          <div class="mb-3">
+            <label for="item-category" class="block text-sm font-medium text-gray-700 mb-1">
+              {{ t('storage.select-category') }}
+            </label>
+            <select
+                id="item-category"
+                v-model="selectedCategory"
+                class="border border-gray-300 w-full rounded-lg p-3 text-base text-black focus:ring-2 focus:ring-blue-500 bg-white">
+              <option disabled value="">{{ t("storage.select-category") }}</option>
+              <option v-for="category in categories" :key="category.id" :value="category.id">
+                {{ category.name }}
               </option>
             </select>
           </div>
-          <input
-              v-model="itemData.expirationDate"
-              type="date"
-              :placeholder="t('storage.expiration-date')"
-              class="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+
+          <div class="mb-3">
+            <label class="block text-sm font-medium text-gray-700 mb-1">
+              {{ t('storage.item-amount') }}
+            </label>
+            <div class="flex flex-col sm:flex-row gap-2">
+              <input
+                  v-model="itemData.amount"
+                  type="number"
+                  :placeholder="t('storage.item-amount')"
+                  class="w-full sm:w-3/4 p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-base">
+              <select
+                  v-model="selectedUnit"
+                  class="border border-gray-300 w-full sm:w-1/4 rounded-lg p-3 text-base text-black focus:ring-2 focus:ring-blue-500 bg-white">
+                <option disabled value="">{{ t("storage.select-unit") }}</option>
+                <option v-for="unit in units" :key="unit.id" :value="unit.id">
+                  {{ unit.name }}
+                </option>
+              </select>
+            </div>
+          </div>
+
+          <div class="mb-3">
+            <label for="item-expiration" class="block text-sm font-medium text-gray-700 mb-1">
+              {{ t('storage.expiration-date') }}
+            </label>
+            <input
+                id="item-expiration"
+                v-model="itemData.expirationDate"
+                type="date"
+                :placeholder="t('storage.expiration-date')"
+                class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-base">
+          </div>
         </div>
 
-        <div class="mt-6 pt-4 border-t flex justify-between">
+        <div v-if="formIncomplete" class="mt-3 mb-1 text-red-600 text-sm text-center">
+          {{ t("storage.fill-all-fields") }}
+        </div>
+
+        <div
+            class="mt-4 sm:mt-6 pt-3 sm:pt-4 border-t flex flex-col sm:flex-row justify-between gap-2 sm:gap-3">
           <button
-              class="px-4 py-2 bg-blue-500 hover:bg-blue-600 rounded-lg text-white font-medium transition-colors duration-200"
+              data-test="save-item"
+              class="order-2 sm:order-1 w-full sm:w-auto px-4 py-3 bg-kf-blue rounded-lg text-white font-medium transition-colors duration-200 text-base"
               @click="saveItem">
             {{ isUpdate ? t("storage.update-item") : t("storage.new-item") }}
           </button>
-          <p
-              v-if="formIncomplete"
-              class="text-red-600 text-sm">
-            {{ t("storage.fill-all-fields") }}
-          </p>
           <button
-              class="px-4 py-2 bg-gray-200 hover:bg-gray-300 rounded-lg text-gray-800 font-medium transition-colors duration-200"
+              class="order-1 sm:order-2 w-full sm:w-auto px-4 py-3 bg-gray-200 hover:bg-gray-300 rounded-lg text-gray-800 font-medium transition-colors duration-200 text-base"
               @click="handleCancel"
           >
             {{ t("storage.close") }}
@@ -240,17 +292,17 @@ onMounted(async () => {
         </div>
 
         <div v-if="showConfirmation"
-             class="fixed inset-0 flex items-center justify-center z-[60]">
-          <div class="bg-white rounded-lg p-6 shadow-xl max-w-md w-full">
-            <p class="mb-6">{{ t("storage.leave-message") }}</p>
-            <div class="flex justify-end space-x-3">
+             class="fixed inset-0 flex items-center justify-center z-[60] p-4">
+          <div class="bg-white rounded-lg p-4 sm:p-6 shadow-xl max-w-md w-full">
+            <p class="mb-4 sm:mb-6 text-base sm:text-lg">{{ t("storage.leave-message") }}</p>
+            <div class="flex flex-col sm:flex-row sm:justify-end gap-2 sm:space-x-3">
               <button
-                  class="px-4 py-2 bg-gray-200 hover:bg-gray-300 rounded-lg text-gray-800 font-medium transition-colors duration-200"
+                  class="w-full sm:w-auto order-2 sm:order-1 px-4 py-3 bg-gray-200 hover:bg-gray-300 rounded-lg text-gray-800 font-medium transition-colors duration-200 text-base"
                   @click="cancelConfirmation">
                 {{ t("storage.stay") }}
               </button>
               <button
-                  class="px-4 py-2 bg-red-500 hover:bg-red-600 rounded-lg text-white font-medium transition-colors duration-200"
+                  class="w-full sm:w-auto order-1 sm:order-2 px-4 py-3 bg-red-500 hover:bg-red-600 rounded-lg text-white font-medium transition-colors duration-200 text-base"
                   @click="confirmCancel">
                 {{ t("storage.quit") }}
               </button>

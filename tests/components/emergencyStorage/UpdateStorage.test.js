@@ -1,6 +1,7 @@
 import { mount, flushPromises } from "@vue/test-utils";
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import UpdateStorage from "@/components/emergencyStorage/UpdateStorageComponent.vue";
+import {createTestingPinia} from "@pinia/testing";
 
 vi.mock("@/services/emergencyItemService.js", () => ({
   emergencyItemService: vi.fn(() => ({
@@ -75,6 +76,7 @@ describe('UpdateStorage.vue', () => {
       },
       global: {
         stubs: {
+          plugins: [createTestingPinia({ createSpy: vi.fn })],
           Teleport: true
         }
       }
@@ -90,8 +92,8 @@ describe('UpdateStorage.vue', () => {
     await flushPromises();
 
     expect(wrapper.isVisible()).toBeTruthy();
-    expect(wrapper.find('h1').text()).toBe('Add New Item');
-    expect(wrapper.find('button.bg-blue-500').text()).toContain('New Item');
+    expect(wrapper.find('h1').text()).toBe('New Item');
+    expect(wrapper.find('[data-test="save-item"]').text()).toContain('New Item');
   });
 
   it('renders correctly for update mode', async () => {
@@ -99,7 +101,7 @@ describe('UpdateStorage.vue', () => {
     await flushPromises();
 
     expect(wrapper.find('h1').text()).toBe('Update Item');
-    expect(wrapper.find('button.bg-blue-500').text()).toContain('Update Item');
+    expect(wrapper.find('[data-test="save-item"]').text()).toBe('Update Item');
   });
 
 
@@ -115,7 +117,7 @@ describe('UpdateStorage.vue', () => {
     wrapper = setupComp();
     await flushPromises();
 
-    await wrapper.find('button.bg-blue-500').trigger('click');
+    await wrapper.find('[data-test="save-item"]').trigger('click');
 
     expect(wrapper.find('.text-red-600').exists()).toBeTruthy();
     expect(wrapper.find('.text-red-600').text()).toContain('Please fill all fields');

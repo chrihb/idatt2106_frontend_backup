@@ -47,14 +47,16 @@
     "select-category": "Velg kategori",
     "select-unit": "Velg Enhet",
     "no-items-in-category": "Ingen artikler funnet i denne kategorien",
-    "expiration-date": "Utløpsdato",
+    "no-items": "Ingen artikler funnet",
+    "expiration-date": "Utløp",
     "fill-all-fields": "Vennligst fyll ut alle felt",
     "leave-message": "Er du sikker på at du vil forlate denne siden? Endringer vil ikke bli lagret.",
     "quit": "Avslutt",
     "stay": "Bli",
     "item-name": "Navn",
     "item-amount": "Mengde",
-    "item-expiration": "Utløpsdato"
+    "item-expiration": "Utløpsdato",
+    "more-info": "Trykk for mer info"
   },
   "news": {
     "title": "Nyheter"

@@ -1,7 +1,7 @@
 <script setup lang="js">
 import {useI18n} from "vue-i18n";
 
-const { t } = useI18n()
+const {t} = useI18n()
 const props = defineProps(["name", "amount", "unit", "expirationDate", "id", "possibleUpdate"]);
 const emit = defineEmits(['update', 'click']);
 
@@ -21,23 +21,45 @@ const handleDelete = (event) => {
 </script>
 
 <template>
-  <div @click="handleClick" class="flex flex-row items-center justify-between bg-white rounded-lg border-1 border-gray-800 shadow-md p-4 mb-3 hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200">
-    <div class="font-bold text-lg text-gray-700">{{amount}} {{unit}}</div>
-    <div class="text-lg text-gray-800">{{name}}</div>
-    <div class="flex items-center gap-1">
-      <div class="text-sm text-gray-500 mr-3">{{ t("storage.expiration-date") }}: {{expirationDate}}</div>
-      <button
-          v-if="possibleUpdate"
-          @click="handleUpdate"
-          class="px-3 py-1 bg-yellow-500 hover:bg-yellow-600 rounded text-white text-sm font-medium transition-colors duration-200">
-        {{ t("storage.update-item") }}
-      </button>
-      <button
-        v-if="possibleUpdate"
-        @click="handleDelete"
-        class="px-3 py-1 bg-red-500 hover:bg-red-600 rounded text-white text-sm font-medium transition-colors duration-200">
-        {{ t("storage.delete-item") }}
-      </button>
+  <div @click="handleClick"
+       class="flex flex-col bg-white rounded-lg border border-gray-200 shadow-md p-3 sm:p-4 mb-2 sm:mb-3 hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200 cursor-pointer">
+    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 sm:gap-0">
+      <div class="font-bold text-base sm:text-lg text-gray-700">
+        {{ amount }} {{ unit }}
+      </div>
+
+      <div
+          class="text-base sm:text-lg text-gray-800 break-words line-clamp-2 sm:max-w-xs md:max-w-sm">
+        {{ name }}
+      </div>
+
+      <div
+          class="flex flex-col sm:flex-row items-start sm:items-center gap-2 sm:gap-1 mt-2 sm:mt-0">
+        <div class="text-xs sm:text-sm text-gray-500 sm:mr-3">
+          {{ t("storage.expiration-date") }}: {{ expirationDate }}
+        </div>
+
+        <div class="flex gap-2 w-full sm:w-auto">
+          <button
+              v-if="possibleUpdate"
+              @click="handleUpdate"
+              class="px-3 py-1 bg-kf-orange rounded text-white text-xs sm:text-sm font-medium transition-colors duration-200 flex-1 sm:flex-none">
+            {{ t("storage.update-item") }}
+          </button>
+          <button
+              v-if="possibleUpdate"
+              @click="handleDelete"
+              class="px-3 py-1 bg-kf-red rounded text-white text-xs sm:text-sm font-medium transition-colors duration-200 flex-1 sm:flex-none">
+            {{ t("storage.delete-item") }}
+          </button>
+        </div>
+      </div>
     </div>
+
+    <p
+        v-if="!possibleUpdate"
+        class="flex justify-center items-center text-gray-500 text-xs sm:text-sm mt-2">
+      {{ t("storage.more-info") }}
+    </p>
   </div>
 </template>
