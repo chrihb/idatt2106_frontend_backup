@@ -18,7 +18,7 @@ export const requestAuthenticationCheck = async () => {
 
 
         console.log("Response data:", response.status);
-        if (response.status === 404) {
+        if (response.status !== 200) {
             userStore.clearToken();
             await router.push('/login');
             return false;
@@ -27,7 +27,7 @@ export const requestAuthenticationCheck = async () => {
         console.log("Response data:", response.data);
         return response.data; // authenticated
     } catch (error) {
-        console.error('Error checking authentication:', error);
+        console.error('Error checking authentication:', error.code);
         userStore.clearToken();
         await router.push('/login');
         return false;
