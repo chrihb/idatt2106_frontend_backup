@@ -1,9 +1,12 @@
 import { defineStore } from 'pinia';
+import {emergencyZoneService} from "@/services/emergencyZoneService.js";
+import {addEmergencyZoneToMap} from "@/utils/markerUtils.js";
 
 export const useEmergencyZonesStore = defineStore('emergencyZonesStore', {
     state:
         () => ({
             emergencyZones: [],
+            error: null,
         }),
     getters: {
         getEmergencyZones: (state) => state.emergencyZones,
@@ -13,22 +16,36 @@ export const useEmergencyZonesStore = defineStore('emergencyZonesStore', {
     },
     actions: {
         async fetchAllEmergencyZones() {
-          // Fetch all emergency zones from the service
+            this.error = null;
+
+            try {
+                const service = emergencyZoneService();
+                const emergencyZonesData = await service.getAllEmergencyZones();
+
+                if (emergencyZonesData.success) {
+                    this.clearEmergencyZones();
+                    for (const zone of emergencyZonesData.zones) {
+                        addEmergencyZoneToMap(zone);
+                        this.addEmergencyZone(zone);
+                    }
+                }
+
+            } catch (error) {
+                console.error('Error fetching all emergency zones:', error);
+                throw error;
+            }
         },
 
-        async fetchEmergencyZonesArea(mapAreaData, zoneIds) {
+        async fetchEmergencyZonesArea(mapBounds, zoneIds) {
             this.error = null;
 
             try {
                 const service = emergencyZoneService();
                 // TODO: This is a placeholder for the actual service call
-                const zones = await service.getEmergencyZonesMock(mapAreaData, zoneIds);
-
-                if (zones && Array.isArray(zones)) {
-                    for (const zone of zones) {
-
-                    }
-                    return {success: true};
+                const zones = await service.getEmergencyZonesMock(mapBounds, zoneIds);
+                for (const zone of zones) {
+                    addEmergencyZoneToMap(zone);
+                    this.addEmergencyZone(zone);
                 }
 
             } catch (error) {
@@ -37,12 +54,34 @@ export const useEmergencyZonesStore = defineStore('emergencyZonesStore', {
             }
         },
 
-        async addEmergencyZone(emergencyZone) {
+        addEmergencyZone(emergencyZone) {
             if (!emergencyZone || !emergencyZone.zoneId || !emergencyZone.coordinates || emergencyZone.coordinates.length < 3) {
                 console.error('Invalid emergency zone data');
                 return;
             }
-            this.emergencyZones.push(emergencyZone);
+            if (!this.getEmergencyZoneById(emergencyZone.zoneId)) {
+                this.emergencyZones.push(emergencyZone);
+            } else {
+                console.error('Emergency zone already exists in the store');
+            }
+        },
+
+        updateEmergencyZone(emergencyZone) {
+            const index = this.emergencyZones.findIndex(zone => zone.zoneId === emergencyZone.zoneId);
+            if (index !== -1) {
+                this.emergencyZones[index] = emergencyZone;
+            } else {
+                console.error('Emergency zone not found in the store');
+            }
+        },
+
+        deleteEmergencyZone(zoneId) {
+            const index = this.emergencyZones.findIndex(zone => zone.zoneId === zoneId);
+            if (index !== -1) {
+                this.emergencyZones.splice(index, 1);
+            } else {
+                console.error('Emergency zone not found in the store');
+            }
         },
 
         clearEmergencyZones() {
