@@ -7,6 +7,7 @@ import {useCategoriesStore} from '@/stores/categoriesStore.js';
 import {useUnitsStore} from '@/stores/unitsStore.js';
 import {useEmergencyItemsStore} from '@/stores/emergencyItemsStore.js';
 import {useI18n} from "vue-i18n";
+import { ExclamationTriangleIcon, XCircleIcon } from "@heroicons/vue/24/solid/index.js";
 
 const {t} = useI18n();
 
@@ -135,11 +136,11 @@ onMounted(async () => {
         class="mb-4 flex flex-col sm:flex-row items-start sm:items-center sm:justify-between gap-2 sm:gap-0">
       <div v-if="expired" class="flex flex-row gap-2">
         <p>Expired items in storage</p>
-        <img src="/icons/emergencyStorage/WarningTriangle.png" alt="Expiring soon" class="w-6 h-6"/>
+        <XCircleIcon class="text-kf-red w-7 h-7"/>
       </div>
       <div v-if="expiringSoon && !expired" class="flex flex-row gap-2">
         <p>Expiring soon</p>
-        <img src="/icons/emergencyStorage/RedCross.png" alt="Expiring soon" class="w-6 h-6"/>
+        <ExclamationTriangleIcon class="text-kf-red w-7 h-7"/>
       </div>
       <h2 class="text-xl sm:text-2xl font-semibold">Categories:</h2>
       <button
