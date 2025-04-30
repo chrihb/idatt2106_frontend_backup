@@ -133,8 +133,14 @@ onMounted(async () => {
   <div class="container mx-auto px-4 py-4 sm:py-8">
     <div
         class="mb-4 flex flex-col sm:flex-row items-start sm:items-center sm:justify-between gap-2 sm:gap-0">
-      <p v-if="expired">Expired items in storage</p>
-      <p v-if="expiringSoon && !expired">Expiring soon</p>
+      <div v-if="expired" class="flex flex-row gap-2">
+        <p>Expired items in storage</p>
+        <img src="/icons/emergencyStorage/WarningTriangle.png" alt="Expiring soon" class="w-6 h-6"/>
+      </div>
+      <div v-if="expiringSoon && !expired" class="flex flex-row gap-2">
+        <p>Expiring soon</p>
+        <img src="/icons/emergencyStorage/RedCross.png" alt="Expiring soon" class="w-6 h-6"/>
+      </div>
       <h2 class="text-xl sm:text-2xl font-semibold">Categories:</h2>
       <button
           class="bg-kf-blue text-white px-3 py-2 rounded transition-colors duration-200 text-sm sm:text-base w-full sm:w-auto"
