@@ -77,12 +77,11 @@ export const emergencyZoneService = () => {
         }
         return response.body;
     }
-
+zx
     return {
-        getEmergencyZones,
-        getEmergencyZoneById,
         getAllEmergencyZones,
         getEmergencyZonesByArea,
+        getEmergencyZoneById,
         createEmergencyZone,
         updateEmergencyZone,
         deleteEmergencyZone,
