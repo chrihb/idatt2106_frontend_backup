@@ -86,7 +86,7 @@ onMounted(() => {
   if (recaptchaToken.value) return;
 
   recaptchaScript.value = document.createElement('script');
-  recaptchaScript.value.src = 'https://www.google.com/recaptcha/api.js?render=6Le5biErAAAAAJi7PY0N8A-011kW48niKklfRhAb';
+  recaptchaScript.value.src = 'https://www.google.com/recaptcha/api.js?render=6LdJUSgrAAAAAJAeQH5nUAago8wTqrshaVAcitBP';
   recaptchaScript.value.async = true;
   recaptchaScript.value.defer = true;
   document.head.appendChild(recaptchaScript.value);
@@ -95,7 +95,7 @@ onMounted(() => {
     if (window.grecaptcha) {
       window.grecaptcha.ready(() => {
         window.grecaptcha
-            .execute('6Le5biErAAAAAJi7PY0N8A-011kW48niKklfRhAb', { action: 'register' })
+            .execute('6LdJUSgrAAAAAJAeQH5nUAago8wTqrshaVAcitBP', { action: 'register' })
             .then((token) => {
               recaptchaToken.value = token;
               recaptchaValue.value = token;
