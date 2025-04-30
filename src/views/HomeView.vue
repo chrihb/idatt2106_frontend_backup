@@ -9,7 +9,7 @@ const userStore = useUserStore();
 
 </script>
 
-<template>Home
+<template>
   <!-- Container -->
   <div class="grid grid-cols-1 md:grid-cols-[auto_auto] md:grid-rows-[1fr_auto_auto] gap-2 py-2 px-2">
     <StorageStatus v-if="userStore.isAuthenticated"/>

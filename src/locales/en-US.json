@@ -143,5 +143,44 @@
   },
   "login-service": {
     "invalidCredentials": "Invalid email or password."
+  }, 
+  "essential-items": {
+  "title": "Essential Items",
+  "sections": {
+    "food": "Food and Water",
+    "heat": "Heat and Light",
+    "info": "Information and Communication",
+    "health": "Medicine and Hygiene"
+  },
+  "items": {
+    "grill": "Grill",
+    "kokeapparat": "Camping stove",
+    "stormkjøkken": "Storm kitchen",
+    "gassbeholder": "Gas canister",
+    "brennstoff": "Fuel",
+    "varme klær": "Warm clothes",
+    "pledd": "Blanket",
+    "dyne": "Duvet",
+    "sovepose": "Sleeping bag",
+    "fyrstikker": "Matches",
+    "stearinlys": "Candles",
+    "ved": "Firewood",
+    "gassovn": "Gas heater",
+    "parafinovn": "Paraffin heater",
+    "lommelykt": "Flashlight",
+    "hodelykt": "Headlamp",
+    "dab-radio": "DAB Radio",
+    "batterier": "Batteries",
+    "batteribank": "Power bank",
+    "førstehjelp": "First aid",
+    "jodtabletter": "Iodine tablets",
+    "legemidler": "Medicine",
+    "våtservietter": "Wet wipes",
+    "håndsprit": "Hand sanitizer",
+    "bleier": "Diapers",
+    "toalettpapir": "Toilet paper",
+    "bind": "Sanitary pads",
+    "tamponger": "Tampons"
   }
+}
 }
