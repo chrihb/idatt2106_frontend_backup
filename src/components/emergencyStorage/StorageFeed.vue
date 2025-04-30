@@ -26,6 +26,8 @@ const updateModalData = ref({
   itemId: null
 });
 
+const expired = ref(false);
+const expiringSoon = ref(false);
 const fetchCategories = async () => {
   try {
     if (categoriesStore.categories.length === 0) {
@@ -64,6 +66,12 @@ const fetchCategories = async () => {
           new Date(item.expirationDate) < new Date(category.expirationDate)
       ) {
         category.expirationDate = item.expirationDate;
+      }
+
+      if(new Date(category.expirationDate) < new Date()) {
+        expired.value = true;
+      } else if (new Date(category.expirationDate) < new Date(Date.now() + 31 * 24 * 60 * 60 * 1000)) {
+        expiringSoon.value = true;
       }
 
       acc[item.categoryId] = category;
@@ -112,7 +120,7 @@ const closeUpdateModal = () => {
   updateModalData.value.display = false;
 };
 
-const handleItemSaved = async () => {
+const handleItemUpdated = async () => {
   await fetchCategories();
 };
 
@@ -125,7 +133,8 @@ onMounted(async () => {
   <div class="container mx-auto px-4 py-4 sm:py-8">
     <div
         class="mb-4 flex flex-col sm:flex-row items-start sm:items-center sm:justify-between gap-2 sm:gap-0">
-      <p class="">warning</p>
+      <p v-if="expired">Expired items in storage</p>
+      <p v-if="expiringSoon && !expired">Expiring soon</p>
       <h2 class="text-xl sm:text-2xl font-semibold">Categories:</h2>
       <button
           class="bg-kf-blue text-white px-3 py-2 rounded transition-colors duration-200 text-sm sm:text-base w-full sm:w-auto"
@@ -155,13 +164,14 @@ onMounted(async () => {
         :display="modalData.display"
         @close="closeModal"
         @update="openUpdateModal"
-        @create="openCreateModal"/>
+        @create="openCreateModal"
+        @itemUpdated="handleItemUpdated"/>
 
     <UpdateStorageComponent
         :display="updateModalData.display"
         :categoryId="updateModalData.categoryId"
         :itemId="updateModalData.itemId"
         @close="closeUpdateModal"
-        @itemSaved="handleItemSaved"/>
+        @itemSaved="handleItemUpdated"/>
   </div>
 </template>

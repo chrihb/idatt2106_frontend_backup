@@ -17,7 +17,7 @@ const props = defineProps({
   }
 });
 
-const emit = defineEmits(['close', 'update', 'create']);
+const emit = defineEmits(['close', 'update', 'create', 'itemUpdated']);
 const {t} = useI18n();
 
 const unitsStore = useUnitsStore();
@@ -60,6 +60,7 @@ const handleDelete = async (id) => {
   try {
     await itemsStore.deleteItem(id);
     await loadItems();
+    emit('itemUpdated', id);
   } catch (error) {
     console.error('Error deleting item', error);
   }
@@ -87,7 +88,7 @@ watch(() => props.display, async (newValue) => {
 <template>
   <Teleport to="body">
     <div v-if="display"
-         class="fixed inset-0 flex items-center justify-center  bg-opacity-50 z-50 p-3 sm:p-0">
+         class="fixed inset-0 flex items-center justify-center z-50 p-3 sm:p-0">
       <div
           class="bg-white rounded-lg shadow-xl w-full sm:w-11/12 md:w-4/5 lg:w-3/5 max-h-[90vh] overflow-auto p-4 sm:p-6 max-w-3xl">
         <div class="flex flex-row justify-between items-center mb-4 sm:mb-6 border-b pb-3 sm:pb-4">
