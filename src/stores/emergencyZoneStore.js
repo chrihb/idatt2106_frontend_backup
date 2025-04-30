@@ -1,4 +1,6 @@
 import {defineStore} from "pinia";
+import {emergencyZoneService} from "@/services/emergencyZoneService.js";
+import {useEmergencyZonesStore} from "@/stores/emergencyZonesStore.js";
 
 
 export const emergencyZoneStore = defineStore('emergencyZone', {
@@ -24,15 +26,17 @@ export const emergencyZoneStore = defineStore('emergencyZone', {
         },
     },
     actions: {
-        fetchDetailsOfEmergencyZone(zoneId) {
+        async fetchEmergencyZoneDetailsById(zoneId) {
             this.error = null;
-
             try {
                 const service = emergencyZoneService();
-                //TODO: This is a placeholder for the actual service call
-                const details = service.getEmergencyZoneDetailsMock(zoneId);
-                this.setRestOfEmergencyZone(details);
-                return details;
+                const emergencyZoneData = await service.getEmergencyZoneDetailsById(zoneId);
+
+                if (emergencyZoneData.success) {
+                    this.setEmergencyZone(emergencyZoneData);
+                    this.setBasicEmergencyZone(emergencyZoneData)
+                }
+
             } catch (error) {
                 console.error('Error fetching emergency zone details:', error);
                 throw error;
@@ -45,7 +49,7 @@ export const emergencyZoneStore = defineStore('emergencyZone', {
             this.lng = emergencyZoneData.lng;
             this.type = emergencyZoneData.type;
             this.level = emergencyZoneData.level;
-            this.coordinates = emergencyZoneData.geojson.coordinates;
+            this.coordinates = emergencyZoneData.coordinates;
         },
 
         setRestOfEmergencyZone(emergencyZoneData) {
@@ -70,6 +74,7 @@ export const emergencyZoneStore = defineStore('emergencyZone', {
         async saveEmergencyZone() {
             try {
                 const service = emergencyZoneService();
+                const emergencyZonesStore = useEmergencyZonesStore();
 
                 const emergencyZoneData = {
                     zoneId: this.zoneId || undefined,
@@ -85,9 +90,11 @@ export const emergencyZoneStore = defineStore('emergencyZone', {
                 let result
                 if (this.zoneId) {
                     result = await service.updateEmergencyZone(emergencyZoneData);
+                    emergencyZonesStore.updateEmergencyZone(result);
                 } else {
                     result = await service.createEmergencyZone(emergencyZoneData);
                     this.zoneId = result.zoneId;
+                    emergencyZonesStore.addEmergencyZone(result);
                 }
                 return result;
             } catch (error) {
@@ -104,8 +111,10 @@ export const emergencyZoneStore = defineStore('emergencyZone', {
 
             this.error = null;
             try {
+                const emergencyZonesStore = emergencyZonesStore();
                 const service = emergencyZoneService();
                 const result = await service.deleteEmergencyZone(this.zoneId);
+                emergencyZonesStore().deleteEmergencyZone(this.zoneId);
                 this.clearEmergencyZoneState();
                 return result;
 
