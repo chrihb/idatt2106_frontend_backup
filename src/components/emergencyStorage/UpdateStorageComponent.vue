@@ -278,6 +278,7 @@ onMounted(async () => {
         <div
             class="mt-4 sm:mt-6 pt-3 sm:pt-4 border-t flex flex-col sm:flex-row justify-between gap-2 sm:gap-3">
           <button
+              data-test="save-item"
               class="order-2 sm:order-1 w-full sm:w-auto px-4 py-3 bg-kf-blue rounded-lg text-white font-medium transition-colors duration-200 text-base"
               @click="saveItem">
             {{ isUpdate ? t("storage.update-item") : t("storage.new-item") }}

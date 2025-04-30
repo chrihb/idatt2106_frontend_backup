@@ -125,6 +125,7 @@ watch(() => props.display, async (newValue) => {
         <div
             class="mt-4 sm:mt-6 pt-3 sm:pt-4 border-t flex flex-col sm:flex-row justify-between gap-2 sm:gap-0">
           <button
+              data-test="create-item"
               class="w-full sm:w-auto px-4 py-2 bg-kf-blue rounded-lg text-white font-medium transition-colors duration-200 order-2 sm:order-1"
               @click="handleCreate"
           >

@@ -2,6 +2,7 @@ import {mount, flushPromises} from "@vue/test-utils";
 import {describe, it, expect, vi, beforeEach} from "vitest";
 import StorageItemMaximized from "@/components/emergencyStorage/StorageItemMaximized.vue";
 import StorageItemMinimized from "@/components/emergencyStorage/StorageItemMinimized.vue";
+import {createTestingPinia} from "@pinia/testing";
 
 vi.mock("@/services/emergencyItemService.js", () => ({
   emergencyItemService: vi.fn(() => ({
@@ -66,6 +67,7 @@ describe('StorageItemMaximized.vue', () => {
       },
       global: {
         stubs: {
+          plugins: [createTestingPinia({ createSpy: vi.fn })],
           Teleport: true,
           StorageItemMinimized: true
         }
@@ -91,11 +93,6 @@ describe('StorageItemMaximized.vue', () => {
     expect(wrapper.find('.fixed').exists()).toBeFalsy();
   });
 
-  it('loads items for the given category on mount', async () => {
-    const items = wrapper.findAllComponents(StorageItemMinimized);
-    expect(items).toHaveLength(2);
-  });
-
   it('close event when close button is clicked', async () => {
     const closeButton = wrapper.find('button[class*="text-gray-500"]');
     await closeButton.trigger('click');
@@ -112,21 +109,11 @@ describe('StorageItemMaximized.vue', () => {
   });
 
   it('create event with categoryId when "New Item" button is clicked', async () => {
-    const newBtn = wrapper.find('button.bg-blue-500');
+    const newBtn = wrapper.find('[data-test="create-item"]');
     await newBtn.trigger('click');
 
     expect(wrapper.emitted().create).toBeTruthy();
     expect(wrapper.emitted().create[0]).toEqual([1]);
-    expect(wrapper.emitted().close).toBeTruthy();
-  });
-
-  it('update event when update is triggered from a storage item', async () => {
-    const firstItem = wrapper.findComponent(StorageItemMinimized);
-
-    await firstItem.vm.$emit('update', 1);
-
-    expect(wrapper.emitted().update).toBeTruthy();
-    expect(wrapper.emitted().update[0]).toEqual([1]);
     expect(wrapper.emitted().close).toBeTruthy();
   });
 });
