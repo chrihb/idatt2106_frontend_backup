@@ -51,7 +51,7 @@ onMounted(async () => {
 
     <!-- Mat -->
     <div class="mb-4">
-      <p class="text-sm text-kf-blue mb-1">{{ t('storage-status.food-label') }}</p>
+      <h3 class="text-md font-semibold text-kf-blue mb-2">{{ t('storage-status.food-label') }}</h3>
       <div class="bg-kf-white-contrast-4 rounded-sm h-6 overflow-hidden">
         <div
           class="h-6 rounded-sm transition-all duration-500 ease-in-out"
@@ -59,12 +59,12 @@ onMounted(async () => {
           :style="{ width: foodWidth }"
         ></div>
       </div>
-      <p class="text-xs text-kf-blue mt-1">{{ t('storage-status.days-food', { days: Math.floor(daysFood) }) }}</p>
+      <p class="text-sm text-kf-blue mt-1">{{ t('storage-status.days-food', { days: Math.floor(daysFood) }) }}</p>
     </div>
 
     <!-- Vann -->
     <div>
-      <p class="text-sm text-kf-blue mb-1">{{ t('storage-status.water-label') }}</p>
+      <h3 class="text-md font-semibold text-kf-blue mb-2">{{ t('storage-status.water-label') }}</h3>
       <div class="bg-kf-white-contrast-4 rounded-sm h-6 overflow-hidden">
         <div
           class="h-6 rounded-sm transition-all duration-500 ease-in-out"
@@ -72,7 +72,7 @@ onMounted(async () => {
           :style="{ width: waterWidth }"
         ></div>
       </div>
-      <p class="text-xs text-kf-blue mt-1">{{ t('storage-status.days-water', { days: Math.floor(daysWater) }) }}</p>
+      <p class="text-sm text-kf-blue mt-1">{{ t('storage-status.days-water', { days: Math.floor(daysWater) }) }}</p>
     </div>
   </div>
 </template>
