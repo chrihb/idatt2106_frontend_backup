@@ -20,7 +20,7 @@ export function emergencyItemService() {
       throw new Error("No token found");
     }
 
-    const response = await fetch(`${baseUrl}`, {
+    const response = await fetch(`${baseUrl}/household/1`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
