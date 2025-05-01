@@ -67,14 +67,6 @@ const handleDelete = async (id) => {
 };
 
 onMounted(async () => {
-  if (categoriesStore.categories.length === 0) {
-    await categoriesStore.fetchCategories();
-  }
-
-  if (unitsStore.units.length === 0) {
-    await unitsStore.fetchUnits();
-  }
-
   await loadItems();
 });
 
