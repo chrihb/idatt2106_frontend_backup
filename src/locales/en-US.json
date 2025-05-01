@@ -34,15 +34,17 @@
         "privacy-policy": "Privacy Policy"
     },
     "storage-status": {
-        "level": {
-          "low": "Your storage does not cover 3 days of needs",
-          "medium": "Your storage covers 3-7 days of needs",
-          "high": "Your storage covers more than 7 days of needs",
-          "unknown": "Storage status is unknown"
-        },
-        "title": "Emergency Storage Status",
-        "desc": "You have storage items that requires attention",
-        "ok": "Your storage looks good!"
+      "level": {
+        "status": "Your storage covers {effectiveDays} days of food and water",
+        "unknown": "Storage status is unknown"
+      },
+      "title": "Emergency Storage Status",
+      "desc": "You have storage items that require attention",
+      "ok": "Your storage looks good!",
+      "food-label": "Food",
+      "water-label": "Water",
+      "days-food": "You have {days} days of food",
+      "days-water": "You have {days} days of water"
     },
     "storage":{
       "title": "Emergency Storage",

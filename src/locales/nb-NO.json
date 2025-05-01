@@ -35,14 +35,16 @@
   },
   "storage-status": {
     "level": {
-      "low": "Lageret ditt dekker ikke 3 dagers behov",
-      "medium": "Lageret ditt dekker 3-7 dagers behov",
-      "high": "Lageret ditt dekker mer enn 7 dagers behov",
-      "unknown": "Lagerstatus er ukjent"
-    },
+        "status": "Lageret ditt dekker {effectiveDays} dager med mat og vann",
+        "unknown": "Lagerstatus er ukjent"
+      },
     "title": "Beredskapsstatus",
     "desc": "Du har lagringsartikler som krever oppmerksomhet",
-    "ok": "Lageret ditt ser bra ut!"
+    "ok": "Lageret ditt ser bra ut!",
+    "food-label": "Mat",
+    "water-label": "Vann",
+    "days-food": "Du har {days} dager med mat",
+    "days-water": "Du har {days} dager med vann"
   },
   "storage":{
     "title": "Beredskapslager",
