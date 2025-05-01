@@ -8,10 +8,10 @@ import EssentialItemChecklist from "@/components/emergencyStorage/EssentialItemC
 import {useCategoriesStore} from '@/stores/categoriesStore.js';
 import {useUnitsStore} from '@/stores/unitsStore.js';
 import {useEmergencyItemsStore} from '@/stores/emergencyItemsStore.js';
-import {emergencyItemService} from '@/services/emergencyItemService.js';
 import {useI18n} from "vue-i18n";
+import { ExclamationTriangleIcon, XCircleIcon } from "@heroicons/vue/24/solid/index.js";
 
-const { t } = useI18n()
+const {t} = useI18n();
 
 const categoriesStore = useCategoriesStore();
 const unitsStore = useUnitsStore();
@@ -20,8 +20,7 @@ const itemsStore = useEmergencyItemsStore();
 const itemCategories = ref([]);
 const modalData = ref({
   id: 0,
-  display: false,
-  items: []
+  display: false
 });
 
 const updateModalData = ref({
@@ -30,6 +29,8 @@ const updateModalData = ref({
   itemId: null
 });
 
+const expired = ref(false);
+const expiringSoon = ref(false);
 const fetchCategories = async () => {
   try {
     if (categoriesStore.categories.length === 0) {
@@ -40,7 +41,8 @@ const fetchCategories = async () => {
       await unitsStore.fetchUnits();
     }
 
-    const allItems = await itemsStore.fetchAllItems();
+    await itemsStore.fetchAllItems();
+    const allItems = itemsStore.items;
 
     const groupedCategories = allItems.reduce((acc, item) => {
       const category = acc[item.categoryId] || {
@@ -69,6 +71,12 @@ const fetchCategories = async () => {
         category.expirationDate = item.expirationDate;
       }
 
+      if(new Date(category.expirationDate) < new Date()) {
+        expired.value = true;
+      } else if (new Date(category.expirationDate) < new Date(Date.now() + 31 * 24 * 60 * 60 * 1000)) {
+        expiringSoon.value = true;
+      }
+
       acc[item.categoryId] = category;
       return acc;
     }, {});
@@ -78,7 +86,7 @@ const fetchCategories = async () => {
       return category;
     });
   } catch (error) {
-    g.error("Error fetching categories");
+    console.error("Error fetching categories");
   }
 };
 
@@ -99,13 +107,11 @@ const openUpdateModal = (itemId) => {
 };
 
 const openModal = async (category) => {
-  const service = emergencyItemService();
-  const items = await service.getEmergencyItemByCategoryId(category.id);
+  await itemsStore.fetchItemsByCategory(category.id);
 
   modalData.value = {
     id: category.id,
-    display: true,
-    items
+    display: true
   };
 };
 
@@ -117,13 +123,8 @@ const closeUpdateModal = () => {
   updateModalData.value.display = false;
 };
 
-const handleItemSaved = async () => {
+const handleItemUpdated = async () => {
   await fetchCategories();
-
-  if (modalData.value.display) {
-    const service = emergencyItemService();
-    modalData.value.items = await service.getEmergencyItemByCategoryId(modalData.value.id);
-  }
 };
 
 onMounted(async () => {
@@ -132,7 +133,7 @@ onMounted(async () => {
 </script>
 
 <template>
-  <div class="container mx-auto px-4 py-8">
+  <div class="container mx-auto px-4 py-4 sm:py-8">
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
       <!-- Venstre kolonne -->
       <div class="lg:col-span-1 flex flex-col gap-4">
@@ -142,14 +143,27 @@ onMounted(async () => {
 
       <!-- Høyre kolonne -->
     <div class="lg:col-span-2">
-    <div class="mb-4 flex justify-end">
-      <button
-          class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition-colors duration-200"
-          @click="openCreateModal()"
-      >
-        {{ t("storage.new-item") }}
-      </button>
+    <div
+        class="mb-4 flex flex-col sm:flex-row items-start sm:items-center sm:justify-between gap-2 sm:gap-0">
+      <div v-if="expired" class="flex flex-row gap-2 w-1/3">
+        <p>Expired items in storage</p>
+        <XCircleIcon class="text-kf-red w-7 h-7"/>
+      </div>
+      <div v-if="expiringSoon && !expired" class="flex flex-row gap-2">
+        <p>Expiring soon</p>
+        <ExclamationTriangleIcon class="text-kf-red w-7 h-7"/>
+      </div>
+      <h2 class="text-xl sm:text-2xl font-semibold">Categories:</h2>
+      <div class="flex flex-row-reverse w-1/3">
+        <button
+            class="bg-kf-blue text-white px-3 py-2 rounded transition-colors duration-200 text-sm sm:text-base w-full sm:w-auto"
+            @click="openCreateModal()"
+        >
+          {{ t("storage.new-item") }}
+        </button>
+      </div>
     </div>
+
     <StorageItemMinimized
         v-for="categoryItem in itemCategories"
         :key="categoryItem.id"
@@ -161,19 +175,24 @@ onMounted(async () => {
         :possibleUpdate="false"
         @click="openModal(categoryItem)"/>
 
+    <div v-if="itemCategories.length === 0" class="py-8 text-center text-gray-500">
+      {{ t("storage.no-items-in-category") }}
+    </div>
+
     <StorageItemMaximized
         :categoryId="modalData.id"
         :display="modalData.display"
         @close="closeModal"
         @update="openUpdateModal"
-        @create="openCreateModal"/>
+        @create="openCreateModal"
+        @itemUpdated="handleItemUpdated"/>
 
     <UpdateStorageComponent
         :display="updateModalData.display"
         :categoryId="updateModalData.categoryId"
         :itemId="updateModalData.itemId"
         @close="closeUpdateModal"
-        @itemSaved="handleItemSaved"/>
+        @itemSaved="handleItemUpdated"/>
       </div>
     </div>
   </div>

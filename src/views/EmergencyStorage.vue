@@ -6,7 +6,6 @@ const { t } = useI18n()
 </script>
 
 <template>
-  <h1>{{ t("storage.title") }}</h1>
   <StorageFeed/>
 </template>
 

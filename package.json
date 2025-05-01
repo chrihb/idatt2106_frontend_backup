@@ -9,8 +9,8 @@
     "preview": "vite preview",
     "test:unit": "vitest run",
     "test:e2e": "start-server-and-test 'vite --host' http://localhost:5173 'cypress run --e2e'",
-    "coverage:e2e": "npx cypress run && open coverage/lcov-report/index.html",
-    "coverage:unit": "npx vitest run --coverage && open coverage/unit/index.html"
+    "coverage:e2e": "npx cypress run && node run-os-specific-cmd.js openE2eCoverage",
+    "coverage:unit": "npx vitest run --coverage && node run-os-specific-cmd.js openUnitCoverage"
   },
   "dependencies": {
     "@heroicons/vue": "^2.2.0",
@@ -19,6 +19,7 @@
     "axios": "^1.8.4",
     "leaflet": "^1.9.4",
     "marked": "^15.0.10",
+
     "pinia": "^3.0.2",
     "pinia-plugin-persistedstate": "^4.2.0",
     "tailwindcss": "^4.1.4",

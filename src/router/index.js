@@ -16,6 +16,7 @@ import PasswordResetRequest from "@/components/email/passwordReset/PasswordReset
 import EmailVerification from "@/components/email/EmailVerification.vue";
 import PasswordResetNewPassword from "@/components/email/passwordReset/PasswordResetNewPassword.vue";
 import SimpleCenteredComponent from "@/views/SimpleCenteredComponent.vue";
+import {useUserStore} from "@/stores/userStore.js";
 
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
@@ -25,13 +26,13 @@ const router = createRouter({
             children: [
                 { path: "", component: HomeView },
                 { path: "/news", component: NewsView },
-                { path: "/account", component: AccountView },
-                { path: "/emergency-storage", component: EmergencyStorage },
+                { path: "/account", component: AccountView, meta: { requiresAuth: true } },
+                { path: "/storage", component: EmergencyStorage, meta: { requiresAuth: true } },
                 { path: "/about-us", component: AboutUsView },
                 { path: "/privacy-policy", component: PrivacyPolicyView },
-                { path: "/storage", component: StorageView },
                 { path: "/map", component: MapView },
-                { path: "/my-home", component: MyHomeView },
+                { path: "/my-home", component: MyHomeView, meta: { requiresAuth: true } },
+
             ],
         },
         {
@@ -54,9 +55,22 @@ const router = createRouter({
 
 });
 
-router.beforeEach((to, from, next) => {
-    // Perform any global navigation guards here
+router.beforeEach(async (to, from, next) => {
+    const userStore = useUserStore();
+    console.log("running auth check in router...");
+
+    if (to.meta.requiresAuth) {
+        console.log("Requires auth");
+        await userStore.isAuthenticated();
+        console.log("isAuth:", userStore.authenticated);
+        if (!userStore.authenticated) {
+            console.log("Not authenticated, redirecting to login");
+            return next('/login');
+        }
+    }
+    console.log("Route ok, proceeding...");
     next();
 });
+
 
 export default router

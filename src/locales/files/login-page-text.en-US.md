@@ -1,5 +1,3 @@
-# Sign in to Krisefikser.no
-
 Register to take full control of your emergency preparedness! As a registered user, you can:
 
 - Manage your household's preparedness inventory with an overview of items and expiration dates.
