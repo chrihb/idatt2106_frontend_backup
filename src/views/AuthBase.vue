@@ -1,5 +1,5 @@
 <script setup>
-import InfoBox from "@/components/InfoBox.vue";
+import InfoBox from "@/components/login/InfoBox.vue";
 import { useRoute, useRouter } from "vue-router";
 import { useI18n } from "vue-i18n";
 import {ArrowLeftIcon} from "@heroicons/vue/24/solid/index.js";

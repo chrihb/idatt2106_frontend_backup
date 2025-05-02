@@ -6,19 +6,21 @@ import NewsView from "@/views/NewsView.vue";
 import AccountView from "@/views/AccountView.vue";
 import AboutUsView from "@/views/AboutUsView.vue";
 import PrivacyPolicyView from "@/views/PrivacyPolicyView.vue";
-import StorageView from "@/views/StorageView.vue";
 import MapView from "@/views/MapView.vue";
 import MyHomeView from "@/views/MyHomeView.vue";
 import AuthBase from "@/views/AuthBase.vue";
-import Login from "@/components/Login.vue";
-import Register from "@/components/Register.vue";
+import Login from "@/components/login/Login.vue";
+import Register from "@/components/login/Register.vue";
 import PasswordResetRequest from "@/components/email/passwordReset/PasswordResetRequest.vue";
 import EmailVerification from "@/components/email/EmailVerification.vue";
 import PasswordResetNewPassword from "@/components/email/passwordReset/PasswordResetNewPassword.vue";
 import SimpleCenteredComponent from "@/views/SimpleCenteredComponent.vue";
 import {useUserStore} from "@/stores/userStore.js";
-import AdminRegister from "@/components/AdminRegister.vue";
-import JoinCreateHousehold from "@/components/JoinCreateHousehold.vue";
+import AdminRegister from "@/components/login/AdminRegister.vue";
+import JoinCreateHousehold from "@/components/joinHousehold/Options.vue";
+import AvailableHousehold from "@/components/joinHousehold/JoinHousehold.vue";
+import CreateHousehold from "@/components/joinHousehold/CreateHousehold.vue";
+import JoinHouseholdView from "@/views/JoinHouseholdView.vue";
 
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
@@ -34,7 +36,12 @@ const router = createRouter({
                 { path: "/privacy-policy", component: PrivacyPolicyView },
                 { path: "/map", component: MapView },
                 { path: "/my-home", component: MyHomeView, meta: { requiresAuth: true, requiresHousehold: true } },
-                { path: "/join-create", component: JoinCreateHousehold, meta: { requiresAuth: true } },
+                { path: "/household", component: JoinHouseholdView, meta: { requiresAuth: true },
+                children: [
+                    { path: "options", component: JoinCreateHousehold },
+                    { path: "join", component: AvailableHousehold },
+                    { path: "create", component: CreateHousehold },
+                ]},
 
             ],
         },
@@ -63,7 +70,7 @@ router.beforeEach(async (to, from, next) => {
     const userStore = useUserStore();
 
 
-    if (!to.meta.requiresAuth) {
+    if (!to.meta.requiresAuth && !to.meta.requiresHousehold) {
         return next();
     }
 
@@ -73,11 +80,15 @@ router.beforeEach(async (to, from, next) => {
 
     await userStore.isAuthenticated();
 
-    if (userStore.authenticated) {
+    if (userStore.authenticated && !to.meta.requiresHousehold) {
         return next();
     }
 
-    next('/login');
+    if (!userStore.householdId) {
+        return next('/household/options');
+    }
+
+    next()
 });
 
 export default router

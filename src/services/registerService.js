@@ -13,7 +13,7 @@ export const requestRegister = async (registerForm, t) => {
 
         const data = response.data;
         if (data.token) {
-            userStore.setCredentials(data.token, registerForm.email);
+            userStore.setCredentials(data.token, registerForm.email, true, null);
             return { success: true };
         } else {
             return { success: true };

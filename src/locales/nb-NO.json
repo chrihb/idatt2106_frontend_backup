@@ -81,7 +81,9 @@
     "manage-storage": "Administrer lager",
     "join": "Bli Med",
     "create": "Opprett Ny",
+    "create-household": "Opprett Husstand",
     "or": "eller",
+    "available": "Tilgjengelige husstander",
     "create-desc": "en husstand for å administrere lageret ditt og andre medlemmer"
   },
   "login": {

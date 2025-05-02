@@ -13,7 +13,7 @@ export const requestLogin = async (loginForm, t) => {
         console.log('Login response:', data); // Debug the response
 
         if (response.status === 200 && data.token) {
-            userStore.setCredentials(data.token, loginForm.email, true);
+            userStore.setCredentials(data.token, loginForm.email, true, data.householdId);
             return { success: true };
         } else {
             return { error: 'Login failed: Invalid response format from server.' };
