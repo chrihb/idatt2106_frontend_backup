@@ -1,5 +1,5 @@
 <script setup>
-import {onMounted, onUnmounted} from 'vue';
+import {onMounted} from 'vue';
 import 'leaflet/dist/leaflet.css';
 import { useMapStore } from '@/stores/mapStore.js';
 import {mockMarkersData} from "@/services/markerService.js";
