@@ -9,6 +9,7 @@ import {addEmergencyZoneToMap} from "@/utils/markerUtils.js";
 import {emergencyZoneService} from "@/services/emergencyZoneService.js";
 import {useEmergencyZonesStore} from "@/stores/emergencyZonesStore.js";
 import L from 'leaflet';
+import {debounce} from 'lodash';
 
 onMounted(async () => {
 
@@ -16,7 +17,6 @@ onMounted(async () => {
     const mapStore = useMapStore();
     const markerStore = useMarkerStore();
     const emergencyZonesStore = useEmergencyZonesStore();
-    const zoneService = emergencyZoneService();
     const positionTrackingStore = usePositionTrackingStore();
 
     // Initialize the map
@@ -37,7 +37,7 @@ onMounted(async () => {
     positionTrackingStore.startTracking();
 
     // Add event listener for map movement
-    mapStore.map.on('moveend', async () => {
+    mapStore.map.on('moveend', debounce( async () => {
       const bounds = mapStore.map.getBounds();
 
       try {
@@ -60,7 +60,7 @@ onMounted(async () => {
       } catch (error) {
         console.error('Error fetching markers:', error);
       }
-    });
+    }, 300));
 
   } catch (error) {
     console.error('Error initializing map:', error);
@@ -68,6 +68,8 @@ onMounted(async () => {
 });
 
 onUnmounted(() => {
+  /*
+}
   const mapStore = useMapStore();
   const positionTrackingStore = usePositionTrackingStore();
   // Remove event listener for map movement
@@ -88,6 +90,8 @@ onUnmounted(() => {
       }
     });
   }
+  */
+
 
 
   //
