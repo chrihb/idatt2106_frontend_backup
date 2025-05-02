@@ -10,7 +10,6 @@ const { t } = useI18n();
 
 const daysFood = ref(0);
 const daysWater = ref(0);
-const householdId = 1; // TODO: make dynamic later
 
 const effectiveDays = computed(() => Math.floor(Math.min(daysFood.value, daysWater.value)));
 
@@ -47,15 +46,21 @@ const statusMessage = computed(() => {
 
 onMounted(async () => {
   try {
-    const status = await getPreparednessStatus(householdId);
-    daysFood.value = status.daysOfFood;
-    daysWater.value = status.daysOfWater;
+    const statusList = await getPreparednessStatus();
+
+    if (statusList.length > 0) {
+      const status = statusList[0]; // Hent første husstand foreløpig
+      daysFood.value = status.daysOfFood;
+      daysWater.value = status.daysOfWater;
+    }
   } catch (error) {
+    console.error('Feil ved henting av beredskapsstatus:', error);
     daysFood.value = 0;
     daysWater.value = 0;
   }
 });
 </script>
+
 
 <template>
   <div @click="router.push('/storage')" class="cursor-pointer bg-kf-white flex flex-col gap-2 items-center shadow-lg rounded-2xl py-2 px-2">

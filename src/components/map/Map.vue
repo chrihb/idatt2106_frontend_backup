@@ -1,32 +1,58 @@
 <script setup>
-import {onMounted, onUnmounted} from 'vue';
+import {onMounted} from 'vue';
 import 'leaflet/dist/leaflet.css';
 import { useMapStore } from '@/stores/mapStore.js';
 import {mockMarkersData} from "@/services/markerService.js";
-import { useMarkerStore} from "@/stores/markerStore.js";
 import {usePositionTrackingStore} from "@/stores/positionTrackingStore.js";
-
-const mapStore = useMapStore();
-const markerStore = useMarkerStore();
-const positionTrackingStore = usePositionTrackingStore();
+import {useEmergencyZonesStore} from "@/stores/emergencyZonesStore.js";
+import {debounce} from 'lodash';
+import {useMarkerStore} from "@/stores/markerStore.js";
+import {createCustomMarkerIcon, createMarkerPopup} from "@/utils/markerUtils.js";
+import {addEmergencyZoneToMap} from "@/utils/markerUtils.js";
+import L from 'leaflet';
 
 onMounted(async () => {
 
   try {
+    const mapStore = useMapStore();
+    const emergencyZonesStore = useEmergencyZonesStore();
+    const positionTrackingStore = usePositionTrackingStore();
+    const markerStore = useMarkerStore();
+
     // Initialize the map
-    console.log("Initializing map...");
-    mapStore.initMap();
-    console.log("Map initialized.");
-    // Re-add existing markers from the store
-    if (markerStore.markers) {
-      markerStore.markers.forEach(marker => {
-        const type = marker.options.type;
-        if (!mapStore.layerGroup[type] || !(mapStore.layerGroup[type] instanceof L.LayerGroup)) {
-          mapStore.layerGroup[type] = L.layerGroup().addTo(mapStore.map);
-        }
-        mapStore.layerGroup[type].addLayer(marker);
-      });
-      console.log("Markers added to map from store.");
+    if (!mapStore.map) {
+      mapStore.initMap();
+    } else {
+      // Reattach the map to the container
+      const container = mapStore.map.getContainer();
+      if (!document.getElementById('map').contains(container)) {
+        document.getElementById('map').appendChild(container);
+      }
+      mapStore.map.invalidateSize();
+    }
+
+
+    const emergencyZones = emergencyZonesStore.getEmergencyZones;
+    const markers = markerStore.getMarkers; // Assuming a getter exists for markers
+
+    // Add emergency zones to the map
+    if (emergencyZones && emergencyZones.length > 0) {
+      for (const zone of emergencyZones) {
+        mapStore.addMapItemId(zone.zoneId);
+        addEmergencyZoneToMap(zone);
+      }
+    }
+
+
+    // Add markers to the map
+    if (markers && markers.length > 0) {
+      for (const marker of markers) {
+        mapStore.addMapItemId(marker.id);
+        const markerIcon = createCustomMarkerIcon(marker.type);
+        L.marker([marker.lat, marker.lng], { icon: markerIcon })
+            .addTo(mapStore.map)
+            .bindPopup(createMarkerPopup(marker.type, marker.location, marker.address, marker.description));
+      }
     }
 
     // Start position tracking
@@ -34,19 +60,17 @@ onMounted(async () => {
     positionTrackingStore.startTracking();
     console.log("Tracking started");
 
-    // Add event listenr for map movement
-    mapStore.map.on('moveend', async () => {
+    // Add event listener for map movement
+    mapStore.map.on('moveend', debounce( async () => {
       const bounds = mapStore.map.getBounds();
-      const markersData = {
-        northEast: bounds.getNorthEast(),
-        southWest: bounds.getSouthWest(),
-      };
-
+      const ids = mapStore.getMapItemIds();
 
       try {
         //TODO: Add request to fetch markers from the backend
-        const result = await mockMarkersData()
-        //const result = await requestMarkers(markersData);
+
+        const result = await mockMarkersData();
+        await emergencyZonesStore.fetchEmergencyZonesArea(bounds, ids)
+
         if (result.success) {
         } else {
           console.error('Error loading markers:', result.error);
@@ -54,37 +78,13 @@ onMounted(async () => {
       } catch (error) {
         console.error('Error fetching markers:', error);
       }
-    });
+    }, 300));
 
   } catch (error) {
     console.error('Error initializing map:', error);
   }
 });
 
-onUnmounted(() => {
-  // Remove event listener for map movement
-  if (mapStore.map) {
-    mapStore.map.off('moveend');
-  }
-
-  // Stop position tracking
-  positionTrackingStore.stopTracking();
-
-  // Remove all markers from the map
-
-  if (mapStore.layerGroup) {
-    Object.keys(mapStore.layerGroup).forEach(type => {
-      if (mapStore.layerGroup[type] instanceof L.LayerGroup) {
-        mapStore.layerGroup[type].clearLayers();
-        mapStore.map.removeLayer(mapStore.layerGroup[type]);
-        delete mapStore.layerGroup[type];
-      }
-    });
-  }
-
-
-  //
-})
 </script>
 
 <template>

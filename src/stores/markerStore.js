@@ -78,7 +78,7 @@ export const useMarkerStore = defineStore('markerStore', {
         enabled: true,
         strategies: [
             {
-                storage: localStorage,
+                storage: window.localStorage,
             },
         ],
     }
