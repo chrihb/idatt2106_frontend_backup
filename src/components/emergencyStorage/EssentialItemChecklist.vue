@@ -4,10 +4,10 @@ import { getEssentialItems } from '@/services/essentialItemService';
 import { CheckCircleIcon, XCircleIcon } from '@heroicons/vue/24/solid';
 import { useI18n } from 'vue-i18n';
 
-const { t, locale } = useI18n();
+const { t } = useI18n();
 
-const householdId = 1; // TODO: gjør dynamisk senere
-const essentials = ref([]);
+const essentials = ref([]); // Liste av lister
+const selectedHouseholdIndex = ref(0); // Brukes til å velge riktig husholdning
 
 const groupedItems = {
   'mat-vann': [['grill', 'kokeapparat', 'stormkjøkken'], 'gassbeholder', 'brennstoff'],
@@ -30,25 +30,29 @@ const translatedSectionTitles = computed(() => {
 });
 
 function getStatus(itemOrGroup) {
+  const currentEssentials = essentials.value[selectedHouseholdIndex.value] || [];
+
   if (Array.isArray(itemOrGroup)) {
     return itemOrGroup.some(name => {
-      const match = essentials.value.find(e => e.name.toLowerCase() === name);
+      const match = currentEssentials.find(e => e.name.toLowerCase() === name);
       return match?.present;
     });
   } else {
-    const match = essentials.value.find(e => e.name.toLowerCase() === itemOrGroup);
+    const match = currentEssentials.find(e => e.name.toLowerCase() === itemOrGroup);
     return match?.present || false;
   }
 }
 
 onMounted(async () => {
   try {
-    essentials.value = await getEssentialItems(householdId);
+    essentials.value = await getEssentialItems(); // Setter hele listen (en per husholdning)
   } catch (e) {
     console.error("Kunne ikke hente essential items", e);
   }
 });
 </script>
+
+
 
 <template>
   <div class="bg-kf-white p-4 rounded-xl shadow-md w-full max-w-xl">
