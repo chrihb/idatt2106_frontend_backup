@@ -60,6 +60,7 @@ export const addEmergencyZoneToMap = (emergencyZone) => {
     polygon.on('click', async () => {
         try {
             const service = emergencyZoneService();
+            //TODO: This is a placeholder for the actual service call
             const zoneDetails = await service.getEmergencyZoneDetailsMock(emergencyZone.zoneId);
 
             if (zoneDetails.success) {
