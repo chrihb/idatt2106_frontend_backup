@@ -34,9 +34,17 @@
         "privacy-policy": "Privacy Policy"
     },
     "storage-status": {
-        "title": "Storage Status",
-        "desc": "You have storage items that requires attention",
-        "ok": "Your storage looks good!"
+      "level": {
+        "status": "Your storage covers {effectiveDays} days of food and water",
+        "unknown": "Storage status is unknown"
+      },
+      "title": "Emergency Storage Status",
+      "desc": "You have storage items that require attention",
+      "ok": "Your storage looks good!",
+      "food-label": "Food",
+      "water-label": "Water",
+      "days-food": "You have {days} days of food",
+      "days-water": "You have {days} days of water"
     },
     "storage":{
       "title": "Emergency Storage",
@@ -127,7 +135,12 @@
     "privacyPolicyText": "I accept the ",
     "privacyPolicyRequired": "You must accept the privacy policy.",
     "hasAccount": "Already have an account?",
-    "loginHere": "Login here"
+    "loginHere": "Login here",
+    "admin": {
+      "username": "Username",
+      "usernameRequired": "Username is required",
+      "register-admin": "Register Admin"
+    }
   },
   "register-service": {
     "emailInUse": "Email is already in use.",
@@ -143,5 +156,44 @@
   "auth":{
     "login": "Login",
     "register": "Register"
+  }, 
+  "essential-items": {
+  "title": "Essential Items",
+  "sections": {
+    "food": "Food and Water",
+    "heat": "Heat and Light",
+    "info": "Information and Communication",
+    "health": "Medicine and Hygiene"
+  },
+  "items": {
+    "grill": "Grill",
+    "kokeapparat": "Camping stove",
+    "stormkjøkken": "Storm kitchen",
+    "gassbeholder": "Gas canister",
+    "brennstoff": "Fuel",
+    "varme klær": "Warm clothes",
+    "pledd": "Blanket",
+    "dyne": "Duvet",
+    "sovepose": "Sleeping bag",
+    "fyrstikker": "Matches",
+    "stearinlys": "Candles",
+    "ved": "Firewood",
+    "gassovn": "Gas heater",
+    "parafinovn": "Paraffin heater",
+    "lommelykt": "Flashlight",
+    "hodelykt": "Headlamp",
+    "dab-radio": "DAB Radio",
+    "batterier": "Batteries",
+    "batteribank": "Power bank",
+    "førstehjelp": "First aid",
+    "jodtabletter": "Iodine tablets",
+    "legemidler": "Medicine",
+    "våtservietter": "Wet wipes",
+    "håndsprit": "Hand sanitizer",
+    "bleier": "Diapers",
+    "toalettpapir": "Toilet paper",
+    "bind": "Sanitary pads",
+    "tamponger": "Tampons"
   }
+}
 }

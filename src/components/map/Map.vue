@@ -56,7 +56,9 @@ onMounted(async () => {
     }
 
     // Start position tracking
+    console.log("Starting tracking...");
     positionTrackingStore.startTracking();
+    console.log("Tracking started");
 
     // Add event listener for map movement
     mapStore.map.on('moveend', debounce( async () => {

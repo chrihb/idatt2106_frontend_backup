@@ -6,7 +6,6 @@ import NewsView from "@/views/NewsView.vue";
 import AccountView from "@/views/AccountView.vue";
 import AboutUsView from "@/views/AboutUsView.vue";
 import PrivacyPolicyView from "@/views/PrivacyPolicyView.vue";
-import StorageView from "@/views/StorageView.vue";
 import MapView from "@/views/MapView.vue";
 import MyHomeView from "@/views/MyHomeView.vue";
 import AuthBase from "@/views/AuthBase.vue";
@@ -17,6 +16,7 @@ import EmailVerification from "@/components/email/EmailVerification.vue";
 import PasswordResetNewPassword from "@/components/email/passwordReset/PasswordResetNewPassword.vue";
 import SimpleCenteredComponent from "@/views/SimpleCenteredComponent.vue";
 import {useUserStore} from "@/stores/userStore.js";
+import AdminRegister from "@/components/AdminRegister.vue";
 
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
@@ -39,7 +39,8 @@ const router = createRouter({
             path: "/login", component: AuthBase,
             children: [
                 { path: "/login", name: "Login", component: Login,},
-                { path: "/register-account",name: "Register",component: Register },
+                { path: "/register-account", name: "Register",component: Register },
+                { path: "/register-admin", name: "Register Admin",component: AdminRegister },
             ],
         },
         {
@@ -57,20 +58,23 @@ const router = createRouter({
 
 router.beforeEach(async (to, from, next) => {
     const userStore = useUserStore();
-    console.log("running auth check in router...");
 
-    if (to.meta.requiresAuth) {
-        console.log("Requires auth");
-        await userStore.isAuthenticated();
-        console.log("isAuth:", userStore.authenticated);
-        if (!userStore.authenticated) {
-            console.log("Not authenticated, redirecting to login");
-            return next('/login');
-        }
+
+    if (!to.meta.requiresAuth) {
+        return next();
     }
-    console.log("Route ok, proceeding...");
-    next();
-});
 
+    if (!userStore.token) {
+        return next('/login');
+    }
+
+    await userStore.isAuthenticated();
+
+    if (userStore.authenticated) {
+        return next();
+    }
+
+    next('/login');
+});
 
 export default router
