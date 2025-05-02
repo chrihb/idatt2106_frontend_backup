@@ -3,7 +3,7 @@ import {emergencyZoneService} from "@/services/emergencyZoneService.js";
 import {useEmergencyZonesStore} from "@/stores/emergencyZonesStore.js";
 
 
-export const emergencyZoneStore = defineStore('emergencyZone', {
+export const useEmergencyZoneStore = defineStore('emergencyZone', {
     state: () => ({
         emergencyZone: {
             zoneId: null,
@@ -110,7 +110,7 @@ export const emergencyZoneStore = defineStore('emergencyZone', {
 
             this.error = null;
             try {
-                const emergencyZonesStore = emergencyZonesStore();
+                const emergencyZonesStore = useEmergencyZonesStore();
                 const service = emergencyZoneService();
                 const result = await service.deleteEmergencyZone(this.zoneId);
                 emergencyZonesStore().deleteEmergencyZone(this.zoneId);
