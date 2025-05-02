@@ -68,10 +68,12 @@ onMounted(async () => {
 });
 
 onUnmounted(() => {
+  const mapStore = useMapStore();
+  const positionTrackingStore = usePositionTrackingStore();
   // Remove event listener for map movement
   if (mapStore.map) {
     mapStore.map.off('moveend');
-  }
+
 
   // Stop position tracking
   positionTrackingStore.stopTracking();
