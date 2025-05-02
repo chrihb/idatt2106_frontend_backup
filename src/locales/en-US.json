@@ -134,7 +134,7 @@
     "phoneInUse": "Phone number is already in use.",
     "failedToSendEmail": "Failed to send verification email. Please try again later.",
     "invalidData": "Invalid data. Please check your input and try again.",
-    "error": "An error occurred KYS. Please try again later.",
+    "error": "An error occurred. Please try again later.",
     "networkError": "Network error. Please check your internet connection and try again."
   },
   "login-service": {
