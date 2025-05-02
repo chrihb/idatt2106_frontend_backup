@@ -135,7 +135,12 @@
     "privacyPolicyText": "Jeg godtar ",
     "privacyPolicyRequired": "Du må godta personvernserklæringen.",
     "hasAccount": "Har du allerede en bruker?",
-    "loginHere": "Logg inn her"
+    "loginHere": "Logg inn her",
+    "admin": {
+      "username": "Brukernavn",
+      "usernameRequired": "Brukernavn er påkrevd",
+      "register-admin": "Registrer Administrator"
+    }
   },
   "register-service": {
     "emailInUse": "E-post er allerede i bruk.",
