@@ -65,7 +65,8 @@ export const addEmergencyZoneToMap = (emergencyZone) => {
             const service = emergencyZoneService();
             const emergencyZoneStore = useEmergencyZoneStore();
             //TODO: This is a placeholder for the actual service call
-            const zoneDetails = await emergencyZoneStore.fetchEmergencyZoneDetailsById(emergencyZone.zoneId);
+            const zoneDetails = await service.getEmergencyZoneDetailsMock(emergencyZone.zoneId)
+            //const zoneDetails = await emergencyZoneStore.fetchEmergencyZoneDetailsById(emergencyZone.zoneId);
 
             if (zoneDetails.success) {
                 const popupContent = createZonePopup(zoneDetails.name, emergencyZone.type, emergencyZone.level, zoneDetails.address, zoneDetails.description);
