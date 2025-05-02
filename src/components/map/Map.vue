@@ -29,18 +29,6 @@ onMounted(async () => {
       mapStore.map.invalidateSize();
     }
 
-
-    // Re-add existing markers from the store
-    if (markerStore.markers) {
-      markerStore.markers.forEach(marker => {
-        const type = marker.options.type;
-        if (!mapStore.layerGroup[type] || !(mapStore.layerGroup[type] instanceof L.LayerGroup)) {
-          mapStore.layerGroup[type] = L.layerGroup().addTo(mapStore.map);
-        }
-        mapStore.layerGroup[type].addLayer(marker);
-      });
-    }
-
     // Start position tracking
     positionTrackingStore.startTracking();
 
