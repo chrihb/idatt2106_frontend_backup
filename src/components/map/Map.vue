@@ -5,8 +5,6 @@ import { useMapStore } from '@/stores/mapStore.js';
 import {mockMarkersData} from "@/services/markerService.js";
 import { useMarkerStore} from "@/stores/markerStore.js";
 import {usePositionTrackingStore} from "@/stores/positionTrackingStore.js";
-import {addEmergencyZoneToMap} from "@/utils/markerUtils.js";
-import {emergencyZoneService} from "@/services/emergencyZoneService.js";
 import {useEmergencyZonesStore} from "@/stores/emergencyZonesStore.js";
 import L from 'leaflet';
 import {debounce} from 'lodash';
