@@ -29,6 +29,17 @@
     "admin-settings": "Admin Settings",
     "manage-admins": "Manage Admins"
   },
+  "manage-admins": {
+    "title": "Manage Admins",
+    "current-admins": "Current Admins",
+    "add-admin": "Add Admin",
+    "add" : "Add",
+    "add-admin-desc": "Add a new admin by entering their email address.",
+    "remove-admin": "Remove Admin",
+    "remove": "Remove",
+    "new-password": "New Password",
+    "email": "Email: "
+  },
     "footer": {
         "about-us": "About Us",
         "privacy-policy": "Privacy Policy"

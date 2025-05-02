@@ -29,6 +29,17 @@
     "admin-settings": "Administrator innstillinger",
     "manage-admins": "Administrer administratorer"
   },
+  "manage-admins": {
+    "title": "Administrer Administratorer",
+    "current-admins": "Nåværende administratorer",
+    "add-admin": "Legg til administrator",
+    "add" : "Legg til",
+    "add-admin-desc": "Legg til en ny administrator ved å oppgi e-postadressen deres.",
+    "remove-admin": "Fjern administrator",
+    "remove": "Fjern",
+    "new-password": "Nytt passord",
+    "email": "E-post: "
+  },
   "footer": {
     "about-us": "Om Oss",
     "privacy-policy": "Personvernserklæring"

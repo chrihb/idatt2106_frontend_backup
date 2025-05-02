@@ -18,7 +18,7 @@ import EmailVerification from "@/components/email/EmailVerification.vue";
 import PasswordResetNewPassword from "@/components/email/passwordReset/PasswordResetNewPassword.vue";
 import SimpleCenteredComponent from "@/views/SimpleCenteredComponent.vue";
 import {useUserStore} from "@/stores/userStore.js";
-import SuperAdminView from "@/views/SuperAdminView.vue";
+import ManageAdmins from "@/components/manageAdmins/ManageAdmins.vue";
 
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
@@ -30,7 +30,7 @@ const router = createRouter({
                 { path: "/news", component: NewsView },
                 { path: "/account", component: AccountView, meta: { requiresAuth: true } },
                 { path: "/admin-settings", component: AdminView, meta: { requiresAuth: true } },
-                { path: "/manage-admins", component: SuperAdminView, meta: { requiresAuth: true } },
+                { path: "/manage-admins", component: ManageAdmins, meta: { requiresAuth: true } },
                 { path: "/storage", component: EmergencyStorage, meta: { requiresAuth: true } },
                 { path: "/about-us", component: AboutUsView },
                 { path: "/privacy-policy", component: PrivacyPolicyView },
