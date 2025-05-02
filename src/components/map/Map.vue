@@ -6,6 +6,10 @@ import {mockMarkersData} from "@/services/markerService.js";
 import {usePositionTrackingStore} from "@/stores/positionTrackingStore.js";
 import {useEmergencyZonesStore} from "@/stores/emergencyZonesStore.js";
 import {debounce} from 'lodash';
+import {useMarkerStore} from "@/stores/markerStore.js";
+import {createCustomMarkerIcon, createMarkerPopup} from "@/utils/markerUtils.js";
+import {addEmergencyZoneToMap} from "@/utils/markerUtils.js";
+import L from 'leaflet';
 
 onMounted(async () => {
 
@@ -13,6 +17,7 @@ onMounted(async () => {
     const mapStore = useMapStore();
     const emergencyZonesStore = useEmergencyZonesStore();
     const positionTrackingStore = usePositionTrackingStore();
+    const markerStore = useMarkerStore();
 
     // Initialize the map
     if (!mapStore.map) {
@@ -25,7 +30,31 @@ onMounted(async () => {
       }
       mapStore.map.invalidateSize();
     }
+    /*
 
+    const emergencyZones = emergencyZonesStore.getEmergencyZones;
+    const markers = markerStore.getMarkers; // Assuming a getter exists for markers
+
+    // Add emergency zones to the map
+    if (emergencyZones && emergencyZones.length > 0) {
+      for (const zone of emergencyZones) {
+        mapStore.addMapItemId(zone.zoneId);
+        addEmergencyZoneToMap(zone);
+      }
+    }
+
+
+    // Add markers to the map
+    if (markers && markers.length > 0) {
+      for (const marker of markers) {
+        mapStore.addMapItemId(marker.id);
+        const markerIcon = createCustomMarkerIcon(marker.type);
+        L.marker([marker.lat, marker.lng], { icon: markerIcon })
+            .addTo(mapStore.map)
+            .bindPopup(createMarkerPopup(marker.type, marker.location, marker.address, marker.description));
+      }
+    }
+    */
     // Start position tracking
     positionTrackingStore.startTracking();
 
@@ -36,10 +65,10 @@ onMounted(async () => {
 
       try {
         //TODO: Add request to fetch markers from the backend
+
         const result = await mockMarkersData();
         await emergencyZonesStore.fetchEmergencyZonesArea(bounds, ids)
 
-        //const result = await requestMarkers(markersData);
         if (result.success) {
         } else {
           console.error('Error loading markers:', result.error);

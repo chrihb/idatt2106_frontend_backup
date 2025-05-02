@@ -135,12 +135,5 @@ export const emergencyZoneStore = defineStore('emergencyZone', {
             this.coordinates = [];
         },
     },
-    persist: {
-        enabled: true,
-        strategies: [
-            {
-                storage: window.localStorage,
-            },
-        ],
-    },
+
 })

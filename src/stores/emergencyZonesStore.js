@@ -8,12 +8,6 @@ export const useEmergencyZonesStore = defineStore('emergencyZonesStore', {
             emergencyZones: [],
             error: null,
         }),
-    getters: {
-        getEmergencyZones: (state) => state.emergencyZones,
-        getEmergencyZoneById: (state) => (id) => {
-            return state.emergencyZones.find(zone => zone.zoneId === id);
-        }
-    },
     actions: {
         async fetchAllEmergencyZones() {
             this.error = null;
@@ -87,6 +81,15 @@ export const useEmergencyZonesStore = defineStore('emergencyZonesStore', {
         clearEmergencyZones() {
             this.emergencyZones = [];
         },
+
+        getEmergencyZoneById(zoneId) {
+            return this.emergencyZones.find(zone => zone.zoneId === zoneId);
+        },
+
+        getEmergencyZones() {
+            return this.emergencyZones;
+        },
     },
+
 
 });

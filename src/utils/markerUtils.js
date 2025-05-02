@@ -16,7 +16,7 @@ export const createCustomMarkerIcon = (type) => {
     const iconUrl = `/icons/map/${type}.png`;
     return L.icon({
         iconUrl: iconUrl,
-        iconSize: [40, 40], // size of the icon
+        iconSize: [40, 40],
     });
 }
 
@@ -48,7 +48,6 @@ export const addEmergencyZoneToMap = (emergencyZone) => {
 
     mapStore.layerGroup[emergencyZone.type].addLayer(polygon);
 
-    emergencyZonesStore.addEmergencyZone(emergencyZone);
     mapStore.addMapItemId(emergencyZone.zoneId);
 }
 
