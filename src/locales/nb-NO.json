@@ -34,9 +34,17 @@
     "privacy-policy": "Personvernserklæring"
   },
   "storage-status": {
-    "title": "Lager Status",
+    "level": {
+        "status": "Lageret ditt dekker {effectiveDays} dager med mat og vann",
+        "unknown": "Lagerstatus er ukjent"
+      },
+    "title": "Beredskapsstatus",
     "desc": "Du har lagringsartikler som krever oppmerksomhet",
-    "ok": "Lageret ditt ser bra ut!"
+    "ok": "Lageret ditt ser bra ut!",
+    "food-label": "Mat",
+    "water-label": "Vann",
+    "days-food": "Du har {days} dager med mat",
+    "days-water": "Du har {days} dager med vann"
   },
   "storage":{
     "title": "Beredskapslager",
@@ -152,5 +160,44 @@
   "auth":{
     "login": "Logg Inn",
     "register": "Registrer"
+  },
+  "essential-items": {
+  "title": "Essensielle Artikler",
+  "sections": {
+    "food": "Mat og Vann",
+    "heat": "Varme og Lys",
+    "info": "Informasjon og Kommunikasjon",
+    "health": "Medisin og Hygiene"
+  },
+  "items": {
+    "grill": "Grill",
+    "kokeapparat": "Kokeapparat",
+    "stormkjøkken": "Stormkjøkken",
+    "gassbeholder": "Gassbeholder",
+    "brennstoff": "Brennstoff",
+    "varme klær": "Varme Klær",
+    "pledd": "Pledd",
+    "dyne": "Dyne",
+    "sovepose": "Sovepose",
+    "fyrstikker": "Fyrstikker",
+    "stearinlys": "Stearinlys",
+    "ved": "Ved",
+    "gassovn": "Gassovn",
+    "parafinovn": "Parafinovn",
+    "lommelykt": "Lommelykt",
+    "hodelykt": "Hodelykt",
+    "dab-radio": "DAB Radio",
+    "batterier": "Batterier",
+    "batteribank": "Batteribank",
+    "førstehjelp": "Førstehjelp",
+    "jodtabletter": "Jodtabletter",
+    "legemidler": "Legemidler",
+    "våtservietter": "Våtservietter",
+    "håndsprit": "Håndsprit",
+    "bleier": "Bleier",
+    "toalettpapir": "Toalettpapir",
+    "bind": "Bind",
+    "tamponger": "Tamponger"
   }
+}
 }

@@ -1,0 +1,82 @@
+<script setup>
+import { ref, onMounted, computed } from 'vue';
+import { getEssentialItems } from '@/services/essentialItemService';
+import { CheckCircleIcon, XCircleIcon } from '@heroicons/vue/24/solid';
+import { useI18n } from 'vue-i18n';
+
+const { t, locale } = useI18n();
+
+const householdId = 1; // TODO: gjør dynamisk senere
+const essentials = ref([]);
+
+const groupedItems = {
+  'mat-vann': [['grill', 'kokeapparat', 'stormkjøkken'], 'gassbeholder', 'brennstoff'],
+  'varme-lys': ['varme klær', 'pledd', 'dyne', 'sovepose', 'fyrstikker', 'stearinlys', 'ved', 'gassovn', 'parafinovn', 'lommelykt', 'hodelykt'],
+  'informasjon-kommunikasjon': ['dab-radio', 'batterier', 'batteribank'],
+  'medisin-hygiene': ['førstehjelp', 'jodtabletter', 'legemidler', 'våtservietter', 'håndsprit', 'bleier', 'toalettpapir', 'bind', 'tamponger']
+};
+
+const groupKeyToLocaleKey = {
+  'mat-vann': 'food',
+  'varme-lys': 'heat',
+  'informasjon-kommunikasjon': 'info',
+  'medisin-hygiene': 'health'
+};
+
+const translatedSectionTitles = computed(() => {
+  return Object.fromEntries(
+    Object.entries(groupKeyToLocaleKey).map(([key, value]) => [key, t(`essential-items.sections.${value}`)])
+  );
+});
+
+function getStatus(itemOrGroup) {
+  if (Array.isArray(itemOrGroup)) {
+    return itemOrGroup.some(name => {
+      const match = essentials.value.find(e => e.name.toLowerCase() === name);
+      return match?.present;
+    });
+  } else {
+    const match = essentials.value.find(e => e.name.toLowerCase() === itemOrGroup);
+    return match?.present || false;
+  }
+}
+
+onMounted(async () => {
+  try {
+    essentials.value = await getEssentialItems(householdId);
+  } catch (e) {
+    console.error("Kunne ikke hente essential items", e);
+  }
+});
+</script>
+
+<template>
+  <div class="bg-kf-white p-4 rounded-xl shadow-md w-full max-w-xl">
+    <h2 class="text-xl font-bold text-kf-blue mb-4">{{ t('essential-items.title') }}</h2>
+
+    <div v-for="(items, groupKey) in groupedItems" :key="groupKey" class="mb-4">
+      <h3 class="text-md font-semibold text-kf-blue mb-2">{{ translatedSectionTitles[groupKey] }}</h3>
+      <ul class="space-y-1">
+        <li v-for="item in items" :key="Array.isArray(item) ? item.join(',') : item" class="flex items-center gap-2">
+            <component
+                :is="getStatus(item) ? CheckCircleIcon : XCircleIcon"
+                :class="getStatus(item) ? 'text-kf-green' : 'text-kf-red'"
+                class="w-5 h-5"
+            />
+            <span class="text-sm">
+                <!-- Samlet tekst hvis array -->
+                <template v-if="Array.isArray(item)">
+                {{ item.map(i => t(`essential-items.items.${i}`)).join(', ') }}
+                </template>
+                <template v-else>
+                {{ t(`essential-items.items.${item}`) }}
+                </template>
+            </span>
+        </li>
+      </ul>
+    </div>
+  </div>
+</template>
+
+<style scoped>
+</style>
