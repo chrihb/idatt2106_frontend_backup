@@ -1,12 +1,22 @@
 import L from 'leaflet';
 import {useMapStore} from "@/stores/mapStore.js";
 import {useEmergencyZonesStore} from "@/stores/emergencyZonesStore.js";
+import {emergencyZoneService} from "@/services/emergencyZoneService.js";
 
 export const createMarkerPopup = (type, location,  address, description) =>
     `
                 <div class="popup">
                     <h2>${type}</h2>
                     <h3>${location}</h3>
+                    <p>${address}</p>
+                    <p>${description}</p>
+                </div>
+    `;
+
+export const createZonePopup = (name, address, description) =>
+    `
+                <div class="popup">
+                    <h2>${name}</h2>
                     <p>${address}</p>
                     <p>${description}</p>
                 </div>
@@ -21,6 +31,7 @@ export const createCustomMarkerIcon = (type) => {
 }
 
 export const addEmergencyZoneToMap = (emergencyZone) => {
+
     if (!emergencyZone || !emergencyZone.zoneId || !emergencyZone.coordinates || emergencyZone.coordinates.length < 3) {
         console.error('Invalid emergency zone data');
         return;
@@ -44,6 +55,22 @@ export const addEmergencyZoneToMap = (emergencyZone) => {
         fillOpacity: 0.4,
         id: emergencyZone.zoneId,
         type: emergencyZone.type,
+    });
+
+    polygon.on('click', async () => {
+        try {
+            const service = emergencyZoneService();
+            const zoneDetails = await service.getEmergencyZoneDetailsMock(emergencyZone.zoneId);
+
+            if (zoneDetails.success) {
+                const popupContent = createZonePopup(zoneDetails.name, zoneDetails.address, zoneDetails.description);
+                polygon.bindPopup(popupContent).openPopup();
+            } else {
+                console.error('Failed to fetch zone details');
+            }
+        } catch (error) {
+            console.error('Error fetching zone details:', error);
+        }
     });
 
     mapStore.layerGroup[emergencyZone.type].addLayer(polygon);
