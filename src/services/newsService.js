@@ -8,15 +8,15 @@ import axios from "axios";
 export const getNews = async () => {
     const newsStore = useNewsStore();
     try {
-        // TODO: the last slash will be removed in the backend
-        const response = await axios.get(`${window.backendURL}/api/news/`);
+        const response = await axios.get(`${window.backendURL}/api/news`);
         const newsData = response.data;
 
         if (Array.isArray(newsData)) {
             newsStore.clearNews(); // Clear existing news before adding new ones
-            for (let newsItem of newsData) {
+            // Flatten the nested array structure and add each news item
+            newsData.flat().forEach(newsItem => {
                 newsStore.addNews(newsItem);
-            }
+            });
             newsStore.noNewsFound = false; // Reset noNewsFound if news is found
         } else {
             console.error("Invalid news data format:", newsData);
@@ -31,6 +31,11 @@ export const getNews = async () => {
     }
 };
 
+/**
+ * Fetches news articles by district from the backend and updates the news store.
+ * @param {string} district - The district to filter news by.
+ * @returns {Promise<void>} news articles
+ */
 export const getNewsByDistrict = async (district) => {
     const newsStore = useNewsStore();
     try {
@@ -39,9 +44,10 @@ export const getNewsByDistrict = async (district) => {
 
         if (Array.isArray(newsData)) {
             newsStore.clearNews(); // Clear existing news before adding new ones
-            for (let newsItem of newsData) {
+            // Flatten the nested array structure and add each news item
+            newsData.flat().forEach(newsItem => {
                 newsStore.addNews(newsItem);
-            }
+            });
             newsStore.noNewsFound = false; // Reset noNewsFound if news is found
         } else {
             console.error("Invalid news data format:", newsData);
@@ -49,11 +55,29 @@ export const getNewsByDistrict = async (district) => {
     } catch (error) {
         if (error.response && error.response.status === 404) {
             newsStore.noNewsFound = true; // Set noNewsFound to true if no news is found
-        }
-        else {
-            console.error("Error fetching news:", error);
+        } else {
+            console.error("Error fetching news by district:", error);
         }
         newsStore.clearNews();
     }
-}
+};
+/**
+ * Fetches case details by caseId from the backend.
+ * @param {string} caseId - The ID of the case to fetch.
+ * @returns {Promise<Array>} case details
+ */
+export const getCaseDetails = async (caseId) => {
+    try {
+        const response = await axios.get(`${window.backendURL}/api/news/${caseId}`);
+        const caseDetails = response.data;
 
+        if (Array.isArray(caseDetails)) {
+            return caseDetails; // Return the array of case details
+        } else {
+            console.error("Invalid case details format:", caseDetails);
+        }
+    } catch (error) {
+        console.error(`Error fetching case details for caseId ${caseId}:`, error);
+        throw error;
+    }
+};
