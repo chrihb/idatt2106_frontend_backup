@@ -3,17 +3,14 @@ import {onMounted} from 'vue';
 import 'leaflet/dist/leaflet.css';
 import { useMapStore } from '@/stores/mapStore.js';
 import {mockMarkersData} from "@/services/markerService.js";
-import { useMarkerStore} from "@/stores/markerStore.js";
 import {usePositionTrackingStore} from "@/stores/positionTrackingStore.js";
 import {useEmergencyZonesStore} from "@/stores/emergencyZonesStore.js";
-import L from 'leaflet';
 import {debounce} from 'lodash';
 
 onMounted(async () => {
 
   try {
     const mapStore = useMapStore();
-    const markerStore = useMarkerStore();
     const emergencyZonesStore = useEmergencyZonesStore();
     const positionTrackingStore = usePositionTrackingStore();
 
