@@ -135,5 +135,4 @@ export const emergencyZoneStore = defineStore('emergencyZone', {
             this.coordinates = [];
         },
     },
-
 })

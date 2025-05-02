@@ -90,6 +90,4 @@ export const useEmergencyZonesStore = defineStore('emergencyZonesStore', {
             return this.emergencyZones;
         },
     },
-
-
 });

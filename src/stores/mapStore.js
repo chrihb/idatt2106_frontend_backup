@@ -60,7 +60,7 @@ export const useMapStore = defineStore('mapStore', {
         enabled: true,
         strategies: [
             {
-                storage: window.localStorage,
+                storage: window.sessionStorage,
             },
         ],
     }

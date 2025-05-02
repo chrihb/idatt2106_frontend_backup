@@ -30,7 +30,7 @@ onMounted(async () => {
       }
       mapStore.map.invalidateSize();
     }
-    /*
+
 
     const emergencyZones = emergencyZonesStore.getEmergencyZones;
     const markers = markerStore.getMarkers; // Assuming a getter exists for markers
@@ -54,7 +54,7 @@ onMounted(async () => {
             .bindPopup(createMarkerPopup(marker.type, marker.location, marker.address, marker.description));
       }
     }
-    */
+
     // Start position tracking
     positionTrackingStore.startTracking();
 
