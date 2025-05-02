@@ -33,8 +33,7 @@ export const emergencyZoneStore = defineStore('emergencyZone', {
                 const emergencyZoneData = await service.getEmergencyZoneDetailsById(zoneId);
 
                 if (emergencyZoneData.success) {
-                    this.setEmergencyZone(emergencyZoneData);
-                    this.setBasicEmergencyZone(emergencyZoneData)
+                    this.setRestOfEmergencyZone(emergencyZonedata);
                 }
 
             } catch (error) {
@@ -140,7 +139,7 @@ export const emergencyZoneStore = defineStore('emergencyZone', {
         enabled: true,
         strategies: [
             {
-                storage: localStorage,
+                storage: window.localStorage,
             },
         ],
     },

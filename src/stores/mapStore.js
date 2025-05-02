@@ -5,6 +5,7 @@ export const useMapStore = defineStore('mapStore', {
     state: () => ({
         map: null,
         layerGroup: {},
+        mapItemIds: [],
     }),
     getters: {
         getLayerGroup: (state) => state.layerGroup,
@@ -28,13 +29,38 @@ export const useMapStore = defineStore('mapStore', {
                     ' ' +
                     '&copy; <a href="https://www.flaticon.com/" title="Icons">Icons created by Freepik - Flaticon</a>'
             }).addTo(this.map);
-        }
+        },
+
+        getMapItemIds() {
+            return this.mapItemIds;
+        },
+
+        setMapItemIds(mapItemIds) {
+            this.mapItemIds = mapItemIds;
+        },
+
+        addMapItemId(mapItemId) {
+            if (!this.mapItemIds.includes(mapItemId)) {
+                this.mapItemIds.push(mapItemId);
+            } else {
+                console.error(`Map item ID ${mapItemId} already exists in the mapItemIds array.`);
+            }
+        },
+
+        removeMapItemId(mapItemId) {
+            const index = this.mapItemIds.indexOf(mapItemId);
+            if (index > -1) {
+                this.mapItemIds.splice(index, 1);
+            } else {
+                console.error(`Map item ID ${mapItemId} not found in the mapItemIds array.`);
+            }
+        },
     },
     persist: {
         enabled: true,
         strategies: [
-            {// Reattach the map to the container
-                storage: localStorage,
+            {
+                storage: window.localStorage,
             },
         ],
     }

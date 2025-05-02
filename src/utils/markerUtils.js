@@ -49,6 +49,7 @@ export const addEmergencyZoneToMap = (emergencyZone) => {
     mapStore.layerGroup[emergencyZone.type].addLayer(polygon);
 
     emergencyZonesStore.addEmergencyZone(emergencyZone);
+    mapStore.addMapItemId(emergencyZone.zoneId);
 }
 
 export const emergencyZoneStyle = (level) => {
