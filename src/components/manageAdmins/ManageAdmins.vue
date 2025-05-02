@@ -3,6 +3,8 @@ import { useI18n } from "vue-i18n";
 import { ref } from "vue";
 import CurrentAdmin from "@/components/manageAdmins/CurrentAdmin.vue";
 import { addAdministrator, deleteAdministrator, passwordResetLinkToAdministrator, getAllAdmins } from "@/services/superAdminService.js";
+import * as rules from "@vee-validate/rules";
+import { useField, useForm } from "vee-validate";
 
 const { t } = useI18n();
 
@@ -12,9 +14,15 @@ const admins = ref([
   { id: 2, email: "idnewoifn@ciowjnv.cewc" },
 ]);
 
+const { handleSubmit, isSubmitting } = useForm();
+const { value: addAdminEmail, errorMessage, validate } = useField("email", (value) => {
+  if (!value) return t("login.emailRequired");
+  if (!rules.email(value)) return t("login.emailError");
+  return true;
+});
+
 
 const addAdminModal = ref(false);
-const addAdminEmail = ref(""); // Bind this to the input field
 
 const showAddAdminModal = () => {
   addAdminModal.value = !addAdminModal.value;
@@ -29,20 +37,15 @@ const fetchAdmins = async () => {
   }
 };
 
-const addAdmin = () => {
-  if (addAdminEmail.value) {
+const addAdmin = handleSubmit(async (values) => {
+  try {
+    await addAdministrator(values.email);
     addAdminModal.value = false;
-    addAdministrator(addAdminEmail.value)
-      .then(() => {
-        addAdminEmail.value = "";
-      })
-      .catch((error) => {
-        console.error("Error adding admin:", error);
-      });
-  } else {
-    alert(t("manage-admins.add-admin-error"));
+    addAdminEmail.value = "";
+  } catch (error) {
+    console.error("Error adding admin:", error);
   }
-};
+});
 
 const removeAdmin = (adminId) => {
   if (confirm(t("manage-admins.remove-admin-confirm"))) {
@@ -76,32 +79,47 @@ const sendPasswordResetEmail = (adminId) => {
 
       <!-- Add New Admin -->
       <div>
-        <button id="add-admin" @click="showAddAdminModal"
-                class="bg-kf-blue text-kf-white border-kf-blue border-1 rounded-md p-2 cursor-pointer
-              hover:bg-kf-link-blue hover:shadow-md
-              active:bg-kf-blue active:scale-95
-              focus:outline-none focus:ring-1 focus:ring-kf-blue
-              transition">
+        <button
+            id="add-admin"
+            @click="showAddAdminModal"
+            class="bg-kf-blue text-kf-white border-kf-blue border-1 rounded-md p-2 cursor-pointer
+        hover:bg-kf-link-blue hover:shadow-md
+        active:bg-kf-blue active:scale-95
+        focus:outline-none focus:ring-1 focus:ring-kf-blue
+        transition"
+        >
           {{ t("manage-admins.add-admin") }}
         </button>
-        <!-- Add Admin Modal -->
+
         <div v-if="addAdminModal" class="p-4">
-          <div class="grid grid-cols-8 grid-rows-2 p-1 gap-4 justify-center items-center">
+          <form @submit="addAdmin" class="grid grid-cols-8 grid-rows-2 p-1 gap-4 justify-center items-center">
             <label class="flex flex-row row-start-1 col-start-3 col-span-4 items-center gap-2">
               {{ t("manage-admins.add-admin-desc") }}
             </label>
             <div class="flex flex-row row-start-2 col-start-3 col-span-3 items-center gap-2">
-              <input id="addAdminEmail" type="email" required v-model="addAdminEmail" class="border border-kf-blue rounded-md p-1 w-full"/>
+              <input
+                  id="addAdminEmail"
+                  type="email"
+                  v-model="addAdminEmail"
+                  @input="validate"
+                  class="border border-kf-blue rounded-md p-1 w-full"
+                  :class="{ 'border-red-500': errorMessage }"
+              />
+              <span v-if="errorMessage" class="text-red-500 text-sm">{{ errorMessage }}</span>
             </div>
-            <button @click="addAdmin"
-                    class="bg-kf-white-contrast-4 border-kf-blue border-1 rounded-md p-1 cursor-pointer
-              hover:bg-kf-link-blue hover:text-white hover:shadow-md
-              active:bg-kf-blue active:scale-95
-              focus:outline-none focus:ring-1 focus:ring-kf-blue
-              transition col-start-6 row-start-2">
+            <button
+                type="submit"
+                :disabled="isSubmitting || errorMessage"
+                class="bg-kf-white-contrast-4 border-kf-blue border-1 rounded-md p-1 cursor-pointer
+            hover:bg-kf-link-blue hover:text-white hover:shadow-md
+            active:bg-kf-blue active:scale-95
+            focus:outline-none focus:ring-1 focus:ring-kf-blue
+            transition col-start-6 row-start-2"
+                :class="{ 'opacity-50 cursor-not-allowed': isSubmitting || errorMessage }"
+            >
               {{ t("manage-admins.add") }}
             </button>
-          </div>
+          </form>
         </div>
       </div>
 
