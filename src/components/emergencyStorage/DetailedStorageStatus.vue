@@ -4,7 +4,6 @@ import { getPreparednessStatus } from '@/services/storageService';
 import { useI18n } from 'vue-i18n';
 
 const { t } = useI18n();
-const householdId = 1; // TODO: dynamisk senere
 
 const daysFood = ref(0);
 const daysWater = ref(0);
@@ -35,15 +34,20 @@ const waterWidth = computed(() => {
 
 onMounted(async () => {
   try {
-    const status = await getPreparednessStatus(householdId);
-    daysFood.value = status.daysOfFood;
-    daysWater.value = status.daysOfWater;
+    const statuses = await getPreparednessStatus(); // Dette er nå en liste
+    if (statuses.length > 0) {
+      const status = statuses[0]; // Vis første husholdning foreløpig
+      daysFood.value = status.daysOfFood;
+      daysWater.value = status.daysOfWater;
+    }
   } catch (error) {
+    console.error("Feil ved henting av status:", error);
     daysFood.value = 0;
     daysWater.value = 0;
   }
 });
 </script>
+
 
 <template>
   <div class="bg-kf-white p-4 rounded-xl shadow-md w-full max-w-xl">
