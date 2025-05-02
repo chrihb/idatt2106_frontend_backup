@@ -92,11 +92,11 @@ const sendPasswordResetEmail = (adminId) => {
         </button>
 
         <div v-if="addAdminModal" class="p-4">
-          <form @submit="addAdmin" class="grid grid-cols-8 grid-rows-2 p-1 gap-4 justify-center items-center">
+          <form @submit="addAdmin" class="grid grid-cols-8 grid-rows-3 p-1 gap-1 justify-center items-center">
             <label class="flex flex-row row-start-1 col-start-3 col-span-4 items-center gap-2">
               {{ t("manage-admins.add-admin-desc") }}
             </label>
-            <div class="flex flex-row row-start-2 col-start-3 col-span-3 items-center gap-2">
+            <div class="flex flex-col row-start-2 col-start-3 col-span-3 items-center gap-2">
               <input
                   id="addAdminEmail"
                   type="email"
@@ -105,8 +105,8 @@ const sendPasswordResetEmail = (adminId) => {
                   class="border border-kf-blue rounded-md p-1 w-full"
                   :class="{ 'border-red-500': errorMessage }"
               />
-              <span v-if="errorMessage" class="text-red-500 text-sm">{{ errorMessage }}</span>
             </div>
+            <span v-if="errorMessage" class="text-red-500 text-sm col-start-3 row-start-3 col-span-3">{{ errorMessage }}</span>
             <button
                 type="submit"
                 :disabled="isSubmitting || errorMessage"
@@ -114,7 +114,7 @@ const sendPasswordResetEmail = (adminId) => {
             hover:bg-kf-link-blue hover:text-white hover:shadow-md
             active:bg-kf-blue active:scale-95
             focus:outline-none focus:ring-1 focus:ring-kf-blue
-            transition col-start-6 row-start-2"
+            transition col-start-6 row-start-2 align-top"
                 :class="{ 'opacity-50 cursor-not-allowed': isSubmitting || errorMessage }"
             >
               {{ t("manage-admins.add") }}
