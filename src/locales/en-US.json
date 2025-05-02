@@ -127,7 +127,12 @@
     "privacyPolicyText": "I accept the ",
     "privacyPolicyRequired": "You must accept the privacy policy.",
     "hasAccount": "Already have an account?",
-    "loginHere": "Login here"
+    "loginHere": "Login here",
+    "admin": {
+      "username": "Username",
+      "usernameRequired": "Username is required",
+      "register-admin": "Register Admin"
+    }
   },
   "register-service": {
     "emailInUse": "Email is already in use.",

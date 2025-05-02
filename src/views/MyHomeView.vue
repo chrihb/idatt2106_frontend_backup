@@ -20,6 +20,8 @@ const homeStore = useHomeStore();
         <Nearest class="" :title="t('my-home.shelter')" :nearest="homeStore.nearest.shelter" ></Nearest>
         <Nearest class="" :title="t('my-home.defib')" :nearest="homeStore.nearest.defib" ></Nearest>
         <Nearest class="" :title="t('my-home.hospital')" :nearest="homeStore.nearest.hospital" ></Nearest>
+        <!--Legevakt-->
+        <!--Møteplass-->
         <ManageStorage class=""></ManageStorage>
       </div>
       <div class="flex flex-col gap-2">

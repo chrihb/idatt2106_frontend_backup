@@ -5,7 +5,10 @@ import * as rules from '@vee-validate/rules';
 import FormField from '@/components/input/FormField.vue';
 import {useI18n} from "vue-i18n";
 import {requestPasswordReset} from "@/services/emailService.js";
+import {ArrowLeftIcon} from "@heroicons/vue/24/solid/index.js";
+import {useRouter} from "vue-router";
 
+const router = useRouter();
 const { t } = useI18n();
 
 const {validate, values: form, resetForm} = useForm({
@@ -52,10 +55,15 @@ const handleSubmit = async () => {
 
 <template>
   <div class="min-h-screen flex items-center justify-center bg-gray-100">
-    <div class="bg-white p-8 rounded-lg shadow-lg w-full max-w-sm">
+    <div class="bg-white p-8 relative rounded-lg shadow-lg w-full max-w-sm">
+
+      <div class="absolute top-2 left-2">
+        <ArrowLeftIcon @click="router.push('/login')" class="cursor-pointer row-1 col-1 size-8 rounded-full hover:bg-kf-grey"/>
+      </div>
+
       <!-- Logo -->
       <div class="flex justify-center mb-4">
-        <img src="../../../assets/logo.png" alt="Logo" class="w-16 h-16" />
+        <img src="@/assets/logo.png" alt="Logo" class="w-16 h-16" />
       </div>
 
       <!-- Title -->
