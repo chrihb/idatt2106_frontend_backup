@@ -70,7 +70,11 @@
       "hospital": "Hospital",
       "distance": "Distance",
       "coordinates": "Coordinates",
-      "manage-storage": "Manage Storage"
+      "manage-storage": "Manage Storage",
+      "join": "Join",
+      "create": "Create",
+      "or": "or",
+      "create-desc": "a household to manage your storage and household members"
     },
   "login": {
     "title": "Login",

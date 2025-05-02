@@ -17,6 +17,7 @@ import PasswordResetNewPassword from "@/components/email/passwordReset/PasswordR
 import SimpleCenteredComponent from "@/views/SimpleCenteredComponent.vue";
 import {useUserStore} from "@/stores/userStore.js";
 import AdminRegister from "@/components/AdminRegister.vue";
+import JoinCreateHousehold from "@/components/JoinCreateHousehold.vue";
 
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
@@ -27,11 +28,12 @@ const router = createRouter({
                 { path: "", component: HomeView },
                 { path: "/news", component: NewsView },
                 { path: "/account", component: AccountView, meta: { requiresAuth: true } },
-                { path: "/storage", component: EmergencyStorage, meta: { requiresAuth: true } },
+                { path: "/storage", component: EmergencyStorage, meta: { requiresAuth: true, requiresHousehold: true } },
                 { path: "/about-us", component: AboutUsView },
                 { path: "/privacy-policy", component: PrivacyPolicyView },
                 { path: "/map", component: MapView },
-                { path: "/my-home", component: MyHomeView, meta: { requiresAuth: true } },
+                { path: "/my-home", component: MyHomeView, meta: { requiresAuth: true, requiresHousehold: true } },
+                { path: "/join-create", component: JoinCreateHousehold, meta: { requiresAuth: true } },
 
             ],
         },
@@ -40,7 +42,7 @@ const router = createRouter({
             children: [
                 { path: "/login", name: "Login", component: Login,},
                 { path: "/register-account", name: "Register",component: Register },
-                { path: "/register-admin", name: "Register Admin",component: AdminRegister },
+                { path: "/register-admin", name: "Register Admin",component: AdminRegister, meta: { requiresAuth: true } },
             ],
         },
         {
@@ -70,6 +72,7 @@ router.beforeEach(async (to, from, next) => {
         }
     }
     console.log("Route ok, proceeding...");
+
     next();
 });
 

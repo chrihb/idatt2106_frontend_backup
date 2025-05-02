@@ -70,7 +70,11 @@
     "hospital": "Sykehus",
     "distance": "Distanse",
     "coordinates": "Koordinater",
-    "manage-storage": "Administrer lager"
+    "manage-storage": "Administrer lager",
+    "join": "Bli Med",
+    "create": "Opprett Ny",
+    "or": "eller",
+    "create-desc": "en husstand for å administrere lageret ditt og andre medlemmer"
   },
   "login": {
     "title": "Logg Inn",
