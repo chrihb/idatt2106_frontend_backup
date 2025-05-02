@@ -14,8 +14,9 @@ onMounted(async () => {
 
   try {
     // Initialize the map
+    console.log("Initializing map...");
     mapStore.initMap();
-
+    console.log("Map initialized.");
     // Re-add existing markers from the store
     if (markerStore.markers) {
       markerStore.markers.forEach(marker => {
@@ -25,10 +26,13 @@ onMounted(async () => {
         }
         mapStore.layerGroup[type].addLayer(marker);
       });
+      console.log("Markers added to map from store.");
     }
 
     // Start position tracking
+    console.log("Starting tracking...");
     positionTrackingStore.startTracking();
+    console.log("Tracking started");
 
     // Add event listenr for map movement
     mapStore.map.on('moveend', async () => {
