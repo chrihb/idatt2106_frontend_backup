@@ -3,6 +3,8 @@ import {onMounted, ref} from 'vue';
 import StorageItemMinimized from "@/components/emergencyStorage/StorageItemMinimized.vue";
 import StorageItemMaximized from "@/components/emergencyStorage/StorageItemMaximized.vue";
 import UpdateStorageComponent from "@/components/emergencyStorage/UpdateStorageComponent.vue";
+import DetailedStorageStatus from "@/components/emergencyStorage/DetailedStorageStatus.vue";
+import EssentialItemChecklist from "@/components/emergencyStorage/EssentialItemChecklist.vue";
 import {useCategoriesStore} from '@/stores/categoriesStore.js';
 import {useUnitsStore} from '@/stores/unitsStore.js';
 import {useEmergencyItemsStore} from '@/stores/emergencyItemsStore.js';
@@ -132,6 +134,15 @@ onMounted(async () => {
 
 <template>
   <div class="container mx-auto px-4 py-4 sm:py-8">
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <!-- Venstre kolonne -->
+      <div class="lg:col-span-1 flex flex-col gap-4">
+        <DetailedStorageStatus />
+        <EssentialItemChecklist />
+      </div>
+
+      <!-- Høyre kolonne -->
+    <div class="lg:col-span-2">
     <div
         class="mb-4 flex flex-col sm:flex-row items-start sm:items-center sm:justify-between gap-2 sm:gap-0">
       <div v-if="expired" class="flex flex-row gap-2 w-1/3">
@@ -182,5 +193,7 @@ onMounted(async () => {
         :itemId="updateModalData.itemId"
         @close="closeUpdateModal"
         @itemSaved="handleItemUpdated"/>
+      </div>
+    </div>
   </div>
 </template>
