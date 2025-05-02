@@ -84,9 +84,9 @@ export const routedSettings = ref([
     },
     {
         id: 7,
-        description: "account-settings.invite-admins",
-        icon: "addUser",
-        route: "/invite-admins",
+        description: "account-settings.manage-admins",
+        icon: "group",
+        route: "/manage-admins",
         adminNeeded: false,
         superAdminNeeded: true,
     }
