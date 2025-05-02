@@ -67,7 +67,13 @@
     "more-info": "Trykk for mer info"
   },
   "news": {
-    "title": "Nyheter"
+    "title": "Nyheter",
+    "allDistricts": "Alle Distrikter",
+    "selectDistrict": "Velg Distrikt",
+    "noNews": "Ingen nyheter tilgjengelig",
+    "noDetails": "Ingen detaljer tilgjengelig",
+    "date": "Dato",
+    "district" : "Distrikt"
   },
   "my-home": {
     "title": "Mitt Hjem",
