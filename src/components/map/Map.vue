@@ -32,18 +32,12 @@ onMounted(async () => {
     // Add event listener for map movement
     mapStore.map.on('moveend', debounce( async () => {
       const bounds = mapStore.map.getBounds();
+      const ids = mapStore.getMapItemIds();
 
       try {
         //TODO: Add request to fetch markers from the backend
         const result = await mockMarkersData();
-
-
-        // Get emergency zones based on the current map bounds
-
-        // Get the zones in the cache
-
-        // Get the zones from the service
-        await emergencyZonesStore.fetchEmergencyZonesArea(bounds, 1)
+        await emergencyZonesStore.fetchEmergencyZonesArea(bounds, ids)
 
         //const result = await requestMarkers(markersData);
         if (result.success) {
