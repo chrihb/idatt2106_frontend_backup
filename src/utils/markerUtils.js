@@ -13,10 +13,12 @@ export const createMarkerPopup = (type, location,  address, description) =>
                 </div>
     `;
 
-export const createZonePopup = (name, address, description) =>
+export const createZonePopup = (name, type, level, address, description) =>
     `
                 <div class="popup">
                     <h2>${name}</h2>
+                    <p>${type}</p>
+                    <p>Nivå: ${level}</p>
                     <p>${address}</p>
                     <p>${description}</p>
                 </div>
@@ -64,7 +66,7 @@ export const addEmergencyZoneToMap = (emergencyZone) => {
             const zoneDetails = await service.getEmergencyZoneDetailsMock(emergencyZone.zoneId);
 
             if (zoneDetails.success) {
-                const popupContent = createZonePopup(zoneDetails.name, zoneDetails.address, zoneDetails.description);
+                const popupContent = createZonePopup(zoneDetails.name, emergencyZone.type, emergencyZone.level, zoneDetails.address, zoneDetails.description);
                 polygon.bindPopup(popupContent).openPopup();
             } else {
                 console.error('Failed to fetch zone details');
