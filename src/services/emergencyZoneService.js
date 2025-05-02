@@ -4,7 +4,7 @@ export const emergencyZoneService = () => {
     const baseUrl = `${window.backendURL}/api/emergency/zones`;
 
     async function getEmergencyZonesMock(mapAreaData, zoneIds) {
-        let zones = [];
+        let zones;
         const zonesInDatabase = [
             {
                 zoneId: 10,
