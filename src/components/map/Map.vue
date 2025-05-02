@@ -20,7 +20,17 @@ onMounted(async () => {
     const positionTrackingStore = usePositionTrackingStore();
 
     // Initialize the map
-    mapStore.initMap();
+    if (!mapStore.map) {
+      mapStore.initMap();
+    } else {
+      // Reattach the map to the container
+      const container = mapStore.map.getContainer();
+      if (!document.getElementById('map').contains(container)) {
+        document.getElementById('map').appendChild(container);
+      }
+      mapStore.map.invalidateSize();
+    }
+
 
     // Re-add existing markers from the store
     if (markerStore.markers) {
@@ -67,35 +77,6 @@ onMounted(async () => {
   }
 });
 
-onUnmounted(() => {
-  /*
-}
-  const mapStore = useMapStore();
-  const positionTrackingStore = usePositionTrackingStore();
-  // Remove event listener for map movement
-  if (mapStore.map) {
-    mapStore.map.off('moveend');
-
-
-  // Stop position tracking
-  positionTrackingStore.stopTracking();
-
-  // Remove all markers from the map
-  if (mapStore.layerGroup) {
-    Object.keys(mapStore.layerGroup).forEach(type => {
-      if (mapStore.layerGroup[type] instanceof L.LayerGroup) {
-        mapStore.layerGroup[type].clearLayers();
-        mapStore.map.removeLayer(mapStore.layerGroup[type]);
-        delete mapStore.layerGroup[type];
-      }
-    });
-  }
-  */
-
-
-
-  //
-})
 </script>
 
 <template>

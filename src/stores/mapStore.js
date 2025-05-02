@@ -13,6 +13,11 @@ export const useMapStore = defineStore('mapStore', {
     actions: {
         // Initialize the map
         initMap() {
+            // Check if the map is already initialized
+            if (this.map) {
+                console.error("Map is already initialized");
+                return
+            }
             // set its view to a specific location
             this.map = L.map('map').setView([63.422464, 10.410394], 15);
 
@@ -28,7 +33,7 @@ export const useMapStore = defineStore('mapStore', {
     persist: {
         enabled: true,
         strategies: [
-            {
+            {// Reattach the map to the container
                 storage: localStorage,
             },
         ],
