@@ -84,6 +84,20 @@ export const addEmergencyZoneToMap = (emergencyZone) => {
     mapStore.addMapItemId(emergencyZone.zoneId);
 }
 
+export const removeEmergencyZoneFromMap = (zoneId) => {
+    const mapStore = useMapStore();
+
+    for (const type in mapStore.layerGroup) {
+        const layerGroup = mapStore.layerGroup[type];
+
+        const layer = layerGroup.getLayers().find(layer => layer.options.id === zoneId);
+        if (layer) {
+            layerGroup.removeLayer(layer);
+            return;
+        }
+    }
+}
+
 export const emergencyZoneStyle = (level) => {
     let style;
     switch (level) {
