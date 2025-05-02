@@ -10,12 +10,11 @@ export const useEmergencyItemStore = defineStore("emergencyItem", {
     categoryId: 0,
     unitId: 0,
     expirationDate: null,
+    householdIds: [1],
   }),
 
   actions: {
     async fetchItemById(id) {
-      this.error = null;
-
       try {
         const service = emergencyItemService();
         const item = await service.getEmergencyItemById(id);
@@ -35,6 +34,7 @@ export const useEmergencyItemStore = defineStore("emergencyItem", {
       this.unitId = item.unitId;
       this.expirationDate = item.expirationDate ? new Date(item.expirationDate)
           : null;
+      this.householdIds = [1];
     },
 
     resetState() {
@@ -44,12 +44,10 @@ export const useEmergencyItemStore = defineStore("emergencyItem", {
       this.categoryId = 0;
       this.unitId = 0;
       this.expirationDate = null;
-      this.error = null;
+      this.householdIds = [1];
     },
 
     async saveItem() {
-      this.error = null;
-
       try {
         const service = emergencyItemService();
 
@@ -66,7 +64,8 @@ export const useEmergencyItemStore = defineStore("emergencyItem", {
           amount: this.amount,
           categoryId: this.categoryId,
           unitId: this.unitId,
-          expirationDate: expirationDateStr
+          expirationDate: expirationDateStr,
+          householdIds: [1]
         };
 
         let result;
@@ -89,8 +88,6 @@ export const useEmergencyItemStore = defineStore("emergencyItem", {
         console.warn('Cannot delete: No item ID provided');
         return;
       }
-
-      this.error = null;
 
       try {
         const service = emergencyItemService();
