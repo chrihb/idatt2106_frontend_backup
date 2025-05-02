@@ -68,7 +68,7 @@ export const getNewsByDistrict = async (district) => {
  */
 export const getCaseDetails = async (caseId) => {
     try {
-        const response = await axios.get(`${window.backendURL}/api/news/${caseId}`);
+        const response = await axios.get(`${window.backendURL}/api/news/case/${caseId}`);
         const caseDetails = response.data;
 
         if (Array.isArray(caseDetails)) {
