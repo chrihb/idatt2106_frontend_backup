@@ -98,6 +98,11 @@ export const removeEmergencyZoneFromMap = (zoneId) => {
     }
 }
 
+export const updateEmergencyZoneOnMap = (emergencyZone) => {
+    removeEmergencyZoneFromMap(emergencyZone.zoneId);
+    addEmergencyZoneToMap(emergencyZone);
+}
+
 export const emergencyZoneStyle = (level) => {
     let style;
     switch (level) {
