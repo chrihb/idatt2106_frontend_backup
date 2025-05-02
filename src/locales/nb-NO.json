@@ -59,7 +59,9 @@
     "more-info": "Trykk for mer info"
   },
   "news": {
-    "title": "Nyheter"
+    "title": "Nyheter",
+    "allDistricts": "Alle Distrikter",
+    "selectDistrict": "Velg Distrikt"
   },
   "my-home": {
     "title": "Mitt Hjem",

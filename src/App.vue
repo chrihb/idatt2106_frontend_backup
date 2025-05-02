@@ -2,9 +2,9 @@
 import { RouterView } from 'vue-router'
 import {onMounted, watch} from 'vue'
 import { useI18n } from 'vue-i18n'
-import { mockNewsData } from "@/services/newsService.js";
 import { mockHomeData } from "@/services/homeService.js";
 import { useUserStore } from "@/stores/userStore.js";
+import {getNews} from "@/services/newsService.js";
 
 const userStore = useUserStore()
 const { locale } = useI18n()
@@ -13,8 +13,8 @@ watch(locale, (newLang) => {
 }, { immediate: true })
 
 onMounted (async () => {
+  await getNews()
   // Mocking data
-  mockNewsData()
   mockHomeData()
   await userStore.isAuthenticated();
 })

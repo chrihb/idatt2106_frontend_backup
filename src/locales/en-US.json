@@ -59,7 +59,9 @@
       "more-info": "Click for More Info"
     },
     "news": {
-        "title": "News"
+        "title": "News",
+        "allDistricts": "All Districts",
+        "selectDistrict": "Select District"
     },
     "my-home": {
       "title": "My Home",
