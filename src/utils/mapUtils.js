@@ -86,6 +86,22 @@ export const addMarker = (marker) => {
     mapStore.addMapItemId(marker.markerId);
 }
 
+// Remove a marker from the map
+export const removeMarker = (markerId) => {
+    const mapStore = useMapStore();
+
+    for (const type in mapStore.layerGroup) {
+        const layerGroup = mapStore.layerGroup[type];
+
+        const layer = layerGroup.getLayers().find(layer => layer.options.id === markerId);
+        if (layer) {
+            layerGroup.removeLayer(layer);
+            mapStore.removeMapItemId(markerId);
+            return;
+        }
+    }
+}
+
 export const addEmergencyZoneToMap = (emergencyZone) => {
 
     if (!emergencyZone || !emergencyZone.zoneId || !emergencyZone.coordinates || emergencyZone.coordinates.length < 3) {
@@ -146,6 +162,7 @@ export const removeEmergencyZoneFromMap = (zoneId) => {
         const layer = layerGroup.getLayers().find(layer => layer.options.id === zoneId);
         if (layer) {
             layerGroup.removeLayer(layer);
+            mapStore.removeMapItemId(zoneId);
             return;
         }
     }

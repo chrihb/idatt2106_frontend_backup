@@ -26,25 +26,7 @@ export const useMarkerStore = defineStore('markerStore', {
     actions: {
 
 
-        // Remove a marker from the map
-        removeMarker(id) {
-            const mapStore = useMapStore();
-            const markerIndex = this.markers.find(m => m.options.id === id);
-            if (!markerIndex !== -1) {
-                const marker = this.markers[markerIndex];
-                // Remove the marker from the layerGroup
-                for (const type in mapStore.layerGroup) {
-                    if (mapStore.layerGroup[type].hasLayer(marker)) {
-                        mapStore.layerGroup[type].removeLayer(marker);
-                        break;
-                    }
-                }
-                // Remove the marker from the markers array
-                this.markers.splice(markerIndex, 1);
-            } else {
-                console.error(`Marker with ${id} not found.`);
-            }
-        },
+
     },
     persist: {
         enabled: true,
