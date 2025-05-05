@@ -7,7 +7,6 @@ import {useEmergencyZonesStore} from "@/stores/emergencyZonesStore.js";
 import {debounce} from 'lodash';
 import {useMarkersStore} from "@/stores/markersStore.js";
 import {addMarkerToMap, centerMapOnMarker} from "@/utils/mapUtils.js";
-import {useMarkerStore} from "@/stores/markerStore.js";
 import {centerMapOnEmergencyZone} from "@/utils/mapUtils.js";
 import {addEmergencyZoneToMap} from "@/utils/mapUtils.js";
 
