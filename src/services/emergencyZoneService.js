@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 export const emergencyZoneService = () => {
-    const baseUrl = `${window.backendURL}/api/emergency/zones`;
+    const baseURL = `${window.backendURL}/api/map/zones`;
 
     async function getEmergencyZonesMock(mapAreaData, zoneIds) {
         let zones;
@@ -79,7 +79,7 @@ export const emergencyZoneService = () => {
 
 
     async function getAllEmergencyZones() {
-        const response = await axios.get(baseUrl, {
+        const response = await axios.get(baseURL, {
             headers: {
                 'Content-Type': 'application/json',
             },
@@ -88,7 +88,7 @@ export const emergencyZoneService = () => {
     }
 
     async function getEmergencyZonesByArea(mapAreaData, zoneIds) {
-        const response = await axios.post(`${baseUrl}/area`, {
+        const response = await axios.post(`${baseURL}/area`, {
             mapAreaData,
             zoneIds,
         }, {
@@ -100,7 +100,7 @@ export const emergencyZoneService = () => {
     }
 
     async function getEmergencyZoneDetailsById(zoneId) {
-        const response = await axios.post(`${baseUrl}/details`, {
+        const response = await axios.post(`${baseURL}/details`, {
             zoneId,
         }, {
             headers: {
@@ -111,7 +111,7 @@ export const emergencyZoneService = () => {
     }
 
     async function getEmergencyZoneById(zoneId) {
-        const response = await axios.get(`${baseUrl}/${zoneId}`, {
+        const response = await axios.get(`${baseURL}/${zoneId}`, {
             headers: {
                 'Content-Type': 'application/json',
             },
@@ -120,16 +120,20 @@ export const emergencyZoneService = () => {
     }
 
     async function createEmergencyZone(zone) {
-        const response = await axios.post(baseUrl, zone, {
-            headers: {
-                'Content-Type': 'application/json',
-            },
+        const response = await axios.post(`${baseURL}/create`,
+            zone,
+            {
+                headers: {
+                    'Content-Type': 'application/json',
+                },
         });
         return response.data;
     }
 
-    async function updateEmergencyZone(zone) {
-        const response = await axios.put(`${baseUrl}/${zone.zoneId}`, zone, {
+    async function updateEmergencyZone(zoneData) {
+        const response = await axios.put(`${baseURL}/update`, {
+            zoneData,
+        },  {
             headers: {
                 'Content-Type': 'application/json',
             },
@@ -138,7 +142,7 @@ export const emergencyZoneService = () => {
     }
 
     async function deleteEmergencyZone(zoneId) {
-        const response = await axios.delete(`${baseUrl}/${zoneId}`, {
+        const response = await axios.delete(`${baseUrl}/delete/${zoneId}`, {
             headers: {
                 'Content-Type': 'application/json',
             },

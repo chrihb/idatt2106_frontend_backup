@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia';
 import {emergencyZoneService} from "@/services/emergencyZoneService.js";
-import {addEmergencyZoneToMap} from "@/utils/markerUtils.js";
+import {addEmergencyZoneToMap} from "@/utils/mapUtils.js";
 
 export const useEmergencyZonesStore = defineStore('emergencyZonesStore', {
     state:
