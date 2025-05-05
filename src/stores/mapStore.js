@@ -31,6 +31,16 @@ export const useMapStore = defineStore('mapStore', {
             }).addTo(this.map);
         },
 
+        toggleLayerGroup(type) {
+            if (this.layerGroup[type] && this.layerGroup[type] instanceof L.LayerGroup) {
+                if (this.map.hasLayer(this.layerGroup[type])) {
+                    this.map.removeLayer(this.layerGroup[type]);
+                } else {
+                    this.map.addLayer(this.layerGroup[type]);
+                }
+            }
+        },
+
         getMapItemIds() {
             return this.mapItemIds;
         },

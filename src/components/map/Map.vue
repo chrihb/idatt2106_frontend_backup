@@ -1,5 +1,5 @@
 <script setup>
-import {onMounted} from 'vue';
+import {onMounted, nextTick} from 'vue';
 import 'leaflet/dist/leaflet.css';
 import { useMapStore } from '@/stores/mapStore.js';
 import {mockMarkersData} from "@/services/markerService.js";
@@ -18,6 +18,8 @@ onMounted(async () => {
     const emergencyZonesStore = useEmergencyZonesStore();
     const positionTrackingStore = usePositionTrackingStore();
     const markerStore = useMarkerStore();
+
+    await nextTick();
 
     // Initialize the map
     if (!mapStore.map) {
