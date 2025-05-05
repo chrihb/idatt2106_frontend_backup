@@ -125,7 +125,10 @@ const closeUpdateModal = () => {
 
 const handleItemUpdated = async () => {
   await fetchCategories();
+  await checklistRef.value?.refreshEssentials();
 };
+const checklistRef = ref(null);
+
 
 onMounted(async () => {
   await fetchCategories();
@@ -138,7 +141,7 @@ onMounted(async () => {
       <!-- Venstre kolonne -->
       <div class="lg:col-span-1 flex flex-col gap-4">
         <DetailedStorageStatus />
-        <EssentialItemChecklist />
+        <EssentialItemChecklist ref="checklistRef"/>
       </div>
 
       <!-- Høyre kolonne -->

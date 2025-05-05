@@ -13,6 +13,7 @@ export const getEssentialItems = async () => {
       Authorization: `Bearer ${userStore.token}`,
     },
   });
+  console.log('Essential items response:', response.data);
 
   return response.data;
 };
