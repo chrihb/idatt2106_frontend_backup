@@ -24,35 +24,7 @@ export const useMarkerStore = defineStore('markerStore', {
         }
     },
     actions: {
-        // Add a marker to the map
-        addMarker(markerData) {
-            const mapStore = useMapStore();
-            if (this.getMarkerById(markerData.id)) {
-                return;
-            }
-            // Create a custom icon for the marker
-            const mapIcon = createCustomMarkerIcon(markerData.type)
 
-            // Create a marker with the given data
-            const marker = L.marker(
-                [markerData.lat, markerData.lng],
-                {id: markerData.id, icon: mapIcon})
-                .bindPopup(createMarkerPopup(
-                    markerData.type,
-                    markerData.location,
-                    markerData.address,
-                    markerData.description
-                ));
-
-            // Check if the layerGroup for the type exists, if not create it
-            if (!mapStore.layerGroup[markerData.type] || !(mapStore.layerGroup[markerData.type] instanceof L.LayerGroup)) {
-                mapStore.layerGroup[markerData.type] = L.layerGroup().addTo(mapStore.map);
-            }
-            // Add the marker to the appropriate layerGroup
-            mapStore.layerGroup[markerData.type].addLayer(marker);
-            //Add the marker to markers array
-            this.markers.push(marker);
-        },
 
         // Remove a marker from the map
         removeMarker(id) {
