@@ -35,7 +35,7 @@ export const createCustomMarkerIcon = (type) => {
 }
 
 // Add a marker to the map
-export const addMarker = (marker) => {
+export const addMarkerToMap = (marker) => {
 
     if (!marker || !marker.markerId) {
         console.error('Invalid marker data');
@@ -87,7 +87,7 @@ export const addMarker = (marker) => {
 }
 
 // Remove a marker from the map
-export const removeMarker = (markerId) => {
+export const removeMarkerFromMap = (markerId) => {
     const mapStore = useMapStore();
 
     for (const type in mapStore.layerGroup) {
@@ -102,7 +102,7 @@ export const removeMarker = (markerId) => {
     }
 }
 
-export const updateMarker = (marker) => {
+export const updateMarkerOnMap = (marker) => {
     removeMarker(marker.markerId);
     addMarker(marker);
 }
