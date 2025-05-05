@@ -64,7 +64,8 @@
       "item-name": "Item Name",
       "item-amount": "Item Amount",
       "item-expiration": "Expiry",
-      "more-info": "Click for More Info"
+      "more-info": "Click for More Info",
+      "household-list-title": "Your households"
     },
     "news": {
       "title": "News",

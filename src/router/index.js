@@ -17,6 +17,7 @@ import PasswordResetNewPassword from "@/components/email/passwordReset/PasswordR
 import SimpleCenteredComponent from "@/views/SimpleCenteredComponent.vue";
 import {useUserStore} from "@/stores/userStore.js";
 import AdminRegister from "@/components/AdminRegister.vue";
+import HouseholdListView from '@/views/HouseholdListView.vue';
 
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
@@ -27,7 +28,8 @@ const router = createRouter({
                 { path: "", component: HomeView },
                 { path: "/news", component: NewsView },
                 { path: "/account", component: AccountView, meta: { requiresAuth: true } },
-                { path: "/storage", component: EmergencyStorage, meta: { requiresAuth: true } },
+                { path: "/storage", component: HouseholdListView, meta: { requiresAuth: true } },
+                { path: "/storage/:id", component: EmergencyStorage, meta: { requiresAuth: true }, props: true },
                 { path: "/about-us", component: AboutUsView },
                 { path: "/privacy-policy", component: PrivacyPolicyView },
                 { path: "/map", component: MapView },
