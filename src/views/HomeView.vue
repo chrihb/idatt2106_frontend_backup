@@ -4,6 +4,7 @@ import MinimalMap from "@/components/map/MinimalMap.vue";
 import News from "@/components/frontpage/News.vue";
 import StorageStatus from "@/components/frontpage/StorageStatus.vue";
 import { useUserStore} from "@/stores/userStore.js";
+import CompleteMap from "@/components/map/CompleteMap.vue";
 
 const userStore = useUserStore();
 
@@ -16,7 +17,7 @@ const userStore = useUserStore();
     <StorageStatus v-if="userStore.authenticated"/>
     <HouseStatus v-if="userStore.authenticated"/>
     <News class="md:col-span-2 w-full"/>
-    <MinimalMap class="md:col-span-2 w-full h-full"/>
+    <CompleteMap class="md:col-span-2 w-full h-full"/>
   </div>
 </template>
 
