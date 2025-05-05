@@ -1,5 +1,4 @@
 <script setup>
-import MinimalMap from '@/components/map/MinimalMap.vue';
 import HouseStatus from "@/components/frontpage/HouseStatus.vue";
 import Address from "@/components/myHome/Address.vue";
 import Nearest from "@/components/myHome/Nearest.vue";

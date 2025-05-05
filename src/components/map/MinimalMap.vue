@@ -2,7 +2,6 @@
 
 import Map from "@/components/map/Map.vue";
 import CenterMapOnUserButton from "@/components/map/CenterMapOnUserButton.vue";
-import ToggleBar from "@/components/map/ToggleBar.vue";
 </script>
 
 <template>

@@ -1,6 +1,5 @@
 <script setup>
 import HouseStatus from "@/components/frontpage/HouseStatus.vue";
-import MinimalMap from "@/components/map/MinimalMap.vue";
 import News from "@/components/frontpage/News.vue";
 import StorageStatus from "@/components/frontpage/StorageStatus.vue";
 import { useUserStore} from "@/stores/userStore.js";
