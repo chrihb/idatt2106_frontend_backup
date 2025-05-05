@@ -1,4 +1,4 @@
-import {shallowMount} from "@vue/test-utils";
+import {flushPromises, shallowMount} from "@vue/test-utils";
 import {describe, it, expect, beforeEach, vi} from 'vitest';
 import Map from '@/components/map/Map.vue';
 import mockPinia from "../../mocks/MockPinia.js";
@@ -38,8 +38,9 @@ describe('Map.vue', () => {
       expect(wrapper.find('#map').exists()).toBe(true);
     });
 
-    it('calls initMap on mounted', () => {
+    it('calls initMap on mounted', async () => {
         shallowMount(Map);
+        await flushPromises();
         expect(mockMapStore.initMap).toHaveBeenCalled();
     });
 

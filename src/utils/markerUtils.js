@@ -128,3 +128,16 @@ export const emergencyZoneStyle = (level) => {
     }
     return style;
 }
+
+export const centerMapOnEmergencyZone = (zoneId) => {
+    const mapStore = useMapStore();
+    const emergencyZonesStore = useEmergencyZonesStore();
+    const emergencyZone = emergencyZonesStore.getEmergencyZoneById(zoneId);
+
+    if (emergencyZone) {
+        const bounds = L.latLngBounds(emergencyZone.coordinates);
+        mapStore.map.fitBounds(bounds);
+    } else {
+        console.error(`Emergency zone with ID ${zoneId} not found.`);
+    }
+}

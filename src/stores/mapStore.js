@@ -31,6 +31,16 @@ export const useMapStore = defineStore('mapStore', {
             }).addTo(this.map);
         },
 
+        toggleLayerGroup(type) {
+            if (this.layerGroup[type] && this.layerGroup[type] instanceof L.LayerGroup) {
+                if (this.map.hasLayer(this.layerGroup[type])) {
+                    this.map.removeLayer(this.layerGroup[type]);
+                } else {
+                    this.map.addLayer(this.layerGroup[type]);
+                }
+            }
+        },
+
         getMapItemIds() {
             return this.mapItemIds;
         },
@@ -53,6 +63,14 @@ export const useMapStore = defineStore('mapStore', {
                 this.mapItemIds.splice(index, 1);
             } else {
                 console.error(`Map item ID ${mapItemId} not found in the mapItemIds array.`);
+            }
+        },
+
+        centerMapOnSpecificLocation(lat, lng) {
+            if (this.map) {
+                this.map.setView([lat, lng], 15);
+            } else {
+                console.error("Map is not initialized");
             }
         },
     },
