@@ -3,8 +3,9 @@ import {useMapStore} from "@/stores/mapStore.js";
 import {useEmergencyZonesStore} from "@/stores/emergencyZonesStore.js";
 import {useEmergencyZoneStore} from "@/stores/emergencyZoneStore.js";
 import {emergencyZoneService} from "@/services/emergencyZoneService.js";
-import {useMarkerStore} from "@/stores/markersStore.js";
+import {useMarkersStore} from "@/stores/markersStore.js";
 import {markerService} from "@/services/markerService.js";
+import {useMarkerStore} from "@/stores/markerStore.js";
 
 export const createMarkerPopup = (type, address, description) =>
     `
@@ -37,7 +38,7 @@ export const createCustomMarkerIcon = (type) => {
 // Add a marker to the map
 export const addMarkerToMap = (marker) => {
 
-    if (!marker || !marker.markerId) {
+    if (!marker || !marker.markerId || !marker.lat || !marker.lng || !marker.type) {
         console.error('Invalid marker data');
         return;
     }
@@ -53,12 +54,14 @@ export const addMarkerToMap = (marker) => {
     const mapIcon = createCustomMarkerIcon(marker.type)
 
     // Create a marker with the given data
-    const mapMarker = L.marker(
-        [marker.lat, marker.lng],
-        {id: marker.id, icon: mapIcon});
+    const mapMarker = L.marker([marker.lat, marker.lng],
+        {
+            id: marker.markerId,
+            icon: mapIcon
+        });
 
     // Bind a popup to the marker
-    marker.on('click', async () => {
+    mapMarker.on('click', async () => {
         try {
             const service = markerService();
             const markerStore = useMarkerStore();
@@ -67,7 +70,7 @@ export const addMarkerToMap = (marker) => {
             //const markerDetails = await markerStore.fetchMarkerDetailsById(marker.markerId);
 
             if (markerDetails.success) {
-                const popupContent = createZonePopup(marker.type, markerDetails.address, markerDetails.description);
+                const popupContent = createMarkerPopup(marker.type, markerDetails.address, markerDetails.description);
                 marker.bindPopup(popupContent).openPopup();
             } else {
                 console.error('Failed to fetch marker details');
@@ -103,8 +106,8 @@ export const removeMarkerFromMap = (markerId) => {
 }
 
 export const updateMarkerOnMap = (marker) => {
-    removeMarker(marker.markerId);
-    addMarker(marker);
+    removeMarkerFromMap(marker.markerId);
+    addMarkerToMap(marker);
 }
 
 export const addEmergencyZoneToMap = (emergencyZone) => {
