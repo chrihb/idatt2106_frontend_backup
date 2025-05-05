@@ -1,8 +1,5 @@
 import { defineStore } from 'pinia';
-import L from 'leaflet';
-import { useMapStore } from "@/stores/mapStore.js";
-import {addEmergencyZoneToMap, addMarkerToMap, createCustomMarkerIcon, createMarkerPopup} from "@/utils/mapUtils.js";
-import {emergencyZoneService} from "@/services/emergencyZoneService.js";
+import {addMarkerToMap} from "@/utils/mapUtils.js";
 import {markerService} from "@/services/markerService.js";
 
 export const useMarkerStore = defineStore('markerStore', {
