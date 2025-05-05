@@ -7,8 +7,8 @@ import {usePositionTrackingStore} from "@/stores/positionTrackingStore.js";
 import {useEmergencyZonesStore} from "@/stores/emergencyZonesStore.js";
 import {debounce} from 'lodash';
 import {useMarkerStore} from "@/stores/markersStore.js";
-import {createCustomMarkerIcon, createMarkerPopup} from "@/utils/markerUtils.js";
-import {addEmergencyZoneToMap} from "@/utils/markerUtils.js";
+import {createCustomMarkerIcon, createMarkerPopup} from "@/utils/mapUtils.js";
+import {addEmergencyZoneToMap} from "@/utils/mapUtils.js";
 import L from 'leaflet';
 
 onMounted(async () => {
