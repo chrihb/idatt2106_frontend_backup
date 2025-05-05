@@ -7,31 +7,31 @@ export const markerService = () => {
         let markers;
         const markersInDatabase = [
             {
-                id: 1,
+                markerId: 1,
                 lat: 63.423494,
                 lng: 10.424354,
                 type: 'Hjertestarter',
             },
             {
-                id: 2,
+                markerId: 2,
                 lat: 63.421424,
                 lng: 10.400834,
                 type: 'Bunker',
             },
             {
-                id: 3,
+                markerId: 3,
                 lat: 63.421434,
                 lng: 10.440124,
                 type: 'Hjertestarter',
             },
             {
-                id: 4,
+                markerId: 4,
                 lat: 63.425434,
                 lng: 10.442124,
                 type: 'Møteplass',
             },
             {
-                id: 5,
+                markerId: 5,
                 lat: 63.424434,
                 lng: 10.439124,
                 type: 'Matstasjon',
@@ -40,7 +40,7 @@ export const markerService = () => {
         ];
 
        if (mapItemIds && mapItemIds.length > 0) {
-            markers = markersInDatabase.filter(marker => !mapItemIds.includes(marker.id));
+            markers = markersInDatabase.filter(marker => !mapItemIds.includes(marker.markerId));
        } else {
             markers = markersInDatabase;
        }
