@@ -16,7 +16,7 @@ onMounted(async () => {
 });
 
 function goToStorage(id) {
-  router.push(`/storage/${id}`); // eller `/storage` hvis du ikke bruker id i ruta
+  router.push(`/storage/${id}`);
 }
 </script>
 

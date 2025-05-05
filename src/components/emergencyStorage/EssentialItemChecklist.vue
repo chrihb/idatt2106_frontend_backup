@@ -7,7 +7,12 @@ import { useI18n } from 'vue-i18n';
 const { t } = useI18n();
 
 const essentials = ref([]); // Liste av lister
-const selectedHouseholdIndex = ref(0); // Brukes til å velge riktig husholdning
+const props = defineProps({
+  householdId: {
+    type: [String, Number],
+    required: true
+  }
+});
 
 const groupedItems = {
   'mat-vann': [['grill', 'kokeapparat', 'stormkjøkken'], 'gassbeholder', 'brennstoff'],
@@ -65,7 +70,7 @@ const translatedSectionTitles = computed(() => {
 });
 
 function getStatus(itemOrGroup) {
-  const currentEssentials = essentials.value[selectedHouseholdIndex.value] || [];
+  const currentEssentials = essentials.value;
 
   // Hjelpefunksjon for å sjekke om et navn (eller alias) er til stede
   const isPresent = (name) => {
@@ -87,7 +92,7 @@ function getStatus(itemOrGroup) {
 
 async function refreshEssentials() {
   try {
-    essentials.value = await getEssentialItems();
+    essentials.value = await getEssentialItems(props.householdId); 
   } catch (e) {
     console.error("Kunne ikke hente essential items", e);
   }
@@ -95,14 +100,6 @@ async function refreshEssentials() {
 
 onMounted(refreshEssentials);
 defineExpose({ refreshEssentials });
-
-onMounted(async () => {
-  try {
-    essentials.value = await getEssentialItems(); // Setter hele listen (en per husholdning)
-  } catch (e) {
-    console.error("Kunne ikke hente essential items", e);
-  }
-});
 </script>
 
 

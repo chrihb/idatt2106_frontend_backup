@@ -148,7 +148,8 @@ onMounted(async () => {
       <!-- Venstre kolonne -->
       <div class="lg:col-span-1 flex flex-col gap-4">
         <DetailedStorageStatus :householdId="props.householdId"/>
-        <EssentialItemChecklist ref="checklistRef"/>
+        <EssentialItemChecklist :householdId="props.householdId"
+        ref="checklistRef"/>
       </div>
 
       <!-- Høyre kolonne -->
