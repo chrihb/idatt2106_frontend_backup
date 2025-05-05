@@ -6,9 +6,10 @@ import FormField from '@/components/input/FormField.vue';
 import PasswordField from "@/components/input/PasswordField.vue";
 import { requestRegister } from "@/services/registerService.js";
 import {useI18n} from "vue-i18n";
+import { useRouter } from "vue-router";
 
 const { t } = useI18n();
-
+const router = useRouter();
 const { validate, values: form, errors, setFieldError, resetForm } = useForm({
   validationSchema: {
     email: (value) => {
@@ -123,15 +124,15 @@ onUnmounted(() => {
 
 
 const handleSubmit = async () => {
-  const result = await validate();
+  const result = await validate()
   if (!result.valid) {
-    console.log('Validation failed:', errors.value); // Debug validation errors
-    return;
+    console.log('Validation failed:', errors.value)
+    return
   }
 
-  isSubmitting.value = true;
-  successMessage.value = '';
-  errorMessage.value = '';
+  isSubmitting.value = true
+  successMessage.value = ''
+  errorMessage.value = ''
 
   try {
     const registerForm = {
@@ -141,34 +142,37 @@ const handleSubmit = async () => {
       lastname: form.lastName,
       phoneNumber: form.phoneNumber,
       reCaptchaToken: recaptchaToken.value,
-    };
-    console.log('Submitting registration form:', registerForm); // Debug the form data
-    const response = await requestRegister(registerForm, t);
+    }
+
+    console.log('Submitting registration form:', registerForm)
+    const response = await requestRegister(registerForm, t)
 
     if (response.success) {
-      successMessage.value = t('register.successMessage');
-      resetForm();
-      recaptchaToken.value = '';
+      successMessage.value = t('register.successMessage')
+      resetForm()
+      recaptchaToken.value = ''
+
+      router.push('/login')
     } else {
       if (response.error === 'ReCAPTCHA verification failed') {
-        setFieldError('recaptcha', response.error);
+        setFieldError('recaptcha', response.error)
       } else if (response.error.includes('First name')) {
-        setFieldError('firstName', response.error);
+        setFieldError('firstName', response.error)
       } else if (response.error.includes('Surname')) {
-        setFieldError('lastName', response.error);
-      }else if (response.error.includes('PhoneNumber')) {
-          setFieldError('phoneNumber', response.error);
+        setFieldError('lastName', response.error)
+      } else if (response.error.includes('PhoneNumber')) {
+        setFieldError('phoneNumber', response.error)
       } else {
-        errorMessage.value = response.error || 'Registration failed';
+        errorMessage.value = response.error || 'Registration failed'
       }
     }
   } catch (error) {
-    console.error('Submission error:', error); // Debug submission errors
-    errorMessage.value = 'An unexpected error occurred. Please try again.';
+    console.error('Submission error:', error)
+    errorMessage.value = 'An unexpected error occurred. Please try again.'
   } finally {
-    isSubmitting.value = false;
+    isSubmitting.value = false
   }
-};
+}
 </script>
 
 <template>

@@ -91,6 +91,9 @@
       "nickname": "Nickname",
       "nicknameRequired": "Nickname is required",
       "addressRequired": "Address is required",
+      "join-household": "Join Household",
+      "invite-code": "Invite Code",
+      "invite-codeRequired": "Invite code is required",
       "or": "or",
       "available": "Available Households",
       "create-desc": "a household to manage your storage and household members"

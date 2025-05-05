@@ -18,8 +18,6 @@ import SimpleCenteredComponent from "@/views/SimpleCenteredComponent.vue";
 import {useUserStore} from "@/stores/userStore.js";
 import AdminRegister from "@/components/login/AdminRegister.vue";
 import JoinCreateHousehold from "@/components/joinHousehold/Options.vue";
-import AvailableHousehold from "@/components/joinHousehold/JoinHousehold.vue";
-import CreateHousehold from "@/components/joinHousehold/CreateHousehold.vue";
 import JoinHouseholdView from "@/views/JoinHouseholdView.vue";
 
 const router = createRouter({
@@ -38,9 +36,7 @@ const router = createRouter({
                 { path: "/my-home", component: MyHomeView, meta: { requiresAuth: true, requiresHousehold: true } },
                 { path: "/household", component: JoinHouseholdView, meta: { requiresAuth: true },
                 children: [
-                    { path: "options", component: JoinCreateHousehold },
-                    { path: "join", component: AvailableHousehold },
-                    { path: "create", component: CreateHousehold },
+                    { path: "options/", component: JoinCreateHousehold },
                 ]},
 
             ],
@@ -75,7 +71,11 @@ router.beforeEach(async (to, from, next) => {
     }
 
     if (!userStore.token) {
-        return next('/login');
+        const redirectTo = to.fullPath
+        return next({
+            path: '/login',
+            query: { redirect: redirectTo }
+        })
     }
 
     await userStore.isAuthenticated();

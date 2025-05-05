@@ -91,6 +91,9 @@
     "nickname": "Kallenavn",
     "nicknameRequired": "Kallenavn er påkrevd",
     "addressRequired": "Adresse er påkrevd",
+    "join-household": "Bli med i husstand",
+    "invite-code": "Invitasjonskode",
+    "invite-codeRequired": "Invitasjonskode er påkrevd",
     "or": "eller",
     "available": "Tilgjengelige husstander",
     "create-desc": "en husstand for å administrere lageret ditt og andre medlemmer"
