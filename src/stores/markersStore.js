@@ -2,7 +2,7 @@ import { defineStore } from 'pinia';
 import {addMarkerToMap} from "@/utils/mapUtils.js";
 import {markerService} from "@/services/markerService.js";
 
-export const useMarkerStore = defineStore('markerStore', {
+export const useMarkersStore = defineStore('markersStore', {
     state:
         () => ({
             markers: [],

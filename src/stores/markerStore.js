@@ -2,7 +2,7 @@ import { defineStore } from 'pinia';
 import {markerService} from "@/services/markerService.js";
 import {useMarkerStore} from "@/stores/markersStore.js";
 
-export const useMarkersStore = defineStore('markersStore', {
+export const useMarkerStore = defineStore('markerStore', {
 
     state: () => ({
         marker: {
