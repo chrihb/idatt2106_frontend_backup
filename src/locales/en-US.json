@@ -88,6 +88,9 @@
       "join": "Join",
       "create": "Create",
       "create-household": "Create Household",
+      "nickname": "Nickname",
+      "nicknameRequired": "Nickname is required",
+      "addressRequired": "Address is required",
       "or": "or",
       "available": "Available Households",
       "create-desc": "a household to manage your storage and household members"

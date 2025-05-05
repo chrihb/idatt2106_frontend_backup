@@ -12,8 +12,12 @@ const router = useRouter();
 
 const { validate, values: form, errors, setFieldError, resetForm } = useForm({
   validationSchema: {
+    nickname: (value) => {
+      if (!value) return t('my-home.nicknameRequired');
+      return true;
+    },
     address: (value) => {
-      if (!value) return t('register.firstNameRequired');
+      if (!value) return t('my-home.addressRequired');
       return true;
     },
   },
@@ -75,17 +79,24 @@ const handleSubmit = async () => {
           {{ errorMessage }}
         </div>
 
-        <div class="flex gap-2">
-          <!-- Address -->
+          <!-- Nickname -->
           <div class="">
             <FormField
-                field-name="address"
-                :label="t('household.createHousehold')"
+                field-name="nickname"
+                :label="t('my-home.nickname')"
                 type="text"
                 class="w-full"
             />
           </div>
-        </div>
+          <!-- Address -->
+          <div class="">
+            <FormField
+                field-name="address"
+                :label="t('my-home.address')"
+                type="text"
+                class="w-full"
+            />
+          </div>
 
         <!-- Submit Button -->
         <button
@@ -93,7 +104,7 @@ const handleSubmit = async () => {
             type="submit"
             class="w-full bg-kf-red text-white py-2 rounded transition disabled:opacity-50 cursor-pointer"
         >
-          {{ t('register.register') }}
+          {{ t('my-home.create-household') }}
         </button>
       </form>
 

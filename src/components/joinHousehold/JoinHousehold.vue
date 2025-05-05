@@ -51,7 +51,7 @@ onMounted(() => {
     <div class="overflow-y-auto px-2 max-h-100 w-full flex flex-col gap-2 text-left">
       <p v-if="availableHouseholds.length === 0">No available households</p>
       <div v-else v-for="(household, index) in availableHouseholds" :key="index">
-        <div @click="openPopup(household.address)" class="bg-kf-white w-full p-2 drop-shadow-md rounded-md cursor-pointer">
+        <div @click="openPopup(household.address)" class="bg-kf-white border border-kf-white-contrast-3 active:border-kf-blue w-full p-2 drop-shadow-md rounded-md cursor-pointer">
           <p class="text-kf-blue text-2xl">{{ household.address }}</p>
         </div>
       </div>

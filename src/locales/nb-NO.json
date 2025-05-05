@@ -88,6 +88,9 @@
     "join": "Bli Med",
     "create": "Opprett Ny",
     "create-household": "Opprett Husstand",
+    "nickname": "Kallenavn",
+    "nicknameRequired": "Kallenavn er påkrevd",
+    "addressRequired": "Adresse er påkrevd",
     "or": "eller",
     "available": "Tilgjengelige husstander",
     "create-desc": "en husstand for å administrere lageret ditt og andre medlemmer"
