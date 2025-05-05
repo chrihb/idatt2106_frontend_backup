@@ -6,6 +6,8 @@ import {mockMarkersData} from "@/services/markerService.js";
 import {usePositionTrackingStore} from "@/stores/positionTrackingStore.js";
 import {useEmergencyZonesStore} from "@/stores/emergencyZonesStore.js";
 import {debounce} from 'lodash';
+import {useMarkerStore} from "@/stores/markersStore.js";
+import {createCustomMarkerIcon, createMarkerPopup} from "@/utils/markerUtils.js";
 import {useMarkerStore} from "@/stores/markerStore.js";
 import {centerMapOnEmergencyZone, createCustomMarkerIcon, createMarkerPopup} from "@/utils/markerUtils.js";
 import {addEmergencyZoneToMap} from "@/utils/markerUtils.js";
