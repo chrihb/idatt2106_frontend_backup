@@ -9,16 +9,6 @@ export const useMarkersStore = defineStore('markersStore', {
             error: null,
         }),
     getters: {
-        getMarkers: (state) => state.markers,
-        getMarkerById: (state) => (id) => {
-            return state.markers.find(marker => marker.options.id === id);
-        },
-        getMarkerByCoordinates: (state) => (latitude, longitude) => {
-            return state.markers.find(marker => marker.getLatLng().lat === latitude && marker.getLatLng().lng === longitude);
-        },
-        getMarkersByType: (state) => (type) => {
-            return state.markers.filter(marker => marker.options.type === type);
-        },
     },
     actions: {
         async fetchAllMarkers() {
@@ -49,11 +39,11 @@ export const useMarkersStore = defineStore('markersStore', {
                 const service = markerService();
                 // TODO: This is a placeholder for the actual service call
                 const result = await service.getMarkersMock(mapBounds, mapItemIds);
+                // const result = await service.getMarkersByArea(mapBounds, mapItemIds);
                 for (const marker of result.markers) {
                     addMarkerToMap(marker);
                     this.addMarker(marker);
                 }
-
             } catch (error) {
                 console.error('Error fetching markers');
                 throw error;
