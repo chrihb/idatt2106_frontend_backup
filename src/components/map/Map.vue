@@ -11,6 +11,8 @@ import {createCustomMarkerIcon, createMarkerPopup} from "@/utils/markerUtils.js"
 import {useMarkerStore} from "@/stores/markerStore.js";
 import {centerMapOnEmergencyZone, createCustomMarkerIcon, createMarkerPopup} from "@/utils/markerUtils.js";
 import {addEmergencyZoneToMap} from "@/utils/markerUtils.js";
+import {createCustomMarkerIcon, createMarkerPopup} from "@/utils/mapUtils.js";
+import {addEmergencyZoneToMap} from "@/utils/mapUtils.js";
 import L from 'leaflet';
 
 onMounted(async () => {
