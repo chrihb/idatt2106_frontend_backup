@@ -87,7 +87,7 @@ export const usePositionTrackingStore = defineStore("positionTrackingStore", {
         centerMapOnUser() {
             const mapStore = useMapStore();
             if (this.latitude !== null && this.longitude !== null) {
-                mapStore.map.setView([this.latitude, this.longitude], 15);
+                mapStore.centerMapOnSpecificLocation(this.latitude, this.longitude);
             } else {
                 console.error("User location is not available.");
             }

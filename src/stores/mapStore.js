@@ -65,6 +65,14 @@ export const useMapStore = defineStore('mapStore', {
                 console.error(`Map item ID ${mapItemId} not found in the mapItemIds array.`);
             }
         },
+
+        centerMapOnSpecificLocation(lat, lng) {
+            if (this.map) {
+                this.map.setView([lat, lng], 15);
+            } else {
+                console.error("Map is not initialized");
+            }
+        },
     },
     persist: {
         enabled: true,

@@ -7,7 +7,7 @@ import {usePositionTrackingStore} from "@/stores/positionTrackingStore.js";
 import {useEmergencyZonesStore} from "@/stores/emergencyZonesStore.js";
 import {debounce} from 'lodash';
 import {useMarkerStore} from "@/stores/markerStore.js";
-import {createCustomMarkerIcon, createMarkerPopup} from "@/utils/markerUtils.js";
+import {centerMapOnEmergencyZone, createCustomMarkerIcon, createMarkerPopup} from "@/utils/markerUtils.js";
 import {addEmergencyZoneToMap} from "@/utils/markerUtils.js";
 import L from 'leaflet';
 
@@ -87,10 +87,42 @@ onMounted(async () => {
   }
 });
 
+const markerStore = useMarkerStore();
+
+//TODO: Remove testing function to center the map on a specific marker
+const centerMapOnMarker1 = async () => {
+  const marker = markerStore.getMarkerById(1);
+  if (marker) {
+    markerStore.centerMapOnMarker(1);
+  } else {
+    console.error('Marker with ID 1 not found');
+  }
+};
+
+//TODO: Remove testing function to center the map on a specific emergency zone
+const centerMapOnZone11 = async () => {
+  const emergencyZonesStore = useEmergencyZonesStore();
+  const zone = emergencyZonesStore.getEmergencyZoneById(11);
+  if (zone) {
+    centerMapOnEmergencyZone(11);
+  } else {
+    console.error('Zone with ID 11 not found');
+  }
+}
+
 </script>
 
 <template>
   <div id="map" class="relative min-h-140 h-full w-full z-0 rounded-2xl"></div>
+  <!-- TODO: Remove testing buttons -->
+  <div>
+    <button @click="centerMapOnMarker1" class="absolute top-4 right-4 bg-blue-500 text-white px-4 py-2 rounded">
+      TEST Center on Marker 1
+    </button>
+    <button @click="centerMapOnZone11" class="absolute top-20 right-4 bg-blue-500 text-white px-4 py-2 rounded">
+      TEST Center on Zone 11
+    </button>
+  </div>
 </template>
 
 <style scoped>
