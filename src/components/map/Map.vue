@@ -2,10 +2,11 @@
 import {onMounted, nextTick} from 'vue';
 import 'leaflet/dist/leaflet.css';
 import { useMapStore } from '@/stores/mapStore.js';
-import {mockMarkersData} from "@/services/markerService.js";
 import {usePositionTrackingStore} from "@/stores/positionTrackingStore.js";
 import {useEmergencyZonesStore} from "@/stores/emergencyZonesStore.js";
 import {debounce} from 'lodash';
+import {useMarkersStore} from "@/stores/markersStore.js";
+import {addMarkerToMap} from "@/utils/mapUtils.js";
 import {useMarkerStore} from "@/stores/markersStore.js";
 import {createCustomMarkerIcon, createMarkerPopup} from "@/utils/markerUtils.js";
 import {useMarkerStore} from "@/stores/markerStore.js";
@@ -13,7 +14,6 @@ import {centerMapOnEmergencyZone, createCustomMarkerIcon, createMarkerPopup} fro
 import {addEmergencyZoneToMap} from "@/utils/markerUtils.js";
 import {createCustomMarkerIcon, createMarkerPopup} from "@/utils/mapUtils.js";
 import {addEmergencyZoneToMap} from "@/utils/mapUtils.js";
-import L from 'leaflet';
 
 onMounted(async () => {
 
@@ -21,7 +21,7 @@ onMounted(async () => {
     const mapStore = useMapStore();
     const emergencyZonesStore = useEmergencyZonesStore();
     const positionTrackingStore = usePositionTrackingStore();
-    const markerStore = useMarkerStore();
+    const markersStore = useMarkersStore();
 
     await nextTick();
 
@@ -39,7 +39,7 @@ onMounted(async () => {
 
 
     const emergencyZones = emergencyZonesStore.getEmergencyZones;
-    const markers = markerStore.getMarkers; // Assuming a getter exists for markers
+    const markers = markersStore.getMarkers;
 
     // Add emergency zones to the map
     if (emergencyZones && emergencyZones.length > 0) {
@@ -53,34 +53,23 @@ onMounted(async () => {
     // Add markers to the map
     if (markers && markers.length > 0) {
       for (const marker of markers) {
-        mapStore.addMapItemId(marker.id);
-        const markerIcon = createCustomMarkerIcon(marker.type);
-        L.marker([marker.lat, marker.lng], { icon: markerIcon })
-            .addTo(mapStore.map)
-            .bindPopup(createMarkerPopup(marker.type, marker.location, marker.address, marker.description));
+        addMarkerToMap(marker);
+        mapStore.addMapItemId(marker.markerId);
       }
     }
 
     // Start position tracking
-    console.log("Starting tracking...");
     positionTrackingStore.startTracking();
-    console.log("Tracking started");
 
     // Add event listener for map movement
-    mapStore.map.on('moveend', debounce( async () => {
+    mapStore.map.on('moveend', debounce(async () => {
       const bounds = mapStore.map.getBounds();
       const ids = mapStore.getMapItemIds();
 
       try {
-        //TODO: Add request to fetch markers from the backend
+        await markersStore.fetchMarkersArea(bounds, ids);
+        await emergencyZonesStore.fetchEmergencyZonesArea(bounds, ids);
 
-        const result = await mockMarkersData();
-        await emergencyZonesStore.fetchEmergencyZonesArea(bounds, ids)
-
-        if (result.success) {
-        } else {
-          console.error('Error loading markers:', result.error);
-        }
       } catch (error) {
         console.error('Error fetching markers:', error);
       }
