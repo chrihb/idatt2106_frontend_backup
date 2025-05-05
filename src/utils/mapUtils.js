@@ -102,6 +102,11 @@ export const removeMarker = (markerId) => {
     }
 }
 
+export const updateMarker = (marker) => {
+    removeMarker(marker.markerId);
+    addMarker(marker);
+}
+
 export const addEmergencyZoneToMap = (emergencyZone) => {
 
     if (!emergencyZone || !emergencyZone.zoneId || !emergencyZone.coordinates || emergencyZone.coordinates.length < 3) {
