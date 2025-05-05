@@ -7,7 +7,6 @@ export const useMarkersStore = defineStore('markersStore', {
     state: () => ({
         marker: {
             markerId: null,
-            name: '',
             address: '',
             lat: null,
             lng: null,
@@ -50,14 +49,12 @@ export const useMarkersStore = defineStore('markersStore', {
         },
 
         setRestOfMarker(markerData) {
-            this.name = markerData.name;
             this.address = markerData.address;
             this.description = markerData.description;
         },
 
         setMarker(markerData) {
             this.markerId = markerData.markerId;
-            this.name = markerData.name;
             this.address = markerData.address;
             this.lat = markerData.lat;
             this.lng = markerData.lng;
@@ -72,7 +69,6 @@ export const useMarkersStore = defineStore('markersStore', {
 
                 const markerData = {
                     markerId: this.markerId || undefined,
-                    name: this.name,
                     address: this.address,
                     lat: this.lat,
                     lng: this.lng,
@@ -118,7 +114,6 @@ export const useMarkersStore = defineStore('markersStore', {
 
         clearMarker() {
             this.markerId = null;
-            this.name = '';
             this.address = '';
             this.lat = null;
             this.lng = null;
