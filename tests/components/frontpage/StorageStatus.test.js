@@ -3,7 +3,7 @@ import { describe, it, expect, beforeEach } from 'vitest'
 import i18n from "@/i18n.js"
 import mockRouter from "../../mocks/MockRouter.js";
 import mockPinia from "../../mocks/MockPinia.js";
-import StorageStatus from "@/components/frontpage/StorageStatus.vue";
+import StorageStatus from "@/components/emergencyStorage/StorageStatus.vue";
 
 describe('StorageStatus.vue', () => {
     let wrapper
