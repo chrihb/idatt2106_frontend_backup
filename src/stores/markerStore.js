@@ -1,77 +1,129 @@
 import { defineStore } from 'pinia';
-import L from 'leaflet';
-import { useMapStore } from "@/stores/mapStore.js";
-import {createCustomMarkerIcon, createMarkerPopup} from "@/utils/markerUtils.js";
+import {markerService} from "@/services/markerService.js";
+import {useMarkerStore} from "@/stores/markersStore.js";
 
-export const useMarkerStore = defineStore('markerStore', {
-    state:
-        () => ({
-            markers: [],
-        }),
+export const useMarkersStore = defineStore('markersStore', {
+
+    state: () => ({
+        marker: {
+            markerId: null,
+            name: '',
+            address: '',
+            lat: null,
+            lng: null,
+            type: '',
+            description: '',
+        },
+        error: null,
+    }),
     getters: {
-        getMarkers: (state) => state.markers,
-        getMarkerById: (state) => (id) => {
-            return state.markers.find(marker => marker.options.id === id);
+        getMarker: (state) => {
+            return state.marker;
         },
-        getMarkerByCoordinates: (state) => (latitude, longitude) => {
-            return state.markers.find(marker => marker.getLatLng().lat === latitude && marker.getLatLng().lng === longitude);
+        getMarkerId: (state) => {
+            return state.marker.markerId;
         },
-        getMarkersByType: (state) => (type) => {
-            return state.markers.filter(marker => marker.options.type === type);
-        },
-        getMarkersByLocation: (state) => (location) => {
-            return state.markers.filter(marker => marker.options.location === location);
-        }
     },
+
     actions: {
-        // Add a marker to the map
-        addMarker(markerData) {
-            const mapStore = useMapStore();
-            if (this.getMarkerById(markerData.id)) {
+        async fetchMarkerDetailsById(markerId) {
+            this.error = null;
+            try {
+                const service = markerService();
+                const markerData = await service.getMarkerDetailsById(markerId);
+
+                if (markerData.success) {
+                    this.setRestOfMarker(markerData);
+                }
+
+            } catch (error) {
+                console.error('Error fetching marker details:', error);
+                throw error;
+            }
+        },
+
+        setBasicMarker(markerData) {
+            this.markerId = markerData.markerId;
+            this.lat = markerData.lat;
+            this.lng = markerData.lng;
+            this.type = markerData.type;
+        },
+
+        setRestOfMarker(markerData) {
+            this.name = markerData.name;
+            this.address = markerData.address;
+            this.description = markerData.description;
+        },
+
+        setMarker(markerData) {
+            this.markerId = markerData.markerId;
+            this.name = markerData.name;
+            this.address = markerData.address;
+            this.lat = markerData.lat;
+            this.lng = markerData.lng;
+            this.type = markerData.type;
+            this.description = markerData.description;
+        },
+
+        async saveMarker(markerData) {
+            try {
+                const service = markerService();
+                const markersStore = useMarkerStore();
+
+                const markerData = {
+                    markerId: this.markerId || undefined,
+                    name: this.name,
+                    address: this.address,
+                    lat: this.lat,
+                    lng: this.lng,
+                    type: this.type,
+                    description: this.description,
+                };
+                let result
+                if (this.markerId) {
+                    result = await service.updateMarker(markerData);
+                    markersStore.updateMarker(result);
+                } else {
+                    result = await service.createMarker(markerData);
+                    this.markerId = result.markerId;
+                    markersStore.addMarker(result);
+                }
+                return result;
+            } catch (error) {
+                console.error('Error saving marker', error);
+                throw error;
+            }
+        },
+
+        async deleteMarker() {
+            if (!this.markerId) {
+                console.warn('Cannot delete: No item ID provided');
                 return;
             }
-            // Create a custom icon for the marker
-            const mapIcon = createCustomMarkerIcon(markerData.type)
 
-            // Create a marker with the given data
-            const marker = L.marker(
-                [markerData.lat, markerData.lng],
-                {id: markerData.id, icon: mapIcon})
-                .bindPopup(createMarkerPopup(
-                    markerData.type,
-                    markerData.location,
-                    markerData.address,
-                    markerData.description
-                ));
+            this.error = null;
+            try {
+                const markersStore = useMarkersStore();
+                const service = markerService();
+                const result = await service.deleteMarker(this.markerId);
+                markersStore().deleteMarker(this.markerId);
+                this.clearMarker();
+                return result;
 
-            // Check if the layerGroup for the type exists, if not create it
-            if (!mapStore.layerGroup[markerData.type] || !(mapStore.layerGroup[markerData.type] instanceof L.LayerGroup)) {
-                mapStore.layerGroup[markerData.type] = L.layerGroup().addTo(mapStore.map);
+            } catch (error) {
+                console.error('Error deleting marker', error);
+                throw error;
             }
-            // Add the marker to the appropriate layerGroup
-            mapStore.layerGroup[markerData.type].addLayer(marker);
-            //Add the marker to markers array
-            this.markers.push(marker);
         },
 
-        // Remove a marker from the map
-        removeMarker(id) {
-            const mapStore = useMapStore();
-            const markerIndex = this.markers.find(m => m.options.id === id);
-            if (!markerIndex !== -1) {
-                const marker = this.markers[markerIndex];
-                // Remove the marker from the layerGroup
-                for (const type in mapStore.layerGroup) {
-                    if (mapStore.layerGroup[type].hasLayer(marker)) {
-                        mapStore.layerGroup[type].removeLayer(marker);
-                        break;
-                    }
-                }
-                // Remove the marker from the markers array
-                this.markers.splice(markerIndex, 1);
-            } else {
-                console.error(`Marker with ${id} not found.`);
-            }
+        clearMarker() {
+            this.markerId = null;
+            this.name = '';
+            this.address = '';
+            this.lat = null;
+            this.lng = null;
+            this.type = '';
+            this.description = '';
         },
 
         centerMapOnMarker(id) {
@@ -84,12 +136,4 @@ export const useMarkerStore = defineStore('markerStore', {
             }
         }
     },
-    persist: {
-        enabled: true,
-        strategies: [
-            {
-                storage: window.localStorage,
-            },
-        ],
-    }
-});
+})
