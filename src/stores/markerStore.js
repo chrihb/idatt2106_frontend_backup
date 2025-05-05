@@ -120,15 +120,5 @@ export const useMarkerStore = defineStore('markerStore', {
             this.type = '';
             this.description = '';
         },
-
-        centerMapOnMarker(id) {
-            const mapStore = useMapStore();
-            const marker = this.getMarkerById(id);
-            if (marker) {
-                mapStore.centerMapOnSpecificLocation(marker.getLatLng().lat, marker.getLatLng().lng);
-            } else {
-                console.error(`Marker with ${id} not found.`);
-            }
-        }
     },
 })

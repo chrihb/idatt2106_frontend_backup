@@ -6,13 +6,9 @@ import {usePositionTrackingStore} from "@/stores/positionTrackingStore.js";
 import {useEmergencyZonesStore} from "@/stores/emergencyZonesStore.js";
 import {debounce} from 'lodash';
 import {useMarkersStore} from "@/stores/markersStore.js";
-import {addMarkerToMap} from "@/utils/mapUtils.js";
-import {useMarkerStore} from "@/stores/markersStore.js";
-import {createCustomMarkerIcon, createMarkerPopup} from "@/utils/markerUtils.js";
+import {addMarkerToMap, centerMapOnMarker} from "@/utils/mapUtils.js";
 import {useMarkerStore} from "@/stores/markerStore.js";
-import {centerMapOnEmergencyZone, createCustomMarkerIcon, createMarkerPopup} from "@/utils/markerUtils.js";
-import {addEmergencyZoneToMap} from "@/utils/markerUtils.js";
-import {createCustomMarkerIcon, createMarkerPopup} from "@/utils/mapUtils.js";
+import {centerMapOnEmergencyZone} from "@/utils/mapUtils.js";
 import {addEmergencyZoneToMap} from "@/utils/mapUtils.js";
 
 onMounted(async () => {
@@ -80,13 +76,14 @@ onMounted(async () => {
   }
 });
 
-const markerStore = useMarkerStore();
+
 
 //TODO: Remove testing function to center the map on a specific marker
 const centerMapOnMarker1 = async () => {
-  const marker = markerStore.getMarkerById(1);
+  const markersStore = useMarkersStore();
+  const marker = markersStore.getMarkerById(1);
   if (marker) {
-    markerStore.centerMapOnMarker(1);
+    centerMapOnMarker(1);
   } else {
     console.error('Marker with ID 1 not found');
   }

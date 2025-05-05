@@ -71,7 +71,7 @@ export const addMarkerToMap = (marker) => {
 
             if (markerDetails.success) {
                 const popupContent = createMarkerPopup(marker.type, markerDetails.address, markerDetails.description);
-                marker.bindPopup(popupContent).openPopup();
+                mapMarker.bindPopup(popupContent).openPopup();
             } else {
                 console.error('Failed to fetch marker details');
             }
@@ -205,6 +205,18 @@ export const emergencyZoneStyle = (level) => {
             break
     }
     return style;
+}
+
+export const centerMapOnMarker = (id) => {
+    const mapStore = useMapStore();
+    const markersStore = useMarkersStore();
+    const marker = markersStore.getMarkerById(id);
+
+    if (marker) {
+        mapStore.centerMapOnSpecificLocation(marker.lat, marker.lng);
+    } else {
+        console.error(`Marker with ${id} not found.`);
+    }
 }
 
 export const centerMapOnEmergencyZone = (zoneId) => {
