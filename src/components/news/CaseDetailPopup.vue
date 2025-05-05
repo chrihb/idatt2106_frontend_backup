@@ -2,6 +2,7 @@
 import {ref, onMounted} from "vue";
 import {getCaseDetails} from "@/services/newsService.js";
 import {useI18n} from "vue-i18n";
+import { XMarkIcon } from "@heroicons/vue/24/solid";
 
 const props = defineProps({
   caseId: {
@@ -34,10 +35,9 @@ onMounted(async () => {
   <div class="fixed inset-0 backdrop-blur-sm flex justify-center items-center z-50 ">
     <div class="bg-white bg-opacity-90 backdrop-blur-sm p-6 rounded-lg shadow-lg w-1/2 max-h-[80vh] overflow-y-auto relative border border-black">
 
-      <button class="absolute top-4 right-4 text-red-500 hover:text-red-600 transition-colors text-3xl w-10 h-10 cursor-pointer"
-              @click="onClose">
-        ✕
-      </button>
+        <XMarkIcon class="absolute top-4 right-4 w-8 h-8 cursor-pointer text-red-500"
+        @click="onClose"/>
+
       <div v-if="isLoading" class="text-center">Loading...</div>
       <div v-else-if="error" class="text-red-500 text-center">{{ error }}</div>
       <div v-else-if="caseDetails.length === 0" class="text-center"> {{t("news.noDetails")}}No details available.</div>
