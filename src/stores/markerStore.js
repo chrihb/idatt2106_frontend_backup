@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia';
 import {markerService} from "@/services/markerService.js";
-import {useMarkerStore} from "@/stores/markersStore.js";
+import {useMarkersStore} from "@/stores/markersStore.js";
 
 export const useMarkerStore = defineStore('markerStore', {
 
@@ -65,7 +65,7 @@ export const useMarkerStore = defineStore('markerStore', {
         async saveMarker(markerData) {
             try {
                 const service = markerService();
-                const markersStore = useMarkerStore();
+                const markersStore = useMarkersStore();
 
                 const markerData = {
                     markerId: this.markerId || undefined,
