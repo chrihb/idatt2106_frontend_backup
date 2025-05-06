@@ -1,15 +1,18 @@
 <script setup>
-import { ref } from "vue";
+import {computed, onMounted, ref, watch} from "vue";
 import { useI18n } from "vue-i18n";
 import { useRouter } from "vue-router";
 import MemberCard from "@/components/myHome/MemberCard.vue";
 import ConfirmationModal from "@/components/myHome/ConfirmationModal.vue";
 import InviteModal from "@/components/myHome/InviteModal.vue";
 import {XMarkIcon} from "@heroicons/vue/24/solid/index.js";
+import {useUserStore} from "@/stores/userStore.js";
+import {requestHouseholds} from "@/services/householdService.js";
 
 
 const { t } = useI18n();
 const router = useRouter();
+const userStore = useUserStore();
 
 const props = defineProps({
   isOpen: {
@@ -20,18 +23,29 @@ const props = defineProps({
 
 const emit = defineEmits(["close"]);
 
-const members = ref([
-  { id: 1, name: "John Doe" },
-  { id: 2, name: "Jane Smith" },
-  { id: 3, name: "Alice Johnson" },
-  { id: 69, name: "Konrad" },
-]);
-
+const members = ref([]);
 const isAdmin = ref(true);
 const selectedMember = ref(null);
 const showInviteModal = ref(false);
 const inviteLink = ref("");
-const householdId = ref("");
+const householdId = computed(() => userStore.householdId[0]?.id || null); // Access the first household ID
+
+// Watch userStore.household.members for changes and update members ref
+watch(
+    () => userStore.householdId[0]?.members,
+    (newMembers) => {
+      if (newMembers) {
+        // Map members to objects with id and name
+        members.value = newMembers.map((name, index) => ({
+          id: index + 1, // Temporary ID (replace with actual ID if available)
+          name,
+        }));
+      } else {
+        members.value = [];
+      }
+    },
+    { immediate: true }
+);
 
 const openInviteModal = () => {
   householdId.value = Math.random().toString(36).substr(2, 8).toUpperCase();
@@ -70,7 +84,7 @@ const leaveHousehold = () => {
 <template>
   <div v-if="isOpen" class="fixed inset-0 backdrop-blur-sm flex justify-center items-center z-50 ">
   <div
-      class="bg-white bg-opacity-90 backdrop-blur-sm p-6 rounded-lg shadow-lg w-1/2 max-h-[80vh] overflow-y-auto relative border border-black">
+      class="bg-white bg-opacity-90 backdrop-blur-sm p-6 rounded-lg shadow-lg w-1/2 max-h-[80vh] relative border border-black">
       <!-- Header -->
       <div class="mb-4 flex justify-between items-center">
         <h1 class="text-2xl font-bold">{{ t("household.title") }}</h1>

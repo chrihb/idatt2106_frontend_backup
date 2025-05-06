@@ -84,7 +84,7 @@ router.beforeEach(async (to, from, next) => {
         return next();
     }
 
-    if (!userStore.householdId) {
+    if (userStore.householdId.length === 0) {
         return next('/household/options');
     }
 

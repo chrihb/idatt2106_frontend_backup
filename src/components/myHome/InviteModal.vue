@@ -24,8 +24,8 @@ const copyToClipboard = (text) => {
 </script>
 
 <template>
-  <div class="fixed inset-0 flex justify-center items-center z-50 bg-gray-800 bg-opacity-50">
-    <div class="bg-white p-6 rounded shadow-lg w-full max-w-md">
+  <div class="fixed inset-0 flex justify-center items-center z-50 bg-opacity-50">
+   <div class="bg-white bg-opacity-90 backdrop-blur-sm p-6 rounded-lg shadow-lg w-1/2 max-h-[80vh] relative border border-black">
       <h2 class="text-xl font-bold mb-4">{{ t("household.inviteLink") }}</h2>
       <div class="mb-4">
         <label class="block text-sm font-medium mb-1">{{ t("household.link") }}</label>
