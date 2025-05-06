@@ -6,6 +6,7 @@ import {useI18n} from "vue-i18n";
 import {useHomeStore} from "@/stores/homeStore.js";
 import ManageStorage from "@/components/myHome/ManageStorage.vue";
 import CompleteMap from "@/components/map/CompleteMap.vue";
+import ManageHousehold from "@/components/myHome/ManageHousehold.vue";
 
 
 const { t } = useI18n();
@@ -23,6 +24,7 @@ const homeStore = useHomeStore();
         <!--Legevakt-->
         <!--Møteplass-->
         <ManageStorage class=""></ManageStorage>
+        <ManageHousehold/>
       </div>
       <div class="flex flex-col gap-2">
         <HouseStatus class="" />

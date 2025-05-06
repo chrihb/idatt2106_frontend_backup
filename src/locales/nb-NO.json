@@ -84,7 +84,6 @@
     "hospital": "Sykehus",
     "distance": "Distanse",
     "coordinates": "Koordinater",
-    "manage-storage": "Administrer lager",
     "join": "Bli Med",
     "create": "Opprett Ny",
     "create-household": "Opprett Husstand",
@@ -96,8 +95,26 @@
     "invite-codeRequired": "Invitasjonskode er påkrevd",
     "or": "eller",
     "available": "Tilgjengelige husstander",
-    "create-desc": "en husstand for å administrere lageret ditt og andre medlemmer"
+    "create-desc": "en husstand for å administrere lageret ditt og andre medlemmer",
+    "manage-storage": "Administrer lager",
+    "manage-household": "Administrer husstand"
   },
+  "household": {
+  "title": "My Household",
+  "generateInvite": "Generate Invite",
+  "inviteLinkGenerated": "Invite link generated",
+  "confirmDelete": "Confirm Deletion",
+  "deleteMember": "Are you sure you want to delete {name}?",
+  "cancel": "Cancel",
+  "delete": "Delete",
+  "inviteLink": "Invite Link",
+  "link": "Link",
+  "householdId": "Household ID",
+  "copy": "Copy",
+  "close": "Close",
+  "copiedToClipboard": "Copied to clipboard",
+  "leaveHousehold": "Leave Household"
+},
   "login": {
     "title": "Logg Inn",
     "email": "E-post",

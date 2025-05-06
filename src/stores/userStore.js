@@ -26,7 +26,7 @@ export const useUserStore = defineStore('user', {
         clearToken() {
             this.token = null;
             this.authenticated = false;
-            this.householdId = null;
+            this.householdId = [];
         },
     },
     persist: {

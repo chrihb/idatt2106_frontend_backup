@@ -95,3 +95,30 @@ export const createHousehold = async (name, lat, lon) => {
         return {success: false};
     }
 };
+
+export const getInviteCode = async (id) => {
+    const userStore = useUserStore();
+    const router = useRouter();
+
+    try {
+        const response = await axios.get(`${window.backendURL}/api/households/${id}/invite`,
+            {
+                headers: {
+                    Authorization: `Bearer ${userStore.token}`
+                }
+            }
+        );
+
+        console.log("Response status:", response.status);
+        if (response.status !== 200) {
+            return null
+        }
+
+        console.log("Response data:", response.data);
+        return response.data;
+    } catch (error) {
+        console.error('Error checking authentication:', error.code);
+        userStore.clearToken();
+        await router.push('/login');
+    }
+};
