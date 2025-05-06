@@ -106,10 +106,10 @@ const centerMapOnZone11 = async () => {
   <!-- TODO: Remove testing buttons -->
   <div>
     <button @click="centerMapOnMarker1" class="absolute top-4 right-4 bg-blue-500 text-white px-4 py-2 rounded">
-      TEST Center on Marker 1
+      TEST Vis nermeste hjertestarter
     </button>
     <button @click="centerMapOnZone11" class="absolute top-20 right-4 bg-blue-500 text-white px-4 py-2 rounded">
-      TEST Center on Zone 11
+      TEST Vis næremeste krise
     </button>
   </div>
 </template>
