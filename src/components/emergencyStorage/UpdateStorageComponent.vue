@@ -4,16 +4,18 @@ import {useCategoriesStore} from '@/stores/categoriesStore.js';
 import {useUnitsStore} from '@/stores/unitsStore.js';
 import {useEmergencyItemsStore} from '@/stores/emergencyItemsStore.js';
 import {useEmergencyItemStore} from '@/stores/emergencyItemStore.js';
+import {useUserStore} from "@/stores/userStore.js";
 import {useI18n} from "vue-i18n";
 
 const {t} = useI18n();
-const props = defineProps(['categoryId', 'unitId', 'itemId', 'display']);
+const props = defineProps(['categoryId', 'unitId', 'itemId', 'display', 'householdId']);
 const emit = defineEmits(['close', 'itemSaved']);
 
 const categoriesStore = useCategoriesStore();
 const unitsStore = useUnitsStore();
 const itemsStore = useEmergencyItemsStore();
 const currentItemStore = useEmergencyItemStore();
+const userStore = useUserStore();
 
 const isUpdate = computed(() => props.itemId !== null);
 
@@ -25,10 +27,12 @@ const itemData = ref({
   amount: '',
   unitId: props.unitId || 0,
   expirationDate: '',
-  categoryId: props.categoryId || 0
+  categoryId: props.categoryId || 0,
+  householdId: props.householdId || userStore.householdId[0].id
 });
 
 const selectedCategory = ref(props.categoryId || 0);
+const selectedHousehold = ref(props.householdId)
 const selectedUnit = ref(props.unitId || 0);
 const formIncomplete = ref(false);
 const showConfirmation = ref(false);
@@ -57,10 +61,12 @@ const resetForm = () => {
     amount: '',
     unitId: 0,
     expirationDate: '',
-    categoryId: 0
+    categoryId: 0,
+    householdId: userStore.householdId[0].id
   };
 
   selectedCategory.value = null;
+  selectedHousehold.value = null;
   selectedUnit.value = null;
   formIncomplete.value = false;
 
@@ -90,7 +96,8 @@ const loadItemData = async () => {
           amount: currentItemStore.amount,
           categoryId: currentItemStore.categoryId,
           unitId: currentItemStore.unitId,
-          expirationDate: currentItemStore.expirationDate
+          expirationDate: currentItemStore.expirationDate,
+          householdId: currentItemStore.householdIds
         };
       }
 
@@ -101,6 +108,7 @@ const loadItemData = async () => {
 
         itemData.value = {...item};
         selectedCategory.value = item.categoryId;
+        selectedHousehold.value = item.householdId;
         selectedUnit.value = item.unitId;
 
         currentItemStore.setItemData(item);
@@ -108,7 +116,7 @@ const loadItemData = async () => {
     } catch (error) {
       console.error("Error fetching item:", error);
     }
-  } else if (props.categoryId || props.unitId) {
+  } else if (props.categoryId || props.unitId || props.householdId) {
     if (props.unitId) {
       selectedUnit.value = props.unitId;
       itemData.value.unitId = props.unitId;
@@ -117,6 +125,11 @@ const loadItemData = async () => {
     if (props.categoryId) {
       selectedCategory.value = props.categoryId;
       itemData.value.categoryId = props.categoryId;
+    }
+
+    if (props.householdId) {
+      selectedHousehold.value = props.householdId;
+      itemData.value.householdId = props.householdId;
     }
   }
 };
@@ -127,7 +140,8 @@ const saveItem = async () => {
       !itemData.value.amount ||
       !selectedCategory.value ||
       !selectedUnit.value ||
-      !itemData.value.expirationDate
+      !itemData.value.expirationDate ||
+      !itemData.value.householdId
   ) {
     formIncomplete.value = true;
     return;
@@ -144,8 +158,10 @@ const saveItem = async () => {
       unitId: selectedUnit.value,
       expirationDate: typeof itemData.value.expirationDate === 'string'
           ? itemData.value.expirationDate
-          : itemData.value.expirationDate.toISOString().split('T')[0]
+          : itemData.value.expirationDate.toISOString().split('T')[0],
+      householdIds: selectedHousehold.value
     };
+
 
     currentItemStore.itemId = saveData.id;
     currentItemStore.name = saveData.name;
@@ -153,6 +169,10 @@ const saveItem = async () => {
     currentItemStore.categoryId = saveData.categoryId;
     currentItemStore.unitId = saveData.unitId;
     currentItemStore.expirationDate = saveData.expirationDate;
+    currentItemStore.householdIds = saveData.householdIds;
+
+    console.log(saveData);
+    console.log(currentItemStore)
 
     await currentItemStore.saveItem();
 
@@ -262,6 +282,21 @@ onMounted(async () => {
                 :placeholder="t('storage.expiration-date')"
                 class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-base">
           </div>
+        </div>
+
+        <div>
+          <label for="item-category" class="block text-sm font-medium text-gray-700 mb-1">
+            {{ t('storage.select-category') }}
+          </label>
+          <select
+              id="item-category"
+              v-model="selectedHousehold"
+              class="border border-gray-300 w-full rounded-lg p-3 text-base text-black focus:ring-2 focus:ring-blue-500 bg-white">
+            <option disabled value="">{{ t("storage.select-category") }}</option>
+            <option v-for="household in userStore.householdId" :key="household.id" :value="household.id">
+              {{ household.name }}
+            </option>
+          </select>
         </div>
 
         <div v-if="formIncomplete" class="mt-3 mb-1 text-red-600 text-sm text-center">
