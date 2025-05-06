@@ -64,7 +64,8 @@
     "item-name": "Navn",
     "item-amount": "Mengde",
     "item-expiration": "Utløpsdato",
-    "more-info": "Trykk for mer info"
+    "more-info": "Trykk for mer info",
+    "household-list-title": "Dine husholdninger"
   },
   "news": {
     "title": "Nyheter",

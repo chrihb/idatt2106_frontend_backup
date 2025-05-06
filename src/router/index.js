@@ -19,6 +19,7 @@ import {useUserStore} from "@/stores/userStore.js";
 import AdminRegister from "@/components/login/AdminRegister.vue";
 import JoinCreateHousehold from "@/components/joinHousehold/Options.vue";
 import JoinHouseholdView from "@/views/JoinHouseholdView.vue";
+import HouseholdListView from '@/views/HouseholdListView.vue';
 
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
@@ -29,7 +30,8 @@ const router = createRouter({
                 { path: "", component: HomeView },
                 { path: "/news", component: NewsView },
                 { path: "/account", component: AccountView, meta: { requiresAuth: true } },
-                { path: "/storage", component: EmergencyStorage, meta: { requiresAuth: true, requiresHousehold: true } },
+                { path: "/storage", component: HouseholdListView, meta: { requiresAuth: true }, requiresHousehold: true },
+                { path: "/storage/:id", component: EmergencyStorage, meta: { requiresAuth: true }, props: true },
                 { path: "/about-us", component: AboutUsView },
                 { path: "/privacy-policy", component: PrivacyPolicyView },
                 { path: "/map", component: MapView },
