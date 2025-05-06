@@ -8,7 +8,6 @@ import ManageStorage from "@/components/myHome/ManageStorage.vue";
 import CompleteMap from "@/components/map/CompleteMap.vue";
 import ManageHousehold from "@/components/myHome/ManageHousehold.vue";
 import { useRoute } from "vue-router";
-import {integer} from "@vee-validate/rules";
 
 const route = useRoute();
 
