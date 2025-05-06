@@ -56,7 +56,10 @@
       "select-unit": "Select Unit",
       "no-items-in-category": "No items found in this category",
       "no-items": "No items found",
+      "inconsistent-units": "Inconsistent units",
       "expiration-date": "Expiry",
+      "expiring-soon": "Expiring Soon",
+      "expired": "Expired",
       "fill-all-fields": "Please fill in all fields",
       "leave-message": "Are you sure you want to leave this page? Unsaved changes will be deleted.",
       "quit": "Quit",
@@ -65,7 +68,8 @@
       "item-amount": "Item Amount",
       "item-expiration": "Expiry",
       "more-info": "Click for More Info",
-      "household-list-title": "Your households"
+      "household-list-title": "Your households",
+      "inventory-categories": "Inventory Categories"
     },
     "news": {
       "title": "News",
