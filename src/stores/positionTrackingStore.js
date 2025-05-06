@@ -33,7 +33,10 @@ export const usePositionTrackingStore = defineStore("positionTrackingStore", {
                         }
                         // Create a new marker at the user's location
                         marker = L.marker([this.latitude, this.longitude],
-                            {icon : createCustomMarkerIcon("PersonligPlassering")});
+                            {icon : L.icon ({
+                                    iconUrl: "/icons/map/PersonligPlassering.png",
+                                    iconSize: [30, 30],
+                                })});
                         // Add the marker to the layer group
                         mapStore.layerGroup["PersonligPlassering"].addLayer(marker);
                         // Center the map on the user's location

@@ -27,16 +27,29 @@ export const createZonePopup = (name, type, level, address, description) =>
                 </div>
     `;
 
+const iconCache = {};
+
 export const createCustomMarkerIcon = (type) => {
-    const iconUrl = `/icons/map/${type}.png`;
-    return L.icon({
+    if (iconCache[type]) {
+        return iconCache[type];
+    }
+
+    const blackWhiteIcons = true;
+    const iconUrl = blackWhiteIcons
+        ? `/icons/map-black-white/${type}.png`
+        : `/icons/map/${type}.png`;
+
+    const icon = L.icon({
         iconUrl: iconUrl,
-        //shadowUrl: '/icons/map/marker-shadow.png',
-
-        iconSize: [24, 24],
-        //shadowSize: [30, 30],
-
+        iconSize: blackWhiteIcons ? [15, 15] : [25, 25],
+        iconAnchor: [7.5, 6.5],
+        shadowUrl: blackWhiteIcons ? '/icons/map-black-white/marker-shadow.png' : undefined,
+        shadowSize: blackWhiteIcons ? [30, 30] : undefined,
+        shadowAnchor: blackWhiteIcons ? [15.5, 11] : undefined,
     });
+
+    iconCache[type] = icon;
+    return icon;
 }
 
 // Add a marker to the map
