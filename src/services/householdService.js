@@ -2,7 +2,7 @@ import axios from 'axios';
 import { useUserStore } from '@/stores/userStore';
 import {useRouter} from "vue-router";
 
-export const requestHouseholds = async (token) => {
+export const requestHouseholds = async () => {
     const userStore = useUserStore();
     const router = useRouter();
 
@@ -10,7 +10,7 @@ export const requestHouseholds = async (token) => {
         const response = await axios.get(`${window.backendURL}/api/households/myHouseholds`,
             {
                 headers: {
-                    Authorization: `Bearer ${token}`
+                    Authorization: `Bearer ${userStore.token}`
                 }
             }
         );

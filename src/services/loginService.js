@@ -15,9 +15,12 @@ export const requestLogin = async (loginForm, t) => {
 
         if (response.status === 200 && data.token) {
 
-            const households = await requestHouseholds(data.token)
+            userStore.setCredentials({ token: data.token, authenticated: true });
 
-            userStore.setCredentials(data.token, true, households);
+            const households = await requestHouseholds();
+
+            userStore.setCredentials({ householdId: households });
+
             return { success: true };
         } else {
             return { error: 'Login failed: Invalid response format from server.' };

@@ -17,11 +17,12 @@ export const useUserStore = defineStore('user', {
             }
             this.authenticated = await requestAuthenticationCheck();
         },
-        setCredentials(token, authenticated, householdId) {
-            this.token = token;
-            this.authenticated = authenticated;
-            this.householdId = householdId;
-        },
+        setCredentials({ token, authenticated, householdId } = {}) {
+            if (token !== undefined) this.token = token;
+            if (authenticated !== undefined) this.authenticated = authenticated;
+            if (householdId !== undefined) this.householdId = householdId;
+        }
+        ,
         clearToken() {
             this.token = null;
             this.authenticated = false;
