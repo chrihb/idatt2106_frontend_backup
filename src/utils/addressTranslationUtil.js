@@ -63,14 +63,7 @@ const fetchAndCacheAddressData = async (lat, lng) => {
 const getAddress = async (lat, lng) => {
     const addr = await fetchAndCacheAddressData(lat, lng);
 
-    const full = [
-        addr.road,
-        addr.postcode,
-        addr.city || addr.town || addr.village,
-        addr.country,
-    ]
-        .filter(Boolean)
-        .join(', ');
+    const full = `${addr.road} ${addr.house_number || ''}, ${addr.postcode}  ${addr.city || addr.town || addr.village}`
 
     return full || 'Address not found';
 };

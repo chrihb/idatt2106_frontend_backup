@@ -1,6 +1,7 @@
 import axios from 'axios';
-import { useUserStore } from '@/stores/userStore';
+import {useUserStore} from '@/stores/userStore';
 import {useRouter} from "vue-router";
+import {getAddress} from "@/utils/addressTranslationUtil.js";
 
 export const requestHouseholds = async () => {
     const userStore = useUserStore();
@@ -17,17 +18,23 @@ export const requestHouseholds = async () => {
 
         console.log("Response status:", response.status);
         if (response.status !== 200) {
-            userStore.clearToken();
-            await router.push('/login');
             return []
         }
 
         console.log("Response data:", response.data);
+
+        for (let i = 0; i < response.data.length; i++) {
+            const household = response.data[i];
+            if (household.latitude && household.longitude) {
+                household.address = await getAddress(household.latitude, household.longitude);
+            } else {
+                household.address = null;
+            }
+        }
+
         return response.data;
     } catch (error) {
-        console.error('Error checking authentication:', error.code);
-        userStore.clearToken();
-        await router.push('/login');
+        console.error('Error:', error.code);
     }
 };
 

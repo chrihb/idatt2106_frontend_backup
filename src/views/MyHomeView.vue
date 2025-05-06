@@ -7,8 +7,12 @@ import {useHomeStore} from "@/stores/homeStore.js";
 import ManageStorage from "@/components/myHome/ManageStorage.vue";
 import CompleteMap from "@/components/map/CompleteMap.vue";
 import ManageHousehold from "@/components/myHome/ManageHousehold.vue";
+import { useRoute } from "vue-router";
+import {integer} from "@vee-validate/rules";
 
+const route = useRoute();
 
+const id = parseInt(route.params.id)
 const { t } = useI18n();
 const homeStore = useHomeStore();
 </script>
@@ -17,7 +21,7 @@ const homeStore = useHomeStore();
   <div class="py-2 px-2">
     <div class="grid grid-cols-[auto_1fr] gap-2">
       <div class="flex flex-col gap-2">
-        <Address class="" />
+        <Address :id="id" class="" />
         <Nearest class="" :title="t('my-home.shelter')" :nearest="homeStore.nearest.shelter" ></Nearest>
         <Nearest class="" :title="t('my-home.defib')" :nearest="homeStore.nearest.defib" ></Nearest>
         <Nearest class="" :title="t('my-home.hospital')" :nearest="homeStore.nearest.hospital" ></Nearest>
