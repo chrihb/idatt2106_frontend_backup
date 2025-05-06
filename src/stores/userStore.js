@@ -17,7 +17,7 @@ export const useUserStore = defineStore('user', {
             }
             this.authenticated = await requestAuthenticationCheck();
         },
-        setCredentials(token, email, authenticated, householdId) {
+        setCredentials(token, authenticated, householdId) {
             this.token = token;
             this.authenticated = authenticated;
             this.householdId = householdId;
