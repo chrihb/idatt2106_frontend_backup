@@ -34,18 +34,10 @@ export const createCustomMarkerIcon = (type) => {
         return iconCache[type];
     }
 
-    const blackWhiteIcons = true;
-    const iconUrl = blackWhiteIcons
-        ? `/icons/map-black-white/${type}.png`
-        : `/icons/map/${type}.png`;
-
+    const iconUrl = `/icons/map/${type}.png`;
     const icon = L.icon({
         iconUrl: iconUrl,
-        iconSize: blackWhiteIcons ? [15, 15] : [25, 25],
-        iconAnchor: [7.5, 6.5],
-        shadowUrl: blackWhiteIcons ? '/icons/map-black-white/marker-shadow.png' : undefined,
-        shadowSize: blackWhiteIcons ? [30, 30] : undefined,
-        shadowAnchor: blackWhiteIcons ? [15.5, 11] : undefined,
+        iconSize: [25, 25],
     });
 
     iconCache[type] = icon;
