@@ -2,7 +2,6 @@ import L from "leaflet";
 import { defineStore } from "pinia";
 import { useMapStore } from "@/stores/mapStore.js";
 import {watchUserPosition} from "@/services/geoLocationService.js";
-import {createCustomMarkerIcon} from "@/utils/mapUtils.js";
 
 export const usePositionTrackingStore = defineStore("positionTrackingStore", {
     state: () => ({
