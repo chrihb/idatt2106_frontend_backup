@@ -84,7 +84,24 @@
       "hospital": "Hospital",
       "distance": "Distance",
       "coordinates": "Coordinates",
-      "manage-storage": "Manage Storage"
+      "manage-storage": "Manage Storage",
+      "manage-household": "Manage Household"
+    },
+    "household": {
+      "title": "My Household",
+      "generateInvite": "Generate Invite",
+      "inviteLinkGenerated": "Invite link generated",
+      "confirmDelete": "Confirm Deletion",
+      "deleteMember": "Are you sure you want to delete {name}?",
+      "cancel": "Cancel",
+      "delete": "Delete",
+      "inviteLink": "Invite Link",
+      "link": "Link",
+      "householdId": "Household ID",
+      "copy": "Copy",
+      "close": "Close",
+      "copiedToClipboard": "Copied to clipboard",
+      "leaveHousehold": "Leave Household"
     },
   "login": {
     "title": "Login",
@@ -162,7 +179,7 @@
   "auth":{
     "login": "Login",
     "register": "Register"
-  }, 
+  },
   "essential-items": {
   "title": "Essential Items",
   "sections": {

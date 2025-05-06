@@ -1,0 +1,77 @@
+<script setup>
+import { useI18n } from "vue-i18n";
+
+const { t } = useI18n();
+
+defineProps({
+  inviteLink: {
+    type: String,
+    required: true,
+  },
+  householdId: {
+    type: String,
+    required: true,
+  },
+});
+
+defineEmits(["close"]);
+
+const copyToClipboard = (text) => {
+  navigator.clipboard.writeText(text).then(() => {
+    alert(t("household.copiedToClipboard"));
+  });
+};
+</script>
+
+<template>
+  <div class="fixed inset-0 flex justify-center items-center z-50 bg-gray-800 bg-opacity-50">
+    <div class="bg-white p-6 rounded shadow-lg w-full max-w-md">
+      <h2 class="text-xl font-bold mb-4">{{ t("household.inviteLink") }}</h2>
+      <div class="mb-4">
+        <label class="block text-sm font-medium mb-1">{{ t("household.link") }}</label>
+        <div class="flex items-center gap-2">
+          <input
+              type="text"
+              :value="inviteLink"
+              readonly
+              class="w-full px-3 py-2 border rounded"
+          />
+          <button
+              class="bg-gray-200 text-gray-700 px-2 py-1 rounded hover:bg-gray-300"
+              @click="copyToClipboard(inviteLink)"
+          >
+            {{ t("household.copy") }}
+          </button>
+        </div>
+      </div>
+      <div class="mb-4">
+        <label class="block text-sm font-medium mb-1">{{ t("household.householdId") }}</label>
+        <div class="flex items-center gap-2">
+          <input
+              type="text"
+              :value="householdId"
+              readonly
+              class="w-full px-3 py-2 border rounded"
+          />
+          <button
+              class="bg-gray-200 text-gray-700 px-2 py-1 rounded hover:bg-gray-300"
+              @click="copyToClipboard(householdId)"
+          >
+            {{ t("household.copy") }}
+          </button>
+        </div>
+      </div>
+      <div class="flex justify-end">
+        <button
+            class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+            @click="$emit('close')"
+        >
+          {{ t("household.close") }}
+        </button>
+      </div>
+    </div>
+  </div>
+</template>
+
+<style scoped>
+</style>

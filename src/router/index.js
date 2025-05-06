@@ -17,6 +17,7 @@ import PasswordResetNewPassword from "@/components/email/passwordReset/PasswordR
 import SimpleCenteredComponent from "@/views/SimpleCenteredComponent.vue";
 import {useUserStore} from "@/stores/userStore.js";
 import AdminRegister from "@/components/AdminRegister.vue";
+import MyHouseholdView from "@/views/MyHouseholdView.vue";
 
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
