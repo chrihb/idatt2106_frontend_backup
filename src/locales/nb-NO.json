@@ -84,7 +84,19 @@
     "hospital": "Sykehus",
     "distance": "Distanse",
     "coordinates": "Koordinater",
-    "manage-storage": "Administrer lager"
+    "manage-storage": "Administrer lager",
+    "join": "Bli Med",
+    "create": "Opprett Ny",
+    "create-household": "Opprett Husstand",
+    "nickname": "Kallenavn",
+    "nicknameRequired": "Kallenavn er påkrevd",
+    "addressRequired": "Adresse er påkrevd",
+    "join-household": "Bli med i husstand",
+    "invite-code": "Invitasjonskode",
+    "invite-codeRequired": "Invitasjonskode er påkrevd",
+    "or": "eller",
+    "available": "Tilgjengelige husstander",
+    "create-desc": "en husstand for å administrere lageret ditt og andre medlemmer"
   },
   "login": {
     "title": "Logg Inn",

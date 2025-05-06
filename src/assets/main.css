@@ -32,4 +32,9 @@
     --color-kf-white-contrast-2: #f2f2f2;  /* gentle gray tint */
     --color-kf-white-contrast-3: #eaeaea;  /* noticeable soft gray */
     --color-kf-white-contrast-4: #e0e0e0;  /* more distinct contrast */
+    --color-kf-white-contrast-5: #d6d6d6;  /* clearly gray */
+    --color-kf-white-contrast-6: #cccccc;  /* medium-light gray */
+    --color-kf-white-contrast-7: #bfbfbf;  /* approaching mid-gray */
+    --color-kf-white-contrast-8: #b3b3b3;  /* strong but not harsh */
+
 }
