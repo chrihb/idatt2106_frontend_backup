@@ -4,7 +4,6 @@ import axios from 'axios';
 
 
 export const requestRegister = async (registerForm, t) => {
-    const userStore = useUserStore();
 
     try {
         const response = await axios.post(`${window.backendURL}/api/users/register`, registerForm, {
@@ -13,9 +12,6 @@ export const requestRegister = async (registerForm, t) => {
 
         const data = response.data;
         if (data.token) {
-            userStore.setCredentials(data.token, registerForm.email, true, null);
-            return { success: true };
-        } else {
             return { success: true };
         }
 

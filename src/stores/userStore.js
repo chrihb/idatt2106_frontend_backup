@@ -4,9 +4,8 @@ import {requestAuthenticationCheck} from "@/services/authenticationCheckService.
 export const useUserStore = defineStore('user', {
     state: () => ({
         token: null,
-        email: null,
         authenticated: false,
-        householdId: null,
+        householdId: [],
     }),
     actions: {
         async isAuthenticated() {
@@ -20,13 +19,11 @@ export const useUserStore = defineStore('user', {
         },
         setCredentials(token, email, authenticated, householdId) {
             this.token = token;
-            this.email = email;
             this.authenticated = authenticated;
             this.householdId = householdId;
         },
         clearToken() {
             this.token = null;
-            this.email = null;
             this.authenticated = false;
             this.householdId = null;
         },
