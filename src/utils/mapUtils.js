@@ -31,7 +31,11 @@ export const createCustomMarkerIcon = (type) => {
     const iconUrl = `/icons/map/${type}.png`;
     return L.icon({
         iconUrl: iconUrl,
-        iconSize: [40, 40],
+        //shadowUrl: '/icons/map/marker-shadow.png',
+
+        iconSize: [24, 24],
+        //shadowSize: [30, 30],
+
     });
 }
 
