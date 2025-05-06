@@ -2,7 +2,7 @@ import L from "leaflet";
 import { defineStore } from "pinia";
 import { useMapStore } from "@/stores/mapStore.js";
 import {watchUserPosition} from "@/services/geoLocationService.js";
-import {createCustomMarkerIcon} from "@/utils/markerUtils.js";
+import {createCustomMarkerIcon} from "@/utils/mapUtils.js";
 
 export const usePositionTrackingStore = defineStore("positionTrackingStore", {
     state: () => ({
@@ -87,7 +87,7 @@ export const usePositionTrackingStore = defineStore("positionTrackingStore", {
         centerMapOnUser() {
             const mapStore = useMapStore();
             if (this.latitude !== null && this.longitude !== null) {
-                mapStore.map.setView([this.latitude, this.longitude], 15);
+                mapStore.centerMapOnSpecificLocation(this.latitude, this.longitude);
             } else {
                 console.error("User location is not available.");
             }

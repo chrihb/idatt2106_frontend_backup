@@ -15,7 +15,8 @@ export const useEmergencyZoneStore = defineStore('emergencyZone', {
             level: 0,
             description: '',
             coordinates: [],
-        }
+        },
+        error: null,
     }),
     getters: {
         getEmergencyZone: (state) => {
