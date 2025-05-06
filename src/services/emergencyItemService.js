@@ -23,10 +23,10 @@ export function emergencyItemService() {
     });
   }
 
-  async function getEmergencyItems() {
+  async function getEmergencyItems(householdId) {
     try {
       const api = createAxiosInstance();
-      const response = await api.get(`${baseUrl}/household/1`);
+      const response = await api.get(`${baseUrl}/household/${householdId}`);
       return response.data;
     } catch (error) {
       throw new Error('Failed to fetch emergency items');

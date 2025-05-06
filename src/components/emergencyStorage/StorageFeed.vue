@@ -48,7 +48,7 @@ const fetchCategories = async () => {
       await unitsStore.fetchUnits();
     }
 
-    await itemsStore.fetchAllItems();
+    await itemsStore.fetchAllItems(props.householdId);
     const allItems = itemsStore.items;
 
     const groupedCategories = allItems.reduce((acc, item) => {
