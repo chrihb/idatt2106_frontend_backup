@@ -9,9 +9,9 @@ const layerTypes = computed(() =>
 </script>
 
 <template>
-  <div class="relative z-10 p-4 bg-white rounded-lg shadow-md h-full v-full overflow-y-auto">
+  <div class="relative z-10 p-4 bg-white rounded-lg shadow-md h-full w-full overflow-y-auto">
     <h3 class="text-lg font-semibold mb-2">Filtrer visning:</h3>
-    <ul class="space-y-2">
+    <ul class="space-y-3">
       <li v-for="layerType in layerTypes" :key="layerType" class="flex items-center gap-2">
         <ToggleBarItem :layerType="layerType" />
       </li>
