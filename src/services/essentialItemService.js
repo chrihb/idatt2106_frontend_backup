@@ -8,7 +8,7 @@ import { useUserStore } from '@/stores/userStore';
 export const getEssentialItems = async (householdId) => {
   const userStore = useUserStore();
 
-  const response = await axios.get(`${window.backendURL}/api/households/essential-items`, {
+  const response = await axios.get(`${window.backendURL}/api/households/essential-items/${householdId}`, {
     headers: {
       Authorization: `Bearer ${userStore.token}`,
     },
