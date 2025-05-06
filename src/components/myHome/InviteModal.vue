@@ -8,7 +8,7 @@ defineProps({
     type: String,
     required: true,
   },
-  householdId: {
+  inviteCode: {
     type: String,
     required: true,
   },
@@ -17,9 +17,7 @@ defineProps({
 defineEmits(["close"]);
 
 const copyToClipboard = (text) => {
-  navigator.clipboard.writeText(text).then(() => {
-    alert(t("household.copiedToClipboard"));
-  });
+  navigator.clipboard.writeText(text)
 };
 </script>
 
@@ -49,13 +47,13 @@ const copyToClipboard = (text) => {
         <div class="flex items-center gap-2">
           <input
               type="text"
-              :value="householdId"
+              :value="inviteCode"
               readonly
               class="w-full px-3 py-2 border rounded"
           />
           <button
               class="bg-gray-200 text-gray-700 px-2 py-1 rounded hover:bg-gray-300"
-              @click="copyToClipboard(householdId)"
+              @click="copyToClipboard(inviteCode)"
           >
             {{ t("household.copy") }}
           </button>

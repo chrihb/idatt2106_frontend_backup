@@ -7,7 +7,7 @@ import ConfirmationModal from "@/components/myHome/ConfirmationModal.vue";
 import InviteModal from "@/components/myHome/InviteModal.vue";
 import {XMarkIcon} from "@heroicons/vue/24/solid/index.js";
 import {useUserStore} from "@/stores/userStore.js";
-import {requestHouseholds} from "@/services/householdService.js";
+import {getInviteCode, requestHouseholds} from "@/services/householdService.js";
 
 
 const { t } = useI18n();
@@ -28,6 +28,7 @@ const isAdmin = ref(true);
 const selectedMember = ref(null);
 const showInviteModal = ref(false);
 const inviteLink = ref("");
+const inviteCode = ref("");
 const householdId = computed(() => userStore.householdId[0]?.id || null); // Access the first household ID
 
 // Watch userStore.household.members for changes and update members ref
@@ -47,9 +48,11 @@ watch(
     { immediate: true }
 );
 
-const openInviteModal = () => {
-  householdId.value = Math.random().toString(36).substr(2, 8).toUpperCase();
-  inviteLink.value = `${window.location.origin}/invite/${householdId.value}`;
+const openInviteModal = async () => {
+  console.log("Opening invite modal");
+  inviteCode.value = await getInviteCode(householdId.value)
+  console.log("Invite code:", inviteCode);
+  inviteLink.value = `${window.location.origin}/household/options/?inviteCode=${inviteCode.value}`;
   showInviteModal.value = true;
 };
 
@@ -118,7 +121,7 @@ const leaveHousehold = () => {
       <InviteModal
           v-if="showInviteModal"
           :invite-link="inviteLink"
-          :household-id="householdId"
+          :invite-code="inviteCode"
           @close="closeInviteModal"
       />
 
