@@ -2,7 +2,7 @@ import axios from 'axios';
 import { useUserStore } from '@/stores/userStore';
 
 /**
- * Fetches preparedness status for all households linked to the authenticated user.
+ * Fetches preparedness status for the primary household linked to the authenticated user.
  * Requires JWT token.
  * @returns {Promise<Array>} List of PreparednessStatus objects, one per household.
  */
@@ -16,6 +16,5 @@ export const getPreparednessStatus = async () => {
     });
 
     console.log('Preparedness status response:', response.data);
-    return response.data; // List of { daysOfFood, daysOfWater }
+    return response.data; // List of { id, householdName, {daysOfFood, daysOfWater} }
 };
-

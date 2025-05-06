@@ -13,6 +13,13 @@ import { ExclamationTriangleIcon, XCircleIcon } from "@heroicons/vue/24/solid/in
 
 const {t} = useI18n();
 
+const props = defineProps({
+  householdId: {
+    type: [String, Number],
+    required: true
+  }
+});
+
 const categoriesStore = useCategoriesStore();
 const unitsStore = useUnitsStore();
 const itemsStore = useEmergencyItemsStore();
@@ -125,7 +132,10 @@ const closeUpdateModal = () => {
 
 const handleItemUpdated = async () => {
   await fetchCategories();
+  await checklistRef.value?.refreshEssentials();
 };
+const checklistRef = ref(null);
+
 
 onMounted(async () => {
   await fetchCategories();
@@ -137,8 +147,9 @@ onMounted(async () => {
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
       <!-- Venstre kolonne -->
       <div class="lg:col-span-1 flex flex-col gap-4">
-        <DetailedStorageStatus />
-        <EssentialItemChecklist />
+        <DetailedStorageStatus :householdId="props.householdId"/>
+        <EssentialItemChecklist :householdId="props.householdId"
+        ref="checklistRef"/>
       </div>
 
       <!-- Høyre kolonne -->
