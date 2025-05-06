@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { useUserStore } from '@/stores/userStore';
+import {requestHouseholds} from "@/services/householdService.js";
 
 export const requestLogin = async (loginForm, t) => {
     const userStore = useUserStore();
@@ -13,7 +14,13 @@ export const requestLogin = async (loginForm, t) => {
         console.log('Login response:', data); // Debug the response
 
         if (response.status === 200 && data.token) {
-            userStore.setCredentials(data.token, true, data.householdId);
+
+            userStore.setCredentials({ token: data.token, authenticated: true });
+
+            const households = await requestHouseholds();
+
+            userStore.setCredentials({ householdId: households });
+
             return { success: true };
         } else {
             return { error: 'Login failed: Invalid response format from server.' };
