@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { useUserStore } from '@/stores/userStore';
 import {requestHouseholds} from "@/services/householdService.js";
+import { getUserSettings } from './userSettingsService';
 
 export const requestLogin = async (loginForm, t) => {
     const userStore = useUserStore();
@@ -20,6 +21,9 @@ export const requestLogin = async (loginForm, t) => {
             const households = await requestHouseholds();
 
             userStore.setCredentials({ householdId: households });
+
+            const settings = await getUserSettings();
+            userStore.setUserSettings(settings);
 
             return { success: true };
         } else {
