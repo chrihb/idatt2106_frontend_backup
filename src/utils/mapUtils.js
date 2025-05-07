@@ -8,6 +8,7 @@ import {markerService} from "@/services/markerService.js";
 import {useMarkerStore} from "@/stores/markerStore.js";
 import {useUserStore} from "@/stores/userStore.js";
 import {getUserPosition} from "@/services/locationService.js";
+import {marker} from "leaflet/src/layer/index.js";
 
 export const createMarkerPopup = (type, address, description) =>
     `
@@ -128,13 +129,13 @@ export const addEmergencyZoneToMap = (emergencyZone) => {
         return;
     }
 
-    const emergencyZonesStore = useEmergencyZonesStore();
-    if (emergencyZonesStore.getEmergencyZoneById(emergencyZone.zoneId)) {
+    const mapStore = useMapStore();
+
+    if (mapStore.mapItemIds.includes(emergencyZone.zoneId)) {
         console.error('Emergency zone already exists on the map');
         return;
     }
 
-    const mapStore = useMapStore();
 
     const layerType = getLayerType(emergencyZone.level);
 

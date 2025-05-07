@@ -9,7 +9,7 @@ export const useEmergencyZonesStore = defineStore('emergencyZonesStore', {
             error: null,
         }),
     actions: {
-        async fetchAllEmergencyZones() {
+        async fetchAllEmergencyZones(addToMap = true) {
             this.error = null;
 
             try {
@@ -22,7 +22,9 @@ export const useEmergencyZonesStore = defineStore('emergencyZonesStore', {
                 if (emergencyZonesData.success) {
                     this.clearEmergencyZones();
                     for (const zone of emergencyZonesData.zones) {
-                        addEmergencyZoneToMap(zone);
+                        if (addToMap) {
+                            addEmergencyZoneToMap(zone);
+                        }
                         this.addEmergencyZone(zone);
                     }
                 }
@@ -33,7 +35,7 @@ export const useEmergencyZonesStore = defineStore('emergencyZonesStore', {
             }
         },
 
-        async fetchEmergencyZonesArea(mapBounds, zoneIds) {
+        async fetchEmergencyZonesArea(mapBounds, zoneIds, addToMap = true) {
             this.error = null;
 
             try {
@@ -41,7 +43,9 @@ export const useEmergencyZonesStore = defineStore('emergencyZonesStore', {
                 // TODO: This is a placeholder for the actual service call
                 const result = await service.getEmergencyZonesMock(mapBounds, zoneIds);
                 for (const zone of result.zones) {
-                    addEmergencyZoneToMap(zone);
+                    if (addToMap) {
+                        addEmergencyZoneToMap(zone);
+                    }
                     this.addEmergencyZone(zone);
                 }
 
@@ -58,8 +62,6 @@ export const useEmergencyZonesStore = defineStore('emergencyZonesStore', {
             }
             if (!this.getEmergencyZoneById(emergencyZone.zoneId)) {
                 this.emergencyZones.push(emergencyZone);
-            } else {
-                console.error('Emergency zone already exists in the store');
             }
         },
 
