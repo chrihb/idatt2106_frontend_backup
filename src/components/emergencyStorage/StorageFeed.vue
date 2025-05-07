@@ -114,8 +114,6 @@ const openUpdateModal = (itemId) => {
 };
 
 const openModal = async (category) => {
-  await itemsStore.fetchItemsByCategory(category.id);
-
   modalData.value = {
     id: category.id,
     display: true
@@ -193,6 +191,7 @@ onMounted(async () => {
     <StorageItemMaximized
         :categoryId="modalData.id"
         :display="modalData.display"
+        :householdId="householdId"
         @close="closeModal"
         @update="openUpdateModal"
         @create="openCreateModal"

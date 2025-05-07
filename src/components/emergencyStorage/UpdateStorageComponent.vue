@@ -84,8 +84,8 @@ const loadItemData = async () => {
       if (props.categoryId) {
         item = itemsStore.getItemById(props.itemId);
 
-        if (!item) {
-          await itemsStore.fetchItemsByCategory(props.categoryId);
+        if (!item && props.householdId) {
+          await itemsStore.fetchItemsByCategory(props.categoryId, props.householdId);
           item = itemsStore.getItemById(props.itemId);
         }
       } else {

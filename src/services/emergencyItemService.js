@@ -53,10 +53,10 @@ export function emergencyItemService() {
     }
   }
 
-  async function getEmergencyItemByCategoryId(categoryId) {
+  async function getEmergencyItemByCategoryId(categoryId, householdId) {
     try {
       const api = createAxiosInstance();
-      const response = await api.get(`${baseUrl}/categories/${categoryId}`);
+      const response = await api.get(`${baseUrl}/categories/${categoryId}/household/${householdId}`);
       return response.data;
     } catch (error) {
       throw new Error('Failed to fetch emergency items by category');

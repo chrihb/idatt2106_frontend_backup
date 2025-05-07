@@ -14,6 +14,10 @@ const props = defineProps({
   display: {
     type: Boolean,
     default: false
+  },
+  householdId: {
+    type: Number,
+    required: true
   }
 });
 
@@ -29,7 +33,7 @@ const items = ref([]);
 const loadItems = async () => {
   if (props.display && props.categoryId) {
     try {
-      const categoryItems = await itemsStore.fetchItemsByCategory(props.categoryId);
+      const categoryItems = await itemsStore.fetchItemsByCategory(props.categoryId, props.householdId);
 
       items.value = categoryItems.map(item => ({
         ...item,
