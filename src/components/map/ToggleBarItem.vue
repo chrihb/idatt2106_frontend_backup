@@ -16,10 +16,10 @@ const toggleLayer = () => {
 
 const layerIcon = () => {
   if (props.layerType === 'Fare nivå 1') {
-    return "circle-green";
+    return "circle-yellow";
   }
   if (props.layerType === 'Fare nivå 2') {
-    return "circle-yellow";
+    return "circle-orange";
   }
   if (props.layerType === 'Fare nivå 3') {
     return "circle-red";
@@ -38,17 +38,17 @@ const layerIcon = () => {
         checked
         @change="toggleLayer"
     />
-    <template v-if="layerIcon() === 'circle-green'">
-      <span class="h-5 w-5 rounded-full bg-green-500"></span>
+    <template v-if="layerIcon() === 'circle-yellow'">
+      <span class="h-5 w-5 rounded-full bg-yellow-200 border-1"></span>
     </template>
-    <template v-else-if="layerIcon() === 'circle-yellow'">
-      <span class="h-5 w-5 rounded-full bg-yellow-500"></span>
+    <template v-else-if="layerIcon() === 'circle-orange'">
+      <span class="h-5 w-5 rounded-full bg-orange-500 border-1"></span>
     </template>
     <template v-else-if="layerIcon() === 'circle-red'">
-      <span class="h-5 w-5 rounded-full bg-red-500"></span>
+      <span class="h-5 w-5 rounded-full bg-red-900 border-1"></span>
     </template>
     <template v-else>
-      <img :src="layerIcon()" alt="icon" class="h-5 w-5 rounded-full" />
+      <img :src="layerIcon()" alt="icon" class="h-5 w-5 rounded-full border-1" />
     </template>
     <span class="text-sm font-medium text-gray-700">{{ layerType }}</span>
   </label>
