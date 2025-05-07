@@ -5,9 +5,13 @@ import { iconMap, routedSettings, toggleableSettingKeys } from "@/utils/settings
 import AccountToggleButton from "@/components/account/AccountToggleButton.vue";
 import { useUserStore } from '@/stores/userStore';
 import { saveUserSettings } from '@/services/userSettingsService';
+import { computed } from 'vue';
 
 
 const { t } = useI18n();
+
+const userStore = useUserStore();
+
 
 const toggleableSettings = computed(() =>
   toggleableSettingKeys.map(setting => ({

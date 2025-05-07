@@ -5,11 +5,11 @@ import { HomeIcon, ArchiveBoxIcon, MapIcon, UserGroupIcon, DocumentTextIcon,
 export const toggleableSettingKeys = [
     {
       id: 'showStorageStatusOnFrontpage',
-      description: 'account-settings.showStorageStatusOnFrontpage',
+      description: 'account-settings.show-storage-on-frontpage',
     },
     {
       id: 'showHouseholdStatusOnFrontpage',
-      description: 'account-settings.showHouseholdStatusOnFrontpage',
+      description: 'account-settings.show-household-on-frontpage',
     }
   ];
 

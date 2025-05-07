@@ -12,12 +12,13 @@ export const getUserSettings = async () => {
         Authorization: `Bearer ${token}`
       }
     });
-  
+    console.log('User settings response:', response.data);
     return response.data;
   };  
   
 
 export const saveUserSettings = async (settings) => {
+    console.log('Saving user settings:', settings);
   const userStore = useUserStore();
   const token = userStore.token || sessionStorage.getItem('token');
 
