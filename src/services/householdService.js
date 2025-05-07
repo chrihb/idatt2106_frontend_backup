@@ -1,7 +1,11 @@
 import axios from 'axios';
-import { useUserStore } from '@/stores/userStore';
+import {useUserStore} from '@/stores/userStore';
 import {useRouter} from "vue-router";
 
+/**
+ * Requests the user's households from the backend.
+ * @returns {Promise<any|null>} - The list of households or null if an error occurred.
+ */
 export const requestHouseholds = async () => {
     const userStore = useUserStore();
     const router = useRouter();
@@ -38,6 +42,11 @@ export const requestHouseholds = async () => {
     }
 };
 
+/**
+ * Requests the household details from the backend.
+ * @param id - The ID of the household to fetch.
+ * @returns {Promise<any|null>} - The household details or null if an error occurred.
+ */
 export const getInviteCode = async (id) => {
     const userStore = useUserStore();
     const router = useRouter();
@@ -64,6 +73,12 @@ export const getInviteCode = async (id) => {
         await router.push('/login');
     }
 };
+/**
+ * Removes a user from a household.
+ * @param householdId The ID of the household from which to remove the user.
+ * @param userId The ID of the user to remove.
+ * @returns {Promise<{error: string}|any|null>} - The response data or an error object if an error occurred.
+ */
 export const kickUserFromHousehold = async (householdId, userId) => {
     const userStore = useUserStore();
     const router = useRouter();
@@ -76,7 +91,7 @@ export const kickUserFromHousehold = async (householdId, userId) => {
         });
 
         if (response.status === 401) {
-            return { error: "\t\nUser not authorized to kick this user from the household" };
+            return {error: "\t\nUser not authorized to kick this user from the household"};
         }
 
         console.log("Response status:", response.status);
@@ -87,7 +102,7 @@ export const kickUserFromHousehold = async (householdId, userId) => {
         // Update userStore.householdId[0].members
         if (userStore.householdId[0]) {
             const updatedMembers = userStore.householdId[0].members.filter(m => m.id !== userId);
-            const updatedHousehold = { ...userStore.householdId[0], members: updatedMembers };
+            const updatedHousehold = {...userStore.householdId[0], members: updatedMembers};
             userStore.setCredentials({
                 householdId: [updatedHousehold],
             });
@@ -98,12 +113,17 @@ export const kickUserFromHousehold = async (householdId, userId) => {
         userStore.clearToken();
     }
 };
+/**
+ * Leaves a household.
+ * @param householdId The ID of the household to leave.
+ * @returns {Promise<any|null>} - The response data or null if an error occurred.
+ */
 export const leaveHouseholdService = async (householdId) => {
     const userStore = useUserStore();
     const router = useRouter();
 
     try {
-        const response = await axios.post(`${window.backendURL}/api/households/${householdId}/leave`, {}, {
+        const response = await axios.delete(`${window.backendURL}/api/households/${householdId}/leave`, {
             headers: {
                 Authorization: `Bearer ${userStore.token}`
             }
@@ -115,13 +135,44 @@ export const leaveHouseholdService = async (householdId) => {
         }
 
         console.log("Left household successfully:", response.data);
-        // Clear household data in userStore
         userStore.setCredentials({
             householdId: [],
         });
         return response.data;
     } catch (error) {
         console.error('Error leaving household:', error.code);
+        await router.push('/login');
+        return null;
+    }
+};
+
+/**
+ * Verifies if the user is an admin of the household.
+ * @param householdId The ID of the household to check.
+ * @returns {Promise<any|null>} - The response data or null if an error occurred.
+ */
+export const verifyIsAdmin = async (householdId) => {
+    const userStore = useUserStore();
+    const router = useRouter();
+
+    try {
+        const response = await axios.get(`${window.backendURL}/api/households/${householdId}/isAdmin`, {
+            headers: {
+                Authorization: `Bearer ${userStore.token}`
+            }
+        });
+
+        console.log("Response status:", response.status);
+        if (response.status !== 200) {
+            return null;
+        }
+
+        console.log("Response data:", response.data);
+        return response.data;
+    } catch (error) {
+        console.error('Error verifying admin status:', error.code);
         userStore.clearToken();
+        await router.push('/login');
+        return null;
     }
 };

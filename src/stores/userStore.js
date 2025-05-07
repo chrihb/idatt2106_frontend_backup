@@ -28,6 +28,9 @@ export const useUserStore = defineStore('user', {
             this.authenticated = false;
             this.householdId = [];
         },
+        clearHouseholdId() {
+            this.householdId = [];
+        }
     },
     persist: {
         enabled: true,

@@ -15,7 +15,7 @@ export const requestRegister = async (registerForm, t) => {
             return { success: true };
         }
 
-        return { error: 'Unexpected response format.' };
+        return { success: true, message: t('register-service.registered') };
     } catch (error) {
         if (error.response) {
             if (error.response.status === 400) {

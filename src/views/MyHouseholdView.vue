@@ -7,7 +7,7 @@ import ConfirmationModal from "@/components/myHome/ConfirmationModal.vue";
 import InviteModal from "@/components/myHome/InviteModal.vue";
 import { XMarkIcon } from "@heroicons/vue/24/solid/index.js";
 import { useUserStore } from "@/stores/userStore.js";
-import { getInviteCode, leaveHouseholdService, requestHouseholds } from "@/services/householdService.js";
+import {getInviteCode, leaveHouseholdService, requestHouseholds, verifyIsAdmin} from "@/services/householdService.js";
 import { kickUserFromHousehold } from "@/services/householdService.js";
 
 const { t } = useI18n();
@@ -24,7 +24,7 @@ const props = defineProps({
 const emit = defineEmits(["close"]);
 
 const members = ref([]);
-const isAdmin = ref(true); // Default to false, update based on logic below
+const isAdmin = ref(false);
 const selectedMember = ref(null);
 const showInviteModal = ref(false);
 const inviteLink = ref("");
@@ -34,8 +34,6 @@ const household = computed(() => userStore.householdId[0] || null);
 const householdId = computed(() => household.value?.id || null);
 
 
-
-// Sync members with household
 watch(
     () => household.value?.members,
     (newMembers) => {
@@ -43,6 +41,19 @@ watch(
     },
     { immediate: true }
 );
+
+onMounted(async () => {
+  await checkAdminStatus();
+});
+
+const checkAdminStatus = async () => {
+  if (householdId.value) {
+    const isAdminResult = await verifyIsAdmin(householdId.value);
+    isAdmin.value = isAdminResult || false;
+  } else {
+    isAdmin.value = false;
+  }
+};
 
 const openInviteModal = async () => {
   console.log("Opening invite modal");
@@ -60,7 +71,6 @@ const openInviteModal = async () => {
 const closeInviteModal = () => {
   showInviteModal.value = false;
   inviteLink.value = "";
-  // Do not set householdId.value = "" since it's a computed property
 };
 
 const confirmDelete = (member) => {
@@ -77,14 +87,16 @@ const removeMember = async () => {
       const response = await kickUserFromHousehold(householdId.value, selectedMember.value.id);
       if (response) {
         closeModal();
+        if (members.value.length === 0) {
+          userStore.clearHouseholdId()
+          await router.push("/household/options")
+        }
         console.log("Member removed successfully");
       } else {
         console.error("Failed to remove member");
-        // Show error to user
       }
     } catch (error) {
       console.error("Error removing member:", error);
-      // Show error to user
     }
   }
 };
@@ -93,6 +105,7 @@ const leaveHousehold = async () => {
   try {
     const response = await leaveHouseholdService(householdId.value);
     if (response) {
+      userStore.clearHouseholdId();
       console.log("Left household successfully");
       await router.push("/");
       emit("close");
