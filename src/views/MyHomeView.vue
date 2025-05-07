@@ -17,8 +17,6 @@ const userStore = useUserStore();
 const route = useRoute();
 
 
-const { t } = useI18n();
-
 const household = userStore.householdId.find(household => household.id === parseInt(route.params.id));
 
 function centerOnAddress() {
@@ -34,8 +32,6 @@ function centerOnAddress() {
         <HouseholdPanel @click="centerOnAddress" :name="household.name" :address="household.address" class="cursor-pointer" />
         <HouseStatus :members="household.members" class="" />
         <Nearest :latitude="household.latitude" :longitude="household.longitude"/>
-        <!--Legevakt-->
-        <!--Møteplass-->
         <ManageHousehold/>
       </div>
       <div class="relative h-full w-full rounded-2xl shadow-lg overflow-hidden">
