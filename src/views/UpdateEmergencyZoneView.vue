@@ -3,8 +3,12 @@ import {onMounted, ref} from 'vue';
 import { useEmergencyZonesStore } from '@/stores/emergencyZonesStore.js';
 import UpdateEmergencyZoneComponent from '@/components/map/UpdateEmergencyZoneComponent.vue';
 import MinimalMap from "@/components/map/MinimalMap.vue";
+import {useI18n} from "vue-i18n";
+import {useEmergencyZoneStore} from "@/stores/emergencyZoneStore.js";
 
+const { t } = useI18n();
 const emergencyZonesStore = useEmergencyZonesStore();
+const emergencyZoneStore = useEmergencyZoneStore();
 const emergencyZones = ref([]);
 const isZoneEditorVisible = ref(false);
 const selectedZoneId = ref(null);
@@ -34,11 +38,21 @@ const handleZoneSaved = async () => {
   closeZoneEditor();
 };
 
+const removeZone = async (zoneId) => {
+  try {
+    await emergencyZoneStore.deleteEmergencyZone(zoneId);
+    await fetchZones();
+    console.log(`Zone with ID ${zoneId} removed successfully.`);
+  } catch (error) {
+    console.error('Error removing zone:', error);
+  }
+};
+
 onMounted(() => {
   try {
     fetchZones();
   } catch (error) {
-    console.error('Error deleting zone:', error);
+    console.error('Error fetching zones:', error);
   }
 });
 </script>
@@ -51,7 +65,7 @@ onMounted(() => {
     </div>
     <!-- Emergency Zones List on right -->
     <div class="w-3/8 h-full p-4 overflow-y-auto">
-      <h1 class="text-xl font-bold mb-4">Emergency Zones</h1>
+      <h1 class="text-xl font-bold mb-4">{{t("zone.EmergencyZones")}}</h1>
       <ul class="space-y-3">
         <li v-for="zone in emergencyZones" :key="zone.zoneId" class="p-4 border rounded-lg">
           <div class="flex justify-between items-center">
@@ -63,7 +77,13 @@ onMounted(() => {
                 class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600"
                 @click="openZoneEditor(zone.zoneId)"
             >
-              Edit
+              {{t('zone.edit')}}
+            </button>
+            <button
+                class="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600"
+                @click="removeZone(zone.zoneId)"
+            >
+              {{t('zone.delete')}}
             </button>
           </div>
         </li>
