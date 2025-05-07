@@ -2,36 +2,16 @@ import { ref } from "vue";
 import { HomeIcon, ArchiveBoxIcon, MapIcon, UserGroupIcon, DocumentTextIcon,
     BellIcon, MapPinIcon, UserPlusIcon, CogIcon } from "@heroicons/vue/24/solid/index.js";
 
-export const toggleableSettings = ref([
+export const toggleableSettingKeys = [
     {
-        id: 8,
-        description: "account-settings.enable-notifications",
-        toggleState: false,
-        adminNeeded: false,
-        superAdminNeeded: false,
+      id: 'showStorageStatusOnFrontpage',
+      description: 'account-settings.show-storage-on-frontpage',
     },
     {
-        id: 9,
-        description: "account-settings.enable-position-sharing",
-        toggleState: false,
-        adminNeeded: false,
-        superAdminNeeded: false,
-    },
-    {
-        id: 10,
-        description: "account-settings.show-storage-on-frontpage",
-        toggleState: false,
-        adminNeeded: false,
-        superAdminNeeded: false,
-    },
-    {
-        id: 11,
-        description: "account-settings.show-household-on-frontpage",
-        toggleState: false,
-        adminNeeded: false,
-        superAdminNeeded: false,
+      id: 'showHouseholdStatusOnFrontpage',
+      description: 'account-settings.show-household-on-frontpage',
     }
-]);
+  ];
 
 export const routedSettings = ref([
     {

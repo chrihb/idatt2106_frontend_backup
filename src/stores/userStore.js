@@ -6,6 +6,10 @@ export const useUserStore = defineStore('user', {
         token: null,
         authenticated: false,
         householdId: [],
+        userSettings: {
+            showStorageStatusOnFrontpage: true,
+            showHouseholdStatusOnFrontpage: true
+        }
     }),
     actions: {
         async isAuthenticated() {
@@ -28,6 +32,10 @@ export const useUserStore = defineStore('user', {
             this.token = null;
             this.authenticated = false;
             this.householdId = [];
+        },
+        
+        setUserSettings(settings) {
+            this.userSettings = settings;
         },
     },
     persist: {
