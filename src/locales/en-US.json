@@ -239,5 +239,10 @@
     "bind": "Sanitary pads",
     "tamponger": "Tampons"
   }
-}
+},
+  "map": {
+    "toggleBar": {
+      "filterView": "Filter view:"
+    }
+  }
 }
