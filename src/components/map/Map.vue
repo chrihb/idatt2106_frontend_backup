@@ -100,17 +100,22 @@ const centerMapOnZone11 = async () => {
 </script>
 
 <template>
-  <div id="map" class="relative min-h-140 h-full w-full z-0 rounded-2xl"></div>
-  <!-- TODO: Remove testing buttons -->
-  <div>
-    <button @click="centerMapOnMarker1" class="absolute top-4 right-4 bg-blue-500 text-white px-4 py-2 rounded">
-      TEST Vis nærmeste hjertestarter
-    </button>
-    <button @click="centerMapOnZone11" class="absolute top-20 right-4 bg-blue-500 text-white px-4 py-2 rounded">
-      TEST Vis nærmeste krise
-    </button>
+  <div id="map-container" class="relative h-full w-full">
+    <div id="map" class="relative min-h-180 w-full z-0 rounded-2xl"></div>
+    <!-- TODO: Remove testing buttons -->
+    <div>
+      <button @click="centerMapOnMarker1" class="absolute top-4 right-4 bg-blue-500 text-white px-4 py-2 rounded">
+        TEST Vis nærmeste hjertestarter
+      </button>
+      <button @click="centerMapOnZone11" class="absolute top-20 right-4 bg-blue-500 text-white px-4 py-2 rounded">
+        TEST Vis nærmeste krise
+      </button>
+    </div>
   </div>
 </template>
 
 <style scoped>
+#map {
+  @apply h-full w-full;
+}
 </style>
