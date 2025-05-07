@@ -239,5 +239,10 @@
     "bind": "Bind",
     "tamponger": "Tamponger"
   }
-}
+},
+  "map": {
+    "toggleBar": {
+      "filterView": "Filtrert visning:"
+    }
+  }
 }
