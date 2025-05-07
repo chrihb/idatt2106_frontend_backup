@@ -131,7 +131,7 @@ const cancelConfirmation = () => {
 
             <div class="mb-3">
               <label for="zoneLevel" class="block text-sm font-medium text-gray-700 mb-1">
-                {{ t('zone.zoneLevel') }}
+                {{ t('zone.zoneEmergencyLevel') }}
               </label>
               <select
                   id="zoneLevel"
@@ -139,9 +139,9 @@ const cancelConfirmation = () => {
                   class="border border-gray-300 w-full rounded-lg p-3 text-base text-black focus:ring-2
                    focus:ring-blue-500 bg-white"
               >
-                <option value="1">{{ t('zoneLevel1') }}</option>
-                <option value="2">{{ t('zoneLevel2') }}</option>
-                <option value="3">{{ t('zoneLevel3') }}</option>
+                <option value="1">{{ t('zone.EmergencyLevel1') }}</option>
+                <option value="2">{{ t('zone.EmergencyLevel2') }}</option>
+                <option value="3">{{ t('zone.EmergencyLevel3') }}</option>
               </select>
             </div>
 
