@@ -41,7 +41,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="flex flex-col md:flex-row gap-4 items-center">
+  <div class="flex flex-col md:flex-row gap-4 items-center mt-2">
     <div @click="handleCreate" class="flex cursor-pointer flex-col justify-center items-center bg-kf-white border border-kf-white-contrast-3 active:border-kf-blue shadow-md rounded-lg size-32 p-4">
       <PlusCircleIcon class="size-12 text-kf-blue mb-2" />
       <p class="text-center text-kf-blue font-bold">{{ t('my-home.create') }}</p>

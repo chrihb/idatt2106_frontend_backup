@@ -60,28 +60,12 @@ const fetchAndCacheAddressData = async (lat, lng) => {
     }
 };
 
-const getAddress = async (lat, lng) => {
+const getAddress = async (lat, lng, { brief }) => {
     const addr = await fetchAndCacheAddressData(lat, lng);
 
-    const full = [
-        addr.road,
-        addr.postcode,
-        addr.city || addr.town || addr.village,
-        addr.country,
-    ]
-        .filter(Boolean)
-        .join(', ');
 
-    return full || 'Address not found';
-};
-
-const getCity = async (lat, lng) => {
-    const addr = await fetchAndCacheAddressData(lat, lng);
-    // Fix the order to match test expectations for the village test case
-    if (addr.city) return addr.city;
-    if (addr.town) return addr.town;
-    if (addr.village) return addr.village;
-    return 'Unknown';
+    if (brief) return addr.road
+    return `${addr.road} ${addr.house_number || ''}, ${addr.postcode}  ${addr.city || addr.town || addr.village}` || 'Address not found';
 };
 
 const getCoordinates = async (address) => {
@@ -163,5 +147,5 @@ const getAddressSuggestions = async (query) => {
 };
 
 
-export { getAddress, getCoordinates, getCity, getAddressSuggestions };
+export { getAddress, getCoordinates, getAddressSuggestions };
 

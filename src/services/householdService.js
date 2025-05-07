@@ -1,10 +1,24 @@
 import axios from 'axios';
-import { useUserStore } from '@/stores/userStore';
+import {useUserStore} from '@/stores/userStore';
 import {useRouter} from "vue-router";
+import {getAddress} from "@/utils/addressTranslationUtil.js";
+
+
+
+const mapAddress = async (objects, { brief }) => {
+    for (let i = 0; i < objects.length; i++) {
+        const object = objects[i];
+        if (object.latitude && object.longitude) {
+            if (brief) object.address = await getAddress(object.latitude, object.longitude, { brief: true });
+            else object.address = await getAddress(object.latitude, object.longitude, { brief: false });
+        } else {
+            object.address = "Unknown";
+        }
+    }
+}
 
 export const requestHouseholds = async () => {
     const userStore = useUserStore();
-    const router = useRouter();
 
     try {
         const response = await axios.get(`${window.backendURL}/api/households/myHouseholds`,
@@ -17,8 +31,104 @@ export const requestHouseholds = async () => {
 
         console.log("Response status:", response.status);
         if (response.status !== 200) {
-            userStore.clearToken();
-            await router.push('/login');
+            return []
+        }
+
+        console.log("Response data:", response.data);
+
+        await mapAddress(response.data, { brief: false });
+        for (const household of response.data) {
+            if (household.members) {
+                await mapAddress(household.members, { brief: true });
+            }
+        }
+
+        return response.data;
+    } catch (error) {
+        console.error('Error:', error.code);
+    }
+};
+
+export const joinHousehold = async (inviteCode) => {
+    const userStore = useUserStore();
+
+    try {
+        const response = await axios.post(`${window.backendURL}/api/households/${inviteCode}/join`, {},
+            {
+                headers: {
+                    Authorization: `Bearer ${userStore.token}`
+                }
+            }
+        );
+
+        console.log("Response status:", response.status);
+        if (response.status !== 200) {
+            console.log("Join household failed");
+            return null
+        }
+
+        console.log("Response data:", response.data);
+        const households = await requestHouseholds();
+        console.log("Households after joining:", households);
+        userStore.setCredentials({ householdId: households });
+        return {success: true};
+    } catch (error) {
+        console.error('Error checking authentication:', error.code);
+        return {success: false};
+    }
+};
+
+export const createHousehold = async (name, lat, lon) => {
+    const userStore = useUserStore();
+
+    console.log(name, lat, lon);
+
+    try {
+        const response = await axios.post(`${window.backendURL}/api/households/create`,
+            {
+                name: name,
+                latitude: lat,
+                longitude: lon
+            },
+            {
+                headers: {
+                    Authorization: `Bearer ${userStore.token}`
+                }
+            }
+        );
+
+        console.log("Response status:", response.status);
+        if (response.status !== 201) {
+            console.log("Create household failed");
+            return null
+        }
+
+        console.log("Response data:", response.data);
+        const households = await requestHouseholds();
+        console.log("Households after joining:", households);
+        userStore.setCredentials({ householdId: households });
+        return {success: true};
+    } catch (error) {
+        console.error('Error checking authentication:', error.code);
+        return {success: false};
+    }
+};
+
+export const getInviteCode = async (id) => {
+    const userStore = useUserStore();
+    const router = useRouter();
+
+    try {
+        const response = await axios.get(`${window.backendURL}/api/households/${id}/invite`,
+            {
+                headers: {
+                    Authorization: `Bearer ${userStore.token}`
+                }
+            }
+        );
+
+        console.log("Response status:", response.status);
+        if (response.status !== 200) {
             return null
         }
 
@@ -29,4 +139,4 @@ export const requestHouseholds = async () => {
         userStore.clearToken();
         await router.push('/login');
     }
-};
+}
