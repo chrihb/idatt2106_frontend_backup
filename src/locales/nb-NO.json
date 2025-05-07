@@ -346,6 +346,7 @@
     "emergencyLevel2": "Krise nivå 2",
     "emergencyLevel3": "Krise nivå 2",
     "zoneCoordinates": "Sone Koordinater",
+    "zoneCoordinatesDescription": "Liste over koordinater for sonen. Format: [[lat, lng], [lat, lng], [lat, lng]]",
     "zoneAddress": "Sone Addresse",
     "zoneDescription": "Sone Beskrivelse",
     "fillAllFields" : "Vennligst fyll ut alle feltene"
