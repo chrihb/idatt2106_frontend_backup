@@ -1,5 +1,5 @@
 <script setup>
-import InfoBox from "@/components/InfoBox.vue";
+import InfoBox from "@/components/login/InfoBox.vue";
 import { useRoute, useRouter } from "vue-router";
 import { useI18n } from "vue-i18n";
 import {ArrowLeftIcon} from "@heroicons/vue/24/solid/index.js";
@@ -13,10 +13,10 @@ const router = useRouter();
 
 <template>
   <div class="min-h-screen flex items-center justify-center bg-kf-white-contrast-2 px-4">
-    <div class="relative bg-kf-white max-w-4xl h-[95vh] rounded-md shadow-md py-2 flex flex-col md:grid md:grid-cols-[1fr_auto_1fr] md:grid-rows-[auto_1fr] w-full">
+    <div class="relative bg-kf-white max-w-4xl w-full min-h-155 rounded-md shadow-md py-2 flex flex-col md:grid md:grid-cols-[1fr_auto_1fr] md:grid-rows-[auto_1fr]">
 
-      <div class="absolute top-2 left-2">
-        <ArrowLeftIcon @click="router.push('/')" class="row-1 col-1 size-8 rounded-full hover:bg-kf-grey"/>
+    <div class="absolute top-2 left-2">
+        <ArrowLeftIcon @click="router.push('/')" class="cursor-pointer row-1 col-1 size-8 rounded-full hover:bg-kf-grey"/>
       </div>
 
       <div class="absolute top-2 right-2">
@@ -34,11 +34,12 @@ const router = useRouter();
       <!-- Right: Login/Register title -->
       <div class="col-3 row-1 w-full">
         <h1 v-if="route.path === '/login'"  class="mt-10 text-4xl font-bold text-kf-blue text-center">{{ t("auth.login") }}</h1>
+        <h1 v-else-if="route.path === '/register-admin'" class="mt-10 text-4xl font-bold text-kf-blue text-center">{{ t("register.admin.register-admin") }}</h1>
         <h1 v-else class="mt-10 text-4xl font-bold text-kf-blue text-center">{{ t("auth.register") }}</h1>
       </div>
 
       <!-- Right: Form content -->
-      <div class="col-3 row-2 flex flex-col p-2 h-full overflow-y-auto ">
+      <div class="col-3 row-2 flex flex-col p-2 h-full max-h-125 overflow-y-auto ">
         <div class="w-full flex-1">
           <router-view />
         </div>

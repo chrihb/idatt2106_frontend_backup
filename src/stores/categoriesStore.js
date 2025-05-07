@@ -4,7 +4,6 @@ import {defineStore} from "pinia";
 export const useCategoriesStore = defineStore("categories", {
   state: () => ({
     categories: [],
-    error: null
   }),
 
   getters: {
@@ -23,8 +22,6 @@ export const useCategoriesStore = defineStore("categories", {
 
   actions: {
     async fetchCategories() {
-      this.error = null;
-
       try {
         const service = emergencyItemService();
         this.categories = await service.getEmergencyItemCategories();

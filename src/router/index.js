@@ -7,18 +7,21 @@ import AccountView from "@/views/AccountView.vue";
 import AdminView from "@/views/AdminView.vue";
 import AboutUsView from "@/views/AboutUsView.vue";
 import PrivacyPolicyView from "@/views/PrivacyPolicyView.vue";
-import StorageView from "@/views/StorageView.vue";
 import MapView from "@/views/MapView.vue";
 import MyHomeView from "@/views/MyHomeView.vue";
 import AuthBase from "@/views/AuthBase.vue";
-import Login from "@/components/Login.vue";
-import Register from "@/components/Register.vue";
+import Login from "@/components/login/Login.vue";
+import Register from "@/components/login/Register.vue";
 import PasswordResetRequest from "@/components/email/passwordReset/PasswordResetRequest.vue";
 import EmailVerification from "@/components/email/EmailVerification.vue";
 import PasswordResetNewPassword from "@/components/email/passwordReset/PasswordResetNewPassword.vue";
 import SimpleCenteredComponent from "@/views/SimpleCenteredComponent.vue";
 import {useUserStore} from "@/stores/userStore.js";
 import SuperAdminView from "@/views/SuperAdminView.vue";
+import AdminRegister from "@/components/login/AdminRegister.vue";
+import JoinCreateHousehold from "@/components/joinHousehold/Options.vue";
+import JoinHouseholdView from "@/views/JoinHouseholdView.vue";
+import HouseholdListView from '@/views/HouseholdListView.vue';
 
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
@@ -29,13 +32,16 @@ const router = createRouter({
                 { path: "", component: HomeView },
                 { path: "/news", component: NewsView },
                 { path: "/account", component: AccountView, meta: { requiresAuth: true } },
-                { path: "/admin-settings", component: AdminView, meta: { requiresAuth: true } },
-                { path: "/manage-admins", component: SuperAdminView, meta: { requiresAuth: true } },
-                { path: "/storage", component: EmergencyStorage, meta: { requiresAuth: true } },
+                { path: "/storage", component: HouseholdListView, meta: { requiresAuth: true }, requiresHousehold: true },
+                { path: "/storage/:id", component: EmergencyStorage, meta: { requiresAuth: true }, props: true },
                 { path: "/about-us", component: AboutUsView },
                 { path: "/privacy-policy", component: PrivacyPolicyView },
                 { path: "/map", component: MapView },
-                { path: "/my-home", component: MyHomeView, meta: { requiresAuth: true } },
+                { path: "/my-home", component: MyHomeView, meta: { requiresAuth: true, requiresHousehold: true } },
+                { path: "/household", component: JoinHouseholdView, meta: { requiresAuth: true },
+                children: [
+                    { path: "options/", component: JoinCreateHousehold },
+                ]},
 
             ],
         },
@@ -43,7 +49,8 @@ const router = createRouter({
             path: "/login", component: AuthBase,
             children: [
                 { path: "/login", name: "Login", component: Login,},
-                { path: "/register-account",name: "Register",component: Register },
+                { path: "/register-account", name: "Register",component: Register },
+                { path: "/register-admin", name: "Register Admin",component: AdminRegister, meta: { requiresAuth: true } },
             ],
         },
         {
@@ -61,20 +68,31 @@ const router = createRouter({
 
 router.beforeEach(async (to, from, next) => {
     const userStore = useUserStore();
-    console.log("running auth check in router...");
 
-    if (to.meta.requiresAuth) {
-        console.log("Requires auth");
-        await userStore.isAuthenticated();
-        console.log("isAuth:", userStore.authenticated);
-        if (!userStore.authenticated) {
-            console.log("Not authenticated, redirecting to login");
-            return next('/login');
-        }
+
+    if (!to.meta.requiresAuth && !to.meta.requiresHousehold) {
+        return next();
     }
-    console.log("Route ok, proceeding...");
-    next();
-});
 
+    if (!userStore.token) {
+        const redirectTo = to.fullPath
+        return next({
+            path: '/login',
+            query: { redirect: redirectTo }
+        })
+    }
+
+    await userStore.isAuthenticated();
+
+    if (userStore.authenticated && !to.meta.requiresHousehold) {
+        return next();
+    }
+
+    if (!userStore.householdId) {
+        return next('/household/options');
+    }
+
+    next()
+});
 
 export default router
