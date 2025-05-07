@@ -28,7 +28,7 @@ const itemData = ref({
   unitId: props.unitId || 0,
   expirationDate: '',
   categoryId: props.categoryId || 0,
-  householdId: props.householdId || userStore.householdId[0].id
+  householdId: props.householdId || -1
 });
 
 const selectedCategory = ref(props.categoryId || 0);
@@ -97,7 +97,7 @@ const loadItemData = async () => {
           categoryId: currentItemStore.categoryId,
           unitId: currentItemStore.unitId,
           expirationDate: currentItemStore.expirationDate,
-          householdId: currentItemStore.householdIds
+          householdId: currentItemStore.householdIds  // This might be the issue
         };
       }
 
@@ -106,10 +106,27 @@ const loadItemData = async () => {
           item.expirationDate = new Date(item.expirationDate);
         }
 
+        // Fix: Ensure householdId is properly set from the item
+        // The object structure may differ between the stores
         itemData.value = {...item};
+
+        // Set the selected values
         selectedCategory.value = item.categoryId;
-        selectedHousehold.value = item.householdId;
         selectedUnit.value = item.unitId;
+
+        // Fix: Explicitly handle the household ID correctly
+        // Check if we have householdIds (plural) or householdId (singular)
+        if (item.householdIds !== undefined) {
+          selectedHousehold.value = item.householdIds;
+          itemData.value.householdId = item.householdIds;
+        } else if (item.householdId !== undefined) {
+          selectedHousehold.value = item.householdId;
+          itemData.value.householdId = item.householdId;
+        } else {
+          // Fallback to the first household ID if needed
+          selectedHousehold.value = userStore.householdId[0]?.id;
+          itemData.value.householdId = userStore.householdId[0]?.id;
+        }
 
         currentItemStore.setItemData(item);
       }
@@ -135,6 +152,7 @@ const loadItemData = async () => {
 };
 
 const saveItem = async () => {
+
   if (
       !itemData.value.name.trim() ||
       !itemData.value.amount ||
@@ -150,26 +168,15 @@ const saveItem = async () => {
   try {
     formIncomplete.value = false;
 
-    const saveData = {
-      id: itemData.value.id,
-      name: itemData.value.name,
-      amount: itemData.value.amount,
-      categoryId: selectedCategory.value,
-      unitId: selectedUnit.value,
-      expirationDate: typeof itemData.value.expirationDate === 'string'
-          ? itemData.value.expirationDate
-          : itemData.value.expirationDate.toISOString().split('T')[0],
-      householdIds: selectedHousehold.value
-    };
-
-
-    currentItemStore.itemId = saveData.id;
-    currentItemStore.name = saveData.name;
-    currentItemStore.amount = saveData.amount;
-    currentItemStore.categoryId = saveData.categoryId;
-    currentItemStore.unitId = saveData.unitId;
-    currentItemStore.expirationDate = saveData.expirationDate;
-    currentItemStore.householdIds = saveData.householdIds;
+    currentItemStore.itemId = itemData.value.id;
+    currentItemStore.name = itemData.value.name;
+    currentItemStore.amount = itemData.value.amount;
+    currentItemStore.categoryId = selectedCategory.value;
+    currentItemStore.unitId = selectedUnit.value;
+    currentItemStore.expirationDate = typeof itemData.value.expirationDate === 'string'
+        ? itemData.value.expirationDate
+        : itemData.value.expirationDate.toISOString().split('T')[0];
+    currentItemStore.householdIds = selectedHousehold.value;
 
     console.log(saveData);
     console.log(currentItemStore)
