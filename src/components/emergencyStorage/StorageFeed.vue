@@ -156,11 +156,11 @@ onMounted(async () => {
         class="mb-4 flex flex-col sm:flex-row items-start sm:items-center sm:justify-between gap-2 sm:gap-0">
       <div v-if="expired" class="flex flex-row gap-2 w-1/3">
         <p>{{ t("storage.expired") }}</p>
-        <XCircleIcon class="text-kf-red w-7 h-7"/>
+        <XCircleIcon class="text-red-600 w-7 h-7"/>
       </div>
       <div v-if="expiringSoon && !expired" class="flex flex-row gap-2">
         <p>{{ t("storage.expiring-soon") }}</p>
-        <ExclamationTriangleIcon class="text-kf-red w-7 h-7"/>
+        <ExclamationTriangleIcon class="text-orange-400 w-7 h-7"/>
       </div>
       <h2 class="text-xl sm:text-2xl font-semibold">{{ t("storage.inventory-categories") }}:</h2>
       <div class="flex flex-row-reverse w-1/3">

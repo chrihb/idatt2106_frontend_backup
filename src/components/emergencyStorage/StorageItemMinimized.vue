@@ -37,8 +37,8 @@ const handleDelete = (event) => {
       <div
           class="flex flex-col sm:flex-row items-start sm:items-center gap-2 sm:gap-1 mt-2 sm:mt-0">
         <div class="text-xs sm:text-sm text-gray-500 sm:mr-3 flex flex-row">
-          <XCircleIcon class="text-kf-red w-7 h-7" v-if="new Date(props.expirationDate).getTime() < Date.now()"/>
-          <ExclamationTriangleIcon class="text-kf-red w-7 h-7" v-if="new Date(props.expirationDate).getTime() < (Date.now() + 31 * 24 * 60 * 60 * 1000) && new Date(props.expirationDate).getTime() >= Date.now()"/>
+          <XCircleIcon class="text-red-600 w-7 h-7" v-if="new Date(props.expirationDate).getTime() < Date.now()"/>
+          <ExclamationTriangleIcon class="text-orange-400 w-7 h-7" v-if="new Date(props.expirationDate).getTime() < (Date.now() + 31 * 24 * 60 * 60 * 1000) && new Date(props.expirationDate).getTime() >= Date.now()"/>
           {{ t("storage.expiration-date") }}: {{ expirationDate }}
         </div>
 
