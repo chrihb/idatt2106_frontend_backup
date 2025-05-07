@@ -1,6 +1,7 @@
 import {defineStore} from "pinia";
 import {emergencyZoneService} from "@/services/emergencyZoneService.js";
 import {useEmergencyZonesStore} from "@/stores/emergencyZonesStore.js";
+import {removeEmergencyZoneFromMap} from "@/utils/mapUtils.js";
 
 
 export const useEmergencyZoneStore = defineStore('emergencyZone', {
@@ -114,7 +115,9 @@ export const useEmergencyZoneStore = defineStore('emergencyZone', {
                 const emergencyZonesStore = useEmergencyZonesStore();
                 const service = emergencyZoneService();
                 const result = await service.deleteEmergencyZone(this.zoneId);
-                emergencyZonesStore().deleteEmergencyZone(this.zoneId);
+
+                removeEmergencyZoneFromMap(this.zoneId);
+                emergencyZonesStore.deleteEmergencyZone(this.zoneId);
                 this.clearEmergencyZoneState();
                 return result;
 
