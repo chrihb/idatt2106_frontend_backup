@@ -73,18 +73,20 @@ onMounted(() => {
               <h2 class="text-lg font-semibold">{{ zone.name }}</h2>
               <p class="text-sm text-gray-600">{{ zone.type }} - Level {{ zone.level }}</p>
             </div>
-            <button
-                class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600"
-                @click="openZoneEditor(zone.zoneId)"
-            >
-              {{t('zone.edit')}}
-            </button>
-            <button
-                class="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600"
-                @click="removeZone(zone.zoneId)"
-            >
-              {{t('zone.delete')}}
-            </button>
+            <div class="flex space-x-2">
+              <button
+                  class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600"
+                  @click="openZoneEditor(zone.zoneId)"
+              >
+                {{t('zone.edit')}}
+              </button>
+              <button
+                  class="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600"
+                  @click="removeZone(zone.zoneId)"
+              >
+                {{t('zone.delete')}}
+              </button>
+              </div>
           </div>
         </li>
       </ul>
