@@ -1,5 +1,5 @@
 <script setup>
-import HouseStatus from "@/components/frontpage/HouseStatus.vue";
+import LocationStatus from "@/components/myHome/LocationStatus.vue";
 import Address from "@/components/myHome/Address.vue";
 import Nearest from "@/components/myHome/Nearest.vue";
 import {useI18n} from "vue-i18n";
@@ -30,7 +30,7 @@ function centerOnAddress() {
     <div class="grid grid-cols-[auto_1fr] gap-2">
       <div class="flex flex-col gap-2 min-w-70 w-full">
         <HouseholdPanel @click="centerOnAddress" :name="household.name" :address="household.address" class="cursor-pointer" />
-        <HouseStatus :members="household.members" class="" />
+        <LocationStatus :members="household.members" class="" />
         <Nearest :latitude="household.latitude" :longitude="household.longitude"/>
         <ManageHousehold :household="household"/>
       </div>
