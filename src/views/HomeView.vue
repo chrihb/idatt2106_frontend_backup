@@ -6,7 +6,7 @@ import PrimaryStorageStatus from "@/components/frontpage/PrimaryStorageStatus.vu
 import LocationStatusFront from "@/components/frontpage/LocationStatusFront.vue";
 import { useRouter } from "vue-router";
 import { ref, onMounted } from "vue";
-import {getPrimaryHousehold} from "@/services/householdService.js";
+import {getPrimaryHousehold, setPrimaryHousehold} from "@/services/householdService.js";
 
 const userStore = useUserStore();
 const router = useRouter();
@@ -14,8 +14,22 @@ const household = ref([]);
 
 onMounted(async () => {
   if (userStore.isAuthenticated && userStore.householdId.length > 0) {
-    const primary = await getPrimaryHousehold();
+    let primary = await getPrimaryHousehold();
 
+    // If no primary, try setting the first household as primary
+    if (!primary?.id && userStore.householdId.length > 0) {
+      try {
+        const firstHousehold = userStore.householdId[0];
+        const success = await setPrimaryHousehold(firstHousehold.id);
+        if (success) {
+          primary = firstHousehold;
+        }
+      } catch (e) {
+        console.warn("Failed to set default primary household:", e);
+      }
+    }
+
+    // Match the household data from the store
     if (primary?.id) {
       const matched = userStore.householdId.find(h => h.id === primary.id);
       if (matched) {
@@ -26,7 +40,6 @@ onMounted(async () => {
     }
   }
 });
-
 </script>
 
 <template>

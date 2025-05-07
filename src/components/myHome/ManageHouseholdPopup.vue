@@ -98,30 +98,40 @@ const closeModal = () => {
 };
 
 const removeMember = async () => {
-  if (selectedMember.value) {
-    try {
-      const response = await kickUserFromHousehold(props.household.id, selectedMember.value.id);
-      if (response) {
-        members.value = members.value.filter(member => member.id !== selectedMember.value.id);
-        closeModal();
+  if (!selectedMember.value) return;
 
-        await userStore.fetchHouseholds();
+  try {
+    const response = await kickUserFromHousehold(props.household.id, selectedMember.value.id);
 
-        if (userStore.householdId.length === 0) {
-          await router.push("/household/options");
-        } else {
-          await router.push("/household/list");
-        }
+    if (response) {
+      await userStore.fetchHouseholds();
 
-        console.log("Member removed successfully");
-      } else {
-        console.error("Failed to remove member");
+      const households = userStore.householdId;
+
+      // If no households remain
+      if (!households || households.length === 0) {
+        await router.push("/");
+        emit("close");
+        return;
       }
-    } catch (error) {
-      console.error("Error removing member:", error);
+
+      // Try to set the first household as primary
+      try {
+        await setPrimaryHousehold(households[0].id);
+      } catch (e) {
+        console.warn("Could not set new primary household:", e);
+      }
+
+      await router.push("/household/list");
+      emit("close");
+    } else {
+      console.error("Failed to remove member");
     }
+  } catch (error) {
+    console.error("Error removing member:", error);
   }
 };
+
 
 const leaveHousehold = async () => {
   try {
