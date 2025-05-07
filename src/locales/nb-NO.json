@@ -239,5 +239,26 @@
     "bind": "Bind",
     "tamponger": "Tamponger"
   }
-}
+},
+  "zone": {
+    "emergencyZones": "Krise Soner:",
+    "edit": "Rediger",
+    "delete": "Slett",
+    "createNewZone": "Opprett Ny Sone",
+    "close": "Lukk",
+    "stay": "Bli",
+    "quit": "Avslutt",
+    "leaveMessage": "Er du sikker på at du vil forlate denne siden? Endringer vil ikke bli lagret.",
+    "updateZone": "Oppdater Sone",
+    "zoneName": "Sone Navn",
+    "zoneType": "Sone Type",
+    "emergencyLevel": "Krise nivå",
+    "emergencyLevel1": "Krise nivå 1",
+    "emergencyLevel2": "Krise nivå 2",
+    "emergencyLevel3": "Krise nivå 2",
+    "zoneCoordinates": "Sone Koordinater",
+    "zoneAddress": "Sone Addresse",
+    "zoneDescription": "Sone Beskrivelse",
+    "fillAllFields" : "Vennligst fyll ut alle feltene"
+  }
 }

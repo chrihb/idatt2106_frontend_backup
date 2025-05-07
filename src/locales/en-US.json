@@ -239,5 +239,26 @@
     "bind": "Sanitary pads",
     "tamponger": "Tampons"
   }
-}
+},
+  "zone": {
+    "emergencyZones": "Emergency Zones:",
+    "edit": "Edit",
+    "delete": "Delete",
+    "createNewZone": "Create New Zone",
+    "close": "Close",
+    "stay": "Stay",
+    "quit": "Quit",
+    "leaveMessage": "Are you sure you want to leave this page? Unsaved changes will be deleted.",
+    "updateZone": "Update Zone",
+    "zoneName": "Zone Name",
+    "zoneType": "Zone Type",
+    "emergencyLevel": "Emergency Level",
+    "emergencyLevel1": "Emergency Level 1",
+    "emergencyLevel2": "Emergency Level 2",
+    "emergencyLevel3": "Emergency Level 2",
+    "zoneCoordinates": "Zone Coordinates",
+    "zoneAddress": "Zone Address",
+    "zoneDescription": "Zone Description",
+    "fillAllFields" : "Please fill in all the fields"
+  }
 }
