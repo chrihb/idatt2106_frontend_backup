@@ -133,20 +133,18 @@ const leaveHousehold = async () => {
 </script>
 
 <template>
-  <div v-if="isOpen" class="fixed inset-0 backdrop-blur-sm flex justify-center items-center z-50 ">
-  <div
-      class="bg-white bg-opacity-90 backdrop-blur-sm p-6 rounded-lg shadow-lg w-1/2 max-h-[80vh] relative border border-black">
-      <!-- Header -->
-      <div class="mb-4 flex justify-between items-center">
-        <h1 class="text-2xl font-bold">{{ t("household.title") }}</h1>
-        <div class="flex gap-2">
-          <XMarkIcon class="absolute top-4 right-4 w-8 h-8 cursor-pointer text-red-500"
-                     @click="$emit('close')"/>
-        </div>
-      </div>
+  <div v-if="isOpen" class="fixed inset-0 backdrop-blur-sm flex justify-center items-center z-50">
+    <div class="bg-kf-white p-6 rounded-lg shadow-lg relative border border-kf-blue max-w-4xl w-full max-h-[90vh] overflow-y-auto">
+
+    <XMarkIcon @click="$emit('close')" class="absolute top-2 right-2 cursor-pointer size-6 rounded-full hover:bg-kf-grey text-kf-blue" />
+
+    <!-- Header -->
+
+    <h1 class="text-kf-blue font-bold text-2xl mb-4">{{ t("household.title") }}</h1>
+
 
       <!-- Members List -->
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
         <MemberCard
             v-for="member in members"
             :key="member.id"
@@ -175,9 +173,9 @@ const leaveHousehold = async () => {
       />
 
       <!-- Leave Household And Invite Button -->
-      <div class="mt-6 flex justify-start gap-4">
+      <div class="mt-8 flex justify-between">
         <button
-            class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+            class="bg-kf-green cursor-pointer text-white px-4 py-2 rounded hover:bg-kf-white-contrast-8"
             @click="openInviteModal"
         >
           {{ t("household.generateInvite") }}
@@ -185,7 +183,7 @@ const leaveHousehold = async () => {
 
         <button
             v-if="!isAdmin"
-            class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600"
+            class="bg-kf-red cursor-pointer text-white px-4 py-2 rounded hover:bg-kf-white-contrast-8"
             @click="leaveHousehold"
         >
           {{ t("household.leaveHousehold") }}

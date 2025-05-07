@@ -15,8 +15,8 @@ const props = defineProps({
 </script>
 
 <template>
-  <div class="bg-kf-white flex flex-col gap-1 items-center shadow-lg rounded-2xl py-2 px-2 cursor-pointer">
-    <h1 class="text-2xl text-kf-blue">{{ t("my-home.location-status") }}</h1>
+  <div class="bg-kf-white flex flex-col gap-1 items-center shadow-lg rounded-2xl p-2 cursor-pointer">
+    <h1 class="text-2xl text-kf-blue font-bold">{{ t("my-home.location-status") }}</h1>
     <div v-for="(member, index) in props.members" :key="index" class="flex flex-col gap-1 w-full">
       <HouseMember :name="member.name" :location="member.address" />
     </div>

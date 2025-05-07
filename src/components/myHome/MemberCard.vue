@@ -16,11 +16,12 @@ defineEmits(["delete"]);
 </script>
 
 <template>
-  <div class="p-4 border rounded shadow flex justify-between items-center">
-    <h2 class="text-lg font-semibold">{{ member.name }}</h2>
-    <TrashIcon
+  <div class="px-4 py-2 w-full border min-w-50 border-kf-blue rounded shadow flex justify-between items-center">
+    <h2 class="text-lg text-kf-blue overflow-hidden whitespace-nowrap text-ellipsis cursor-default">
+      {{ member.name }}
+    </h2>    <TrashIcon
         v-if="isAdmin"
-        class="w-6 h-6 text-red-500 cursor-pointer hover:text-red-700"
+        class="size-6 text-kf-red cursor-pointer hover:text-kf-white-contrast-8"
         @click="$emit('delete', member)"
     />
   </div>

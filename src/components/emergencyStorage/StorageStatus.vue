@@ -39,10 +39,8 @@ const statusMessage = computed(() => {
 </script>
 
 <template>
-  <div class="bg-kf-white w-full flex flex-col gap-4 items-center shadow-lg rounded-2xl py-6 px-6">
-
-
-    <h1 class="text-xl font-semibold text-kf-blue text-center leading-snug">
+  <div class="bg-kf-white w-full flex flex-col gap-4 items-center shadow-lg rounded-2xl p-2">
+    <h1 class="text-2xl text-kf-blue font-bold text-center leading-snug">
         {{ title || t('storage-status.title') }}</h1>
 
 
@@ -55,7 +53,7 @@ const statusMessage = computed(() => {
       </div>
     </div>
 
-    <div class="flex items-center gap-2 px-2 mt-2">
+    <div class="flex items-center gap-2 px-2">
       <component :is="statusIcon.icon" class="size-6" :class="statusIcon.color" />
       <p class="text-sm text-center text-kf-blue leading-relaxed">
         {{ statusMessage }}

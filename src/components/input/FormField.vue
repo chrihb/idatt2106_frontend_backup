@@ -21,7 +21,7 @@ const { value, errorMessage, handleChange } = useField(() => props.fieldName);
         :name="fieldName"
         :value="value"
         @input="handleChange"
-        class="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-kf-link-blue"
+        class="w-full p-2 border border-kf-blue rounded focus:outline-none focus:ring-2 focus:ring-kf-link-blue"
         :class="{ 'border-kf-red': errorMessage }"
         :aria-describedby="errorMessage ? `${fieldName}-error` : null"
     />
