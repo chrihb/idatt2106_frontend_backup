@@ -44,12 +44,13 @@ onMounted(() => {
 </script>
 
 <template>
-  <div >
-    <div>
+  <div class="pt-2 pb-2 flex h-full w-full">
+    <!-- Map Component on left -->
+    <div class="w-5/8 h-full pr-4">
       <MinimalMap />
     </div>
-
-    <div>
+    <!-- Emergency Zones List on right -->
+    <div class="w-3/8 h-full p-4 overflow-y-auto">
       <h1 class="text-xl font-bold mb-4">Emergency Zones</h1>
       <ul class="space-y-3">
         <li v-for="zone in emergencyZones" :key="zone.zoneId" class="p-4 border rounded-lg">
