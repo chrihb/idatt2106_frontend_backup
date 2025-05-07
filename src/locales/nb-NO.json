@@ -133,7 +133,8 @@
     "passwordRequired": "Skriv inn passord.",
     "emailError": "E-post må være på et gyldig format.",
     "emailRequired": "Skriv inn e-post.",
-    "loginError": "Ugyldig e-post eller passord."
+    "loginError": "Ugyldig e-post eller passord.",
+    "redirectSuccessMessage": "Registrering vellykket. Vennligst sjekk e-posten din for å verifisere kontoen din før du logger inn"
   },
   "password-reset": {
     "title": "Tilbakestill Passord",
@@ -193,7 +194,8 @@
     "networkError": "Nettverksfeil. Vennligst sjekk internettilkoblingen din og prøv igjen."
   },
   "login-service": {
-    "invalidCredentials": "Ugyldig brukernavn eller passord."
+    "invalidCredentials": "Ugyldig brukernavn eller passord.",
+    "emailNotVerified": "E-post ikke bekreftet. Vennligst sjekk e-posten din for bekreftelseslenken"
   },
   "auth":{
     "login": "Logg Inn",

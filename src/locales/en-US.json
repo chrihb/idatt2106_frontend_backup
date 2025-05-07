@@ -133,7 +133,8 @@
     "passwordRequired": "Password is required.",
     "emailError": "Email must be a valid email address.",
     "emailRequired": "Email is required.",
-    "loginError": "Invalid email or password."
+    "loginError": "Invalid email or password.",
+    "redirectSuccessMessage": "Registration successful. Please check your email to verify your account before logging in"
   },
     "password-reset": {
         "title": "Password Reset",
@@ -193,7 +194,8 @@
     "networkError": "Network error. Please check your internet connection and try again."
   },
   "login-service": {
-    "invalidCredentials": "Invalid email or password."
+    "invalidCredentials": "Invalid email or password.",
+    "emailNotVerified": "Email not verified. Please check your email for the verification link."
   },
   "auth":{
     "login": "Login",
