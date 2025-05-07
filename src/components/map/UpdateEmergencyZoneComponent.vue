@@ -50,19 +50,6 @@ const saveZone = async () => {
   }
 };
 
-// Delete zone
-const deleteZone = async () => {
-  if (!isUpdate.value) return;
-
-  try {
-    await emergencyZoneStore.deleteEmergencyZone();
-    emit('zoneSaved');
-    emit('close');
-  } catch (error) {
-    console.error('Error deleting zone:', error);
-  }
-};
-
 const close = () => {
   emit('close');
 };
