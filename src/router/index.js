@@ -30,9 +30,9 @@ const router = createRouter({
                 { path: "", component: HomeView },
                 { path: "/news", component: NewsView },
                 { path: "/account", component: AccountView, meta: { requiresAuth: true } },
-                { path: "/storage", component: StorageListView, meta: { requiresAuth: true },
+                { path: "/storage", meta: { requiresAuth: true },
                     children: [
-                        { path: "list", component: StorageListView },
+                        { path: "list", component: StorageListView, meta: { requiresHousehold: true } },
                         { path: ":id", component: EmergencyStorage, meta: { requiresHousehold: true }, props: true },
                     ]},
                 { path: "/about-us", component: AboutUsView },

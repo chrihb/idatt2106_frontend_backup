@@ -56,7 +56,10 @@
       "select-unit": "Select Unit",
       "no-items-in-category": "No items found in this category",
       "no-items": "No items found",
+      "inconsistent-units": "Inconsistent units",
       "expiration-date": "Expiry",
+      "expiring-soon": "Expiring Soon",
+      "expired": "Expired",
       "fill-all-fields": "Please fill in all fields",
       "leave-message": "Are you sure you want to leave this page? Unsaved changes will be deleted.",
       "quit": "Quit",
@@ -65,7 +68,9 @@
       "item-amount": "Item Amount",
       "item-expiration": "Expiry",
       "more-info": "Click for More Info",
-      "household-list-title": "Your households"
+      "household-list-title": "Your households",
+      "inventory-categories": "Inventory Categories",
+      "select-household": "Select Household"
     },
     "news": {
       "title": "News",
@@ -128,7 +133,8 @@
     "passwordRequired": "Password is required.",
     "emailError": "Email must be a valid email address.",
     "emailRequired": "Email is required.",
-    "loginError": "Invalid email or password."
+    "loginError": "Invalid email or password.",
+    "redirectSuccessMessage": "Registration successful. Please check your email to verify your account before logging in"
   },
     "password-reset": {
         "title": "Password Reset",
@@ -188,7 +194,8 @@
     "networkError": "Network error. Please check your internet connection and try again."
   },
   "login-service": {
-    "invalidCredentials": "Invalid email or password."
+    "invalidCredentials": "Invalid email or password.",
+    "emailNotVerified": "Email not verified. Please check your email for the verification link."
   },
   "auth":{
     "login": "Login",

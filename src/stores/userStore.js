@@ -7,6 +7,10 @@ export const useUserStore = defineStore('user', {
         token: null,
         authenticated: false,
         householdId: [],
+        userSettings: {
+            showStorageStatusOnFrontpage: true,
+            showHouseholdStatusOnFrontpage: true
+        }
     }),
     actions: {
         async isAuthenticated() {
@@ -22,6 +26,7 @@ export const useUserStore = defineStore('user', {
             if (token !== undefined) this.token = token;
             if (authenticated !== undefined) this.authenticated = authenticated;
             if (householdId !== undefined) this.householdId = householdId;
+            console.log(householdId)
         }
         ,
         clearToken() {
@@ -39,7 +44,11 @@ export const useUserStore = defineStore('user', {
             } catch (error) {
                 console.error("Error fetching households:", error);
             }
-        }
+        },
+        
+        setUserSettings(settings) {
+            this.userSettings = settings;
+        },
     },
     persist: {
         enabled: true,

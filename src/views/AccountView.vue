@@ -1,18 +1,34 @@
 <script setup>
 import { useI18n } from "vue-i18n";
 import AccountRouterLink from "@/components/account/AccountRouterLink.vue";
-import { iconMap, routedSettings, toggleableSettings } from "@/utils/settings.js";
+import { iconMap, routedSettings, toggleableSettingKeys } from "@/utils/settings.js";
 import AccountToggleButton from "@/components/account/AccountToggleButton.vue";
+import { useUserStore } from '@/stores/userStore';
+import { saveUserSettings } from '@/services/userSettingsService';
+import { computed } from 'vue';
 
 
 const { t } = useI18n();
 
-const toggleSetting = (id) => {
-  const setting = toggleableSettings.value.find((s) => s.id === id);
-  if (setting) {
-    setting.toggleState = !setting.toggleState;
+const userStore = useUserStore();
+
+
+const toggleableSettings = computed(() =>
+  toggleableSettingKeys.map(setting => ({
+    ...setting,
+    toggleState: userStore.userSettings[setting.id]
+  }))
+)
+
+const toggleSetting = async (key) => {
+  const updatedSettings = {
+    ...userStore.userSettings,
+    [key]: !userStore.userSettings[key]
   }
-};
+
+  userStore.setUserSettings(updatedSettings)
+  await saveUserSettings(updatedSettings)
+}
 </script>
 
 <template>

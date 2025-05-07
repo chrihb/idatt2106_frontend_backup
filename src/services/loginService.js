@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { useUserStore } from '@/stores/userStore';
 import {requestHouseholds} from "@/services/householdService.js";
+import { getUserSettings } from './userSettingsService';
 
 export const requestLogin = async (loginForm, t) => {
     const userStore = useUserStore();
@@ -21,6 +22,9 @@ export const requestLogin = async (loginForm, t) => {
 
             userStore.setCredentials({ householdId: households });
 
+            const settings = await getUserSettings();
+            userStore.setUserSettings(settings);
+
             return { success: true };
         } else {
             return { error: 'Login failed: Invalid response format from server.' };
@@ -31,6 +35,9 @@ export const requestLogin = async (loginForm, t) => {
         if (error.response) {
             if (error.response.status === 400 || error.response.status === 404) {
                 return { error: t('login-service.invalidCredentials') };
+            }
+            if (error.response.status === 406) {
+                return { error: t('login-service.emailNotVerified') };
             }
             return { error: 'An error occurred. Please try again.' };
         }

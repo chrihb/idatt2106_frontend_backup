@@ -54,9 +54,12 @@
     "close": "Lukk",
     "select-category": "Velg kategori",
     "select-unit": "Velg Enhet",
+    "inconsistent-units": "Uoverensstemmende enheter",
     "no-items-in-category": "Ingen artikler funnet i denne kategorien",
     "no-items": "Ingen artikler funnet",
     "expiration-date": "Utløp",
+    "expiring-soon": "Artikkel utløper snart",
+    "expired": "Artikkel utløpt",
     "fill-all-fields": "Vennligst fyll ut alle felt",
     "leave-message": "Er du sikker på at du vil forlate denne siden? Endringer vil ikke bli lagret.",
     "quit": "Avslutt",
@@ -65,7 +68,9 @@
     "item-amount": "Mengde",
     "item-expiration": "Utløpsdato",
     "more-info": "Trykk for mer info",
-    "household-list-title": "Dine husholdninger"
+    "household-list-title": "Dine husholdninger",
+    "inventory-categories": "Lagerkategorier",
+    "select-household": "Velg husstand"
   },
   "news": {
     "title": "Nyheter",
@@ -128,7 +133,8 @@
     "passwordRequired": "Skriv inn passord.",
     "emailError": "E-post må være på et gyldig format.",
     "emailRequired": "Skriv inn e-post.",
-    "loginError": "Ugyldig e-post eller passord."
+    "loginError": "Ugyldig e-post eller passord.",
+    "redirectSuccessMessage": "Registrering vellykket. Vennligst sjekk e-posten din for å verifisere kontoen din før du logger inn"
   },
   "password-reset": {
     "title": "Tilbakestill Passord",
@@ -188,7 +194,8 @@
     "networkError": "Nettverksfeil. Vennligst sjekk internettilkoblingen din og prøv igjen."
   },
   "login-service": {
-    "invalidCredentials": "Ugyldig brukernavn eller passord."
+    "invalidCredentials": "Ugyldig brukernavn eller passord.",
+    "emailNotVerified": "E-post ikke bekreftet. Vennligst sjekk e-posten din for bekreftelseslenken"
   },
   "auth":{
     "login": "Logg Inn",

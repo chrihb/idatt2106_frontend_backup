@@ -15,7 +15,7 @@ const {t} = useI18n();
 
 const props = defineProps({
   householdId: {
-    type: [String, Number],
+    type: [String],
     required: true
   }
 });
@@ -48,7 +48,7 @@ const fetchCategories = async () => {
       await unitsStore.fetchUnits();
     }
 
-    await itemsStore.fetchAllItems();
+    await itemsStore.fetchAllItems(props.householdId);
     const allItems = itemsStore.items;
 
     const groupedCategories = allItems.reduce((acc, item) => {
@@ -64,7 +64,7 @@ const fetchCategories = async () => {
       category.units.add(unitsStore.getUnitName(item.unitId));
 
       if (category.units.size > 1) {
-        category.unit = "Inconsistent units";
+        category.unit = t("storage.inconsistent-units");
         category.amount = null;
       } else {
         category.unit = [...category.units][0];
@@ -114,8 +114,6 @@ const openUpdateModal = (itemId) => {
 };
 
 const openModal = async (category) => {
-  await itemsStore.fetchItemsByCategory(category.id);
-
   modalData.value = {
     id: category.id,
     display: true
@@ -157,14 +155,14 @@ onMounted(async () => {
     <div
         class="mb-4 flex flex-col sm:flex-row items-start sm:items-center sm:justify-between gap-2 sm:gap-0">
       <div v-if="expired" class="flex flex-row gap-2 w-1/3">
-        <p>Expired items in storage</p>
-        <XCircleIcon class="text-kf-red w-7 h-7"/>
+        <p>{{ t("storage.expired") }}</p>
+        <XCircleIcon class="text-red-600 w-7 h-7"/>
       </div>
       <div v-if="expiringSoon && !expired" class="flex flex-row gap-2">
-        <p>Expiring soon</p>
-        <ExclamationTriangleIcon class="text-kf-red w-7 h-7"/>
+        <p>{{ t("storage.expiring-soon") }}</p>
+        <ExclamationTriangleIcon class="text-orange-400 w-7 h-7"/>
       </div>
-      <h2 class="text-xl sm:text-2xl font-semibold">Categories:</h2>
+      <h2 class="text-xl sm:text-2xl font-semibold">{{ t("storage.inventory-categories") }}:</h2>
       <div class="flex flex-row-reverse w-1/3">
         <button
             class="bg-kf-blue text-white px-3 py-2 rounded transition-colors duration-200 text-sm sm:text-base w-full sm:w-auto"
@@ -193,6 +191,7 @@ onMounted(async () => {
     <StorageItemMaximized
         :categoryId="modalData.id"
         :display="modalData.display"
+        :householdId="householdId"
         @close="closeModal"
         @update="openUpdateModal"
         @create="openCreateModal"

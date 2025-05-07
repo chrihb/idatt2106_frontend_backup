@@ -10,16 +10,18 @@ import ManageHousehold from "@/components/myHome/ManageHousehold.vue";
 import { useRoute } from "vue-router";
 import { useUserStore } from "@/stores/userStore.js";
 import HouseholdPanel from "@/components/myHome/HouseholdPanel.vue";
+import Map from "@/components/map/Map.vue";
 
 
 const userStore = useUserStore();
 const route = useRoute();
 
 
-const { t } = useI18n();
-const homeStore = useHomeStore();
-
 const household = userStore.householdId.find(household => household.id === parseInt(route.params.id));
+
+function centerOnAddress() {
+
+}
 
 </script>
 
@@ -31,15 +33,15 @@ const household = userStore.householdId.find(household => household.id === parse
         <Nearest class="" :title="t('my-home.shelter')" :nearest="homeStore.nearest.shelter" ></Nearest>
         <Nearest class="" :title="t('my-home.defib')" :nearest="homeStore.nearest.defib" ></Nearest>
         <Nearest class="" :title="t('my-home.hospital')" :nearest="homeStore.nearest.hospital" ></Nearest>
-        <!--Legevakt-->
-        <!--Møteplass-->
+
+      <div class="flex flex-col gap-2 min-w-70 w-full">
+        <HouseholdPanel @click="centerOnAddress" :name="household.name" :address="household.address" class="cursor-pointer" />
+        <HouseStatus :members="household.members" class="" />
+        <Nearest :latitude="household.latitude" :longitude="household.longitude"/>
         <ManageHousehold :household="household"/>
       </div>
-      <div class="flex flex-col gap-2">
-        <HouseStatus :members="household.members" class="" />
-        <div class="relative h-full w-full rounded-2xl shadow-lg overflow-hidden">
-          <CompleteMap class="h-full w-full" />
-        </div>
+      <div class="relative h-full w-full rounded-2xl shadow-lg overflow-hidden">
+        <Map class="h-full w-full" />
       </div>
     </div>
   </div>
