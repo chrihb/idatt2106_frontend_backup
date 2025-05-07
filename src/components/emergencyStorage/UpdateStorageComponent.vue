@@ -1,5 +1,5 @@
 <script setup lang="js">
-import {ref, computed, onMounted, watch} from 'vue';
+import {computed, onMounted, ref, watch} from 'vue';
 import {useCategoriesStore} from '@/stores/categoriesStore.js';
 import {useUnitsStore} from '@/stores/unitsStore.js';
 import {useEmergencyItemsStore} from '@/stores/emergencyItemsStore.js';
@@ -28,7 +28,7 @@ const itemData = ref({
   unitId: props.unitId || 0,
   expirationDate: '',
   categoryId: props.categoryId || 0,
-  householdId: props.householdId || -1
+  householdId: props.householdId || null
 });
 
 const selectedCategory = ref(props.categoryId || 0);
@@ -56,21 +56,26 @@ const cancelConfirmation = () => {
 };
 
 const resetForm = () => {
-  itemData.value = {
-    name: '',
-    amount: '',
-    unitId: 0,
-    expirationDate: '',
-    categoryId: 0,
-    householdId: userStore.householdId[0].id
-  };
+  try {
+    const householdId = userStore?.householdId?.[0]?.id || null;
+    itemData.value = {
+      name: '',
+      amount: '',
+      unitId: 0,
+      expirationDate: '',
+      categoryId: 0,
+      householdId: householdId
+    };
 
-  selectedCategory.value = null;
-  selectedHousehold.value = null;
-  selectedUnit.value = null;
-  formIncomplete.value = false;
+    selectedCategory.value = null;
+    selectedHousehold.value = null;
+    selectedUnit.value = null;
+    formIncomplete.value = false;
 
-  currentItemStore.resetState();
+    currentItemStore.resetState();
+  } catch (error) {
+    console.error("Error resetting form:", error);
+  }
 };
 
 const loadItemData = async () => {
@@ -97,7 +102,7 @@ const loadItemData = async () => {
           categoryId: currentItemStore.categoryId,
           unitId: currentItemStore.unitId,
           expirationDate: currentItemStore.expirationDate,
-          householdId: currentItemStore.householdIds  // This might be the issue
+          householdId: currentItemStore.householdIds
         };
       }
 
@@ -106,16 +111,11 @@ const loadItemData = async () => {
           item.expirationDate = new Date(item.expirationDate);
         }
 
-        // Fix: Ensure householdId is properly set from the item
-        // The object structure may differ between the stores
         itemData.value = {...item};
 
-        // Set the selected values
         selectedCategory.value = item.categoryId;
         selectedUnit.value = item.unitId;
 
-        // Fix: Explicitly handle the household ID correctly
-        // Check if we have householdIds (plural) or householdId (singular)
         if (item.householdIds !== undefined) {
           selectedHousehold.value = item.householdIds;
           itemData.value.householdId = item.householdIds;
@@ -123,7 +123,6 @@ const loadItemData = async () => {
           selectedHousehold.value = item.householdId;
           itemData.value.householdId = item.householdId;
         } else {
-          // Fallback to the first household ID if needed
           selectedHousehold.value = userStore.householdId[0]?.id;
           itemData.value.householdId = userStore.householdId[0]?.id;
         }
@@ -159,7 +158,7 @@ const saveItem = async () => {
       !selectedCategory.value ||
       !selectedUnit.value ||
       !itemData.value.expirationDate ||
-      !itemData.value.householdId
+      !selectedHousehold.value
   ) {
     formIncomplete.value = true;
     return;
@@ -178,7 +177,6 @@ const saveItem = async () => {
         : itemData.value.expirationDate.toISOString().split('T')[0];
     currentItemStore.householdIds = selectedHousehold.value;
 
-    console.log(saveData);
     console.log(currentItemStore)
 
     await currentItemStore.saveItem();
