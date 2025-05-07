@@ -32,6 +32,24 @@ if (isUpdate.value) {
     zoneData.value = { ...zone };
   }
 }
+
+// Save or update zone
+const saveZone = async () => {
+  if (!zoneData.value.name || !zoneData.value.coordinates.length) {
+    formIncomplete.value = true;
+    return;
+  }
+
+  try {
+    await emergencyZoneStore.saveEmergencyZone(zoneData.value);
+
+    emit('zoneSaved');
+    emit('close');
+  } catch (error) {
+    console.error('Error saving zone:', error);
+  }
+};
+
 </script>
 
 <template>
