@@ -7,9 +7,8 @@ import ConfirmationModal from "@/components/myHome/ConfirmationModal.vue";
 import InviteModal from "@/components/myHome/InviteModal.vue";
 import { XMarkIcon } from "@heroicons/vue/24/solid/index.js";
 import { useUserStore } from "@/stores/userStore.js";
-import {getInviteCode, leaveHouseholdService, requestHouseholds, verifyIsAdmin} from "@/services/householdService.js";
+import {getInviteCode, leaveHouseholdService, verifyIsAdmin} from "@/services/householdService.js";
 import { kickUserFromHousehold } from "@/services/householdService.js";
-import {required} from "@vee-validate/rules";
 
 const { t } = useI18n();
 const router = useRouter();
@@ -89,10 +88,17 @@ const removeMember = async () => {
       if (response) {
         members.value = members.value.filter(member => member.id !== selectedMember.value.id);
         closeModal();
-        if (members.value.length === 0) {
-          await router.push("/household/list")
+
+        // First update the households data
+        await userStore.fetchHouseholds();
+
+        // Now decide where to redirect based on whether there are any households left
+        if (userStore.householdId.length === 0) {
+          await router.push("/household/options");
+        } else {
+          await router.push("/household/list");
         }
-        await userStore.fetchHouseholds() // Add parentheses here too
+
         console.log("Member removed successfully");
       } else {
         console.error("Failed to remove member");
@@ -106,10 +112,16 @@ const leaveHousehold = async () => {
   try {
     const response = await leaveHouseholdService(props.household.id);
     if (response) {
-      // This line is wrong - you're not actually calling the function
-      await userStore.fetchHouseholds() // Add parentheses to call the function
+      await userStore.fetchHouseholds();
+
+      // Check if any households remain after leaving
+      if (userStore.householdId.length === 0) {
+        await router.push("/household/options");
+      } else {
+        await router.push("/household/list");
+      }
+
       console.log("Left household successfully");
-      await router.push("/");
       emit("close");
     } else {
       console.error("Failed to leave household");
