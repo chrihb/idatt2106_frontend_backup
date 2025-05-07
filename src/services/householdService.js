@@ -5,11 +5,12 @@ import {getAddress} from "@/utils/addressTranslationUtil.js";
 
 
 
-const mapAddress = async (objects) => {
+const mapAddress = async (objects, { brief }) => {
     for (let i = 0; i < objects.length; i++) {
         const object = objects[i];
         if (object.latitude && object.longitude) {
-            object.address = await getAddress(object.latitude, object.longitude);
+            if (brief) object.address = await getAddress(object.latitude, object.longitude, { brief: true });
+            else object.address = await getAddress(object.latitude, object.longitude, { brief: false });
         } else {
             object.address = "Unknown";
         }
@@ -35,10 +36,10 @@ export const requestHouseholds = async () => {
 
         console.log("Response data:", response.data);
 
-        await mapAddress(response.data);
+        await mapAddress(response.data, { brief: false });
         for (const household of response.data) {
             if (household.members) {
-                await mapAddress(household.members);
+                await mapAddress(household.members, { brief: true });
             }
         }
 

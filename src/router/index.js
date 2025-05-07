@@ -41,7 +41,7 @@ const router = createRouter({
                 { path: "/household", meta: { requiresAuth: true },
                     children: [
                         { path: "options", component: JoinCreateHousehold },
-                        { path: "list", component: HouseholdListView },
+                        { path: "list", component: HouseholdListView, meta: { requiresHousehold: true } },
                         { path: ":id", component: MyHomeView, meta: { requiresHousehold: true }, props: true },
                     ]},
 
