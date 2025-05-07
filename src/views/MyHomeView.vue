@@ -28,12 +28,6 @@ function centerOnAddress() {
 <template>
   <div class="py-2 px-2">
     <div class="grid grid-cols-[auto_1fr] gap-2">
-      <div class="flex flex-col gap-2">
-        <HouseholdPanel :name="household.name" :address="household.address" class="" />
-        <Nearest class="" :title="t('my-home.shelter')" :nearest="homeStore.nearest.shelter" ></Nearest>
-        <Nearest class="" :title="t('my-home.defib')" :nearest="homeStore.nearest.defib" ></Nearest>
-        <Nearest class="" :title="t('my-home.hospital')" :nearest="homeStore.nearest.hospital" ></Nearest>
-
       <div class="flex flex-col gap-2 min-w-70 w-full">
         <HouseholdPanel @click="centerOnAddress" :name="household.name" :address="household.address" class="cursor-pointer" />
         <HouseStatus :members="household.members" class="" />
