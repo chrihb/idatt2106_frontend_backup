@@ -11,7 +11,7 @@ import ToggleBar from "@/components/map/ToggleBar.vue";
       <Map />
       <CenterMapOnUserButton />
     </div>
-    <div class="relative inline-flex h-full w-43 flex-col gap-2 z-10">
+    <div class="relative inline-flex h-full w-60 flex-col gap-2 z-10">
       <ToggleBar />
     </div>
   </div>

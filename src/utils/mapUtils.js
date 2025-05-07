@@ -134,8 +134,10 @@ export const addEmergencyZoneToMap = (emergencyZone) => {
 
     const mapStore = useMapStore();
 
-    if (!mapStore.layerGroup[emergencyZone.type] || !(mapStore.layerGroup[emergencyZone.type] instanceof L.LayerGroup)) {
-        mapStore.layerGroup[emergencyZone.type] = L.layerGroup().addTo(mapStore.map);
+    const layerType = getLayerType(emergencyZone.level);
+
+    if (!mapStore.layerGroup[layerType] || !(mapStore.layerGroup[layerType] instanceof L.LayerGroup)) {
+        mapStore.layerGroup[layerType] = L.layerGroup().addTo(mapStore.map);
     }
 
     const polygon = L.polygon(emergencyZone.coordinates, {
@@ -165,7 +167,7 @@ export const addEmergencyZoneToMap = (emergencyZone) => {
         }
     });
 
-    mapStore.layerGroup[emergencyZone.type].addLayer(polygon);
+    mapStore.layerGroup[layerType].addLayer(polygon);
 
     mapStore.addMapItemId(emergencyZone.zoneId);
 }
@@ -188,6 +190,24 @@ export const removeEmergencyZoneFromMap = (zoneId) => {
 export const updateEmergencyZoneOnMap = (emergencyZone) => {
     removeEmergencyZoneFromMap(emergencyZone.zoneId);
     addEmergencyZoneToMap(emergencyZone);
+}
+
+export const getLayerType = (level) => {
+    let layerType;
+    switch (level) {
+        case 1:
+            layerType = "Fare nivå 1";
+            break
+        case 2:
+            layerType = "Fare nivå 2";
+            break
+        case 3:
+            layerType = "Fare nivå 3";
+            break
+        default:
+            layerType = 'default';
+    }
+    return layerType;
 }
 
 export const emergencyZoneStyle = (level) => {
