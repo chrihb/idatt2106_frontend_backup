@@ -8,7 +8,7 @@ const { t } = useI18n();
 const props = defineProps({
   members: {
     type: Array,
-    required: true,
+    required: false,
   },
 });
 

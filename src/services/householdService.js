@@ -67,9 +67,6 @@ export const joinHousehold = async (inviteCode) => {
         console.log("Response status:", response.status);
         if (response.status !== 200) {
             console.log("Join household failed");
-            return null
-            userStore.clearToken();
-            await router.push('/login');
             return null;
         }
 

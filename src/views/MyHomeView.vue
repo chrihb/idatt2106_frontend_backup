@@ -11,11 +11,10 @@ import { useRoute } from "vue-router";
 import { useUserStore } from "@/stores/userStore.js";
 import HouseholdPanel from "@/components/myHome/HouseholdPanel.vue";
 import Map from "@/components/map/Map.vue";
-
+import { onMounted } from "vue";
 
 const userStore = useUserStore();
 const route = useRoute();
-
 
 const household = userStore.householdId.find(household => household.id === parseInt(route.params.id));
 
@@ -23,6 +22,9 @@ function centerOnAddress() {
 
 }
 
+onMounted(async () => {
+  await userStore.fetchHouseholds()
+});
 </script>
 
 <template>

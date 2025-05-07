@@ -50,6 +50,11 @@ export const useUserStore = defineStore('user', {
             this.userSettings = settings;
         },
     },
+    getters: {
+        getHouseholdByName: (state) => (name) => {
+            return state.householdId.find(h => h.name?.toLowerCase() === name.toLowerCase());
+        }
+    },
     persist: {
         enabled: true,
         strategies: [

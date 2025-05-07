@@ -26,7 +26,7 @@ export const routedSettings = ref([
         id: 2,
         description: "account-settings.manage-households",
         icon: "home",
-        route: "/household",
+        route: "/household/options",
         adminNeeded: false,
         superAdminNeeded: false,
     },
