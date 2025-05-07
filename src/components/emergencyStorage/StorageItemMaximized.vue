@@ -16,7 +16,7 @@ const props = defineProps({
     default: false
   },
   householdId: {
-    type: Number,
+    type: String,
     required: true
   }
 });

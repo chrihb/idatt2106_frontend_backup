@@ -15,7 +15,7 @@ const {t} = useI18n();
 
 const props = defineProps({
   householdId: {
-    type: [String, Number],
+    type: [String],
     required: true
   }
 });
