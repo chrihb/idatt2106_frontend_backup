@@ -158,9 +158,6 @@
 	"show": "Vis",
 	"hide": "Skjul"
   },
-  "map": {
-	"filter": "Filtrer"
-  },
   "register": {
 	"title": "Registrer",
 	"email": "E-post",
@@ -245,5 +242,8 @@
 	  "bind": "Bind",
 	  "tamponger": "Tamponger"
 	}
+  },
+  "map": {
+	"filter": "Filtrer"
   }
 }

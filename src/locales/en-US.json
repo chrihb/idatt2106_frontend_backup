@@ -158,9 +158,6 @@
     "show": "show",
     "hide": "Hide"
   },
-  "map": {
-    "filter": "Filter"
-  },
   "register": {
     "title": "Register",
     "email": "Email",
@@ -245,5 +242,8 @@
     "bind": "Sanitary pads",
     "tamponger": "Tampons"
   }
-}
+},
+  "map": {
+    "filter": "Filter"
+  }
 }
