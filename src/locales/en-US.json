@@ -257,6 +257,7 @@
     "emergencyLevel2": "Emergency Level 2",
     "emergencyLevel3": "Emergency Level 2",
     "zoneCoordinates": "Zone Coordinates",
+    "zoneCoordinatesDescription": "List of coordinates for the zone. Format: [[lat, lng], [lat, lng], [lat, lng]]",
     "zoneAddress": "Zone Address",
     "zoneDescription": "Zone Description",
     "fillAllFields" : "Please fill in all the fields"

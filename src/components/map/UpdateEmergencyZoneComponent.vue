@@ -152,7 +152,7 @@ const cancelConfirmation = () => {
               <textarea
                   id="zoneCoordinates"
                   v-model="zoneData.coordinates"
-                  :placeholder="t('zone.zoneCoordinates')"
+                  :placeholder="t('zone.zoneCoordinatesDescription')"
                   class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2
                    focus:ring-blue-500 text-base"
               ></textarea>
