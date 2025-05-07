@@ -6,6 +6,7 @@ import {emergencyZoneService} from "@/services/emergencyZoneService.js";
 import {useMarkersStore} from "@/stores/markersStore.js";
 import {markerService} from "@/services/markerService.js";
 import {useMarkerStore} from "@/stores/markerStore.js";
+import 'leaflet.markercluster';
 
 export const createMarkerPopup = (type, address, description) =>
     `
@@ -91,7 +92,7 @@ export const addMarkerToMap = (marker) => {
 
     // Check if the layerGroup for the type exists, if not create it
     if (!mapStore.layerGroup[marker.type] || !(mapStore.layerGroup[marker.type] instanceof L.LayerGroup)) {
-        mapStore.layerGroup[marker.type] = L.layerGroup().addTo(mapStore.map);
+        mapStore.layerGroup[marker.type] = L.markerClusterGroup().addTo(mapStore.map);
     }
     // Add the marker to the appropriate layerGroup
     mapStore.layerGroup[marker.type].addLayer(mapMarker);
