@@ -131,7 +131,7 @@ const cancelConfirmation = () => {
 
             <div class="mb-3">
               <label for="zoneLevel" class="block text-sm font-medium text-gray-700 mb-1">
-                {{ t('zone.zoneEmergencyLevel') }}
+                {{ t('zone.EmergencyLevel') }}
               </label>
               <select
                   id="zoneLevel"
