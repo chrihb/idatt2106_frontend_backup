@@ -8,19 +8,19 @@ const homeStore = useHomeStore();
 const { t } = useI18n();
 
 const props = defineProps({
-  id: {
-    type: Number,
+  address: {
+    type: String,
     required: true,
 }});
 
-const household = userStore.householdId.find(household => household.id === props.id);
+
 
 </script>
 
 <template>
   <div class="bg-kf-white flex flex-col gap-1 items-center shadow-lg rounded-2xl py-2 px-2">
     <h1 class="text-2xl text-kf-blue">{{ t("my-home.address") }}</h1>
-    <p class="text-1xl text-kf-blue"> {{household.address}} </p>
+    <p class="text-1xl text-kf-blue"> {{address}} </p>
   </div>
 </template>
 
