@@ -22,9 +22,23 @@ const fetchZones = async () => {
   }
 };
 
-const openZoneEditor = (zoneId) => {
-  selectedZoneId.value = zoneId;
-  isZoneEditorVisible.value = true;
+const openZoneEditor = async (zoneId) => {
+  try {
+    if (zoneId) {
+      const zone = emergencyZonesStore.getEmergencyZoneById(zoneId);
+      if (zone) {
+        emergencyZoneStore.setEmergencyZone(zone);
+      } else {
+        await emergencyZoneStore.fetchEmergencyZoneDetailsById(zoneId);
+      }
+    } else {
+      emergencyZoneStore.clearEmergencyZoneState();
+    }
+    selectedZoneId.value = zoneId;
+    isZoneEditorVisible.value = true;
+  } catch (error) {
+    console.error('Error loading zone details:', error);
+  }
 };
 
 const closeZoneEditor = () => {
@@ -40,6 +54,9 @@ const handleZoneSaved = async () => {
 
 const removeZone = async (zoneId) => {
   try {
+    console.log("ZoneID: ", zoneId);
+    const zone = emergencyZonesStore.getEmergencyZoneById(zoneId);
+    emergencyZoneStore.setEmergencyZone(zone);
     await emergencyZoneStore.deleteEmergencyZone(zoneId);
     await fetchZones();
     console.log(`Zone with ID ${zoneId} removed successfully.`);
@@ -66,6 +83,14 @@ onMounted(() => {
     <!-- Emergency Zones List on right -->
     <div class="w-3/8 h-full p-4 overflow-y-auto">
       <h1 class="text-xl font-bold mb-4">{{t("zone.emergencyZones")}}</h1>
+      <div >
+        <button
+            class="px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 mb-4"
+            @click="openZoneEditor(null)"
+        >
+          {{t('zone.createNewZone')}}
+        </button>
+      </div>
       <ul class="space-y-3">
         <li v-for="zone in emergencyZones" :key="zone.zoneId" class="p-4 border rounded-lg">
           <div class="flex justify-between items-center">
@@ -96,6 +121,7 @@ onMounted(() => {
           :display="isZoneEditorVisible"
           @close="closeZoneEditor"
           @zoneSaved="handleZoneSaved"
+
       />
     </div>
   </div>
