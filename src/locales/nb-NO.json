@@ -98,7 +98,8 @@
     "available": "Tilgjengelige husstander",
     "create-desc": "en husstand for å administrere lageret ditt og andre medlemmer",
     "manage-storage": "Administrer lager",
-    "manage-household": "Administrer husstand"
+    "manage-household": "Administrer husstand",
+    "location-status": "Lokasjonsstatus"
   },
   "household": {
   "title": "My Household",

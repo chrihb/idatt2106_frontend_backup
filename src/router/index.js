@@ -18,7 +18,6 @@ import SimpleCenteredComponent from "@/views/SimpleCenteredComponent.vue";
 import {useUserStore} from "@/stores/userStore.js";
 import AdminRegister from "@/components/login/AdminRegister.vue";
 import JoinCreateHousehold from "@/components/joinHousehold/Options.vue";
-import JoinHouseholdView from "@/views/JoinHouseholdView.vue";
 import StorageListView from '@/views/StorageListView.vue';
 import HouseholdListView from "@/views/HouseholdListView.vue";
 
@@ -39,7 +38,7 @@ const router = createRouter({
                 { path: "/about-us", component: AboutUsView },
                 { path: "/privacy-policy", component: PrivacyPolicyView },
                 { path: "/map", component: MapView },
-                { path: "/household", component: JoinHouseholdView, meta: { requiresAuth: true },
+                { path: "/household", meta: { requiresAuth: true },
                     children: [
                         { path: "options", component: JoinCreateHousehold },
                         { path: "list", component: HouseholdListView },
@@ -91,7 +90,7 @@ router.beforeEach(async (to, from, next) => {
         return next();
     }
 
-    if (userStore.householdId.length === 0) {
+    if (!userStore.householdId || userStore.householdId.length === 0) {
         return next('/household/options');
     }
 

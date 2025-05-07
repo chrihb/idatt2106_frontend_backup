@@ -3,9 +3,21 @@ import {useUserStore} from '@/stores/userStore';
 import {useRouter} from "vue-router";
 import {getAddress} from "@/utils/addressTranslationUtil.js";
 
+
+
+const mapAddress = async (objects) => {
+    for (let i = 0; i < objects.length; i++) {
+        const object = objects[i];
+        if (object.latitude && object.longitude) {
+            object.address = await getAddress(object.latitude, object.longitude);
+        } else {
+            object.address = "Unknown";
+        }
+    }
+}
+
 export const requestHouseholds = async () => {
     const userStore = useUserStore();
-    const router = useRouter();
 
     try {
         const response = await axios.get(`${window.backendURL}/api/households/myHouseholds`,
@@ -23,12 +35,10 @@ export const requestHouseholds = async () => {
 
         console.log("Response data:", response.data);
 
-        for (let i = 0; i < response.data.length; i++) {
-            const household = response.data[i];
-            if (household.latitude && household.longitude) {
-                household.address = await getAddress(household.latitude, household.longitude);
-            } else {
-                household.address = null;
+        await mapAddress(response.data);
+        for (const household of response.data) {
+            if (household.members) {
+                await mapAddress(household.members);
             }
         }
 
@@ -128,4 +138,4 @@ export const getInviteCode = async (id) => {
         userStore.clearToken();
         await router.push('/login');
     }
-};
+}

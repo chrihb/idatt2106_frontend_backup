@@ -7,7 +7,7 @@ const router = useRouter();
 const { t } = useI18n();
 
 const props = defineProps({
-  members: {
+  nearest: {
     type: Array,
     required: true,
   },

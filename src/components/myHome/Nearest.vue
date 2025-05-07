@@ -17,7 +17,7 @@ const props = defineProps({
 </script>
 
 <template>
-  <div class="bg-kf-white flex flex-col gap-1 items-start shadow-lg rounded-2xl py-2 px-2">
+  <div class="bg-kf-white flex flex-col items-center gap-1  shadow-lg rounded-2xl py-2 px-2">
     <h1 class="text-2xl text-kf-blue">{{ t("my-home.nearest") }} {{props.title}}</h1>
     <p class="text-1xl text-kf-blue"> {{props.nearest.address}} </p>
     <p class="text-1xl text-kf-blue">{{ t("my-home.distance") }}: {{ props.nearest.distance }} km</p>
