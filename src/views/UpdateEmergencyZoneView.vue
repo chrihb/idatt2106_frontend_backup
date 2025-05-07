@@ -65,7 +65,7 @@ onMounted(() => {
     </div>
     <!-- Emergency Zones List on right -->
     <div class="w-3/8 h-full p-4 overflow-y-auto">
-      <h1 class="text-xl font-bold mb-4">{{t("zone.EmergencyZones")}}</h1>
+      <h1 class="text-xl font-bold mb-4">{{t("zone.emergencyZones")}}</h1>
       <ul class="space-y-3">
         <li v-for="zone in emergencyZones" :key="zone.zoneId" class="p-4 border rounded-lg">
           <div class="flex justify-between items-center">
