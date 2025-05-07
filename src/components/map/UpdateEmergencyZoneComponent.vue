@@ -20,14 +20,22 @@ const zoneData = ref({
   coordinates: [],
   address: '',
   description: '',
+  lat: null,
+  lng: null,
 });
 
+const isAddressMode = ref(true);
 const formIncomplete = ref(false);
 const showConfirmation = ref(false);
+
+const setInputMode = () => {
+  isAddressMode.value = !isAddressMode.value;
+};
 
 // Load zone data if updating
 if (isUpdate.value) {
   const zone = emergencyZonesStore.getEmergencyZoneById(props.zoneId);
+  emergencyZoneStore.setEmergencyZone(zone);
   if (zone) {
     zoneData.value = { ...zone };
   }
@@ -93,6 +101,8 @@ const cancelConfirmation = () => {
             <h1 class="text-xl sm:text-2xl font-bold text-gray-800">
               {{ isUpdate ? t('zone.updateZone') : t('zone.newZone') }}
             </h1>
+
+            <!-- Close Button -->
             <button
                 class="text-gray-500 hover:text-gray-800 focus:outline-none transition-colors duration-200 p-2
                  rounded-full hover:bg-gray-100"
@@ -102,6 +112,8 @@ const cancelConfirmation = () => {
             </button>
           </div>
 
+          <!-- Form Fields -->
+          <!-- Zone Name -->
           <div class="space-y-3">
             <div class="mb-3">
               <label for="zoneName" class="block text-sm font-medium text-gray-700 mb-1">
@@ -117,6 +129,7 @@ const cancelConfirmation = () => {
               />
             </div>
 
+            <!-- Zone Type -->
             <div class="mb-3">
               <label for="zoneType" class="block text-sm font-medium text-gray-700 mb-1">
                 {{ t('zone.zoneType') }}
@@ -131,6 +144,7 @@ const cancelConfirmation = () => {
               />
             </div>
 
+            <!-- Emergency Level -->
             <div class="mb-3">
               <label for="zoneLevel" class="block text-sm font-medium text-gray-700 mb-1">
                 {{ t('zone.emergencyLevel') }}
@@ -147,12 +161,13 @@ const cancelConfirmation = () => {
               </select>
             </div>
 
+            <!-- Polygon Coordinates-->
             <div class="mb-3">
-              <label for="zoneCoordinates" class="block text-sm font-medium text-gray-700 mb-1">
-                {{ t('zone.zoneCoordinates') }}
+              <label for="zonePolygonCoordinates" class="block text-sm font-medium text-gray-700 mb-1">
+                {{ t('zone.zonePolygonCoordinates') }}
               </label>
               <textarea
-                  id="zoneCoordinates"
+                  id="zonePolygonCoordinates"
                   v-model="zoneData.coordinates"
                   :placeholder="t('zone.zoneCoordinatesDescription')"
                   class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2
@@ -160,20 +175,61 @@ const cancelConfirmation = () => {
               ></textarea>
             </div>
 
-            <div class="mb-3">
-              <label for="zoneAddress" class="block text-sm font-medium text-gray-700 mb-1">
-                {{ t('zone.zoneAddress') }}
-              </label>
+            <!-- Conditionally Rendered Fields -->
+
+            <!-- Toggle Button -->
+            <div class="mb-4">
+              <label class="block text-sm font-medium mb-1">{{ t('zone.inputMode') }}</label>
+              <div class="flex gap-2">
+                <!-- Address Mode Button -->
+                <button
+                    :class="isAddressMode ? 'bg-blue-500 text-white' : 'bg-gray-200 text-gray-800'"
+                    class="px-4 py-2 rounded-lg"
+                    @click="setInputMode(true)"
+                >
+                  {{ t('zone.useAddress') }}
+                </button>
+                <!-- Lat/Lng Mode Button -->
+                <button
+                    :class="!isAddressMode ? 'bg-blue-500 text-white' : 'bg-gray-200 text-gray-800'"
+                    class="px-4 py-2 rounded-lg"
+                    @click="setInputMode(false)"
+                >
+                  {{ t('zone.useLatLng') }}
+                </button>
+              </div>
+            </div>
+
+            <!-- Address or Coordinates -->
+            <div v-if="isAddressMode" class="mb-4">
+              <label class="block text-sm font-medium mb-1">{{ t('zone.zoneAddress') }}</label>
               <input
-                  id="zoneAddress"
                   v-model="zoneData.address"
                   type="text"
+                  class="w-full p-3 border rounded-lg"
                   :placeholder="t('zone.zoneAddress')"
-                  class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2
-                   focus:ring-blue-500 text-base"
               />
             </div>
 
+            <div v-else class="mb-4">
+              <label class="block text-sm font-medium mb-1">{{ t('zone.zoneCoordinates') }}</label>
+              <div class="flex gap-2">
+                <input
+                    v-model.number="zoneData.lat"
+                    type="number"
+                    class="w-1/2 p-3 border rounded-lg"
+                    :placeholder="t('zone.latitude')"
+                />
+                <input
+                    v-model.number="zoneData.lng"
+                    type="number"
+                    class="w-1/2 p-3 border rounded-lg"
+                    :placeholder="t('zone.longitude')"
+                />
+              </div>
+            </div>
+
+            <!-- Description Field -->
             <div class="mb-3">
               <label for="zoneDescription" class="block text-sm font-medium text-gray-700 mb-1">
                 {{ t('zone.zoneDescription') }}
@@ -188,10 +244,12 @@ const cancelConfirmation = () => {
             </div>
           </div>
 
+          <!-- Error Message -->
           <div v-if="formIncomplete" class="mt-3 mb-1 text-red-600 text-sm text-center">
             {{ t('zone.fillAllFields') }}
           </div>
 
+          <!-- Save and Cancel Buttons -->
           <div class="mt-4 sm:mt-6 pt-3 sm:pt-4 border-t flex flex-col sm:flex-row justify-between gap-2 sm:gap-3">
             <button
                 class="order-2 sm:order-1 w-full sm:w-auto px-4 py-3 bg-blue-500 hover:bg-blue-600 rounded-lg
@@ -209,6 +267,7 @@ const cancelConfirmation = () => {
             </button>
           </div>
 
+          <!-- Confirmation Modal -->
           <div v-if="showConfirmation" class="fixed inset-0 flex items-center justify-center z-[60] p-4">
             <div class="bg-white rounded-lg p-4 sm:p-6 shadow-xl max-w-md w-full">
               <p class="mb-4 sm:mb-6 text-base sm:text-lg">{{ t('zone.leaveMessage') }}</p>
