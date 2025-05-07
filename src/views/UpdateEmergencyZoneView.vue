@@ -11,7 +11,7 @@ const selectedZoneId = ref(null);
 
 const fetchZones = async () => {
   try {
-    await emergencyZonesStore.fetchAllEmergencyZones();
+    await emergencyZonesStore.fetchAllEmergencyZones(false);
     emergencyZones.value = emergencyZonesStore.getEmergencyZones()
   } catch (error) {
     console.error('Error fetching emergency zones:', error);

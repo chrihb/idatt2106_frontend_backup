@@ -63,7 +63,7 @@ onMounted(async () => {
 
       try {
         await markersStore.fetchMarkersArea(bounds, ids);
-        await emergencyZonesStore.fetchEmergencyZonesArea(bounds, ids);
+        await emergencyZonesStore.fetchEmergencyZonesArea(bounds, ids, true);
 
       } catch (error) {
         console.error('Error fetching markers:', error);
