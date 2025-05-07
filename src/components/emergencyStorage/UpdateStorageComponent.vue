@@ -1,19 +1,21 @@
 <script setup lang="js">
-import {ref, computed, onMounted, watch} from 'vue';
+import {computed, onMounted, ref, watch} from 'vue';
 import {useCategoriesStore} from '@/stores/categoriesStore.js';
 import {useUnitsStore} from '@/stores/unitsStore.js';
 import {useEmergencyItemsStore} from '@/stores/emergencyItemsStore.js';
 import {useEmergencyItemStore} from '@/stores/emergencyItemStore.js';
+import {useUserStore} from "@/stores/userStore.js";
 import {useI18n} from "vue-i18n";
 
 const {t} = useI18n();
-const props = defineProps(['categoryId', 'unitId', 'itemId', 'display']);
+const props = defineProps(['categoryId', 'unitId', 'itemId', 'display', 'householdId']);
 const emit = defineEmits(['close', 'itemSaved']);
 
 const categoriesStore = useCategoriesStore();
 const unitsStore = useUnitsStore();
 const itemsStore = useEmergencyItemsStore();
 const currentItemStore = useEmergencyItemStore();
+const userStore = useUserStore();
 
 const isUpdate = computed(() => props.itemId !== null);
 
@@ -25,10 +27,12 @@ const itemData = ref({
   amount: '',
   unitId: props.unitId || 0,
   expirationDate: '',
-  categoryId: props.categoryId || 0
+  categoryId: props.categoryId || 0,
+  householdId: props.householdId || null
 });
 
 const selectedCategory = ref(props.categoryId || 0);
+const selectedHousehold = ref(props.householdId)
 const selectedUnit = ref(props.unitId || 0);
 const formIncomplete = ref(false);
 const showConfirmation = ref(false);
@@ -52,19 +56,26 @@ const cancelConfirmation = () => {
 };
 
 const resetForm = () => {
-  itemData.value = {
-    name: '',
-    amount: '',
-    unitId: 0,
-    expirationDate: '',
-    categoryId: 0
-  };
+  try {
+    const householdId = userStore?.householdId?.[0]?.id || null;
+    itemData.value = {
+      name: '',
+      amount: '',
+      unitId: 0,
+      expirationDate: '',
+      categoryId: 0,
+      householdId: householdId
+    };
 
-  selectedCategory.value = null;
-  selectedUnit.value = null;
-  formIncomplete.value = false;
+    selectedCategory.value = null;
+    selectedHousehold.value = null;
+    selectedUnit.value = null;
+    formIncomplete.value = false;
 
-  currentItemStore.resetState();
+    currentItemStore.resetState();
+  } catch (error) {
+    console.error("Error resetting form:", error);
+  }
 };
 
 const loadItemData = async () => {
@@ -78,8 +89,8 @@ const loadItemData = async () => {
       if (props.categoryId) {
         item = itemsStore.getItemById(props.itemId);
 
-        if (!item) {
-          await itemsStore.fetchItemsByCategory(props.categoryId);
+        if (!item && props.householdId) {
+          await itemsStore.fetchItemsByCategory(props.categoryId, props.householdId);
           item = itemsStore.getItemById(props.itemId);
         }
       } else {
@@ -90,7 +101,8 @@ const loadItemData = async () => {
           amount: currentItemStore.amount,
           categoryId: currentItemStore.categoryId,
           unitId: currentItemStore.unitId,
-          expirationDate: currentItemStore.expirationDate
+          expirationDate: currentItemStore.expirationDate,
+          householdId: currentItemStore.householdIds
         };
       }
 
@@ -100,15 +112,27 @@ const loadItemData = async () => {
         }
 
         itemData.value = {...item};
+
         selectedCategory.value = item.categoryId;
         selectedUnit.value = item.unitId;
+
+        if (item.householdIds !== undefined) {
+          selectedHousehold.value = item.householdIds;
+          itemData.value.householdId = item.householdIds;
+        } else if (item.householdId !== undefined) {
+          selectedHousehold.value = item.householdId;
+          itemData.value.householdId = item.householdId;
+        } else {
+          selectedHousehold.value = userStore.householdId[0]?.id;
+          itemData.value.householdId = userStore.householdId[0]?.id;
+        }
 
         currentItemStore.setItemData(item);
       }
     } catch (error) {
       console.error("Error fetching item:", error);
     }
-  } else if (props.categoryId || props.unitId) {
+  } else if (props.categoryId || props.unitId || props.householdId) {
     if (props.unitId) {
       selectedUnit.value = props.unitId;
       itemData.value.unitId = props.unitId;
@@ -118,16 +142,23 @@ const loadItemData = async () => {
       selectedCategory.value = props.categoryId;
       itemData.value.categoryId = props.categoryId;
     }
+
+    if (props.householdId) {
+      selectedHousehold.value = props.householdId;
+      itemData.value.householdId = props.householdId;
+    }
   }
 };
 
 const saveItem = async () => {
+
   if (
       !itemData.value.name.trim() ||
       !itemData.value.amount ||
       !selectedCategory.value ||
       !selectedUnit.value ||
-      !itemData.value.expirationDate
+      !itemData.value.expirationDate ||
+      !selectedHousehold.value
   ) {
     formIncomplete.value = true;
     return;
@@ -136,23 +167,17 @@ const saveItem = async () => {
   try {
     formIncomplete.value = false;
 
-    const saveData = {
-      id: itemData.value.id,
-      name: itemData.value.name,
-      amount: itemData.value.amount,
-      categoryId: selectedCategory.value,
-      unitId: selectedUnit.value,
-      expirationDate: typeof itemData.value.expirationDate === 'string'
-          ? itemData.value.expirationDate
-          : itemData.value.expirationDate.toISOString().split('T')[0]
-    };
+    currentItemStore.itemId = itemData.value.id;
+    currentItemStore.name = itemData.value.name;
+    currentItemStore.amount = itemData.value.amount;
+    currentItemStore.categoryId = selectedCategory.value;
+    currentItemStore.unitId = selectedUnit.value;
+    currentItemStore.expirationDate = typeof itemData.value.expirationDate === 'string'
+        ? itemData.value.expirationDate
+        : itemData.value.expirationDate.toISOString().split('T')[0];
+    currentItemStore.householdIds = selectedHousehold.value;
 
-    currentItemStore.itemId = saveData.id;
-    currentItemStore.name = saveData.name;
-    currentItemStore.amount = saveData.amount;
-    currentItemStore.categoryId = saveData.categoryId;
-    currentItemStore.unitId = saveData.unitId;
-    currentItemStore.expirationDate = saveData.expirationDate;
+    console.log(currentItemStore)
 
     await currentItemStore.saveItem();
 
@@ -262,6 +287,21 @@ onMounted(async () => {
                 :placeholder="t('storage.expiration-date')"
                 class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-base">
           </div>
+        </div>
+
+        <div>
+          <label for="item-category" class="block text-sm font-medium text-gray-700 mb-1">
+            {{ t('storage.select-household') }}
+          </label>
+          <select
+              id="item-category"
+              v-model="selectedHousehold"
+              class="border border-gray-300 w-full rounded-lg p-3 text-base text-black focus:ring-2 focus:ring-blue-500 bg-white">
+            <option disabled value="">{{ t("storage.select-household") }}</option>
+            <option v-for="household in userStore.householdId" :key="household.id" :value="household.id">
+              {{ household.name }}
+            </option>
+          </select>
         </div>
 
         <div v-if="formIncomplete" class="mt-3 mb-1 text-red-600 text-sm text-center">

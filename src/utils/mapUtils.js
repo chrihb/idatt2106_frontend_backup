@@ -27,12 +27,21 @@ export const createZonePopup = (name, type, level, address, description) =>
                 </div>
     `;
 
+const iconCache = {};
+
 export const createCustomMarkerIcon = (type) => {
+    if (iconCache[type]) {
+        return iconCache[type];
+    }
+
     const iconUrl = `/icons/map/${type}.png`;
-    return L.icon({
+    const icon = L.icon({
         iconUrl: iconUrl,
-        iconSize: [40, 40],
+        iconSize: [25, 25],
     });
+
+    iconCache[type] = icon;
+    return icon;
 }
 
 // Add a marker to the map

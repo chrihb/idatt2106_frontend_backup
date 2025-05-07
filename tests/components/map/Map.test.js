@@ -49,7 +49,7 @@ describe('Map.vue', () => {
         const icon = createCustomMarkerIcon(type);
 
         expect(icon.options.iconUrl).toBe('/icons/map/Hjertestarter.png');
-        expect(icon.options.iconSize).toEqual([40, 40]);
+        expect(icon.options.iconSize).toEqual([25, 25]);
     });
 
     it('should create a custom marker icon with the correct URL and size', () => {
@@ -57,7 +57,7 @@ describe('Map.vue', () => {
         const icon = createCustomMarkerIcon(type);
 
         expect(icon.options.iconUrl).toBe('/icons/map/Hjertestarter.png');
-        expect(icon.options.iconSize).toEqual([40, 40]);
+        expect(icon.options.iconSize).toEqual([25, 25]);
     });
 
 })
