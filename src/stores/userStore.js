@@ -21,6 +21,7 @@ export const useUserStore = defineStore('user', {
             if (token !== undefined) this.token = token;
             if (authenticated !== undefined) this.authenticated = authenticated;
             if (householdId !== undefined) this.householdId = householdId;
+            console.log(householdId)
         }
         ,
         clearToken() {

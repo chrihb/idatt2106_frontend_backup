@@ -54,9 +54,12 @@
     "close": "Lukk",
     "select-category": "Velg kategori",
     "select-unit": "Velg Enhet",
+    "inconsistent-units": "Uoverensstemmende enheter",
     "no-items-in-category": "Ingen artikler funnet i denne kategorien",
     "no-items": "Ingen artikler funnet",
     "expiration-date": "Utløp",
+    "expiring-soon": "Artikkel utløper snart",
+    "expired": "Artikkel utløpt",
     "fill-all-fields": "Vennligst fyll ut alle felt",
     "leave-message": "Er du sikker på at du vil forlate denne siden? Endringer vil ikke bli lagret.",
     "quit": "Avslutt",
@@ -65,7 +68,9 @@
     "item-amount": "Mengde",
     "item-expiration": "Utløpsdato",
     "more-info": "Trykk for mer info",
-    "household-list-title": "Dine husholdninger"
+    "household-list-title": "Dine husholdninger",
+    "inventory-categories": "Lagerkategorier",
+    "select-household": "Velg husstand"
   },
   "news": {
     "title": "Nyheter",
