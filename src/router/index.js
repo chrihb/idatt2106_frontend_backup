@@ -20,6 +20,7 @@ import AdminRegister from "@/components/login/AdminRegister.vue";
 import JoinCreateHousehold from "@/components/joinHousehold/Options.vue";
 import StorageListView from '@/views/StorageListView.vue';
 import HouseholdListView from "@/views/HouseholdListView.vue";
+import UpdateEmergencyZoneView from "@/views/UpdateEmergencyZoneView.vue";
 
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
@@ -30,6 +31,7 @@ const router = createRouter({
                 { path: "", component: HomeView },
                 { path: "/news", component: NewsView },
                 { path: "/account", component: AccountView, meta: { requiresAuth: true } },
+                { path: "/update-zone", component: UpdateEmergencyZoneView },
                 { path: "/storage", meta: { requiresAuth: true },
                     children: [
                         { path: "list", component: StorageListView, meta: { requiresHousehold: true } },

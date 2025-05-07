@@ -14,7 +14,10 @@ export const useEmergencyZonesStore = defineStore('emergencyZonesStore', {
 
             try {
                 const service = emergencyZoneService();
-                const emergencyZonesData = await service.getAllEmergencyZones();
+
+                //TODO: This is a placeholder for the actual service call
+                //const emergencyZonesData = await service.getAllEmergencyZones();
+                const emergencyZonesData = await service.getAllEmergencyZonesMock();
 
                 if (emergencyZonesData.success) {
                     this.clearEmergencyZones();
