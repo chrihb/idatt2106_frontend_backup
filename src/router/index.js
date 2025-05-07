@@ -21,7 +21,9 @@ import AdminRegister from "@/components/login/AdminRegister.vue";
 import JoinCreateHousehold from "@/components/joinHousehold/Options.vue";
 import JoinHouseholdView from "@/views/JoinHouseholdView.vue";
 import HouseholdListView from '@/views/HouseholdListView.vue';
-import CreateEmergencyZone from "@/components/admin/CreateEmergencyZone.vue";
+import CreateEmergencyZone from "@/components/admin/map/CreateEmergencyZone.vue";
+import CreateNews from "@/components/admin/news/CreateNews.vue";
+import DeleteNews from "@/components/admin/news/DeleteNews.vue";
 
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
@@ -44,7 +46,9 @@ const router = createRouter({
                 ]},
                 { path: "/admin-settings", component: AdminSettings,
                     children: [
-                        { path: "/createEmergencyZone", component: CreateEmergencyZone }
+                        { path: "/createEmergencyZone", component: CreateEmergencyZone },
+                        { path: "/createNews", component: CreateNews },
+                        { path: "/deleteNews", component: DeleteNews },
                     ]
                 },
 
