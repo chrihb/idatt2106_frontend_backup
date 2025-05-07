@@ -262,3 +262,69 @@ export const verifyIsAdmin = async (householdId) => {
         return null;
     }
 };
+
+/**
+ * Sets the given household as the primary household for the user.
+ * @param householdId The ID of the household to set as primary.
+ * @returns {Promise<boolean|null>} - `true` if successful, `null` on error.
+ */
+export const setPrimaryHousehold = async (householdId) => {
+    const userStore = useUserStore();
+    const router = useRouter();
+
+    try {
+        const response = await axios.put(
+            `${window.backendURL}/api/households/setPrimary/${householdId}`,
+            {},
+            {
+                headers: {
+                    Authorization: `Bearer ${userStore.token}`,
+                },
+            }
+        );
+
+        if (response.status === 200) {
+            return true;
+        }
+
+        return null;
+    } catch (error) {
+        console.error("Error setting primary household:", error.code);
+        userStore.clearToken();
+        await router.push("/login");
+        return null;
+    }
+};
+
+/**
+ * Gets the primary household for the current user.
+ * @returns {Promise<object|null>} - Household object (e.g. { id, name }) or null on error.
+ */
+export const getPrimaryHousehold = async () => {
+    const userStore = useUserStore();
+    const router = useRouter();
+
+    try {
+        const response = await axios.get(
+            `${window.backendURL}/api/households/getPrimary`,
+            {
+                headers: {
+                    Authorization: `Bearer ${userStore.token}`,
+                },
+            }
+        );
+
+        if (response.status === 200) {
+            return response.data;
+        }
+
+        return null;
+    } catch (error) {
+        console.error("Error fetching primary household:", error.code);
+        userStore.clearToken();
+        await router.push("/login");
+        return null;
+    }
+};
+
+

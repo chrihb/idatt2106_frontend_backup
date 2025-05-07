@@ -6,14 +6,24 @@ import PrimaryStorageStatus from "@/components/frontpage/PrimaryStorageStatus.vu
 import LocationStatusFront from "@/components/frontpage/LocationStatusFront.vue";
 import { useRouter } from "vue-router";
 import { ref, onMounted } from "vue";
+import {getPrimaryHousehold} from "@/services/householdService.js";
 
 const userStore = useUserStore();
 const router = useRouter();
 const household = ref([]);
 
-onMounted(() => {
+onMounted(async () => {
   if (userStore.isAuthenticated && userStore.householdId.length > 0) {
-    household.value = userStore.householdId[0]
+    const primary = await getPrimaryHousehold();
+
+    if (primary?.id) {
+      const matched = userStore.householdId.find(h => h.id === primary.id);
+      if (matched) {
+        household.value = matched;
+      } else {
+        console.warn("Primary household ID not found in user store.");
+      }
+    }
   }
 });
 

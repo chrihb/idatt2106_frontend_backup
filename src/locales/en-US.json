@@ -122,7 +122,8 @@
       "copiedToClipboard": "Copied to clipboard",
       "leaveHousehold": "Leave Household",
       "create-success": "Household created successfully",
-      "join-success": "Household joined successfully"
+      "join-success": "Household joined successfully",
+      "set-as-primary": "Set as Primary"
     },
   "login": {
     "title": "Login",
@@ -156,6 +157,9 @@
   "password": {
     "show": "show",
     "hide": "Hide"
+  },
+  "map": {
+    "filter": "Filter"
   },
   "register": {
     "title": "Register",

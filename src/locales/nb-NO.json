@@ -107,22 +107,23 @@
 	"location-status": "Lokasjonsstatus"
   },
   "household": {
-	"title": "My Household",
-	"generateInvite": "Generate Invite",
-	"inviteLinkGenerated": "Invite link generated",
-	"confirmDelete": "Confirm Deletion",
-	"deleteMember": "Are you sure you want to delete {name}?",
-	"cancel": "Cancel",
-	"delete": "Delete",
-	"inviteLink": "Invite Link",
-	"link": "Link",
-	"householdId": "Household ID",
-	"copy": "Copy",
-	"close": "Close",
-	"copiedToClipboard": "Copied to clipboard",
-	"leaveHousehold": "Leave Household",
+	"title": "Administrer husstand",
+	"generateInvite": "Generer invitasjon",
+	"inviteLinkGenerated": "Invitasjonslenke generert",
+	"confirmDelete": "Bekreft sletting",
+	"deleteMember": "Er du sikker på at du vil fjerne {name}?",
+	"cancel": "Avbryt",
+	"delete": "Fjern",
+	"inviteLink": "Invitasjonslenke",
+	"link": "Lenke",
+	"householdId": "Husstand ID",
+	"copy": "Kopier",
+	"close": "Lukk",
+	"copiedToClipboard": "Kopiert til utklippstavlen",
+	"leaveHousehold": "Forlat husstand",
 	"create-success": "Husstand opprettet",
-	"join-success": "Ble med i husstand"
+	"join-success": "Ble med i husstand",
+	"set-as-primary": "Sett som primær"
   },
   "login": {
 	"title": "Logg Inn",
@@ -156,6 +157,9 @@
   "password": {
 	"show": "Vis",
 	"hide": "Skjul"
+  },
+  "map": {
+	"filter": "Filtrer"
   },
   "register": {
 	"title": "Registrer",

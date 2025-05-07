@@ -3,7 +3,6 @@ import {useI18n} from "vue-i18n";
 import {XMarkIcon, CheckCircleIcon, XCircleIcon, ArrowLeftIcon} from "@heroicons/vue/24/solid/index.js";
 import {useForm} from "vee-validate";
 import {ref} from "vue";
-import {getAddressSuggestions} from "@/utils/addressTranslationUtil.js";
 import FormField from "@/components/input/FormField.vue";
 import {joinHousehold} from "@/services/householdService.js";
 import {useRouter} from "vue-router";

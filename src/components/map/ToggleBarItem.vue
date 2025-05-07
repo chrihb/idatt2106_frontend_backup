@@ -33,24 +33,25 @@ const layerIcon = () => {
 <template>
   <label class="flex items-center gap-3 cursor-pointer">
     <input
-        class="form-checkbox h-5 w-5 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+        class="form-checkbox size-5 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
         type="checkbox"
         checked
         @change="toggleLayer"
     />
     <template v-if="layerIcon() === 'circle-green'">
-      <span class="h-5 w-5 rounded-full bg-green-500"></span>
+      <span class="size-5 rounded-full bg-green-500"></span>
     </template>
     <template v-else-if="layerIcon() === 'circle-yellow'">
-      <span class="h-5 w-5 rounded-full bg-yellow-500"></span>
+      <span class="size-5  rounded-full bg-yellow-500"></span>
     </template>
     <template v-else-if="layerIcon() === 'circle-red'">
-      <span class="h-5 w-5 rounded-full bg-red-500"></span>
+      <span class="size-5 rounded-full bg-red-500"></span>
     </template>
     <template v-else>
-      <img :src="layerIcon()" alt="icon" class="h-5 w-5 rounded-full" />
+      <img :src="layerIcon()" alt="icon" class="size-5 rounded-full" />
     </template>
-    <span class="text-sm font-medium text-gray-700">{{ layerType }}</span>
+    <span class="text-md font-medium text-kf-blue truncate block max-w-25">{{ layerType }}</span>
+
   </label>
 </template>
 

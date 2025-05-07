@@ -7,7 +7,13 @@ import ConfirmationModal from "@/components/myHome/ConfirmationModal.vue";
 import InviteModal from "@/components/myHome/InviteModal.vue";
 import { XMarkIcon } from "@heroicons/vue/24/solid/index.js";
 import { useUserStore } from "@/stores/userStore.js";
-import {getInviteCode, leaveHouseholdService, verifyIsAdmin} from "@/services/householdService.js";
+import {
+  getInviteCode,
+  leaveHouseholdService,
+  verifyIsAdmin,
+  setPrimaryHousehold,
+  getPrimaryHousehold
+} from "@/services/householdService.js";
 import { kickUserFromHousehold } from "@/services/householdService.js";
 
 const { t } = useI18n();
@@ -29,6 +35,7 @@ const emit = defineEmits(["close"]);
 
 const members = ref([]);
 const isAdmin = ref(false);
+const isPrimary = ref(false);
 const selectedMember = ref(null);
 const showInviteModal = ref(false);
 const inviteLink = ref("");
@@ -44,6 +51,7 @@ watch(
 
 onMounted(async () => {
   await checkAdminStatus();
+  await checkIfPrimary();
 });
 
 const checkAdminStatus = async () => {
@@ -55,16 +63,24 @@ const checkAdminStatus = async () => {
   }
 };
 
+const checkIfPrimary = async () => {
+  try {
+    const primary = await getPrimaryHousehold();
+    isPrimary.value = primary?.id === props.household.id;
+  } catch (error) {
+    console.error("Failed to verify primary household:", error);
+  }
+};
+
 const openInviteModal = async () => {
   console.log("Opening invite modal");
   const code = await getInviteCode(props.household.id);
   if (code) {
-    inviteCode.value = code.inviteCode || code; // Adjust based on getInviteCode response structure
+    inviteCode.value = code.inviteCode || code;
     inviteLink.value = `${window.location.origin}/household/options/?inviteCode=${inviteCode.value}`;
     showInviteModal.value = true;
   } else {
     console.error("Failed to get invite code");
-    // Optionally show an error to the user
   }
 };
 
@@ -89,10 +105,8 @@ const removeMember = async () => {
         members.value = members.value.filter(member => member.id !== selectedMember.value.id);
         closeModal();
 
-        // First update the households data
         await userStore.fetchHouseholds();
 
-        // Now decide where to redirect based on whether there are any households left
         if (userStore.householdId.length === 0) {
           await router.push("/household/options");
         } else {
@@ -108,13 +122,13 @@ const removeMember = async () => {
     }
   }
 };
+
 const leaveHousehold = async () => {
   try {
     const response = await leaveHouseholdService(props.household.id);
     if (response) {
       await userStore.fetchHouseholds();
 
-      // Check if any households remain after leaving
       if (userStore.householdId.length === 0) {
         await router.push("/household/options");
       } else {
@@ -130,18 +144,27 @@ const leaveHousehold = async () => {
     console.error("Error leaving household:", error);
   }
 };
+
+const setAsPrimary = async () => {
+  try {
+    const success = await setPrimaryHousehold(props.household.id);
+    if (success) {
+      await checkIfPrimary();
+    } else {
+      console.error("Failed to set as primary");
+    }
+  } catch (error) {
+    console.error("Error setting household as primary:", error);
+  }
+};
 </script>
 
 <template>
   <div v-if="isOpen" class="fixed inset-0 backdrop-blur-sm flex justify-center items-center z-50">
     <div class="bg-kf-white p-6 rounded-lg shadow-lg relative border border-kf-blue max-w-4xl w-full max-h-[90vh] overflow-y-auto">
+      <XMarkIcon @click="$emit('close')" class="absolute top-2 right-2 cursor-pointer size-6 rounded-full hover:bg-kf-grey text-kf-blue" />
 
-    <XMarkIcon @click="$emit('close')" class="absolute top-2 right-2 cursor-pointer size-6 rounded-full hover:bg-kf-grey text-kf-blue" />
-
-    <!-- Header -->
-
-    <h1 class="text-kf-blue font-bold text-2xl mb-4">{{ t("household.title") }}</h1>
-
+      <h1 class="text-kf-blue font-bold text-2xl mb-4">{{ t("household.title") }}</h1>
 
       <!-- Members List -->
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -172,13 +195,21 @@ const leaveHousehold = async () => {
           @close="closeInviteModal"
       />
 
-      <!-- Leave Household And Invite Button -->
+      <!-- Action Buttons -->
       <div class="mt-8 flex justify-between">
         <button
             class="bg-kf-green cursor-pointer text-white px-4 py-2 rounded hover:bg-kf-white-contrast-8"
             @click="openInviteModal"
         >
           {{ t("household.generateInvite") }}
+        </button>
+
+        <button
+            class="bg-kf-link-blue text-white px-4 py-2 rounded hover:bg-kf-white-contrast-8 disabled:opacity-50 disabled:cursor-not-allowed"
+            :disabled="isPrimary"
+            @click="setAsPrimary"
+        >
+          {{ t("household.set-as-primary") }}
         </button>
 
         <button

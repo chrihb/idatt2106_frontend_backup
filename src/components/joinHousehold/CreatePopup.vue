@@ -46,23 +46,8 @@ const errorMessage = ref("");
 const addressSuggestions = ref([]);
 
 const fetchAddressSuggestions = async (query) => {
-  if (!query || query.length < 5) {
-    addressSuggestions.value = [];
-    return;
-  }
-
-  const suggestions = await getAddressSuggestions(query);
-
-  addressSuggestions.value = suggestions
-      .map((suggestion) => {
-        const { road = "", house_number = "", postcode = "", city = "", town = "", village = "" } =
-        suggestion.address || {};
-        suggestion.displayName = `${road} ${house_number}, ${postcode} ${city || town || village}`.trim();
-        return suggestion;
-      })
-      .filter((suggestion) => suggestion.displayName && suggestion.displayName !== ',' && suggestion.displayName.length > 1);
+  addressSuggestions.value = await getAddressSuggestions(query);
 };
-
 
 function selectSuggestion(suggestion) {
   setFieldValue("address", suggestion.displayName);
