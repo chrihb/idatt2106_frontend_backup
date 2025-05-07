@@ -1,14 +1,15 @@
 <script setup>
-import {computed, onMounted, ref, watch} from "vue";
+import { computed, onMounted, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRouter } from "vue-router";
 import MemberCard from "@/components/myHome/MemberCard.vue";
 import ConfirmationModal from "@/components/myHome/ConfirmationModal.vue";
 import InviteModal from "@/components/myHome/InviteModal.vue";
-import {XMarkIcon} from "@heroicons/vue/24/solid/index.js";
-import {useUserStore} from "@/stores/userStore.js";
-import {getInviteCode, requestHouseholds} from "@/services/householdService.js";
-
+import { XMarkIcon } from "@heroicons/vue/24/solid/index.js";
+import { useUserStore } from "@/stores/userStore.js";
+import {getInviteCode, leaveHouseholdService, requestHouseholds, verifyIsAdmin} from "@/services/householdService.js";
+import { kickUserFromHousehold } from "@/services/householdService.js";
+import {required} from "@vee-validate/rules";
 
 const { t } = useI18n();
 const router = useRouter();
@@ -19,47 +20,58 @@ const props = defineProps({
     type: Boolean,
     required: true,
   },
+  household: {
+    type: Object,
+    required: true,
+  },
 });
 
 const emit = defineEmits(["close"]);
 
 const members = ref([]);
-const isAdmin = ref(true);
+const isAdmin = ref(false);
 const selectedMember = ref(null);
 const showInviteModal = ref(false);
 const inviteLink = ref("");
 const inviteCode = ref("");
-const householdId = computed(() => userStore.householdId[0]?.id || null); // Access the first household ID
 
-// Watch userStore.household.members for changes and update members ref
 watch(
-    () => userStore.householdId[0]?.members,
+    () => props.household.members,
     (newMembers) => {
-      if (newMembers) {
-        // Map members to objects with id and name
-        members.value = newMembers.map((name, index) => ({
-          id: index + 1, // Temporary ID (replace with actual ID if available)
-          name,
-        }));
-      } else {
-        members.value = [];
-      }
+      members.value = newMembers || [];
     },
     { immediate: true }
 );
 
+onMounted(async () => {
+  await checkAdminStatus();
+});
+
+const checkAdminStatus = async () => {
+  if (props.household.id) {
+    const isAdminResult = await verifyIsAdmin(props.household.id);
+    isAdmin.value = isAdminResult || false;
+  } else {
+    isAdmin.value = false;
+  }
+};
+
 const openInviteModal = async () => {
   console.log("Opening invite modal");
-  inviteCode.value = await getInviteCode(householdId.value)
-  console.log("Invite code:", inviteCode);
-  inviteLink.value = `${window.location.origin}/household/options/?inviteCode=${inviteCode.value}`;
-  showInviteModal.value = true;
+  const code = await getInviteCode(props.household.id);
+  if (code) {
+    inviteCode.value = code.inviteCode || code; // Adjust based on getInviteCode response structure
+    inviteLink.value = `${window.location.origin}/household/options/?inviteCode=${inviteCode.value}`;
+    showInviteModal.value = true;
+  } else {
+    console.error("Failed to get invite code");
+    // Optionally show an error to the user
+  }
 };
 
 const closeInviteModal = () => {
   showInviteModal.value = false;
   inviteLink.value = "";
-  householdId.value = "";
 };
 
 const confirmDelete = (member) => {
@@ -70,17 +82,41 @@ const closeModal = () => {
   selectedMember.value = null;
 };
 
-const removeMember = () => {
+const removeMember = async () => {
   if (selectedMember.value) {
-    members.value = members.value.filter((m) => m.id !== selectedMember.value.id);
-    closeModal();
+    try {
+      const response = await kickUserFromHousehold(props.household.id, selectedMember.value.id);
+      if (response) {
+        members.value = members.value.filter(member => member.id !== selectedMember.value.id);
+        closeModal();
+        if (members.value.length === 0) {
+          await router.push("/household/list")
+        }
+        await userStore.fetchHouseholds() // Add parentheses here too
+        console.log("Member removed successfully");
+      } else {
+        console.error("Failed to remove member");
+      }
+    } catch (error) {
+      console.error("Error removing member:", error);
+    }
   }
 };
-
-const leaveHousehold = () => {
-  alert(t("household.leaveHousehold"));
-  router.push("/");
-  emit("close");
+const leaveHousehold = async () => {
+  try {
+    const response = await leaveHouseholdService(props.household.id);
+    if (response) {
+      // This line is wrong - you're not actually calling the function
+      await userStore.fetchHouseholds() // Add parentheses to call the function
+      console.log("Left household successfully");
+      await router.push("/");
+      emit("close");
+    } else {
+      console.error("Failed to leave household");
+    }
+  } catch (error) {
+    console.error("Error leaving household:", error);
+  }
 };
 </script>
 
@@ -104,6 +140,7 @@ const leaveHousehold = () => {
             :key="member.id"
             :member="member"
             :is-admin="isAdmin"
+            :is.current-user="member.name === userStore.$id"
             @delete="confirmDelete"
         />
       </div>
