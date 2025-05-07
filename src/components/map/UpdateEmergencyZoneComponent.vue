@@ -3,6 +3,7 @@ import { computed, ref} from 'vue';
 import { useEmergencyZoneStore } from '@/stores/emergencyZoneStore.js';
 import { useEmergencyZonesStore } from '@/stores/emergencyZonesStore.js';
 import { useI18n } from 'vue-i18n';
+import PolygonMapModal from '@/components/map/PolygonMapModal.vue';
 
 const { t } = useI18n();
 const props = defineProps(['zoneId', 'display']);
@@ -27,6 +28,20 @@ const zoneData = ref({
 const isAddressMode = ref(true);
 const formIncomplete = ref(false);
 const showConfirmation = ref(false);
+const isMapModalVisible = ref(false);
+
+const openMapModal = () => {
+  isMapModalVisible.value = true;
+};
+
+const closeMapModal = () => {
+  isMapModalVisible.value = false;
+};
+
+const handleCoordinatesSelected = (coordinates) => {
+  zoneData.value.coordinates = coordinates;
+  closeMapModal();
+};
 
 const setInputMode = () => {
   isAddressMode.value = !isAddressMode.value;
@@ -173,6 +188,18 @@ const cancelConfirmation = () => {
                   class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2
                    focus:ring-blue-500 text-base"
               ></textarea>
+
+              <PolygonMapModal
+                  v-if="isMapModalVisible"
+                  @close="closeMapModal"
+                  @coordinatesSelected="handleCoordinatesSelected"
+              />
+              <button
+                  class="mt-2 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600"
+                  @click="openMapModal"
+              >
+                {{ t('zone.createPolygonOnMap') }}
+              </button>
             </div>
 
             <!-- Conditionally Rendered Fields -->
