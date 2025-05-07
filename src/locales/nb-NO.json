@@ -250,6 +250,7 @@
     "quit": "Avslutt",
     "leaveMessage": "Er du sikker på at du vil forlate denne siden? Endringer vil ikke bli lagret.",
     "updateZone": "Oppdater Sone",
+    "newZone": "Ny Sone",
     "zoneName": "Sone Navn",
     "zoneType": "Sone Type",
     "emergencyLevel": "Krise nivå",

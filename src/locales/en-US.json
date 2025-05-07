@@ -250,6 +250,7 @@
     "quit": "Quit",
     "leaveMessage": "Are you sure you want to leave this page? Unsaved changes will be deleted.",
     "updateZone": "Update Zone",
+    "newZone": "New Zone",
     "zoneName": "Zone Name",
     "zoneType": "Zone Type",
     "emergencyLevel": "Emergency Level",
