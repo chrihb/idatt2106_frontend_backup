@@ -1,5 +1,6 @@
 import {defineStore} from 'pinia';
 import {requestAuthenticationCheck} from "@/services/authenticationCheckService.js";
+import {requestHouseholds} from "@/services/householdService.js";
 
 export const useUserStore = defineStore('user', {
     state: () => ({
@@ -32,6 +33,17 @@ export const useUserStore = defineStore('user', {
             this.token = null;
             this.authenticated = false;
             this.householdId = [];
+        },
+        clearHouseholdId() {
+            this.householdId = [];
+        },
+        async fetchHouseholds() {
+            try {
+                const households = await requestHouseholds();
+                this.setCredentials({ householdId: households });
+            } catch (error) {
+                console.error("Error fetching households:", error);
+            }
         },
         
         setUserSettings(settings) {

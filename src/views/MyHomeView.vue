@@ -32,7 +32,7 @@ function centerOnAddress() {
         <HouseholdPanel @click="centerOnAddress" :name="household.name" :address="household.address" class="cursor-pointer" />
         <HouseStatus :members="household.members" class="" />
         <Nearest :latitude="household.latitude" :longitude="household.longitude"/>
-        <ManageHousehold/>
+        <ManageHousehold :household="household"/>
       </div>
       <div class="relative h-full w-full rounded-2xl shadow-lg overflow-hidden">
         <Map class="h-full w-full" />
