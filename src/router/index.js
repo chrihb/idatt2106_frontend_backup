@@ -4,7 +4,7 @@ import HomeView from "@/views/HomeView.vue";
 import EmergencyStorage from "@/views/EmergencyStorage.vue";
 import NewsView from "@/views/NewsView.vue";
 import AccountView from "@/views/AccountView.vue";
-import AdminView from "@/views/AdminView.vue";
+import AdminSettings from "@/components/admin/AdminSettings.vue";
 import AboutUsView from "@/views/AboutUsView.vue";
 import PrivacyPolicyView from "@/views/PrivacyPolicyView.vue";
 import MapView from "@/views/MapView.vue";
@@ -17,11 +17,11 @@ import EmailVerification from "@/components/email/EmailVerification.vue";
 import PasswordResetNewPassword from "@/components/email/passwordReset/PasswordResetNewPassword.vue";
 import SimpleCenteredComponent from "@/views/SimpleCenteredComponent.vue";
 import {useUserStore} from "@/stores/userStore.js";
-import SuperAdminView from "@/views/SuperAdminView.vue";
 import AdminRegister from "@/components/login/AdminRegister.vue";
 import JoinCreateHousehold from "@/components/joinHousehold/Options.vue";
 import JoinHouseholdView from "@/views/JoinHouseholdView.vue";
 import HouseholdListView from '@/views/HouseholdListView.vue';
+import CreateEmergencyZone from "@/components/admin/CreateEmergencyZone.vue";
 
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
@@ -42,6 +42,11 @@ const router = createRouter({
                 children: [
                     { path: "options/", component: JoinCreateHousehold },
                 ]},
+                { path: "/admin-settings", component: AdminSettings,
+                    children: [
+                        { path: "/createEmergencyZone", component: CreateEmergencyZone }
+                    ]
+                },
 
             ],
         },
