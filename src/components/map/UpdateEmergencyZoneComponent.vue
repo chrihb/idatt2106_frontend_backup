@@ -51,7 +51,22 @@ const saveZone = async () => {
 };
 
 const close = () => {
+  resetForm();
   emit('close');
+};
+
+const resetForm = () => {
+  zoneData.value = {
+    name: '',
+    type: '',
+    level: 1,
+    address: '',
+    lat: null,
+    lng: null,
+    coordinates: [],
+    description: '',
+  };
+  formIncomplete.value = false;
 };
 
 const handleCancel = () => {
