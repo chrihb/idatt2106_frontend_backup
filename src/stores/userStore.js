@@ -34,10 +34,6 @@ export const useUserStore = defineStore('user', {
             this.authenticated = false;
             this.householdId = [];
         },
-
-        setUserSettings(settings) {
-            this.userSettings = settings;
-        },
         clearHouseholdId() {
             this.householdId = [];
         },
@@ -48,7 +44,11 @@ export const useUserStore = defineStore('user', {
             } catch (error) {
                 console.error("Error fetching households:", error);
             }
-        }
+        },
+
+        setUserSettings(settings) {
+            this.userSettings = settings;
+        },
     },
     persist: {
         enabled: true,
