@@ -6,7 +6,6 @@ import {emergencyZoneService} from "@/services/emergencyZoneService.js";
 import {useMarkersStore} from "@/stores/markersStore.js";
 import {markerService} from "@/services/markerService.js";
 import {useMarkerStore} from "@/stores/markerStore.js";
-import {marker} from "leaflet/src/layer/index.js";
 
 export const createMarkerPopup = (type, address, description) =>
     `

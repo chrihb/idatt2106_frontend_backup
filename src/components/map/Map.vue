@@ -6,9 +6,7 @@ import {usePositionTrackingStore} from "@/stores/positionTrackingStore.js";
 import {useEmergencyZonesStore} from "@/stores/emergencyZonesStore.js";
 import {debounce} from 'lodash';
 import {useMarkersStore} from "@/stores/markersStore.js";
-import {addMarkerToMap, centerMapOnMarker} from "@/utils/mapUtils.js";
-import {centerMapOnEmergencyZone} from "@/utils/mapUtils.js";
-import {addEmergencyZoneToMap} from "@/utils/mapUtils.js";
+import {addMarkerToMap, centerMapOnMarker, centerMapOnEmergencyZone, addEmergencyZoneToMap} from "@/utils/mapUtils.js";
 
 onMounted(async () => {
 
