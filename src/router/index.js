@@ -49,7 +49,7 @@ const router = createRouter({
             ],
         },
         {
-            path: "/login", component: AuthBase,
+            path: "/", component: AuthBase,
             children: [
                 { path: "/login", name: "Login", component: Login,},
                 { path: "/register-account", name: "Register",component: Register },
