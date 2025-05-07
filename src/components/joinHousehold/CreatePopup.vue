@@ -5,6 +5,7 @@ import {useForm} from "vee-validate";
 import {ref} from "vue";
 import {getAddressSuggestions} from "@/utils/addressTranslationUtil.js";
 import FormField from "@/components/input/FormField.vue";
+import {createHousehold} from "@/services/householdService.js";
 
 const { t } = useI18n();
 
@@ -19,6 +20,8 @@ const { validate, values: form, errors, setFieldError, setFieldValue, resetForm 
   initialValues: {
     nickname: "",
     address: "",
+    lat: null,
+    lon: null,
   },
   validationSchema: {
     nickname: (value) => {
@@ -58,8 +61,11 @@ const fetchAddressSuggestions = async (query) => {
 
 function selectSuggestion(suggestion) {
   setFieldValue("address", suggestion.displayName);
+  setFieldValue("lat", parseFloat(suggestion.lat));
+  setFieldValue("lon", parseFloat(suggestion.lon));
   addressSuggestions.value = [];
 }
+
 
 const handleSubmit = async () => {
   const result = await validate();
@@ -75,10 +81,11 @@ const handleSubmit = async () => {
   try {
     const registerForm = {
       nickname: form.nickname,
-      address: form.address,
+      lat: form.lat,
+      lon: form.lon,
     };
-    console.log("Submitting registration form:", registerForm); // Debug the form data
-    const response = 1; // await requestRegister(registerForm, t);
+    console.log("Submitting registration form:", registerForm);
+    const response = await createHousehold(registerForm.nickname, registerForm.lat, registerForm.lon);
 
     if (response.success) {
       successMessage.value = t("register.successMessage");

@@ -8,6 +8,12 @@ import MyHouseholdView from "@/views/MyHouseholdView.vue";
 const { t } = useI18n();
 const showHouseholdModal = ref(false);
 
+const props = defineProps({
+  household: {
+    type: Object,
+    required: true,
+  },
+});
 const openHouseholdModal = () => {
   showHouseholdModal.value = true;
 };
@@ -28,7 +34,7 @@ const closeHouseholdModal = () => {
         <h1 class="text-2xl text-kf-blue">{{ t("my-home.manage-household") }}</h1>
       </div>
     </div>
-    <MyHouseholdView :is-open="showHouseholdModal" @close="closeHouseholdModal" />
+    <MyHouseholdView :is-open="showHouseholdModal" @close="closeHouseholdModal" :household="household" />
   </div>
 </template>
 

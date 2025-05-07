@@ -18,7 +18,8 @@ import SimpleCenteredComponent from "@/views/SimpleCenteredComponent.vue";
 import {useUserStore} from "@/stores/userStore.js";
 import AdminRegister from "@/components/login/AdminRegister.vue";
 import JoinCreateHousehold from "@/components/joinHousehold/Options.vue";
-import JoinHouseholdView from "@/views/JoinHouseholdView.vue";
+import StorageListView from '@/views/StorageListView.vue';
+import HouseholdListView from "@/views/HouseholdListView.vue";
 
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
@@ -29,20 +30,25 @@ const router = createRouter({
                 { path: "", component: HomeView },
                 { path: "/news", component: NewsView },
                 { path: "/account", component: AccountView, meta: { requiresAuth: true } },
-                { path: "/storage", component: EmergencyStorage, meta: { requiresAuth: true, requiresHousehold: true } },
+                { path: "/storage", component: StorageListView, meta: { requiresAuth: true },
+                    children: [
+                        { path: "list", component: StorageListView },
+                        { path: ":id", component: EmergencyStorage, meta: { requiresHousehold: true }, props: true },
+                    ]},
                 { path: "/about-us", component: AboutUsView },
                 { path: "/privacy-policy", component: PrivacyPolicyView },
                 { path: "/map", component: MapView },
-                { path: "/my-home", component: MyHomeView, meta: { requiresAuth: true, requiresHousehold: true } },
-                { path: "/household", component: JoinHouseholdView, meta: { requiresAuth: true },
-                children: [
-                    { path: "options/", component: JoinCreateHousehold },
-                ]},
+                { path: "/household", meta: { requiresAuth: true },
+                    children: [
+                        { path: "options", component: JoinCreateHousehold },
+                        { path: "list", component: HouseholdListView, meta: { requiresHousehold: true } },
+                        { path: ":id", component: MyHomeView, meta: { requiresHousehold: true }, props: true },
+                    ]},
 
             ],
         },
         {
-            path: "/login", component: AuthBase,
+            path: "/", component: AuthBase,
             children: [
                 { path: "/login", name: "Login", component: Login,},
                 { path: "/register-account", name: "Register",component: Register },
@@ -84,7 +90,7 @@ router.beforeEach(async (to, from, next) => {
         return next();
     }
 
-    if (userStore.householdId.length === 0) {
+    if (!userStore.householdId || userStore.householdId.length === 0) {
         return next('/household/options');
     }
 

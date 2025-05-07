@@ -64,7 +64,8 @@
       "item-name": "Item Name",
       "item-amount": "Item Amount",
       "item-expiration": "Expiry",
-      "more-info": "Click for More Info"
+      "more-info": "Click for More Info",
+      "household-list-title": "Your households"
     },
     "news": {
       "title": "News",
@@ -97,7 +98,8 @@
       "available": "Available Households",
       "create-desc": "a household to manage your storage and household members",
       "manage-storage": "Manage Storage",
-      "manage-household": "Manage Household"
+      "manage-household": "Manage Household",
+      "location-status": "Location Status"
     },
     "household": {
       "title": "My Household",

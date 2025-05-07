@@ -9,6 +9,7 @@ import { XMarkIcon } from "@heroicons/vue/24/solid/index.js";
 import { useUserStore } from "@/stores/userStore.js";
 import {getInviteCode, leaveHouseholdService, requestHouseholds, verifyIsAdmin} from "@/services/householdService.js";
 import { kickUserFromHousehold } from "@/services/householdService.js";
+import {required} from "@vee-validate/rules";
 
 const { t } = useI18n();
 const router = useRouter();
@@ -17,6 +18,10 @@ const userStore = useUserStore();
 const props = defineProps({
   isOpen: {
     type: Boolean,
+    required: true,
+  },
+  household: {
+    type: Object,
     required: true,
   },
 });
@@ -30,12 +35,8 @@ const showInviteModal = ref(false);
 const inviteLink = ref("");
 const inviteCode = ref("");
 
-const household = computed(() => userStore.householdId[0] || null);
-const householdId = computed(() => household.value?.id || null);
-
-
 watch(
-    () => household.value?.members,
+    () => props.household.members,
     (newMembers) => {
       members.value = newMembers || [];
     },
@@ -47,8 +48,8 @@ onMounted(async () => {
 });
 
 const checkAdminStatus = async () => {
-  if (householdId.value) {
-    const isAdminResult = await verifyIsAdmin(householdId.value);
+  if (props.household.id) {
+    const isAdminResult = await verifyIsAdmin(props.household.id);
     isAdmin.value = isAdminResult || false;
   } else {
     isAdmin.value = false;
@@ -57,7 +58,7 @@ const checkAdminStatus = async () => {
 
 const openInviteModal = async () => {
   console.log("Opening invite modal");
-  const code = await getInviteCode(householdId.value);
+  const code = await getInviteCode(props.household.id);
   if (code) {
     inviteCode.value = code.inviteCode || code; // Adjust based on getInviteCode response structure
     inviteLink.value = `${window.location.origin}/household/options/?inviteCode=${inviteCode.value}`;
@@ -84,13 +85,14 @@ const closeModal = () => {
 const removeMember = async () => {
   if (selectedMember.value) {
     try {
-      const response = await kickUserFromHousehold(householdId.value, selectedMember.value.id);
+      const response = await kickUserFromHousehold(props.household.id, selectedMember.value.id);
       if (response) {
+        members.value = members.value.filter(member => member.id !== selectedMember.value.id);
         closeModal();
         if (members.value.length === 0) {
-          userStore.clearHouseholdId()
-          await router.push("/household/options")
+          await router.push("/household/list")
         }
+        await userStore.fetchHouseholds() // Add parentheses here too
         console.log("Member removed successfully");
       } else {
         console.error("Failed to remove member");
@@ -100,22 +102,20 @@ const removeMember = async () => {
     }
   }
 };
-
 const leaveHousehold = async () => {
   try {
-    const response = await leaveHouseholdService(householdId.value);
+    const response = await leaveHouseholdService(props.household.id);
     if (response) {
-      userStore.clearHouseholdId();
+      // This line is wrong - you're not actually calling the function
+      await userStore.fetchHouseholds() // Add parentheses to call the function
       console.log("Left household successfully");
       await router.push("/");
       emit("close");
     } else {
       console.error("Failed to leave household");
-      // Show error to user
     }
   } catch (error) {
     console.error("Error leaving household:", error);
-    // Show error to user
   }
 };
 </script>

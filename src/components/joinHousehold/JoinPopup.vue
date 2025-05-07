@@ -5,6 +5,7 @@ import {useForm} from "vee-validate";
 import {ref} from "vue";
 import {getAddressSuggestions} from "@/utils/addressTranslationUtil.js";
 import FormField from "@/components/input/FormField.vue";
+import {joinHousehold} from "@/services/householdService.js";
 
 const { t } = useI18n();
 
@@ -47,11 +48,11 @@ const handleSubmit = async () => {
   errorMessage.value = "";
 
   try {
-    const registerForm = {
+    const inviteForm = {
       inviteCode: form.inviteCode,
     };
-    console.log("Submitting registration form:", registerForm); // Debug the form data
-    const response = 1; // await requestRegister(registerForm, t);
+    console.log("Submitting registration form:", inviteForm); // Debug the form data
+    const response = await joinHousehold(inviteForm.inviteCode);
 
     if (response.success) {
       successMessage.value = t("register.successMessage");
