@@ -69,7 +69,8 @@
     "item-expiration": "Utløpsdato",
     "more-info": "Trykk for mer info",
     "household-list-title": "Dine husholdninger",
-    "inventory-categories": "Lagerkategorier"
+    "inventory-categories": "Lagerkategorier",
+    "select-household": "Velg husstand"
   },
   "news": {
     "title": "Nyheter",

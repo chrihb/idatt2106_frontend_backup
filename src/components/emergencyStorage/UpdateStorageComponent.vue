@@ -286,13 +286,13 @@ onMounted(async () => {
 
         <div>
           <label for="item-category" class="block text-sm font-medium text-gray-700 mb-1">
-            {{ t('storage.select-category') }}
+            {{ t('storage.select-household') }}
           </label>
           <select
               id="item-category"
               v-model="selectedHousehold"
               class="border border-gray-300 w-full rounded-lg p-3 text-base text-black focus:ring-2 focus:ring-blue-500 bg-white">
-            <option disabled value="">{{ t("storage.select-category") }}</option>
+            <option disabled value="">{{ t("storage.select-household") }}</option>
             <option v-for="household in userStore.householdId" :key="household.id" :value="household.id">
               {{ household.name }}
             </option>

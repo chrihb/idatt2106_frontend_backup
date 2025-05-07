@@ -69,7 +69,8 @@
       "item-expiration": "Expiry",
       "more-info": "Click for More Info",
       "household-list-title": "Your households",
-      "inventory-categories": "Inventory Categories"
+      "inventory-categories": "Inventory Categories",
+      "select-household": "Select Household"
     },
     "news": {
       "title": "News",
