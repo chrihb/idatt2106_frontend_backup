@@ -215,15 +215,14 @@ export const emergencyZoneStyle = (level) => {
     switch (level) {
         case 1:
             style = {
-                color: 'green',
-                fillColor: '#3f0',
+                color: 'yellow',
+                fillColor: '#ff0',
             };
             break
         case 2:
             style = {
-
-                color: 'yellow',
-                fillColor: '#ff0',
+                color: 'orange',
+                fillColor: '#FFA500',
             };
             break
         case 3:
