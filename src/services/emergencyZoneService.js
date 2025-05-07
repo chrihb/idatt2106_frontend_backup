@@ -208,7 +208,7 @@ export const emergencyZoneService = () => {
     }
 
     async function deleteEmergencyZone(zoneId) {
-        const response = await axios.delete(`${baseUrl}/delete/${zoneId}`, {
+        const response = await axios.delete(`${baseURL}/delete/${zoneId}`, {
             headers: {
                 'Content-Type': 'application/json',
             },
