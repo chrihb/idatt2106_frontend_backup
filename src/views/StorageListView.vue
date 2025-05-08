@@ -21,21 +21,19 @@ function goToStorage(id) {
 </script>
 
 <template>
-  <div class="container mx-auto px-4 py-6">
-    <h2 class="text-2xl font-semibold text-kf-blue mb-4 text-center">{{ $t('storage.household-list-title') }}</h2>
-
+  <div class="container p-2">
 
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
       <div
-        v-for="household in households"
-        :key="household.id"
-        @click="goToStorage(household.id)"
-        class="cursor-pointer"
+          v-for="household in households"
+          :key="household"
+          @click="goToStorage(household.id)"
+          class="cursor-pointer"
       >
         <StorageStatus
-          :title="household.name"
-          :daysOfFood="household.status.daysOfFood"
-          :daysOfWater="household.status.daysOfWater"
+            :title="household.name"
+            :daysOfFood="household.status.daysOfFood"
+            :daysOfWater="household.status.daysOfWater"
         />
       </div>
     </div>

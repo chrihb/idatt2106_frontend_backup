@@ -99,19 +99,37 @@ const centerMapOnZone11 = async () => {
   }
 }
 
+const positionTrackingStore = usePositionTrackingStore();
+
+const centerMapOnUser = () => {
+  positionTrackingStore.centerMapOnUser();
+};
+
 </script>
 
 <template>
-  <div id="map" class="relative min-h-140 h-full w-full z-0 rounded-2xl"></div>
-  <!-- TODO: Remove testing buttons -->
+  <!-- Map container -->
+  <div id="map" class="relative min-h-160 h-full w-full z-0 rounded-2xl"></div>
+
+  <!-- Map Controls -->
   <div>
+    <!-- Existing test buttons -->
     <button @click="centerMapOnMarker1" class="absolute top-4 right-4 bg-blue-500 text-white px-4 py-2 rounded">
-      TEST Center on Marker 1
+      TEST Vis nærmeste hjertestarter
     </button>
     <button @click="centerMapOnZone11" class="absolute top-20 right-4 bg-blue-500 text-white px-4 py-2 rounded">
-      TEST Center on Zone 11
+      TEST Vis nærmeste krise
+    </button>
+
+    <!-- New "center on user" button -->
+    <button
+        class="absolute bottom-8 right-4 w-8 h-8 bg-white rounded-full shadow-md border border-black flex items-center justify-center hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
+        @click="centerMapOnUser"
+    >
+      <img src="/icons/map/PersonligPlassering.png" alt="Center Map" class="w-5 h-5" />
     </button>
   </div>
+
 </template>
 
 <style scoped>

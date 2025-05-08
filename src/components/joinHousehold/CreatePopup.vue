@@ -2,11 +2,17 @@
 import {useI18n} from "vue-i18n";
 import {XMarkIcon, CheckCircleIcon, XCircleIcon, ArrowLeftIcon} from "@heroicons/vue/24/solid/index.js";
 import {useForm} from "vee-validate";
-import {ref} from "vue";
+import {ref, computed} from "vue";
 import {getAddressSuggestions} from "@/utils/addressTranslationUtil.js";
 import FormField from "@/components/input/FormField.vue";
+import {createHousehold} from "@/services/householdService.js";
+import {useRouter} from "vue-router";
+import { useUserStore } from "@/stores/userStore.js";
 
 const { t } = useI18n();
+const router = useRouter();
+const userStore = useUserStore();
+
 
 const props = defineProps({
   onClose: {
@@ -19,6 +25,8 @@ const { validate, values: form, errors, setFieldError, setFieldValue, resetForm 
   initialValues: {
     nickname: "",
     address: "",
+    lat: null,
+    lon: null,
   },
   validationSchema: {
     nickname: (value) => {
@@ -38,28 +46,16 @@ const errorMessage = ref("");
 const addressSuggestions = ref([]);
 
 const fetchAddressSuggestions = async (query) => {
-  if (!query || query.length < 5) {
-    addressSuggestions.value = [];
-    return;
-  }
-
-  const suggestions = await getAddressSuggestions(query);
-
-  addressSuggestions.value = suggestions
-      .map((suggestion) => {
-        const { road = "", house_number = "", postcode = "", city = "", town = "", village = "" } =
-        suggestion.address || {};
-        suggestion.displayName = `${road} ${house_number}, ${postcode} ${city || town || village}`.trim();
-        return suggestion;
-      })
-      .filter((suggestion) => suggestion.displayName && suggestion.displayName !== ',' && suggestion.displayName.length > 1);
+  addressSuggestions.value = await getAddressSuggestions(query);
 };
-
 
 function selectSuggestion(suggestion) {
   setFieldValue("address", suggestion.displayName);
+  setFieldValue("lat", parseFloat(suggestion.lat));
+  setFieldValue("lon", parseFloat(suggestion.lon));
   addressSuggestions.value = [];
 }
+
 
 const handleSubmit = async () => {
   const result = await validate();
@@ -75,14 +71,18 @@ const handleSubmit = async () => {
   try {
     const registerForm = {
       nickname: form.nickname,
-      address: form.address,
+      lat: form.lat,
+      lon: form.lon,
     };
-    console.log("Submitting registration form:", registerForm); // Debug the form data
-    const response = 1; // await requestRegister(registerForm, t);
+    console.log("Submitting registration form:", registerForm);
+    const response = await createHousehold(registerForm.nickname, registerForm.lat, registerForm.lon);
 
     if (response.success) {
-      successMessage.value = t("register.successMessage");
+      successMessage.value = t("household.create-success");
       resetForm();
+      await userStore.fetchHouseholds()
+      const household = userStore.getHouseholdByName(registerForm.nickname);
+      await router.push(`/household/${household.id}`);
     } else {
       if (response.error.includes("Address")) {
         setFieldError("address", response.error);
@@ -97,6 +97,11 @@ const handleSubmit = async () => {
     isSubmitting.value = false;
   }
 };
+
+const locationSelected = computed(() => {
+  return form.lat !== null && form.lon !== null;
+});
+
 
 </script>
 
@@ -129,7 +134,7 @@ const handleSubmit = async () => {
           </div>
 
           <!-- Address -->
-          <div>
+          <div class="relative">
             <FormField
                 field-name="address"
                 :label="t('my-home.address')"
@@ -138,11 +143,14 @@ const handleSubmit = async () => {
                 @input="fetchAddressSuggestions($event.target.value)"
                 class="w-full"
             />
-            <ul v-if="addressSuggestions.length" class="bg-kf-white absolute border rounded mt-2 shadow">
+            <ul
+                v-if="addressSuggestions.length"
+                class="absolute z-50 w-full bg-kf-white border rounded mt-1 shadow max-h-48 overflow-y-auto"
+            >
               <li
                   v-for="(suggestion, index) in addressSuggestions"
                   :key="index"
-                  class="p-2 hover:bg-kf-white-contrast-3 rounded cursor-pointer"
+                  class="px-4 py-2 hover:bg-kf-grey-100 cursor-pointer"
                   @click="selectSuggestion(suggestion)"
               >
                 {{ suggestion.displayName }}
@@ -150,14 +158,16 @@ const handleSubmit = async () => {
             </ul>
           </div>
 
+
           <!-- Submit Button -->
           <button
-              :disabled="isSubmitting"
+              :disabled="isSubmitting || !locationSelected"
               type="submit"
               class="w-full bg-kf-red text-white py-2 rounded transition disabled:opacity-50 cursor-pointer"
           >
             {{ t('my-home.create-household') }}
           </button>
+
         </form>
       </div>
     </div>

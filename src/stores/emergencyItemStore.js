@@ -10,7 +10,7 @@ export const useEmergencyItemStore = defineStore("emergencyItem", {
     categoryId: 0,
     unitId: 0,
     expirationDate: null,
-    householdIds: [1],
+    householdIds: [],
   }),
 
   actions: {
@@ -34,7 +34,7 @@ export const useEmergencyItemStore = defineStore("emergencyItem", {
       this.unitId = item.unitId;
       this.expirationDate = item.expirationDate ? new Date(item.expirationDate)
           : null;
-      this.householdIds = [1];
+      this.householdIds = [item.householdIds];
     },
 
     resetState() {
@@ -44,7 +44,7 @@ export const useEmergencyItemStore = defineStore("emergencyItem", {
       this.categoryId = 0;
       this.unitId = 0;
       this.expirationDate = null;
-      this.householdIds = [1];
+      this.householdIds = [];
     },
 
     async saveItem() {
@@ -65,7 +65,7 @@ export const useEmergencyItemStore = defineStore("emergencyItem", {
           categoryId: this.categoryId,
           unitId: this.unitId,
           expirationDate: expirationDateStr,
-          householdIds: [1]
+          householdIds: [this.householdIds]
         };
 
         let result;

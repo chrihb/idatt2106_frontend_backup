@@ -148,11 +148,11 @@ const handleSubmit = async () => {
     const response = await requestRegister(registerForm, t)
 
     if (response.success) {
-      successMessage.value = t('register.successMessage')
-      resetForm()
-      recaptchaToken.value = ''
+      successMessage.value = t('register.successMessage');
+      resetForm();
+      recaptchaToken.value = '';
 
-      router.push('/login')
+      await router.push({ path: '/login', query: { success: 'true' } });
     } else {
       if (response.error === 'ReCAPTCHA verification failed') {
         setFieldError('recaptcha', response.error)

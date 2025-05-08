@@ -25,6 +25,8 @@ import HouseholdListView from '@/views/HouseholdListView.vue';
 import CreateEmergencyZone from "@/components/admin/map/CreateEmergencyZone.vue";
 import CreateNews from "@/components/admin/news/CreateNews.vue";
 import DeleteNews from "@/components/admin/news/DeleteNews.vue";
+import StorageListView from '@/views/StorageListView.vue';
+import HouseholdListView from "@/views/HouseholdListView.vue";
 
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
@@ -35,10 +37,18 @@ const router = createRouter({
                 { path: "", component: HomeView },
                 { path: "/news", component: NewsView },
                 { path: "/account", component: AccountView, meta: { requiresAuth: true } },
-                { path: "/storage", component: HouseholdListView, meta: { requiresAuth: true }, requiresHousehold: true },
-                { path: "/storage/:id", component: EmergencyStorage, meta: { requiresAuth: true }, props: true },
                 { path: "/manage-admins", component: ManageAdmins, meta: { requiresAuth: true } },
-                { path: "/storage", component: EmergencyStorage, meta: { requiresAuth: true } },
+                { path: "/storage", meta: { requiresAuth: true },
+                    children: [
+                        { path: "list", component: StorageListView, meta: { requiresHousehold: true } },
+                        { path: ":id", component: EmergencyStorage, meta: { requiresHousehold: true }, props: true },
+                    ]},
+                { path: "/household", meta: { requiresAuth: true },
+                    children: [
+                        { path: "options", component: JoinCreateHousehold },
+                        { path: "list", component: HouseholdListView, meta: { requiresHousehold: true } },
+                        { path: ":id", component: MyHomeView, meta: { requiresHousehold: true }, props: true },
+                    ]},
                 { path: "/about-us", component: AboutUsView },
                 { path: "/privacy-policy", component: PrivacyPolicyView },
                 { path: "/map", component: MapView },
@@ -58,7 +68,7 @@ const router = createRouter({
             ],
         },
         {
-            path: "/login", component: AuthBase,
+            path: "/", component: AuthBase,
             children: [
                 { path: "/login", name: "Login", component: Login,},
                 { path: "/register-account", name: "Register",component: Register },
@@ -81,17 +91,16 @@ const router = createRouter({
 router.beforeEach(async (to, from, next) => {
     const userStore = useUserStore();
 
-
     if (!to.meta.requiresAuth && !to.meta.requiresHousehold) {
         return next();
     }
 
     if (!userStore.token) {
-        const redirectTo = to.fullPath
+        const redirectTo = to.fullPath;
         return next({
             path: '/login',
             query: { redirect: redirectTo }
-        })
+        });
     }
 
     await userStore.isAuthenticated();
@@ -100,9 +109,26 @@ router.beforeEach(async (to, from, next) => {
         return next();
     }
 
-    if (!userStore.householdId) {
+    if (!userStore.householdId || userStore.householdId.length === 0) {
         return next('/household/options');
     }
+
+    if (
+        to.path === '/household/list' &&
+        userStore.householdId.length === 1 &&
+        userStore.householdId[0].id
+    ) {
+        return next(`/household/${userStore.householdId[0].id}`);
+    }
+
+    if (
+        to.path === '/storage/list' &&
+        userStore.householdId.length === 1 &&
+        userStore.householdId[0].id
+    ) {
+        return next(`/storage/${userStore.householdId[0].id}`);
+    }
+
     next();
 });
 

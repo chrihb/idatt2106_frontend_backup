@@ -1,16 +1,16 @@
 <script setup>
-import {ref} from 'vue';
+import {ref, onMounted} from 'vue';
 import {useForm} from 'vee-validate';
 import * as rules from '@vee-validate/rules';
 import FormField from '@/components/input/FormField.vue';
 import PasswordField from "@/components/input/PasswordField.vue";
 import {requestLogin} from '@/services/loginService';
 import {useI18n} from "vue-i18n";
-import router from "@/router/index.js";
 import {useAuthRedirect} from "@/utils/useAuthRedirect.js";
+import {useRoute} from "vue-router";
 
 const { t } = useI18n();
-
+const route = useRoute();
 const { redirectAfterAuth } = useAuthRedirect()
 
 const {validate, values: form, resetForm} = useForm({
@@ -31,6 +31,12 @@ const {validate, values: form, resetForm} = useForm({
 const isSubmitting = ref(false);
 const successMessage = ref('');
 const errorMessage = ref('');
+
+onMounted(() => {
+  if (route.query.success === 'true') {
+    successMessage.value = t('login.redirectSuccessMessage');
+  }
+});
 
 const handleSubmit = async () => {
   const result = await validate()
