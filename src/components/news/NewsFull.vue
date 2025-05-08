@@ -1,11 +1,9 @@
 <script setup>
 
+import {timeSinceEvent} from "@/utils/timeFormat.js";
+
 const props = defineProps({
   date: {
-    date: Date,
-    default: null
-  },
-  time: {
     date: Date,
     default: null
   },
@@ -32,7 +30,7 @@ const props = defineProps({
     <!-- Location + Time -->
     <div class="text-right">
       <p class="text-1xl">{{ props.location }}</p>
-      <p class="text-1xl">{{ props.date }} - {{ props.time }}</p>
+      <p class="text-1xl">{{ timeSinceEvent(props.date) }}</p>
     </div>
 
     <!-- Content spans full width -->

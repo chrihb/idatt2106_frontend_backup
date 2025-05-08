@@ -170,3 +170,21 @@ export const getPrimaryHousehold = async () => {
         return null;
     }
 };
+
+
+export const updateNonUsers = async (adults, children, pets, householdId) => {
+    const userStore = useUserStore();
+    try {
+        const response = await axios.post(`${window.backendURL}/api/households/${householdId}/addUnregisteredMembers`, {
+            unregisteredAdultCount: adults,
+            unregisteredChildCount: children,
+            unregisteredPetCount: pets,
+        },{
+            headers: { Authorization: `Bearer ${userStore.token}` },
+        });
+        return response.status === 200 ? response.data : null;
+    } catch (error) {
+        console.error('Error fetching primary household:', error);
+        return null;
+    }
+};

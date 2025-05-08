@@ -1,42 +1,48 @@
 <script setup>
 import { RouterView } from 'vue-router'
-import {nextTick, onBeforeUnmount, onMounted, watch} from 'vue'
+import { nextTick, onMounted, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { mockHomeData } from "@/services/homeService.js";
 import { useUserStore } from "@/stores/userStore.js";
-import {getNews} from "@/services/newsService.js";
+import { getNews } from "@/services/newsService.js";
 import { startLocationTracking, stopLocationTracking } from '@/services/locationService.js'
+import { initAccountMarkers, removeAccountMarkers } from "@/utils/mapUtils.js";
 
 const userStore = useUserStore()
 const { locale } = useI18n()
+
+// Set HTML lang attribute based on locale
 watch(locale, (newLang) => {
   document.documentElement.lang = newLang.split('-')[0]
 }, { immediate: true })
 
-onMounted (async () => {
+// On app mount, validate auth and load markers if logged in
+onMounted(async () => {
   await getNews()
-  // Mocking data
-  mockHomeData()
-  const success = await userStore.isAuthenticated();
-  await nextTick();
+  const success = await userStore.isAuthenticated()
+  await nextTick()
 
   if (success) {
-    console.log('User is authenticated, starting tracking');
-    startLocationTracking();
+    console.log('User is authenticated, starting tracking')
+    await userStore.fetchHouseholds()
+    initAccountMarkers()
+    startLocationTracking()
   }
 })
 
-// Se om bruker er autentisert, hvis ja start sporing
+// Watch authentication state to manage tracking and markers
 watch(
-  () => userStore.authenticated,
-  (isAuthed, wasAuthed) => {
-    if (isAuthed) {
-      startLocationTracking()
-    } else {
-      stopLocationTracking()
-    }
-  },
-  { immediate: true }
+    () => userStore.authenticated,
+    async (isAuthed) => {
+      if (isAuthed) {
+        await userStore.fetchHouseholds()
+        initAccountMarkers()
+        startLocationTracking()
+      } else {
+        removeAccountMarkers()
+        stopLocationTracking()
+      }
+    },
+    { immediate: true }
 )
 </script>
 

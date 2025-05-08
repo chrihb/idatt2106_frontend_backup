@@ -112,7 +112,11 @@
 	"create-desc": "en husstand for å administrere lageret ditt og andre medlemmer",
 	"manage-storage": "Administrer lager",
 	"manage-household": "Administrer husstand",
-	"location-status": "Lokasjonsstatus"
+	"location-status": "Lokasjonsstatus",
+	"other-members": "Andre Medlemmer",
+	"adults": "Voksne",
+	"children": "Barn",
+	"pets": "Kjæledyr"
   },
   "household": {
 	"title": "Administrer husstand",
@@ -255,10 +259,14 @@
 	"filter": "Filtrer"
   },
   "admin-settings": {
-    "title": "Admin Settings",
+    "title": "Administrator Innstillinger",
     "map": {
       "name": "Kart",
-      "createNewEmergencyZone": "Opprett Nytt Kriseområde"
+      "createNewEmergencyZone": "Opprett Nytt Kriseområde",
+	  "updateEmergencyZone": "Oppdater Kriseområde",
+	  "deleteEmergencyZone": "Slett Kriseområde",
+	  "addNewMapMarker": "Legg til Nytt Kartmerke",
+	  "addMarkerType": "Legg til Kartmerke Type"
     },
     "news": {
       "name": "Nyheter",

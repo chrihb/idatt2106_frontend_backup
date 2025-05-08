@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { useUserStore } from '@/stores/userStore';
+import {requestHouseholds} from "@/services/householdService.js";
 
 let locationInterval = null;
 
@@ -56,3 +57,21 @@ export const stopLocationTracking = () => {
   if (locationInterval) clearInterval(locationInterval);
   locationInterval = null;
 };
+
+export const getUserPosition = async () => {
+  const userStore = useUserStore();
+
+  try {
+    const response = await axios.get(`${window.backendURL}/api/users/location`, {
+      headers: { Authorization: `Bearer ${userStore.token}` },
+    });
+
+    if (response.status !== 200) return null;
+
+    return response.data;
+  } catch (error) {
+    console.error('Error joining household:', error);
+    return { success: false };
+  }
+};
+

@@ -6,6 +6,8 @@ import {emergencyZoneService} from "@/services/emergencyZoneService.js";
 import {useMarkersStore} from "@/stores/markersStore.js";
 import {markerService} from "@/services/markerService.js";
 import {useMarkerStore} from "@/stores/markerStore.js";
+import {useUserStore} from "@/stores/userStore.js";
+import {getUserPosition} from "@/services/locationService.js";
 
 export const createMarkerPopup = (type, address, description) =>
     `
@@ -259,3 +261,77 @@ export const centerMapOnEmergencyZone = (zoneId) => {
         console.error(`Emergency zone with ID ${zoneId} not found.`);
     }
 }
+
+export const initAccountMarkers = async () => {
+    const userStore = useUserStore();
+    const markersStore = useMarkersStore();
+    const userPosition = await getUserPosition();
+
+    console.log("Adding markers for households and members");
+
+    userStore.householdId.forEach((household) => {
+        const householdMarkerId = `household-${household.id}`;
+        if (
+            household.latitude &&
+            household.longitude &&
+            !markersStore.getMarkerById(householdMarkerId)
+        ) {
+            addMarkerToMap({
+                markerId: householdMarkerId,
+                lat: household.latitude,
+                lng: household.longitude,
+                type: "home",
+            });
+        }
+
+        household.members.forEach((member) => {
+            const memberMarkerId = `member-${member.id}`;
+            if (
+                member.latitude &&
+                member.longitude &&
+                !markersStore.getMarkerById(memberMarkerId) &&
+                userPosition.id !== member.id
+            ) {
+                addMarkerToMap({
+                    markerId: memberMarkerId,
+                    lat: member.latitude,
+                    lng: member.longitude,
+                    type: "AndreMedlemmer",
+                });
+            }
+        });
+    });
+};
+
+
+export const removeAccountMarkers = async () => {
+    const mapStore = useMapStore();
+    const userPosition = await getUserPosition();
+
+    console.log("Removing markers for households and members");
+
+    for (const type in mapStore.layerGroup) {
+        const layerGroup = mapStore.layerGroup[type];
+
+        const layersToRemove = layerGroup.getLayers().filter((layer) => {
+            const id = layer.options.id;
+            return (
+                typeof id === 'string' &&
+                (id.startsWith("member-") || id.startsWith("household-")) &&
+                id !== `member-${userPosition.id}`
+            );
+        });
+
+        for (const layer of layersToRemove) {
+            layerGroup.removeLayer(layer);
+            mapStore.removeMapItemId(layer.options.id);
+        }
+
+        // 🧹 Clean up layer group if empty after removal
+        if (layerGroup.getLayers().length === 0) {
+            layerGroup.remove();
+            delete mapStore.layerGroup[type];
+        }
+    }
+};
+
