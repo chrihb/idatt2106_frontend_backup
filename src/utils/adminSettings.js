@@ -10,31 +10,31 @@ export const adminSettings = ref([
                 id: 1,
                 name: "CreateNewEmergencyZone",
                 desc: "admin-settings.map.createNewEmergencyZone",
-                route: "/createEmergencyZone",
+                route: "/admin-settings/createEmergencyZone",
             },
             {
                 id: 2,
                 name: "UpdateExistingEmergencyZone",
                 desc: "admin-settings.map.updateEmergencyZone",
-                route: "/updateEmergencyZone",
+                route: "/admin-settings/updateEmergencyZone",
             },
             {
                 id: 3,
                 name: "DeleteEmergencyZone",
                 desc: "admin-settings.map.deleteEmergencyZone",
-                route: "/deleteEmergencyZone",
+                route: "/admin-settings/deleteEmergencyZone",
             },
             {
                 id: 4,
                 name: "AddNewMapMarker",
                 desc: "admin-settings.map.addNewMapMarker",
-                route: "/addMapMarker",
+                route: "/admin-settings/addMapMarker",
             },
             {
                 id: 5,
                 name: "AddMarkerType",
                 desc: "admin-settings.map.addMarkerType",
-                route: "/addMarkerType",
+                route: "/admin-settings/addMarkerType",
             }
         ]
     },
@@ -47,13 +47,13 @@ export const adminSettings = ref([
                 id: 1,
                 name: "CreateNewNews",
                 desc: "admin-settings.news.createNewNews",
-                route: "/createNews",
+                route: "/admin-settings/createNews",
             },
             {
                 id: 2,
                 name: "DeleteNews",
                 desc: "admin-settings.news.deleteNews",
-                route: "/deleteNews",
+                route: "/admin-settings/deleteNews",
             }
         ]
     },
