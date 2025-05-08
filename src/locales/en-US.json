@@ -9,7 +9,7 @@
     "storage": "Storage",
     "news": "News",
     "map": "Map",
-    "my-home": "My Home",
+    "my-home": "Household",
     "language": {
         "en": "EN",
         "nb": "NO"
@@ -120,7 +120,10 @@
       "copy": "Copy",
       "close": "Close",
       "copiedToClipboard": "Copied to clipboard",
-      "leaveHousehold": "Leave Household"
+      "leaveHousehold": "Leave Household",
+      "create-success": "Household created successfully",
+      "join-success": "Household joined successfully",
+      "set-as-primary": "Set as Primary"
     },
   "login": {
     "title": "Login",
@@ -241,8 +244,6 @@
   }
 },
   "map": {
-    "toggleBar": {
-      "filterView": "Filter view:"
-    }
+    "filter": "Filter"
   }
 }

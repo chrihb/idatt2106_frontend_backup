@@ -3,7 +3,7 @@ import { ref } from "vue";
 import { useI18n } from "vue-i18n";
 import { ArchiveBoxIcon } from "@heroicons/vue/24/solid/index.js";
 
-import MyHouseholdView from "@/views/MyHouseholdView.vue";
+import ManageHouseholdPopup from "@/components/myHome/ManageHouseholdPopup.vue";
 
 const { t } = useI18n();
 const showHouseholdModal = ref(false);
@@ -34,7 +34,7 @@ const closeHouseholdModal = () => {
         <h1 class="text-2xl text-kf-blue">{{ t("my-home.manage-household") }}</h1>
       </div>
     </div>
-    <MyHouseholdView :is-open="showHouseholdModal" @close="closeHouseholdModal" :household="household" />
+    <ManageHouseholdPopup :is-open="showHouseholdModal" @close="closeHouseholdModal" :household="household" />
   </div>
 </template>
 

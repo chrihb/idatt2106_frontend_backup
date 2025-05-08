@@ -3,8 +3,8 @@ import CompleteMap from "@/components/map/CompleteMap.vue";
 </script>
 
 <template>
-  <div class="relative flex flex-col h-full w-full">
-    <CompleteMap class="h-full w-full"/>
+  <div class="py-2">
+    <CompleteMap />
   </div>
 </template>
 

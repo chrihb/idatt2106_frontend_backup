@@ -23,8 +23,8 @@ const copyToClipboard = (text) => {
 
 <template>
   <div class="fixed inset-0 flex justify-center items-center z-50 bg-opacity-50">
-   <div class="bg-white bg-opacity-90 backdrop-blur-sm p-6 rounded-lg shadow-lg w-1/2 max-h-[80vh] relative border border-black">
-      <h2 class="text-xl font-bold mb-4">{{ t("household.inviteLink") }}</h2>
+   <div class="bg-white p-6 rounded-lg shadow-lg w-md relative border border-kf-blue">
+      <h2 class="text-2xl text-kf-blue font-bold mb-4">{{ t("household.inviteLink") }}</h2>
       <div class="mb-4">
         <label class="block text-sm font-medium mb-1">{{ t("household.link") }}</label>
         <div class="flex items-center gap-2">
@@ -32,10 +32,10 @@ const copyToClipboard = (text) => {
               type="text"
               :value="inviteLink"
               readonly
-              class="w-full px-3 py-2 border rounded"
+              class="w-full p-2 border border-kf-blue rounded"
           />
           <button
-              class="bg-gray-200 text-gray-700 px-2 py-1 rounded hover:bg-gray-300"
+              class="bg-kf-grey text-gray-700 px-2 h-10 cursor-pointer rounded border border-kf-grey active:border-kf-blue hover:bg-kf-white-contrast-8"
               @click="copyToClipboard(inviteLink)"
           >
             {{ t("household.copy") }}
@@ -49,10 +49,10 @@ const copyToClipboard = (text) => {
               type="text"
               :value="inviteCode"
               readonly
-              class="w-full px-3 py-2 border rounded"
+              class="w-full p-2 border border-kf-blue rounded"
           />
           <button
-              class="bg-gray-200 text-gray-700 px-2 py-1 rounded hover:bg-gray-300"
+              class="bg-kf-grey text-gray-700 px-2 h-10 cursor-pointer rounded border border-kf-grey active:border-kf-blue hover:bg-kf-white-contrast-8"
               @click="copyToClipboard(inviteCode)"
           >
             {{ t("household.copy") }}
@@ -61,7 +61,7 @@ const copyToClipboard = (text) => {
       </div>
       <div class="flex justify-end">
         <button
-            class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+            class="bg-kf-red text-kf-white px-4 py-2 rounded cursor-pointer hover:bg-kf-white-contrast-8"
             @click="$emit('close')"
         >
           {{ t("household.close") }}

@@ -3,10 +3,13 @@ import {useI18n} from "vue-i18n";
 import {XMarkIcon, CheckCircleIcon, XCircleIcon, ArrowLeftIcon} from "@heroicons/vue/24/solid/index.js";
 import {useForm} from "vee-validate";
 import {ref} from "vue";
-import {getAddressSuggestions} from "@/utils/addressTranslationUtil.js";
 import FormField from "@/components/input/FormField.vue";
 import {joinHousehold} from "@/services/householdService.js";
+import {useRouter} from "vue-router";
+import { useUserStore } from "@/stores/userStore.js";
 
+const router = useRouter();
+const userStore = useUserStore();
 const { t } = useI18n();
 
 const props = defineProps({
@@ -57,6 +60,8 @@ const handleSubmit = async () => {
     if (response.success) {
       successMessage.value = t("register.successMessage");
       resetForm();
+      await userStore.fetchHouseholds()
+      router.push(`/household/list`)
     } else {
       if (response.error.includes("Address")) {
         setFieldError("address", response.error);

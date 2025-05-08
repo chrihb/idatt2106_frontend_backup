@@ -1,36 +1,61 @@
 <script setup>
-import HouseStatus from "@/components/frontpage/HouseStatus.vue";
-import Address from "@/components/myHome/Address.vue";
-import Nearest from "@/components/myHome/Nearest.vue";
-import {useI18n} from "vue-i18n";
-import {useHomeStore} from "@/stores/homeStore.js";
-import ManageStorage from "@/components/myHome/ManageStorage.vue";
-import CompleteMap from "@/components/map/CompleteMap.vue";
-import ManageHousehold from "@/components/myHome/ManageHousehold.vue";
+import { onMounted, onUnmounted } from "vue";
 import { useRoute } from "vue-router";
-import { useUserStore } from "@/stores/userStore.js";
+import LocationStatus from "@/components/myHome/LocationStatus.vue";
+import Nearest from "@/components/myHome/Nearest.vue";
+import ManageHousehold from "@/components/myHome/ManageHousehold.vue";
 import HouseholdPanel from "@/components/myHome/HouseholdPanel.vue";
 import Map from "@/components/map/Map.vue";
 
+import { useUserStore } from "@/stores/userStore.js";
+import { useMapStore } from "@/stores/mapStore.js";
+import { useMarkersStore } from "@/stores/markersStore.js";
+import { addMarkerToMap, removeMarkerFromMap } from "@/utils/mapUtils.js";
 
+const mapStore = useMapStore();
+const markersStore = useMarkersStore();
 const userStore = useUserStore();
 const route = useRoute();
 
+const household = userStore.householdId.find(
+    (household) => household.id === parseInt(route.params.id)
+);
 
-const household = userStore.householdId.find(household => household.id === parseInt(route.params.id));
+const markerId = `household-${household?.id}`;
 
 function centerOnAddress() {
-
+  if (household.latitude && household.longitude) {
+    mapStore.centerMapOnSpecificLocation(household.latitude, household.longitude);
+  } else {
+    console.error("Household coordinates missing");
+  }
 }
 
+onMounted(async () => {
+  await userStore.fetchHouseholds();
+
+  if (household?.latitude && household?.longitude) {
+    addMarkerToMap({
+      markerId,
+      lat: household.latitude,
+      lng: household.longitude,
+      type: "home",
+    });
+  }
+});
+
+onUnmounted(() => {
+  removeMarkerFromMap(markerId);
+});
 </script>
+
 
 <template>
   <div class="py-2 px-2">
     <div class="grid grid-cols-[auto_1fr] gap-2">
       <div class="flex flex-col gap-2 min-w-70 w-full">
         <HouseholdPanel @click="centerOnAddress" :name="household.name" :address="household.address" class="cursor-pointer" />
-        <HouseStatus :members="household.members" class="" />
+        <LocationStatus :members="household.members"/>
         <Nearest :latitude="household.latitude" :longitude="household.longitude"/>
         <ManageHousehold :household="household"/>
       </div>

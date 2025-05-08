@@ -3,17 +3,23 @@ import { useUserStore } from '@/stores/userStore';
 
 export const getUserSettings = async () => {
     const userStore = useUserStore();
-    const token = userStore.token || sessionStorage.getItem('token');
-  
-    if (!token) throw new Error('No token available');
-  
+
+    try {
     const response = await axios.get(`${window.backendURL}/api/users/settings/get`, {
       headers: {
-        Authorization: `Bearer ${token}`
+        Authorization: `Bearer ${userStore.token}`
       }
     });
+
+    if (response.status !== 200) {
+        return null;
+    }
+
     console.log('User settings response:', response.data);
     return response.data;
+    } catch (error) {
+        console.error('Error fetching settings:', error);
+    }
   };  
   
 

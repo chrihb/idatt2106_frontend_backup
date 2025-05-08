@@ -45,10 +45,15 @@ export const useUserStore = defineStore('user', {
                 console.error("Error fetching households:", error);
             }
         },
-        
+
         setUserSettings(settings) {
             this.userSettings = settings;
         },
+    },
+    getters: {
+        getHouseholdByName: (state) => (name) => {
+            return state.householdId.find(h => h.name?.toLowerCase() === name.toLowerCase());
+        }
     },
     persist: {
         enabled: true,
