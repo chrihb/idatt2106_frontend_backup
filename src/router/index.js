@@ -35,16 +35,15 @@ const router = createRouter({
                         { path: "list", component: StorageListView, meta: { requiresHousehold: true } },
                         { path: ":id", component: EmergencyStorage, meta: { requiresHousehold: true }, props: true },
                     ]},
-                { path: "/about-us", component: AboutUsView },
-                { path: "/privacy-policy", component: PrivacyPolicyView },
-                { path: "/map", component: MapView },
                 { path: "/household", meta: { requiresAuth: true },
                     children: [
                         { path: "options", component: JoinCreateHousehold },
                         { path: "list", component: HouseholdListView, meta: { requiresHousehold: true } },
                         { path: ":id", component: MyHomeView, meta: { requiresHousehold: true }, props: true },
                     ]},
-
+                { path: "/about-us", component: AboutUsView },
+                { path: "/privacy-policy", component: PrivacyPolicyView },
+                { path: "/map", component: MapView },
             ],
         },
         {
@@ -71,17 +70,16 @@ const router = createRouter({
 router.beforeEach(async (to, from, next) => {
     const userStore = useUserStore();
 
-
     if (!to.meta.requiresAuth && !to.meta.requiresHousehold) {
         return next();
     }
 
     if (!userStore.token) {
-        const redirectTo = to.fullPath
+        const redirectTo = to.fullPath;
         return next({
             path: '/login',
             query: { redirect: redirectTo }
-        })
+        });
     }
 
     await userStore.isAuthenticated();
@@ -94,7 +92,23 @@ router.beforeEach(async (to, from, next) => {
         return next('/household/options');
     }
 
-    next()
+    if (
+        to.path === '/household/list' &&
+        userStore.householdId.length === 1 &&
+        userStore.householdId[0].id
+    ) {
+        return next(`/household/${userStore.householdId[0].id}`);
+    }
+
+    if (
+        to.path === '/storage/list' &&
+        userStore.householdId.length === 1 &&
+        userStore.householdId[0].id
+    ) {
+        return next(`/storage/${userStore.householdId[0].id}`);
+    }
+
+    next();
 });
 
 export default router

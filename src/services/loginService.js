@@ -23,6 +23,7 @@ export const requestLogin = async (loginForm, t) => {
             userStore.setCredentials({ householdId: households });
 
             const settings = await getUserSettings();
+
             userStore.setUserSettings(settings);
 
             return { success: true };

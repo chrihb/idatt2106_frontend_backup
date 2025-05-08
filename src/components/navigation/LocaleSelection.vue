@@ -1,5 +1,6 @@
 <script setup>
 import {useI18n} from "vue-i18n";
+import { watch } from "vue";
 
 const { locale, t } = useI18n()
 
@@ -7,6 +8,10 @@ const localeOptions = [
   { code: 'en-US', nameKey: "navbar.language.en" },
   { code: 'nb-NO', nameKey: "navbar.language.nb" }
 ]
+
+watch(locale, (newLocale) => {
+  localStorage.setItem('locale', newLocale)
+})
 </script>
 
 <template>
