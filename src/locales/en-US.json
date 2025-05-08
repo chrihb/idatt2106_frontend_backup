@@ -1,210 +1,210 @@
 {
-  "navbar": {
-    "menu": "Menu",
-    "account": "Account",
-    "emergencyStorage": "Emergency Storage",
-    "login": "Login",
-    "logout": "Log Out",
-    "settings": "Settings",
-    "storage": "Storage",
-    "news": "News",
-    "map": "Map",
-    "my-home": "Household",
-    "language": {
-        "en": "EN",
-        "nb": "NO"
-        }
+"navbar": {
+  "menu": "Menu",
+  "account": "Account",
+  "emergencyStorage": "Emergency Storage",
+  "login": "Login",
+  "logout": "Log Out",
+  "settings": "Settings",
+  "storage": "Storage",
+  "news": "News",
+  "map": "Map",
+  "my-home": "Household",
+  "language": {
+      "en": "EN",
+      "nb": "NO"
+      }
+},
+"account-settings": {
+  "title": "Account Settings",
+  "manage-storages": "Manage Storages",
+  "manage-households": "Manage Households",
+  "find-assembling-areas": "Find Assembling Areas",
+  "manage-emergency-groups": "Manage Emergency Groups",
+  "experience-journal": "Experience Journal",
+  "enable-notifications": "Enable Notifications",
+  "enable-position-sharing": "Enable Location Sharing",
+  "show-storage-on-frontpage": "Show Storage Status on Frontpage",
+  "show-household-on-frontpage": "Show Household Status on Frontpage",
+  "admin-settings": "Admin Settings",
+  "invite-admins": "Invite Admins"
+},
+"footer": {
+  "about-us": "About Us",
+  "privacy-policy": "Privacy Policy"
+},
+"storage-status": {
+  "level": {
+    "status": "Your storage covers {effectiveDays} days of food and water",
+    "unknown": "Storage status is unknown"
   },
-  "account-settings": {
-    "title": "Account Settings",
-    "manage-storages": "Manage Storages",
-    "manage-households": "Manage Households",
-    "find-assembling-areas": "Find Assembling Areas",
-    "manage-emergency-groups": "Manage Emergency Groups",
-    "experience-journal": "Experience Journal",
-    "enable-notifications": "Enable Notifications",
-    "enable-position-sharing": "Enable Location Sharing",
-    "show-storage-on-frontpage": "Show Storage Status on Frontpage",
-    "show-household-on-frontpage": "Show Household Status on Frontpage",
-    "admin-settings": "Admin Settings",
-    "invite-admins": "Invite Admins"
-  },
-  "footer": {
-    "about-us": "About Us",
-    "privacy-policy": "Privacy Policy"
-  },
-  "storage-status": {
-    "level": {
-      "status": "Your storage covers {effectiveDays} days of food and water",
-      "unknown": "Storage status is unknown"
-    },
-    "title": "Emergency Storage Status",
-    "desc": "You have storage items that require attention",
-    "ok": "Your storage looks good!",
-    "food-label": "Food",
-    "water-label": "Water",
-    "days-food": "You have {days} days of food",
-    "days-water": "You have {days} days of water"
-  },
-  "storage":{
-    "title": "Emergency Storage",
-    "new-item": "Create New Item",
-    "update-item": "Update",
-    "delete-item": "Delete",
-    "close": "Close",
-    "select-category": "Select Category",
-    "select-unit": "Select Unit",
-    "no-items-in-category": "No items found in this category",
-    "no-items": "No items found",
-    "inconsistent-units": "Inconsistent units",
-    "expiration-date": "Expiry",
-    "expiring-soon": "Expiring Soon",
-    "expired": "Expired",
-    "fill-all-fields": "Please fill in all fields",
-    "leave-message": "Are you sure you want to leave this page? Unsaved changes will be deleted.",
-    "quit": "Quit",
-    "stay": "Stay",
-    "item-name": "Item Name",
-    "item-amount": "Item Amount",
-    "item-expiration": "Expiry",
-    "more-info": "Click for More Info",
-    "household-list-title": "Your households",
-    "inventory-categories": "Inventory Categories",
-    "select-household": "Select Household"
-  },
-  "news": {
-    "title": "News",
-    "allDistricts": "All Districts",
-    "selectDistrict": "Select District",
-    "noNews": "No news available",
-    "noDetails": "No details available",
-    "date": "Date",
-    "district" : "District"
-  },
-  "my-home": {
-    "title": "My Home",
-    "address": "Address",
-    "nearest": "Nearest",
-    "shelter": "Shelter",
-    "defib": "Defibrillator",
-    "hospital": "Hospital",
-    "distance": "Distance",
-    "coordinates": "Coordinates",
-    "join": "Join",
-    "create": "Create",
-    "create-household": "Create Household",
-    "nickname": "Nickname",
-    "nicknameRequired": "Nickname is required",
-    "addressRequired": "Address is required",
-    "join-household": "Join Household",
-    "invite-code": "Invite Code",
-    "invite-codeRequired": "Invite code is required",
-    "or": "or",
-    "available": "Available Households",
-    "create-desc": "a household to manage your storage and household members",
-    "manage-storage": "Manage Storage",
-    "manage-household": "Manage Household",
-    "location-status": "Location Status"
-  },
-  "household": {
-    "title": "My Household",
-    "generateInvite": "Generate Invite",
-    "inviteLinkGenerated": "Invite link generated",
-    "confirmDelete": "Confirm Deletion",
-    "deleteMember": "Are you sure you want to delete {name}?",
-    "cancel": "Cancel",
-    "delete": "Delete",
-    "inviteLink": "Invite Link",
-    "link": "Link",
-    "householdId": "Household ID",
-    "copy": "Copy",
-    "close": "Close",
-    "copiedToClipboard": "Copied to clipboard",
-    "leaveHousehold": "Leave Household",
-    "create-success": "Household created successfully",
-    "join-success": "Household joined successfully",
-    "set-as-primary": "Set as Primary"
-  },
-  "login": {
-    "title": "Login",
-    "email": "Email",
-    "password": "Password",
-    "login": "Login",
-    "forgotPassword": "Forgot Password?",
-    "createUser": "Register user",
-    "passwordLengthError": "Password must be at least 8 characters long.",
-    "passwordRequired": "Password is required.",
-    "emailError": "Email must be a valid email address.",
-    "emailRequired": "Email is required.",
-    "loginError": "Invalid email or password.",
-    "redirectSuccessMessage": "Registration successful. Please check your email to verify your account before logging in"
-  },
-  "password-reset": {
-    "title": "Password Reset",
-    "email": "Email",
-    "sendResetLabel": "Enter your email address to reset your password.",
-    "sendResetLink": "Send Email",
-    "emailError": "Email must be a valid email address.",
-    "emailRequired": "Email is required.",
-    "resetLinkSent": "Password reset link sent to your email.",
-    "resetLinkError": "Failed to send password reset link. Please try again.",
-    "setNewPassword": "Change Password"
-  },
-  "email-verification": {
-    "title": "Email Verification",
-    "emailVerificationAcceptButton": "Ok"
-  },
-  "password": {
-    "show": "show",
-    "hide": "Hide"
-  },
-  "register": {
-    "title": "Register",
-    "email": "Email",
-    "firstName": "First Name",
-    "lastName": "Last Name",
-    "phone": "Phone number",
-    "password": "Password",
-    "confirmPassword": "Confirm Password",
-    "register": "Register User",
-    "passwordLengthError": "Password must be at least 8 characters long.",
-    "passwordRequired": "Password is required.",
-    "emailError": "Email must be a valid email address.",
-    "emailRequired": "Email is required.",
-    "firstNameRequired": "First name is required.",
-    "lastNameRequired": "Last name is required.",
-    "phoneRequired": "Phone number is required.",
-    "confirmPasswordRequired": "Confirm password is required.",
-    "confirmPasswordError": "Passwords does not match.",
-    "registerError": "Registration failed. Please try again.",
-    "registerSuccess": "Registration successful. Please check your email to verify your account.",
-    "privacyPolicyText": "I accept the ",
-    "privacyPolicyRequired": "You must accept the privacy policy.",
-    "hasAccount": "Already have an account?",
-    "loginHere": "Login here",
-    "admin": {
-      "username": "Username",
-      "usernameRequired": "Username is required",
-      "register-admin": "Register Admin"
-    }
-  },
-  "register-service": {
-    "emailInUse": "Email is already in use.",
-    "phoneInUse": "Phone number is already in use.",
-    "failedToSendEmail": "Failed to send verification email. Please try again later.",
-    "invalidData": "Invalid data. Please check your input and try again.",
-    "error": "An error occurred. Please try again later.",
-    "networkError": "Network error. Please check your internet connection and try again."
-  },
-  "login-service": {
-    "invalidCredentials": "Invalid email or password.",
-    "emailNotVerified": "Email not verified. Please check your email for the verification link."
-  },
-  "auth":{
-    "login": "Login",
-    "register": "Register"
-  },
-  "essential-items": {
+  "title": "Emergency Storage Status",
+  "desc": "You have storage items that require attention",
+  "ok": "Your storage looks good!",
+  "food-label": "Food",
+  "water-label": "Water",
+  "days-food": "You have {days} days of food",
+  "days-water": "You have {days} days of water"
+},
+"storage":{
+  "title": "Emergency Storage",
+  "new-item": "Create New Item",
+  "update-item": "Update",
+  "delete-item": "Delete",
+  "close": "Close",
+  "select-category": "Select Category",
+  "select-unit": "Select Unit",
+  "no-items-in-category": "No items found in this category",
+  "no-items": "No items found",
+  "inconsistent-units": "Inconsistent units",
+  "expiration-date": "Expiry",
+  "expiring-soon": "Expiring Soon",
+  "expired": "Expired",
+  "fill-all-fields": "Please fill in all fields",
+  "leave-message": "Are you sure you want to leave this page? Unsaved changes will be deleted.",
+  "quit": "Quit",
+  "stay": "Stay",
+  "item-name": "Item Name",
+  "item-amount": "Item Amount",
+  "item-expiration": "Expiry",
+  "more-info": "Click for More Info",
+  "household-list-title": "Your households",
+  "inventory-categories": "Inventory Categories",
+  "select-household": "Select Household"
+},
+"news": {
+  "title": "News",
+  "allDistricts": "All Districts",
+  "selectDistrict": "Select District",
+  "noNews": "No news available",
+  "noDetails": "No details available",
+  "date": "Date",
+  "district" : "District"
+},
+"my-home": {
+  "title": "My Home",
+  "address": "Address",
+  "nearest": "Nearest",
+  "shelter": "Shelter",
+  "defib": "Defibrillator",
+  "hospital": "Hospital",
+  "distance": "Distance",
+  "coordinates": "Coordinates",
+  "join": "Join",
+  "create": "Create",
+  "create-household": "Create Household",
+  "nickname": "Nickname",
+  "nicknameRequired": "Nickname is required",
+  "addressRequired": "Address is required",
+  "join-household": "Join Household",
+  "invite-code": "Invite Code",
+  "invite-codeRequired": "Invite code is required",
+  "or": "or",
+  "available": "Available Households",
+  "create-desc": "a household to manage your storage and household members",
+  "manage-storage": "Manage Storage",
+  "manage-household": "Manage Household",
+  "location-status": "Location Status"
+},
+"household": {
+  "title": "My Household",
+  "generateInvite": "Generate Invite",
+  "inviteLinkGenerated": "Invite link generated",
+  "confirmDelete": "Confirm Deletion",
+  "deleteMember": "Are you sure you want to delete {name}?",
+  "cancel": "Cancel",
+  "delete": "Delete",
+  "inviteLink": "Invite Link",
+  "link": "Link",
+  "householdId": "Household ID",
+  "copy": "Copy",
+  "close": "Close",
+  "copiedToClipboard": "Copied to clipboard",
+  "leaveHousehold": "Leave Household",
+  "create-success": "Household created successfully",
+  "join-success": "Household joined successfully",
+  "set-as-primary": "Set as Primary"
+},
+"login": {
+  "title": "Login",
+  "email": "Email",
+  "password": "Password",
+  "login": "Login",
+  "forgotPassword": "Forgot Password?",
+  "createUser": "Register user",
+  "passwordLengthError": "Password must be at least 8 characters long.",
+  "passwordRequired": "Password is required.",
+  "emailError": "Email must be a valid email address.",
+  "emailRequired": "Email is required.",
+  "loginError": "Invalid email or password.",
+  "redirectSuccessMessage": "Registration successful. Please check your email to verify your account before logging in"
+},
+"password-reset": {
+  "title": "Password Reset",
+  "email": "Email",
+  "sendResetLabel": "Enter your email address to reset your password.",
+  "sendResetLink": "Send Email",
+  "emailError": "Email must be a valid email address.",
+  "emailRequired": "Email is required.",
+  "resetLinkSent": "Password reset link sent to your email.",
+  "resetLinkError": "Failed to send password reset link. Please try again.",
+  "setNewPassword": "Change Password"
+},
+"email-verification": {
+  "title": "Email Verification",
+  "emailVerificationAcceptButton": "Ok"
+},
+"password": {
+  "show": "show",
+  "hide": "Hide"
+},
+"register": {
+  "title": "Register",
+  "email": "Email",
+  "firstName": "First Name",
+  "lastName": "Last Name",
+  "phone": "Phone number",
+  "password": "Password",
+  "confirmPassword": "Confirm Password",
+  "register": "Register User",
+  "passwordLengthError": "Password must be at least 8 characters long.",
+  "passwordRequired": "Password is required.",
+  "emailError": "Email must be a valid email address.",
+  "emailRequired": "Email is required.",
+  "firstNameRequired": "First name is required.",
+  "lastNameRequired": "Last name is required.",
+  "phoneRequired": "Phone number is required.",
+  "confirmPasswordRequired": "Confirm password is required.",
+  "confirmPasswordError": "Passwords does not match.",
+  "registerError": "Registration failed. Please try again.",
+  "registerSuccess": "Registration successful. Please check your email to verify your account.",
+  "privacyPolicyText": "I accept the ",
+  "privacyPolicyRequired": "You must accept the privacy policy.",
+  "hasAccount": "Already have an account?",
+  "loginHere": "Login here",
+  "admin": {
+    "username": "Username",
+    "usernameRequired": "Username is required",
+    "register-admin": "Register Admin"
+  }
+},
+"register-service": {
+  "emailInUse": "Email is already in use.",
+  "phoneInUse": "Phone number is already in use.",
+  "failedToSendEmail": "Failed to send verification email. Please try again later.",
+  "invalidData": "Invalid data. Please check your input and try again.",
+  "error": "An error occurred. Please try again later.",
+  "networkError": "Network error. Please check your internet connection and try again."
+},
+"login-service": {
+  "invalidCredentials": "Invalid email or password.",
+  "emailNotVerified": "Email not verified. Please check your email for the verification link."
+},
+"auth":{
+  "login": "Login",
+  "register": "Register"
+},
+"essential-items": {
   "title": "Essential Items",
   "sections": {
     "food": "Food and Water",
@@ -241,6 +241,7 @@
     "toalettpapir": "Toilet paper",
     "bind": "Sanitary pads",
     "tamponger": "Tampons"
+  }
   },
   "map": {
     "filter": "Filter"
@@ -275,4 +276,4 @@
       "storageDesc": "A storage to manage your storage items"
     }
   }
-  }
+}
