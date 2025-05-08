@@ -20,9 +20,11 @@ const props = defineProps({
 });
 
 const clearMarkers = () => {
-  markers.value.forEach((marker) => map.value.removeLayer(marker));
-  lines.value.forEach((line) => map.value.removeLayer(line));
-  map.value.removeLayer(marker);
+  if (map.value) {
+    markers.value.forEach((marker) => map.value.removeLayer(marker));
+    lines.value.forEach((line) => map.value.removeLayer(line));
+    map.value.removeLayer(marker);
+  }
   markers.value = [];
   lines.value = [];
   polygonCoordinates.value = [];
