@@ -65,7 +65,6 @@ const filteredNews = computed(() => newsStore.articles);
         >
           <NewsFull
               :date="publishing.date"
-              :time="publishing.time"
               :title="publishing.title"
               :content="publishing.content"
               :location="publishing.location"
