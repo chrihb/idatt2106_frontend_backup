@@ -1,12 +1,12 @@
+import { ref } from 'vue';
 import {mount, flushPromises} from "@vue/test-utils";
 import {describe, it, expect, vi, beforeEach} from "vitest";
 import StorageFeed from "@/components/emergencyStorage/StorageFeed.vue";
-import StorageItemMinimized
-  from "@/components/emergencyStorage/StorageItemMinimized.vue";
-import StorageItemMaximized
-  from "@/components/emergencyStorage/StorageItemMaximized.vue";
-import UpdateStorageComponent
-  from "@/components/emergencyStorage/UpdateStorageComponent.vue";
+import StorageItemMinimized from "@/components/emergencyStorage/StorageItemMinimized.vue";
+import StorageItemMaximized from "@/components/emergencyStorage/StorageItemMaximized.vue";
+import UpdateStorageComponent from "@/components/emergencyStorage/UpdateStorageComponent.vue";
+import DetailedStorageStatus from "@/components/emergencyStorage/DetailedStorageStatus.vue";
+import EssentialItemChecklist from "@/components/emergencyStorage/EssentialItemChecklist.vue";
 import {useEmergencyItemsStore} from "@/stores/emergencyItemsStore.js";
 import {emergencyItemService} from "@/services/emergencyItemService.js";
 
@@ -40,7 +40,7 @@ vi.mock("@/stores/categoriesStore.js", () => ({
       {id: 2, name: "Water"}
     ],
     fetchCategories: vi.fn().mockResolvedValue(),
-    getCategoryName: vi.fn((id) => id === 1 ? "Food" : "Water")
+    getCategoryName: vi.fn((id, locale) => id === 1 ? "Food" : "Water")
   }))
 }));
 
@@ -51,7 +51,7 @@ vi.mock("@/stores/unitsStore.js", () => ({
       {id: 2, name: "L"}
     ],
     fetchUnits: vi.fn().mockResolvedValue(),
-    getUnitName: vi.fn((id) => id === 1 ? "Kg" : "L")
+    getUnitName: vi.fn((id, locale) => id === 1 ? "Kg" : "L")
   }))
 }));
 
@@ -106,9 +106,9 @@ vi.mock("@/components/emergencyStorage/StorageItemMinimized.vue", () => ({
 vi.mock("@/components/emergencyStorage/StorageItemMaximized.vue", () => ({
   default: {
     name: "StorageItemMaximized",
-    props: ["categoryId", "display"],
+    props: ["categoryId", "display", "householdId"],
     template: '<div v-if="display" class="storage-item-maximized">Category: {{categoryId}}</div>',
-    emits: ['close', 'update', 'create']
+    emits: ['close', 'update', 'create', 'itemUpdated']
   }
 }));
 
@@ -121,14 +121,48 @@ vi.mock("@/components/emergencyStorage/UpdateStorageComponent.vue", () => ({
   }
 }));
 
+vi.mock("@/components/emergencyStorage/DetailedStorageStatus.vue", () => ({
+  default: {
+    name: "DetailedStorageStatus",
+    props: ["householdId"],
+    template: '<div class="detailed-storage-status">Storage Status</div>'
+  }
+}));
+
+vi.mock("@/components/emergencyStorage/EssentialItemChecklist.vue", () => ({
+  default: {
+    name: "EssentialItemChecklist",
+    props: ["householdId"],
+    template: '<div class="essential-item-checklist">Essential Items</div>',
+    methods: {
+      refreshEssentials: vi.fn()
+    }
+  }
+}));
+
+vi.mock("@heroicons/vue/24/solid/index.js", () => ({
+  ExclamationTriangleIcon: {
+    render: () => null
+  },
+  XCircleIcon: {
+    render: () => null
+  }
+}));
+
 vi.mock("vue-i18n", () => ({
   useI18n: () => ({
     t: (key) => {
       const translations = {
-        "storage.new-item": "New Item"
+        "storage.new-item": "New Item",
+        "storage.inventory-categories": "Inventory Categories",
+        "storage.no-items-in-category": "No items in this category",
+        "storage.inconsistent-units": "Mixed Units",
+        "storage.expired": "Expired",
+        "storage.expiring-soon": "Expiring Soon"
       };
       return translations[key] || key;
-    }
+    },
+    locale: ref("en")
   }),
   createI18n: vi.fn(() => ({
     global: {},
@@ -143,11 +177,18 @@ describe('StorageFeed.vue', () => {
     vi.clearAllMocks();
 
     wrapper = mount(StorageFeed, {
+      props: {
+        householdId: "123"
+      },
       global: {
         stubs: {
           StorageItemMinimized: true,
           StorageItemMaximized: true,
-          UpdateStorageComponent: true
+          UpdateStorageComponent: true,
+          DetailedStorageStatus: true,
+          EssentialItemChecklist: true,
+          ExclamationTriangleIcon: true,
+          XCircleIcon: true
         }
       }
     });
@@ -166,15 +207,20 @@ describe('StorageFeed.vue', () => {
     expect(categoryItems.length).toBe(2);
   });
 
-  it('closes category modal', async () => {
+  it('opens and closes category modal', async () => {
     const categoryItems = wrapper.findAllComponents(StorageItemMinimized);
     await categoryItems[0].trigger('click');
     await flushPromises();
 
     const modal = wrapper.findComponent(StorageItemMaximized);
-    await modal.vm.$emit('close');
+    expect(modal.props().display).toBe(true);
+    expect(modal.props().categoryId).toBe(1);
+    expect(modal.props().householdId).toBe("123");
 
-    expect(modal.props().display).toBe(false);
+    await modal.vm.$emit('close');
+    await flushPromises();
+
+    expect(wrapper.vm.modalData.display).toBe(false);
   });
 
   it('shows create modal on create event', async () => {
@@ -184,6 +230,7 @@ describe('StorageFeed.vue', () => {
 
     const modal = wrapper.findComponent(StorageItemMaximized);
     await modal.vm.$emit('create', 1);
+    await flushPromises();
 
     const updateModal = wrapper.findComponent(UpdateStorageComponent);
     expect(updateModal.props().display).toBe(true);
@@ -194,6 +241,7 @@ describe('StorageFeed.vue', () => {
   it('opens create modal on click of New Item button', async () => {
     const newItemButton = wrapper.find('button');
     await newItemButton.trigger('click');
+    await flushPromises();
 
     const updateModal = wrapper.findComponent(UpdateStorageComponent);
     expect(updateModal.props().display).toBe(true);
@@ -201,13 +249,30 @@ describe('StorageFeed.vue', () => {
     expect(updateModal.props().itemId).toBe(null);
   });
 
-  it('update modal closes', async () => {
+  it('closes update modal', async () => {
     const newItemButton = wrapper.find('button');
     await newItemButton.trigger('click');
+    await flushPromises();
 
     const updateModal = wrapper.findComponent(UpdateStorageComponent);
     await updateModal.vm.$emit('close');
+    await flushPromises();
 
-    expect(updateModal.props().display).toBe(false);
+    expect(wrapper.vm.updateModalData.display).toBe(false);
+  });
+
+  it('shows update modal on update event', async () => {
+    const categoryItems = wrapper.findAllComponents(StorageItemMinimized);
+    await categoryItems[0].trigger('click');
+    await flushPromises();
+
+    const modal = wrapper.findComponent(StorageItemMaximized);
+    await modal.vm.$emit('update', 1);
+    await flushPromises();
+
+    const updateModal = wrapper.findComponent(UpdateStorageComponent);
+    expect(updateModal.props().display).toBe(true);
+    expect(updateModal.props().categoryId).toBe(1);
+    expect(updateModal.props().itemId).toBe(1);
   });
 });
