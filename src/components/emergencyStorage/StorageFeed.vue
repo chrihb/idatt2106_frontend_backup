@@ -11,7 +11,7 @@ import {useEmergencyItemsStore} from '@/stores/emergencyItemsStore.js';
 import {useI18n} from "vue-i18n";
 import { ExclamationTriangleIcon, XCircleIcon } from "@heroicons/vue/24/solid/index.js";
 
-const {t} = useI18n();
+const {t, locale} = useI18n();
 
 const props = defineProps({
   householdId: {
@@ -54,14 +54,14 @@ const fetchCategories = async () => {
     const groupedCategories = allItems.reduce((acc, item) => {
       const category = acc[item.categoryId] || {
         id: item.categoryId,
-        name: categoriesStore.getCategoryName(item.categoryId),
+        name: categoriesStore.getCategoryName(item.categoryId, locale.value),
         units: new Set(),
         unit: null,
         amount: 0,
         expirationDate: null,
       };
 
-      category.units.add(unitsStore.getUnitName(item.unitId));
+      category.units.add(unitsStore.getUnitName(item.unitId, locale.value));
 
       if (category.units.size > 1) {
         category.unit = t("storage.inconsistent-units");
@@ -134,6 +134,12 @@ const handleItemUpdated = async () => {
 };
 const checklistRef = ref(null);
 
+watch(() => locale.value, () => {
+  itemCategories.value = itemCategories.value.map(category => ({
+    ...category,
+    name: categoriesStore.getCategoryName(category.id, locale.value)
+  }));
+}, { immediate: false });
 
 onMounted(async () => {
   await fetchCategories();
