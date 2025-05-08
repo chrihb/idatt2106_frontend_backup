@@ -3,10 +3,16 @@ import { ref } from "vue";
 import { useI18n } from "vue-i18n";
 import { ArchiveBoxIcon } from "@heroicons/vue/24/solid/index.js";
 
-import ManageHouseholdPopup from "@/components/myHome/ManageHouseholdPopup.vue";
+import ManageHouseholdModal from "@/components/myHome/ManageHouseholdModal.vue";
 
 const { t } = useI18n();
 const showHouseholdModal = ref(false);
+
+const emit = defineEmits(["close", "member-removed"]);
+
+const onMemberRemoved = () => {
+  emit("member-removed");
+};
 
 const props = defineProps({
   household: {
@@ -34,7 +40,12 @@ const closeHouseholdModal = () => {
         <h1 class="text-2xl text-kf-blue">{{ t("my-home.manage-household") }}</h1>
       </div>
     </div>
-    <ManageHouseholdPopup :is-open="showHouseholdModal" @close="closeHouseholdModal" :household="household" />
+    <ManageHouseholdModal
+        :is-open="showHouseholdModal"
+        @close="closeHouseholdModal"
+        @member-removed="onMemberRemoved"
+        :household="household"
+    />
   </div>
 </template>
 
