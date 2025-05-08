@@ -5,6 +5,8 @@ import { useEmergencyZonesStore } from '@/stores/emergencyZonesStore.js';
 import { useI18n } from 'vue-i18n';
 import CreatePolygonMapModal from '@/components/map/CreatePolygonMapModal.vue';
 import ConfirmationModal from "@/components/common/ConfirmationModal.vue";
+import { getAddressSuggestions, getCoordinates, getAddress} from "@/utils/addressTranslationUtil.js";
+import {useForm} from "vee-validate";
 
 const { t } = useI18n();
 const props = defineProps(['zoneId', 'display']);
@@ -12,20 +14,59 @@ const emit = defineEmits(['close', 'zoneSaved']);
 
 const emergencyZoneStore = useEmergencyZoneStore();
 const emergencyZonesStore = useEmergencyZonesStore();
-
 const isUpdate = computed(() => props.zoneId !== null);
 
-const zoneData = ref({
-  name: '',
-  type: '',
-  level: 1,
-  coordinates: [],
-  address: '',
-  description: '',
-  lat: null,
-  lng: null,
+const { validate, values: form, errors, setFieldError, setFieldValue, resetForm } = useForm({
+  initialValues: {
+    name: '',
+    type: '',
+    level: null,
+    coordinates: [],
+    address: '',
+    description: '',
+    lat: null,
+    lng: null,
+  },
+  validationSchema: {
+    name: (value) => {
+      if (!value) return t('zone.nameRequired');
+      return true;
+    },
+    type: (value) => {
+      if (!value) return t('zone.typeRequired');
+      return true;
+    },
+    level: (value) => {
+      if (!value) return t('zone.levelRequired');
+      return true;
+    },
+    coordinates: (value) => {
+      if (!value || value.length > 6) return t('zone.coordinatesRequired');
+      return true;
+    },
+    address: (value) => {
+      if (!value) return t('zone.addressRequired');
+      return true;
+    },
+    description: (value) => {
+      if (!value) return t('zone.descriptionRequired');
+      return true;
+    },
+    lat: (value) => {
+      if (!value) return t('zone.latRequired');
+      return true;
+    },
+    lng: (value) => {
+      if (!value) return t('zone.lngRequired');
+      return true;
+    },
+  },
 });
 
+const isSubmitting = ref(false);
+const successMessage = ref("");
+const errorMessage = ref("");
+const addressSuggestions = ref([]);
 const isAddressMode = ref(true);
 const formIncomplete = ref(false);
 const showConfirmation = ref(false);
@@ -40,7 +81,7 @@ const closeMapModal = () => {
 };
 
 const handleCoordinatesSelected = (coordinates) => {
-  zoneData.value.coordinates = coordinates;
+  setFieldValue("coordinates", coordinates);
   closeMapModal();
 };
 
@@ -48,24 +89,54 @@ const setInputMode = () => {
   isAddressMode.value = !isAddressMode.value;
 };
 
+const handleSubmit = async () => {
+  if (isAddressMode.value) {
+    const result = await getCoordinates(form.address);
+    if (result.status === 'full') {
+      setFieldValue('lat', result.lat);
+      setFieldValue('lng', result.lng);
+    } else {
+      setFieldError('address', t('zone.addressNotFound'));
+    }
+  } else if (!isAddressMode.value) {
+    const result = await getAddress(form.lat, form.lng);
+    if (result.status === 'full') {
+      setFieldValue('address', result.address);
+    } else {
+      setFieldError('lat', t('zone.coordinatesNotFound'));
+    }
+  }
+  const result = await validate();
+
+  if (!result.valid) {
+    console.log("Validation failed:", errors.value); // Debug validation errors
+    return;
+  }
+
+  isSubmitting.value = true;
+  successMessage.value = "";
+  errorMessage.value = "";
+}
+
+
 // Load zone data if updating
 if (isUpdate.value) {
   const zone = emergencyZonesStore.getEmergencyZoneById(props.zoneId);
   emergencyZoneStore.setEmergencyZone(zone);
   if (zone) {
-    zoneData.value = { ...zone };
+    form.value = { ...zone };
   }
 }
 
 // Save or update zone
 const saveZone = async () => {
-  if (!zoneData.value.name || !zoneData.value.coordinates.length) {
+  if (!form.value.name || !form.value.coordinates.length) {
     formIncomplete.value = true;
     return;
   }
 
   try {
-    await emergencyZoneStore.saveEmergencyZone(zoneData.value);
+    await emergencyZoneStore.saveEmergencyZone(form.value);
 
     emit('zoneSaved');
     emit('close');
@@ -79,6 +150,7 @@ const close = () => {
   emit('close');
 };
 
+/*
 const resetForm = () => {
   zoneData.value = {
     name: '',
@@ -92,6 +164,7 @@ const resetForm = () => {
   };
   formIncomplete.value = false;
 };
+*/
 
 const handleCancel = () => {
   showConfirmation.value = true;
@@ -104,6 +177,29 @@ const confirmCancel = () => {
 
 const cancelConfirmation = () => {
   showConfirmation.value = false;
+};
+
+const fetchAddressSuggestions = async (query) => {
+  if (!query || query.length < 5) {
+    addressSuggestions.value = [];
+    return;
+  }
+
+  const suggestions = await getAddressSuggestions(query);
+
+  addressSuggestions.value = suggestions
+      .map((suggestion) => {
+        const { road = '', house_number = '', postcode = '', city = '', town = '', village = '' } =
+        suggestion.address || {};
+        suggestion.displayName = `${road} ${house_number}, ${postcode} ${city || town || village}`.trim();
+        return suggestion;
+      })
+      .filter((suggestion) => suggestion.displayName && suggestion.displayName !== ',' && suggestion.displayName.length > 1);
+};
+
+const selectSuggestion = (suggestion) => {
+  setFieldValue("address", suggestion.displayName);
+  addressSuggestions.value = [];
 };
 </script>
 
@@ -137,7 +233,7 @@ const cancelConfirmation = () => {
               </label>
               <input
                   id="zoneName"
-                  v-model="zoneData.name"
+                  v-model="form.name"
                   type="text"
                   :placeholder="t('zone.zoneName')"
                   class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2
@@ -152,7 +248,7 @@ const cancelConfirmation = () => {
               </label>
               <input
                   id="zoneType"
-                  v-model="zoneData.type"
+                  v-model="form.type"
                   type="text"
                   :placeholder="t('zone.zoneType')"
                   class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2
@@ -167,7 +263,7 @@ const cancelConfirmation = () => {
               </label>
               <select
                   id="zoneLevel"
-                  v-model="zoneData.level"
+                  v-model="form.level"
                   class="border border-gray-300 w-full rounded-lg p-3 text-base text-black focus:ring-2
                    focus:ring-blue-500 bg-white"
               >
@@ -184,7 +280,7 @@ const cancelConfirmation = () => {
               </label>
               <textarea
                   id="zonePolygonCoordinates"
-                  v-model="zoneData.coordinates"
+                  v-model="form.coordinates"
                   :placeholder="t('zone.zoneCoordinatesDescription')"
                   class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2
                    focus:ring-blue-500 text-base"
@@ -232,24 +328,35 @@ const cancelConfirmation = () => {
             <div v-if="isAddressMode" class="mb-4">
               <label class="block text-sm font-medium mb-1">{{ t('zone.zoneAddress') }}</label>
               <input
-                  v-model="zoneData.address"
+                  v-model="form.address"
                   type="text"
                   class="w-full p-3 border rounded-lg"
                   :placeholder="t('zone.zoneAddress')"
+                  @input="fetchAddressSuggestions($event.target.value)"
               />
+              <ul v-if="addressSuggestions.length" class="bg-white border rounded mt-2 shadow">
+                <li
+                    v-for="(suggestion, index) in addressSuggestions"
+                    :key="index"
+                    class="p-2 hover:bg-kf-white-contrast-3 rounded cursor-pointer"
+                    @click="selectSuggestion(suggestion)"
+                >
+                  {{ suggestion.displayName }}
+                </li>
+              </ul>
             </div>
 
             <div v-else class="mb-4">
               <label class="block text-sm font-medium mb-1">{{ t('zone.zoneCoordinates') }}</label>
               <div class="flex gap-2">
                 <input
-                    v-model.number="zoneData.lat"
+                    v-model.number="form.lat"
                     type="number"
                     class="w-1/2 p-3 border rounded-lg"
                     :placeholder="t('zone.latitude')"
                 />
                 <input
-                    v-model.number="zoneData.lng"
+                    v-model.number="form.lng"
                     type="number"
                     class="w-1/2 p-3 border rounded-lg"
                     :placeholder="t('zone.longitude')"
@@ -264,7 +371,7 @@ const cancelConfirmation = () => {
               </label>
               <textarea
                   id="zoneDescription"
-                  v-model="zoneData.description"
+                  v-model="form.description"
                   :placeholder="t('zone.zoneDescription')"
                   class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2
                    focus:ring-blue-500 text-base"
