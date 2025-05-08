@@ -343,6 +343,36 @@
     "zoneDescriptionInvalid": "Invalid zone description. Please check the format.",
     "zoneLevel": "Zone Level",
     "coordinatesNotFound": "Coordinates not found."
+  },
+  "marker": {
+    "markers": "Markers",
+    "markerName": "Name",
+    "markerType": "Type",
+    "latitude": "Latitude",
+    "longitude": "Longitude",
+    "markerDescription": "Description",
+    "createNewMarker": "Create New Marker",
+    "newMarker": "New Marker",
+    "updateMarker": "Update Marker",
+    "stay": "Stay",
+    "quit": "Quit",
+    "close": "Close",
+    "leaveMessage": "Are you sure you want to leave this page? Unsaved changes will be deleted.",
+    "edit": "Edit",
+    "delete": "Delete",
+    "cancel": "Cancel",
+    "nameRequired": "Name is required",
+    "typeRequired": "Type is required",
+    "latInvalid": "Latitude is invalid",
+    "lngInvalid": "Longitude is invalid",
+    "errorSavingMarker": "Error saving marker",
+    "deleteMessage": "Are you sure you want to delete this marker? This action cannot be undone.",
+    "markerCoordinates": "Coordinates",
+    "setPin": "Set Pin",
+    "removePin": "Remove Pin",
+    "saveCoordinate": "Save Coordinate",
+    "createMarker": "Create Coordinate",
+    "getCoordinatesFromMap": "Click on the map and set a pin to get the coordinates."
   }
 }
 

@@ -11,17 +11,20 @@ export const useMarkersStore = defineStore('markersStore', {
     getters: {
     },
     actions: {
-        async fetchAllMarkers() {
+        async fetchAllMarkers(addToMap = true) {
             this.error = null;
 
             try {
                 const service = markerService();
-                const markersData = await service.getAllMarkers();
+                //const markersData = await service.getAllMarkers();
+                const markersData = await service.getAllMarkersMock();
 
                 if (markersData.success) {
                     this.clearMarkers();
                     for (const marker of markersData.markers) {
-                        addMarkerToMap(marker);
+                        if (addToMap) {
+                            addMarkerToMap(marker);
+                        }
                         this.addMarker(marker);
                     }
                 }

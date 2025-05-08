@@ -31,6 +31,7 @@ import HouseholdListView from "@/views/HouseholdListView.vue";
 import AdminAuthBase from "@/views/AdminAuthBase.vue";
 import AdminLogin from "@/components/login/AdminLogin.vue";
 import UpdateEmergencyZoneView from "@/views/UpdateEmergencyZoneView.vue";
+import UpdateMarkerView from "@/views/UpdateMarkerView.vue";
 
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
@@ -67,6 +68,7 @@ const router = createRouter({
                 { path: "/admin-settings", component: AdminSettings,
                     children: [
                         { path: "createEmergencyZone", component: CreateEmergencyZone },
+                        { path: "createMarker", component: UpdateMarkerView },
                         { path: "createNews", component: CreateNews },
                         { path: "deleteNews", component: DeleteNews },
                     ]
