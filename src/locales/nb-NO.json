@@ -378,6 +378,7 @@
     "zoneCoordinatesInvalid": "Ugyldige sone koordinater. Vennligst sjekk formatet.",
     "zoneAddressInvalid": "Ugyldig sone adresse. Vennligst sjekk formatet.",
     "zoneDescriptionInvalid": "Ugyldig sone beskrivelse. Vennligst sjekk formatet.",
-    "zoneLevel": "Sone Nivå"
+    "zoneLevel": "Sone Nivå",
+    "coordinatesNotFound": "Koordinater ikke funnet."
   }
 }

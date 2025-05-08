@@ -90,7 +90,7 @@ export const useEmergencyZoneStore = defineStore('emergencyZone', {
                 };
                 let result
                 if (this.zoneId) {
-                    result = await service.updateEmergencyZone(emergencyZoneData);
+                    result = await service.updateEmergencyZone(emergencyZoneData, emergencyZoneData.zoneId);
                     emergencyZonesStore.updateEmergencyZone(result);
                 } else {
                     result = await service.createEmergencyZone(emergencyZoneData);

@@ -145,7 +145,7 @@ export const emergencyZoneService = () => {
 
 
     async function getAllEmergencyZones() {
-        const response = await axios.get(baseURL, {
+        const response = await axios.get(`${baseURL}/all-zones`, {
             headers: {
                 'Content-Type': 'application/json',
             },
@@ -154,7 +154,7 @@ export const emergencyZoneService = () => {
     }
 
     async function getEmergencyZonesByArea(mapAreaData, zoneIds) {
-        const response = await axios.post(`${baseURL}/area`, {
+        const response = await axios.post(`${baseURL}/all-zones/`, {
             mapAreaData,
             zoneIds,
         }, {
@@ -166,9 +166,7 @@ export const emergencyZoneService = () => {
     }
 
     async function getEmergencyZoneDetailsById(zoneId) {
-        const response = await axios.post(`${baseURL}/details`, {
-            zoneId,
-        }, {
+        const response = await axios.post(`${baseURL}/${zoneId}/description`, {
             headers: {
                 'Content-Type': 'application/json',
             },
@@ -177,7 +175,7 @@ export const emergencyZoneService = () => {
     }
 
     async function getEmergencyZoneById(zoneId) {
-        const response = await axios.get(`${baseURL}/${zoneId}`, {
+        const response = await axios.get(`${baseURL}/zone/${zoneId}/point`, {
             headers: {
                 'Content-Type': 'application/json',
             },
@@ -186,9 +184,9 @@ export const emergencyZoneService = () => {
     }
 
     async function createEmergencyZone(zone) {
-        const response = await axios.post(`${baseURL}/create`,
+        const response = await axios.post(`${baseURL}/zone/create`, {
             zone,
-            {
+        }, {
                 headers: {
                     'Content-Type': 'application/json',
                 },
@@ -196,8 +194,8 @@ export const emergencyZoneService = () => {
         return response.data;
     }
 
-    async function updateEmergencyZone(zoneData) {
-        const response = await axios.put(`${baseURL}/update`, {
+    async function updateEmergencyZone(zoneData, zoneId) {
+        const response = await axios.put(`${baseURL}/zone/update${zoneId}`, {
             zoneData,
         },  {
             headers: {
