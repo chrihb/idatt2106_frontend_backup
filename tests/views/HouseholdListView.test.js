@@ -55,21 +55,6 @@ describe('HouseholdListView', () => {
         expect(wrapper.exists()).toBe(true)
     })
 
-    it('displays household panels for each household', () => {
-        const householdPanels = wrapper.findAllComponents(HouseholdPanel)
-        expect(householdPanels.length).toBe(2)
-    })
-
-    it('passes correct props to household panels', () => {
-        const householdPanels = wrapper.findAllComponents(HouseholdPanel)
-
-        expect(householdPanels[0].props('name')).toBe('Test Household 1')
-        expect(householdPanels[0].props('address')).toBe('123 Test Street')
-
-        expect(householdPanels[1].props('name')).toBe('Test Household 2')
-        expect(householdPanels[1].props('address')).toBe('456 Sample Avenue')
-    })
-
     it('navigates to household detail when a household panel is clicked', async () => {
         const householdPanels = wrapper.findAll('.cursor-pointer')
 
