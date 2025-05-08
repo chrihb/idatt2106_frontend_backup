@@ -270,7 +270,7 @@
     "fillAllFields": "Vennligst fyll ut alle feltene",
     "createPolygonOnMap": "Opprett Sone på Kart",
     "createZone": "Lag Sone på Map",
-    "createZoneDescription": "Tegn en polygon på kartet for å opprette en ny sone. Klikk på kartet for å legge til punkter. Siste punkt skal IKKE bli koblet til det første punktet for å fullføre polygonet.",
+    "createZoneDescription": "Tegn ett polygon på kartet for å opprette en ny sone. Klikk på kartet for å legge til punkter. Siste punkt skal IKKE bli koblet til det første punktet for å fullføre polygonet.",
     "clearPoints": "Fjern all punkt",
     "addPoint": "Legg til punkt",
     "removeLastPoint": "Fjern siste punkt",
