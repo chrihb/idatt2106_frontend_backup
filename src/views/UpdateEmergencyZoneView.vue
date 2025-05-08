@@ -5,7 +5,10 @@ import UpdateEmergencyZoneModal from '@/components/map/UpdateEmergencyZoneModal.
 import MinimalMap from "@/components/map/MinimalMap.vue";
 import {useI18n} from "vue-i18n";
 import {useEmergencyZoneStore} from "@/stores/emergencyZoneStore.js";
+import ConfirmationModal from "@/components/common/ConfirmationModal.vue";
 
+const showDeleteConfirmation = ref(false);
+const zoneToDelete = ref(null);
 const { t } = useI18n();
 const emergencyZonesStore = useEmergencyZonesStore();
 const emergencyZoneStore = useEmergencyZoneStore();
@@ -65,6 +68,24 @@ const removeZone = async (zoneId) => {
   }
 };
 
+const confirmDeleteZone = (zoneId) => {
+  zoneToDelete.value = zoneId;
+  showDeleteConfirmation.value = true;
+};
+
+const handleDeleteConfirmed = async () => {
+  if (zoneToDelete.value) {
+    await removeZone(zoneToDelete.value);
+    zoneToDelete.value = null;
+  }
+  showDeleteConfirmation.value = false;
+};
+
+const handleDeleteCancelled = () => {
+  showDeleteConfirmation.value = false;
+  zoneToDelete.value = null;
+};
+
 onMounted(() => {
   try {
     fetchZones();
@@ -107,11 +128,11 @@ onMounted(() => {
               </button>
               <button
                   class="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600"
-                  @click="removeZone(zone.zoneId)"
+                  @click="confirmDeleteZone(zone.zoneId)"
               >
                 {{t('zone.delete')}}
               </button>
-              </div>
+            </div>
           </div>
         </li>
       </ul>
@@ -122,6 +143,15 @@ onMounted(() => {
           @close="closeZoneEditor"
           @zoneSaved="handleZoneSaved"
 
+      />
+
+      <ConfirmationModal
+          v-if="showDeleteConfirmation"
+          :message="t('zone.deleteMessage')"
+          :confirm-text="t('zone.delete')"
+          :cancel-text="t('zone.cancel')"
+          @confirm="handleDeleteConfirmed"
+          @cancel="handleDeleteCancelled"
       />
     </div>
   </div>

@@ -362,6 +362,8 @@
     "clearPoints": "Fjern all punkt",
     "addPoint": "Legg til punkt",
     "removeLastPoint": "Fjern siste punkt",
-    "saveCoordinates": "Lagre Sone Koordinater"
+    "saveCoordinates": "Lagre Sone Koordinater",
+    "deleteMessage": "Er du sikker på at du vil slette denne sonen? Denne handlingen kan ikke angres.",
+    "cancel": "Avbryt"
   }
 }
