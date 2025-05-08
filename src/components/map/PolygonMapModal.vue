@@ -22,6 +22,7 @@ const props = defineProps({
 const clearMarkers = () => {
   markers.value.forEach((marker) => map.value.removeLayer(marker));
   lines.value.forEach((line) => map.value.removeLayer(line));
+  map.value.removeLayer(marker);
   markers.value = [];
   lines.value = [];
   polygonCoordinates.value = [];
@@ -148,7 +149,8 @@ watch(() => props.isOpen, (newVal) => {
           <button @click="saveMarker" class="px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600">
             {{t("zone.addPoint")}}
           </button>
-          <button @click="removeLastMarker" class="px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600">
+          <button @click="removeLastMarker" class="px-4 py-2 bg-green-500 text-white rounded-lg
+           hover:bg-green-600">
             {{t("zone.removeLastPoint")}}
           </button>
           <button @click="saveCoordinates" class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600">
