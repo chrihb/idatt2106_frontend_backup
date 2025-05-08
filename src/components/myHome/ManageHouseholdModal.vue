@@ -31,7 +31,7 @@ const props = defineProps({
   },
 });
 
-const emit = defineEmits(["close"]);
+const emit = defineEmits(["close", "member-removed"]);
 
 const members = ref([]);
 const isAdmin = ref(false);
@@ -42,13 +42,14 @@ const inviteLink = ref("");
 const inviteCode = ref("");
 
 watch(
-    () => props.household.members,
-    (newMembers) => {
-      members.value = newMembers || [];
+    () => props.household,
+    (newHousehold) => {
+      if (newHousehold && newHousehold.members) {
+        members.value = [...newHousehold.members];
+      }
     },
-    { immediate: true }
+    { immediate: true, deep: true }
 );
-
 onMounted(async () => {
   await checkAdminStatus();
   await checkIfPrimary();
@@ -97,6 +98,8 @@ const closeModal = () => {
   selectedMember.value = null;
 };
 
+// In ManageHouseholdPopup.vue, modify the removeMember function:
+
 const removeMember = async () => {
   if (!selectedMember.value) return;
 
@@ -104,26 +107,31 @@ const removeMember = async () => {
     const response = await kickUserFromHousehold(props.household.id, selectedMember.value.id);
 
     if (response) {
+      const removedMemberId = selectedMember.value.id;
+
+      // Close only the confirmation modal (not the entire ManageHousehold modal)
+      selectedMember.value = null;
+
+      // Refresh householdId list
       await userStore.fetchHouseholds();
 
-      const households = userStore.householdId;
+      // Check if the current household still exists for the user
+      const householdStillExists = userStore.householdId.some(h => h.id === props.household.id);
 
-      // If no households remain
-      if (!households || households.length === 0) {
-        await router.push("/");
-        emit("close");
-        return;
+      if (!householdStillExists) {
+        // If the household no longer exists for the user (e.g., user kicked themselves)
+        if (userStore.householdId.length === 0) {
+          await router.push("/household/options");
+        } else {
+          await router.push("/household/list");
+        }
+        emit("close"); // Close the modal only if the household is inaccessible
+      } else {
+        // Update the local members list to reflect the change immediately
+        members.value = members.value.filter(m => m.id !== removedMemberId);
+        emit("member-removed"); // Emit event to refresh household data in parent
+        // Do NOT emit "close" here to keep the "Administer hustand" modal open
       }
-
-      // Try to set the first household as primary
-      try {
-        await setPrimaryHousehold(households[0].id);
-      } catch (e) {
-        console.warn("Could not set new primary household:", e);
-      }
-
-      await router.push("/household/list");
-      emit("close");
     } else {
       console.error("Failed to remove member");
     }
@@ -131,8 +139,6 @@ const removeMember = async () => {
     console.error("Error removing member:", error);
   }
 };
-
-
 const leaveHousehold = async () => {
   try {
     const response = await leaveHouseholdService(props.household.id);

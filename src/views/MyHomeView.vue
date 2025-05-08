@@ -1,5 +1,5 @@
 <script setup>
-import { onMounted, onUnmounted } from "vue";
+import { onMounted, onUnmounted, ref } from "vue";
 import { useRoute } from "vue-router";
 import LocationStatus from "@/components/myHome/LocationStatus.vue";
 import Nearest from "@/components/myHome/Nearest.vue";
@@ -17,47 +17,55 @@ const markersStore = useMarkersStore();
 const userStore = useUserStore();
 const route = useRoute();
 
-const household = userStore.householdId.find(
-    (household) => household.id === parseInt(route.params.id)
-);
+// Use ref for household to make it reactive
+const household = ref(null);
 
-const markerId = `household-${household?.id}`;
+const markerId = ref('');
 
 function centerOnAddress() {
-  if (household.latitude && household.longitude) {
-    mapStore.centerMapOnSpecificLocation(household.latitude, household.longitude);
+  if (household.value?.latitude && household.value?.longitude) {
+    mapStore.centerMapOnSpecificLocation(household.value.latitude, household.value.longitude);
   } else {
     console.error("Household coordinates missing");
   }
 }
 
-onMounted(async () => {
+const refreshHouseholdData = async () => {
   await userStore.fetchHouseholds();
+  household.value = userStore.householdId.find(
+      h => h.id === parseInt(route.params.id)
+  );
 
-  if (household?.latitude && household?.longitude) {
+  // Update marker if needed
+  if (household.value?.latitude && household.value?.longitude) {
+    removeMarkerFromMap(markerId.value);
+    markerId.value = `household-${household.value.id}`;
     addMarkerToMap({
-      markerId,
-      lat: household.latitude,
-      lng: household.longitude,
+      markerId: markerId.value,
+      lat: household.value.latitude,
+      lng: household.value.longitude,
       type: "home",
     });
   }
+};
+
+onMounted(async () => {
+  await refreshHouseholdData();
 });
 
 onUnmounted(() => {
-  removeMarkerFromMap(markerId);
+  removeMarkerFromMap(markerId.value);
 });
 </script>
 
-
 <template>
-  <div class="py-2 px-2">
+  <div class="py-2 px-2" v-if="household">
     <div class="grid grid-cols-[auto_1fr] gap-2">
       <div class="flex flex-col gap-2 min-w-70 w-full">
         <HouseholdPanel @click="centerOnAddress" :name="household.name" :address="household.address" class="cursor-pointer" />
         <LocationStatus :members="household.members"/>
         <Nearest :latitude="household.latitude" :longitude="household.longitude"/>
-        <ManageHousehold :household="household"/>
+        <ManageHousehold :household="household" @member-removed="refreshHouseholdData"/>
       </div>
       <div class="relative h-full w-full rounded-2xl shadow-lg overflow-hidden">
         <Map class="h-full w-full" />
@@ -65,6 +73,3 @@ onUnmounted(() => {
     </div>
   </div>
 </template>
-
-<style scoped>
-</style>
