@@ -13,6 +13,8 @@ export const useUnitsStore = defineStore("units", {
 
     getUnitName: (state) => (unitId, locale = 'en') => {
       const unit = state.units.find(unit => unit.id == Number(unitId));
+      console.log(unitId)
+      console.log(unit)
 
       if (!unit) {
         return 'Unknown Unit';

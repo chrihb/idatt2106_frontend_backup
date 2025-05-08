@@ -1,5 +1,5 @@
 <script setup lang="js">
-import {onMounted, ref} from 'vue';
+import {onMounted, ref, watch} from 'vue';
 import StorageItemMinimized from "@/components/emergencyStorage/StorageItemMinimized.vue";
 import StorageItemMaximized from "@/components/emergencyStorage/StorageItemMaximized.vue";
 import UpdateStorageComponent from "@/components/emergencyStorage/UpdateStorageComponent.vue";
@@ -9,7 +9,7 @@ import {useCategoriesStore} from '@/stores/categoriesStore.js';
 import {useUnitsStore} from '@/stores/unitsStore.js';
 import {useEmergencyItemsStore} from '@/stores/emergencyItemsStore.js';
 import {useI18n} from "vue-i18n";
-import { ExclamationTriangleIcon, XCircleIcon } from "@heroicons/vue/24/solid/index.js";
+import {ExclamationTriangleIcon, XCircleIcon} from "@heroicons/vue/24/solid/index.js";
 
 const {t, locale} = useI18n();
 
@@ -56,18 +56,23 @@ const fetchCategories = async () => {
         id: item.categoryId,
         name: categoriesStore.getCategoryName(item.categoryId, locale.value),
         units: new Set(),
+        unitIds: new Set(),
         unit: null,
+        unitId: null,
         amount: 0,
         expirationDate: null,
       };
 
       category.units.add(unitsStore.getUnitName(item.unitId, locale.value));
+      category.unitIds.add(item.unitId);
 
-      if (category.units.size > 1) {
+      if (category.unitIds.size > 1) {
         category.unit = t("storage.inconsistent-units");
+        category.unitId = null;
         category.amount = null;
       } else {
         category.unit = [...category.units][0];
+        category.unitId = [...category.unitIds][0];
         category.amount += item.amount;
       }
 
@@ -89,8 +94,8 @@ const fetchCategories = async () => {
     }, {});
 
     itemCategories.value = Object.values(groupedCategories).map(category => {
-      delete category.units;
-      return category;
+      const {units, unitIds, ...rest} = category;
+      return rest;
     });
   } catch (error) {
     console.error("Error fetching categories");
@@ -137,7 +142,12 @@ const checklistRef = ref(null);
 watch(() => locale.value, () => {
   itemCategories.value = itemCategories.value.map(category => ({
     ...category,
-    name: categoriesStore.getCategoryName(category.id, locale.value)
+    name: categoriesStore.getCategoryName(category.id, locale.value),
+    unit: category.unit === t("storage.inconsistent-units")
+        ? t("storage.inconsistent-units")
+        : category.unitId !== null
+            ? unitsStore.getUnitName(category.unitId, locale.value)
+            : category.unit
   }));
 }, { immediate: false });
 
