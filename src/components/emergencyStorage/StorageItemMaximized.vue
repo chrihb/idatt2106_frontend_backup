@@ -22,7 +22,7 @@ const props = defineProps({
 });
 
 const emit = defineEmits(['close', 'update', 'create', 'itemUpdated']);
-const {t} = useI18n();
+const {t, locale} = useI18n();
 
 const unitsStore = useUnitsStore();
 const categoriesStore = useCategoriesStore();
@@ -89,7 +89,7 @@ watch(() => props.display, async (newValue) => {
           class="bg-white rounded-lg shadow-xl w-full sm:w-11/12 md:w-4/5 lg:w-3/5 max-h-[90vh] overflow-auto p-4 sm:p-6 max-w-3xl">
         <div class="flex flex-row justify-between items-center mb-4 sm:mb-6 border-b pb-3 sm:pb-4">
           <h1 class="text-xl sm:text-2xl font-bold text-gray-800 truncate">
-            {{ categoriesStore.getCategoryName(categoryId) }}
+            {{ categoriesStore.getCategoryName(categoryId, locale.value) }}
           </h1>
           <button
               class="text-gray-500 hover:text-gray-800 focus:outline-none transition-colors duration-200 p-2 rounded-full hover:bg-gray-100"
