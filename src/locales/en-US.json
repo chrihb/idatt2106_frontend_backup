@@ -18,10 +18,7 @@
   "account-settings": {
     "title": "Account Settings",
     "manage-storages": "Manage Storages",
-    "manage-households": "Manage Households",
-    "find-assembling-areas": "Find Assembling Areas",
-    "manage-emergency-groups": "Manage Emergency Groups",
-    "experience-journal": "Experience Journal",
+    "manage-households": "Add household",
     "enable-notifications": "Enable Notifications",
     "enable-position-sharing": "Enable Location Sharing",
     "show-storage-on-frontpage": "Show Storage Status on Frontpage",
