@@ -276,6 +276,7 @@
     "removeLastPoint": "Fjern siste punkt",
     "saveCoordinates": "Lagre Sone Koordinater",
     "deleteMessage": "Er du sikker på at du vil slette denne sonen? Denne handlingen kan ikke angres.",
-    "cancel": "Avbryt"
+    "cancel": "Avbryt",
+    "notEnoughPoints": "Ikke nok punkter til å opprette en polygon. Vennligst legg til minimum 3 punkter."
   }
 }
