@@ -345,7 +345,7 @@
     "emergencyLevel": "Krise nivå",
     "emergencyLevel1": "Krise nivå 1",
     "emergencyLevel2": "Krise nivå 2",
-    "emergencyLevel3": "Krise nivå 2",
+    "emergencyLevel3": "Krise nivå 3",
     "zoneCoordinates": "Sone Koordinater",
     "zonePolygonCoordinates": "Sone Koordinater",
     "inputMode": "Inndata Modus",
@@ -366,6 +366,18 @@
     "saveCoordinates": "Lagre Sone Koordinater",
     "deleteMessage": "Er du sikker på at du vil slette denne sonen? Denne handlingen kan ikke angres.",
     "cancel": "Avbryt",
-    "notEnoughPoints": "Ikke nok punkter til å opprette en polygon. Vennligst legg til minimum 3 punkter."
+    "notEnoughPoints": "Ikke nok punkter til å opprette en polygon. Vennligst legg til minimum 3 punkter.",
+    "nameRequired": "Sone navn er påkrevd",
+    "typeRequired": "Sone type er påkrevd",
+    "levelRequired": "Sone nivå er påkrevd",
+    "zoneCoordinatesRequired": "Sone koordinater er påkrevd",
+    "addressRequired": "Sone adresse er påkrevd",
+    "descriptionRequired": "Sone beskrivelse er påkrevd",
+    "latRequired": "Breddegrad er påkrevd",
+    "lngRequired": "Lengdegrad er påkrevd",
+    "zoneCoordinatesInvalid": "Ugyldige sone koordinater. Vennligst sjekk formatet.",
+    "zoneAddressInvalid": "Ugyldig sone adresse. Vennligst sjekk formatet.",
+    "zoneDescriptionInvalid": "Ugyldig sone beskrivelse. Vennligst sjekk formatet.",
+    "zoneLevel": "Sone Nivå"
   }
 }
