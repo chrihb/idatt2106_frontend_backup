@@ -16,6 +16,12 @@ export const usePositionTrackingStore = defineStore("positionTrackingStore", {
         getLongitude: (state) => state.longitude,
         getCanTrack: (state) => state.canTrack,
         getWatchId: (state) => state.watchId,
+        getPosition: (state) => {
+            if (state.latitude !== null && state.longitude !== null) {
+                return { lat: state.latitude, lng: state.longitude };
+            }
+            return null;
+        },
     },
     actions: {
         // Start tracking the user's location

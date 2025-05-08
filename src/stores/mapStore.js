@@ -6,6 +6,7 @@ export const useMapStore = defineStore('mapStore', {
         map: null,
         layerGroup: {},
         mapItemIds: [],
+        currentRoute: null,
     }),
     getters: {
         getLayerGroup: (state) => state.layerGroup,

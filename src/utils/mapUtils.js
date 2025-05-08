@@ -6,14 +6,21 @@ import {emergencyZoneService} from "@/services/emergencyZoneService.js";
 import {useMarkersStore} from "@/stores/markersStore.js";
 import {markerService} from "@/services/markerService.js";
 import {useMarkerStore} from "@/stores/markerStore.js";
+import { usePositionTrackingStore } from "@/stores/positionTrackingStore.js";
+import {nextTick} from "vue";
 
-export const createMarkerPopup = (type, address, description) =>
+export const createMarkerPopup = (type, address, description, markerId) =>
     `
-                <div class="popup">
-                    <h2>${type}</h2>
-                    <p>${address}</p>
-                    <p>${description}</p>
-                </div>
+        <div class="popup text-sm text-gray-800 space-y-1">
+            <h2 class="font-semibold text-base">${type}</h2>
+                <p><span class="font-medium">Adresse:</span> ${address}</p>
+                <p>${description}</p>
+                <p>
+                    <a href="#" class="directions-link text-blue-600 hover:underline font-medium" data-marker-id="${markerId}">
+                        Veibeskrivelse
+                    </a>
+                </p>
+        </div>
     `;
 
 export const createZonePopup = (name, type, level, address, description) =>
@@ -79,8 +86,16 @@ export const addMarkerToMap = (marker) => {
             //const markerDetails = await markerStore.fetchMarkerDetailsById(marker.markerId);
 
             if (markerDetails.success) {
-                const popupContent = createMarkerPopup(marker.type, markerDetails.address, markerDetails.description);
+                const popupContent = createMarkerPopup(marker.type, markerDetails.address, markerDetails.description, marker.markerId);
                 mapMarker.bindPopup(popupContent).openPopup();
+                await nextTick();
+                const link = document.querySelector('.directions-link');
+                if (link) {
+                    link.addEventListener('click', (e) => {
+                        e.preventDefault();
+                        handleGetDirections(marker.lat, marker.lng);
+                    });
+                }
             } else {
                 console.error('Failed to fetch marker details');
             }
@@ -88,6 +103,10 @@ export const addMarkerToMap = (marker) => {
             console.error('Error fetching marker details:', error);
         }
     });
+
+    mapMarker.on('popupclose', () => {
+        clearRoute();
+    }); 
 
     // Check if the layerGroup for the type exists, if not create it
     if (!mapStore.layerGroup[marker.type] || !(mapStore.layerGroup[marker.type] instanceof L.LayerGroup)) {
@@ -259,3 +278,61 @@ export const centerMapOnEmergencyZone = (zoneId) => {
         console.error(`Emergency zone with ID ${zoneId} not found.`);
     }
 }
+
+export const drawRoute = async (startLat, startLng, endLat, endLng) => {
+    const mapStore = useMapStore();
+    const url = `https://router.project-osrm.org/route/v1/driving/${startLng},${startLat};${endLng},${endLat}?overview=full&geometries=geojson`;
+
+    try {
+        const response = await fetch(url);
+        const data = await response.json();
+
+        if (data.routes && data.routes.length > 0) {
+            const coords = data.routes[0].geometry.coordinates.map(coord => [coord[1], coord[0]]);
+            const routeLine = L.polyline(coords, { color: 'blue' });
+
+            clearRoute(); // Fjern eksisterende
+
+            routeLine.addTo(mapStore.map);
+            mapStore.map.fitBounds(routeLine.getBounds());
+
+            mapStore.currentRoute = routeLine;  // Lagre direkte polyline
+        } else {
+            console.error('No route found');
+        }
+    } catch (error) {
+        console.error('Failed to fetch route:', error);
+    }
+};
+
+
+export const clearRoute = () => {
+    const mapStore = useMapStore();
+    const map = mapStore.map;
+    const route = mapStore.currentRoute;
+
+    if (!map || !route) return;
+
+    try {
+        route.remove(); // Fjern polyline
+        mapStore.currentRoute = null;
+    } catch (e) {
+        console.warn("Feil ved fjerning av rute:", e);
+    }
+};
+
+
+export const handleGetDirections = async (targetLat, targetLng) => {
+    const positionTrackingStore = usePositionTrackingStore();
+    const userPos = positionTrackingStore.getPosition;
+
+    if (!userPos) {
+        alert("Brukerens posisjon er ikke tilgjengelig");
+        return;
+    }
+
+    clearRoute();
+
+    // Bruk drawRoute med brukerens posisjon
+    await drawRoute(userPos.lat, userPos.lng, targetLat, targetLng);
+};
