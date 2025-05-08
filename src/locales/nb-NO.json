@@ -18,10 +18,7 @@
   "account-settings": {
 	"title": "Brukerinnstillinger",
 	"manage-storages": "Administrer lager",
-	"manage-households": "Administrer husstander",
-	"find-assembling-areas": "Finn møteplasser",
-	"manage-emergency-groups": "Administrer beredskapsgrupper",
-	"experience-journal": "Erfaringsjournal",
+	"manage-households": "Legg til husstand",
 	"enable-notifications": "Aktiver varslinger",
 	"enable-position-sharing": "Skru på posisjonsdeling",
 	"show-storage-on-frontpage": "Vis lagerstatus på forsiden",
