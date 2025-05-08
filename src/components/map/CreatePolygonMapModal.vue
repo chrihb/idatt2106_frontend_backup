@@ -73,6 +73,7 @@ const saveCoordinates = () => {
 
 const closeModal = () => {
   clearMarkers();
+  marker.value = null;
   emit('onClose');
 };
 
@@ -122,6 +123,7 @@ onMounted(async () => {
 
 onUnmounted(() => {
   clearMarkers();
+  marker.value = null;
   destroyMap();
 });
 
@@ -129,7 +131,10 @@ watch(() => props.isOpen, (newVal) => {
   if (newVal) {
     initMap();
   } else {
+    clearMarkers();
+    marker.value = null;
     destroyMap();
+
   }
 });
 
@@ -142,6 +147,9 @@ watch(() => props.isOpen, (newVal) => {
         <div class="flex justify-between items-center mb-4">
           <h2 class="text-lg font-bold">{{t("zone.createZone")}}</h2>
           <button @click="closeModal" class="text-gray-500 hover:text-gray-800">✖</button>
+        </div>
+        <div>
+          <p class="text-sm text-gray-600 mb-2">{{t("zone.createZoneDescription")}}</p>
         </div>
         <div id="polygon-map" class="h-96 w-full"></div>
         <div class="flex justify-between mt-4">
