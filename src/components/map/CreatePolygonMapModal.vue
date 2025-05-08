@@ -167,7 +167,7 @@ watch(() => props.isOpen, (newVal) => {
         <div class="flex justify-between items-center mb-4">
           <h2 class="text-lg font-bold">{{t("zone.createZone")}}</h2>
           <button @click="handleCancel" class="text-gray-500 hover:text-gray-800 focus:outline-none transition-colors duration-200 p-2
-                 rounded-full hover:bg-gray-100">✖</button>
+                 rounded-full hover:bg-kf-darkgrey">✖</button>
           <ConfirmationModal
               v-if="showConfirmation"
               :message="t('zone.leaveMessage')"
