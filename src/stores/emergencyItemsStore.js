@@ -20,20 +20,20 @@ export const useEmergencyItemsStore = defineStore("items", {
   },
 
   actions: {
-    async fetchAllItems() {
+    async fetchAllItems(householdId) {
       try {
         const service = emergencyItemService();
-        this.items = await service.getEmergencyItems();
+        this.items = await service.getEmergencyItems(householdId);
         return this.items;
       } catch (error) {
         console.error('Error fetching all emergency items:');
       }
     },
 
-    async fetchItemsByCategory(categoryId) {
+    async fetchItemsByCategory(categoryId, householdId) {
       try {
         const service = emergencyItemService();
-        const categoryItems = await service.getEmergencyItemByCategoryId(categoryId);
+        const categoryItems = await service.getEmergencyItemByCategoryId(categoryId, householdId);
 
         this.items = this.items.filter(item => item.categoryId !== categoryId);
         this.items = [...this.items, ...categoryItems];

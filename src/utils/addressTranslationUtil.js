@@ -14,6 +14,33 @@ const withTimeoutAndAbort = (axiosRequest, ms) => {
     return axiosRequest(controller.signal).finally(() => clearTimeout(timeout));
 };
 
+function formatDisplayAddress(address = {}) {
+    if (!address || typeof address !== 'object') return 'Address not found';
+
+    const road = address.road || address.residential || address.pedestrian || address.footway || "";
+    const house = address.house_number || address.house_name || "";
+
+    const place =
+        address.city ||
+        address.town ||
+        address.village ||
+        address.municipality ||
+        address.hamlet ||
+        address.suburb ||
+        address.city_district ||
+        address.county ||
+        "";
+
+    const postcode = address.postcode || "";
+
+    const mainLine = [road, house].filter(Boolean).join(" ").trim();
+    const regionLine = [postcode, place].filter(Boolean).join(" ").trim();
+
+    const full = [mainLine, regionLine].filter(Boolean).join(", ").trim();
+
+    return full || "Address not found";
+}
+
 const fetchAndCacheAddressData = async (lat, lng) => {
     const cacheKey = `${lat},${lng}`;
 
@@ -60,28 +87,11 @@ const fetchAndCacheAddressData = async (lat, lng) => {
     }
 };
 
-const getAddress = async (lat, lng) => {
+const getAddress = async (lat, lng, { brief }) => {
     const addr = await fetchAndCacheAddressData(lat, lng);
 
-    const full = [
-        addr.road,
-        addr.postcode,
-        addr.city || addr.town || addr.village,
-        addr.country,
-    ]
-        .filter(Boolean)
-        .join(', ');
-
-    return full || 'Address not found';
-};
-
-const getCity = async (lat, lng) => {
-    const addr = await fetchAndCacheAddressData(lat, lng);
-    // Fix the order to match test expectations for the village test case
-    if (addr.city) return addr.city;
-    if (addr.town) return addr.town;
-    if (addr.village) return addr.village;
-    return 'Unknown';
+    if (brief) return addr.road || addr.residential || '';
+    return formatDisplayAddress(addr);
 };
 
 const getCoordinates = async (address) => {
@@ -130,38 +140,62 @@ const getCoordinates = async (address) => {
     }
 };
 
-let debounceTimeout;
-const getAddressSuggestions = async (query) => {
+function debounceAsync(fn, delay) {
+    let timeout;
+    let resolveQueue = [];
 
-    return new Promise((resolve) => {
-        clearTimeout(debounceTimeout);
-        debounceTimeout = setTimeout(async () => {
-            try {
-                const response = await axios.get('https://nominatim.openstreetmap.org/search', {
-                    params: {
-                        q: query,
-                        format: 'json',
-                        addressdetails: 1,
-                        limit: 5,
-                        countrycodes: 'no'
-                    },
-                });
+    return function debounced(...args) {
+        clearTimeout(timeout);
+        return new Promise((resolve) => {
+            resolveQueue.push(resolve);
+            timeout = setTimeout(async () => {
+                try {
+                    const result = await fn(...args);
+                    resolveQueue.forEach((res) => res(result));
+                } catch (err) {
+                    resolveQueue.forEach((res) => res([])); // resolve with empty array on error
+                } finally {
+                    resolveQueue = [];
+                }
+            }, delay);
+        });
+    };
+}
 
-                const suggestions = response.data.map((item) => ({
-                    address: item.address,
-                    lat: parseFloat(item.lat),
-                    lon: parseFloat(item.lon),
-                }));
+const fetchAndFormatSuggestions = async (query) => {
+    if (!query || query.length < 5) {
+        return [];
+    }
 
-                resolve(suggestions);
-            } catch (error) {
-                console.error('Error fetching address suggestions:', error);
-                resolve([]);
-            }
-        }, 1000); // 1 second delay
-    });
+    try {
+        const response = await axios.get('https://nominatim.openstreetmap.org/search', {
+            params: {
+                q: query,
+                format: 'json',
+                addressdetails: 1,
+                limit: 5,
+                countrycodes: 'no',
+            },
+        });
+
+        return response.data
+            .map((item) => {
+                const { address = {}, lat, lon } = item;
+
+                return {
+                    address,
+                    lat: parseFloat(lat),
+                    lon: parseFloat(lon),
+                    displayName: formatDisplayAddress(address),
+                };
+            })
+            .filter((s) => s.displayName && s.displayName.length > 1);
+    } catch (error) {
+        console.error("Error fetching address suggestions:", error);
+        return [];
+    }
 };
 
+export const getAddressSuggestions = debounceAsync(fetchAndFormatSuggestions, 1000);
 
-export { getAddress, getCoordinates, getCity, getAddressSuggestions };
-
+export { getAddress, getCoordinates };
