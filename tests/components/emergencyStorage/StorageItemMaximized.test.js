@@ -1,22 +1,22 @@
-import {mount, flushPromises} from "@vue/test-utils";
-import {describe, it, expect, vi, beforeEach} from "vitest";
-import StorageItemMaximized from "@/components/emergencyStorage/StorageItemMaximized.vue";
-import StorageItemMinimized from "@/components/emergencyStorage/StorageItemMinimized.vue";
+import {flushPromises, mount} from "@vue/test-utils";
+import {beforeEach, describe, expect, it, vi} from "vitest";
+import StorageItemMaximized
+  from "@/components/emergencyStorage/StorageItemMaximized.vue";
 import {createTestingPinia} from "@pinia/testing";
 
-vi.mock("@/services/emergencyItemService.js", () => ({
-  emergencyItemService: vi.fn(() => ({
-    getEmergencyItemByCategoryId: vi.fn().mockResolvedValue([
+vi.mock("@/stores/emergencyItemsStore.js", () => ({
+  useEmergencyItemsStore: vi.fn(() => ({
+    fetchItemsByCategory: vi.fn().mockResolvedValue([
       {id: 1, name: "Rice", amount: 5, unitId: 3, expirationDate: "2025-12-31"},
       {id: 2, name: "Potatoes", amount: 10, unitId: 3, expirationDate: "2026-01-15"}
     ]),
-    deleteEmergencyItem: vi.fn().mockResolvedValue(true)
+    deleteItem: vi.fn().mockResolvedValue(true)
   }))
 }));
 
 vi.mock("@/stores/categoriesStore.js", () => ({
   useCategoriesStore: vi.fn(() => ({
-    categories: [{id: 1, name: "Food"}],
+    categories: [{id: 1, englishName: "Food"}],
     fetchCategories: vi.fn().mockResolvedValue(),
     getCategoryName: vi.fn().mockReturnValue("Food")
   }))
@@ -24,7 +24,7 @@ vi.mock("@/stores/categoriesStore.js", () => ({
 
 vi.mock("@/stores/unitsStore.js", () => ({
   useUnitsStore: vi.fn(() => ({
-    units: [{id: 1, name: "kg"}, {id: 2, name: "L"}],
+    units: [{id: 1, englishName: "kg"}, {id: 2, englishName: "L"}],
     fetchUnits: vi.fn().mockResolvedValue(),
     getUnitName: vi.fn((id) => id === 1 ? "kg" : "L")
   }))
@@ -39,7 +39,8 @@ vi.mock("vue-i18n", () => ({
         "storage.close": "Close"
       };
       return translations[key] || key;
-    }
+    },
+    locale: {value: 'en'}
   }),
   createI18n: vi.fn(() => ({
     global: {},
@@ -63,11 +64,12 @@ describe('StorageItemMaximized.vue', () => {
       props: {
         categoryId: 1,
         display: true,
+        householdId: "household123",
         ...props
       },
       global: {
+        plugins: [createTestingPinia({createSpy: vi.fn})],
         stubs: {
-          plugins: [createTestingPinia({ createSpy: vi.fn })],
           Teleport: true,
           StorageItemMinimized: true
         }
@@ -102,8 +104,9 @@ describe('StorageItemMaximized.vue', () => {
   });
 
   it('close event when the bottom close button is clicked', async () => {
-    const bottomButton = wrapper.findAll('button').at(-1);
-    await bottomButton.trigger('click');
+    const bottomCloseButton = wrapper.find(
+        'button:not([data-test="create-item"])');
+    await bottomCloseButton.trigger('click');
 
     expect(wrapper.emitted().close).toBeTruthy();
   });

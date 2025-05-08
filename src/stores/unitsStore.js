@@ -11,13 +11,13 @@ export const useUnitsStore = defineStore("units", {
       return state.units.find(unit => unit.id === unitId);
     },
 
-    getUnitName: (state) => (unitId) => {
+    getUnitName: (state) => (unitId, locale = 'en') => {
       const unit = state.units.find(unit => unit.id == Number(unitId));
 
       if (!unit) {
         return 'Unknown Unit';
       }
-      return unit.name;
+      return locale === 'nb-NO' ? unit.norwegianName : unit.englishName;
     },
   },
 
