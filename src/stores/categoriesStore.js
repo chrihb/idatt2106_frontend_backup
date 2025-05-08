@@ -1,5 +1,5 @@
-import {emergencyItemService} from '@/services/emergencyItemService.js';
-import {defineStore} from "pinia";
+import { defineStore } from "pinia";
+import { emergencyItemService } from '@/services/emergencyItemService.js';
 
 export const useCategoriesStore = defineStore("categories", {
   state: () => ({
@@ -11,12 +11,13 @@ export const useCategoriesStore = defineStore("categories", {
       return state.categories.find(category => category.id === categoryId);
     },
 
-    getCategoryName: (state) => (categoryId) => {
+    getCategoryName: (state) => (categoryId, locale = 'en') => {
       const category = state.categories.find(cat => cat.id === categoryId);
       if (!category) {
         return 'Unknown Category';
       }
-      return category.name;
+      console.log(locale)
+      return locale === 'nb-NO' ? category.norwegianName : category.englishName;
     },
   },
 
