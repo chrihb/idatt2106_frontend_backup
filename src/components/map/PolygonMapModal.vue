@@ -1,30 +1,67 @@
 <script setup>
-import {onMounted, onUnmounted, ref} from 'vue';
+import {nextTick, onMounted, onUnmounted, ref, watch} from 'vue';
 import L from 'leaflet';
-import {useMapStore} from "@/stores/mapStore.js";
-import MinimalMap from "@/components/map/MinimalMap.vue";
+import {useI18n} from "vue-i18n";
+import {createCustomMarkerIcon} from "@/utils/mapUtils.js";
 
 const {t} = useI18n();
-const emit = defineEmits(['close', 'coordinatesSelected']);
+const emit = defineEmits(['onClose', 'coordinatesSelected']);
 const map = ref(null);
+const marker = ref(null);
 const markers = ref([]);
+const lines = ref([]);
 const polygonCoordinates = ref([]);
 
-const mapStore = useMapStore();
-
-const placeMarker = () => {
-  mapStore.map.value.on('click', (e) => {
-    const { lat, lng } = e.latlng;
-    const marker = L.marker([lat, lng]).addTo(map.value);
-    markers.value.push(marker);
-    polygonCoordinates.value.push([lat, lng]);
-  });
-}
+const props = defineProps({
+  isOpen: {
+    type: Boolean,
+    required: true,
+  },
+});
 
 const clearMarkers = () => {
   markers.value.forEach((marker) => map.value.removeLayer(marker));
+  lines.value.forEach((line) => map.value.removeLayer(line));
   markers.value = [];
+  lines.value = [];
   polygonCoordinates.value = [];
+};
+
+const saveMarker = () => {
+  if (marker.value) {
+    const {lat, lng} = marker.value.getLatLng();
+    markers.value.push(
+        L.marker([lat, lng],
+            {
+              icon: createCustomMarkerIcon('Pin')})
+        .addTo(map.value));
+    polygonCoordinates.value.push([lat, lng]);
+
+    if (markers.value.length > 1) {
+      const lastTwoCoords = [
+        polygonCoordinates.value[polygonCoordinates.value.length - 2],
+        [lat, lng],
+      ];
+      const line = L.polyline(lastTwoCoords, { color: 'blue' }).addTo(map.value);
+      lines.value.push(line);
+    }
+
+    map.value.removeLayer(marker.value);
+    marker.value = null;
+  }
+};
+
+const removeLastMarker = () => {
+  if (markers.value.length > 0) {
+    const lastMarker = markers.value.pop();
+    map.value.removeLayer(lastMarker);
+    polygonCoordinates.value.pop();
+
+    if (lines.value.length > 0) {
+      const lastLine = lines.value.pop();
+      map.value.removeLayer(lastLine);
+    }
+  }
 };
 
 const saveCoordinates = () => {
@@ -33,41 +70,96 @@ const saveCoordinates = () => {
 
 const closeModal = () => {
   clearMarkers();
-  emit('close');
+  emit('onClose');
 };
+
+const initMap = async () => {
+  await nextTick();
+
+  const mapContainer = document.getElementById('polygon-map');
+
+  if (!map.value && mapContainer) {
+    map.value = L.map(mapContainer, {
+      center: [63.42, 10.4],
+      zoom: 13,
+    });
+
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '&copy; OpenStreetMap contributors',
+    }).addTo(map.value);
+
+
+    map.value.on('click', (e) => {
+      const {lat, lng} = e.latlng;
+      if (!marker.value) {
+        marker.value = L.marker([lat, lng], {draggable: true}).addTo(map.value);
+      } else {
+        marker.value.setLatLng([lat, lng]);
+
+      }
+    });
+
+  } else {
+    map.value.invalidateSize();
+  }
+};
+
+const destroyMap = () => {
+  if (map.value) {
+    map.value.remove();
+    map.value = null;
+  }
+};
+
+onMounted(async () => {
+  if (props.isOpen) {
+    await initMap();
+  }
+})
 
 onUnmounted(() => {
   clearMarkers();
+  destroyMap();
+});
+
+watch(() => props.isOpen, (newVal) => {
+  if (newVal) {
+    initMap();
+  } else {
+    destroyMap();
+  }
 });
 
 </script>
 
 <template>
-  <div class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-    <div class="bg-white rounded-lg shadow-xl w-full max-w-4xl h-3/4 p-4">
-      <div class="flex justify-between items-center mb-4">
-        <h2 class="text-lg font-bold">{{t("zone.createPolygon")}}</h2>
-        <button @click="closeModal" class="text-gray-500 hover:text-gray-800">✖</button>
-      </div>
-      <div>
-        <MinimalMap />
-      </div>
-      <div class="flex justify-between mt-4">
-        <button @click="clearMarkers" class="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600">
-          {{t("zone.Clear")}}
-        </button>
-        <button @click="saveCoordinates" class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600">
-          {{t("zone.Save")}}
-        </button>
+  <Teleport to="body" v-if="isOpen">
+    <div class="fixed inset-0 flex items-center justify-center bg-opacity-50 z-[1050]">
+      <div class="bg-white rounded-lg shadow-xl w-full max-w-4xl h-3/4 p-4">
+        <div class="flex justify-between items-center mb-4">
+          <h2 class="text-lg font-bold">{{t("zone.createPolygon")}}</h2>
+          <button @click="closeModal" class="text-gray-500 hover:text-gray-800">✖</button>
+        </div>
+        <div id="polygon-map" class="h-96 w-full"></div>
+        <div class="flex justify-between mt-4">
+          <button @click="clearMarkers" class="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600">
+            {{t("zone.clear")}}
+          </button>
+          <button @click="saveMarker" class="px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600">
+            {{t("zone.addPoint")}}
+          </button>
+          <button @click="removeLastMarker" class="px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600">
+            {{t("zone.removeLastPoint")}}
+          </button>
+          <button @click="saveCoordinates" class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600">
+            {{t("zone.save")}}
+          </button>
+        </div>
       </div>
     </div>
-  </div>
+  </Teleport>
 </template>
 
 
 <style scoped>
-#polygon-map {
-  height: 200px;
-  width: 100%;
-}
 </style>

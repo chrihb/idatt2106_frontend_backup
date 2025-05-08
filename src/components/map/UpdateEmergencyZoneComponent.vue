@@ -190,8 +190,8 @@ const cancelConfirmation = () => {
               ></textarea>
 
               <PolygonMapModal
-                  v-if="isMapModalVisible"
-                  @close="closeMapModal"
+                  :isOpen="isMapModalVisible"
+                  @onClose="closeMapModal"
                   @coordinatesSelected="handleCoordinatesSelected"
               />
               <button
