@@ -3,6 +3,7 @@ import {nextTick, onMounted, onUnmounted, ref, watch} from 'vue';
 import L from 'leaflet';
 import {useI18n} from "vue-i18n";
 import {createCustomMarkerIcon} from "@/utils/mapUtils.js";
+import ConfirmationModal from "@/components/common/ConfirmationModal.vue";
 
 const {t} = useI18n();
 const emit = defineEmits(['onClose', 'coordinatesSelected']);
@@ -10,6 +11,7 @@ const map = ref(null);
 const marker = ref(null);
 const markers = ref([]);
 const lines = ref([]);
+const showConfirmation = ref(false);
 const polygonCoordinates = ref([]);
 
 const props = defineProps({
@@ -19,11 +21,25 @@ const props = defineProps({
   },
 });
 
+const handleCancel = () => {
+  showConfirmation.value = true;
+};
+
+const confirmCancel = () => {
+  showConfirmation.value = false;
+  closeModal();
+};
+
+const cancelConfirmation = () => {
+  showConfirmation.value = false;
+};
+
 const clearMarkers = () => {
   if (map.value) {
     markers.value.forEach((marker) => map.value.removeLayer(marker));
     lines.value.forEach((line) => map.value.removeLayer(line));
     map.value.removeLayer(marker);
+    marker.value = null;
   }
   markers.value = [];
   lines.value = [];
@@ -68,6 +84,10 @@ const removeLastMarker = () => {
 };
 
 const saveCoordinates = () => {
+  if (polygonCoordinates.value.length < 3) {
+    alert(t("zone.notEnoughPoints"));
+    return;
+  }
   emit('coordinatesSelected', polygonCoordinates.value);
 };
 
@@ -142,11 +162,21 @@ watch(() => props.isOpen, (newVal) => {
 
 <template>
   <Teleport to="body" v-if="isOpen">
-    <div class="fixed inset-0 flex items-center justify-center bg-opacity-50 z-[1050]">
-      <div class="bg-white rounded-lg shadow-xl w-full max-w-4xl h-3/4 p-4">
+    <div class="fixed inset-0 flex items-center justify-center bg-opacity-50 z-[100]">
+      <div class="bg-white rounded-lg shadow-xl w-full max-w-4xl h-5/8 p-4">
         <div class="flex justify-between items-center mb-4">
           <h2 class="text-lg font-bold">{{t("zone.createZone")}}</h2>
-          <button @click="closeModal" class="text-gray-500 hover:text-gray-800">✖</button>
+          <button @click="handleCancel" class="text-gray-500 hover:text-gray-800 focus:outline-none transition-colors duration-200 p-2
+                 rounded-full hover:bg-gray-100">✖</button>
+          <ConfirmationModal
+              v-if="showConfirmation"
+              :message="t('zone.leaveMessage')"
+              :confirm-text="t('zone.quit')"
+              :cancel-text="t('zone.stay')"
+              @confirm="confirmCancel"
+              @cancel="cancelConfirmation"
+          />
+
         </div>
         <div>
           <p class="text-sm text-gray-600 mb-2">{{t("zone.createZoneDescription")}}</p>
@@ -163,7 +193,11 @@ watch(() => props.isOpen, (newVal) => {
            hover:bg-green-600">
             {{t("zone.removeLastPoint")}}
           </button>
-          <button @click="saveCoordinates" class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600">
+          <button
+              @click="saveCoordinates"
+              :disabled="polygonCoordinates.length < 3"
+              class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600
+              disabled:bg-gray-300 disabled:cursor-not-allowed">
             {{t("zone.saveCoordinates")}}
           </button>
         </div>
