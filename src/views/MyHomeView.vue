@@ -1,5 +1,5 @@
 <script setup>
-import { onMounted, onUnmounted } from "vue";
+import { ref, onMounted } from "vue";
 import { useRoute } from "vue-router";
 import LocationStatus from "@/components/myHome/LocationStatus.vue";
 import OtherMembers from "@/components/myHome/OtherMembers.vue";
@@ -14,13 +14,12 @@ const mapStore = useMapStore();
 const userStore = useUserStore();
 const route = useRoute();
 
-const household = userStore.householdId.find(
-    (household) => household.id === parseInt(route.params.id)
-);
+const loading = ref(true); // ✅ Local loading state
+const household = ref(null);
 
 function centerOnAddress() {
-  if (household.latitude && household.longitude) {
-    mapStore.centerMapOnSpecificLocation(household.latitude, household.longitude);
+  if (household.value?.latitude && household.value?.longitude) {
+    mapStore.centerMapOnSpecificLocation(household.value.latitude, household.value.longitude);
   } else {
     console.error("Household coordinates missing");
   }
@@ -28,27 +27,36 @@ function centerOnAddress() {
 
 onMounted(async () => {
   await userStore.fetchHouseholds();
-
+  household.value = userStore.householdId.find(
+      (h) => h.id === parseInt(route.params.id)
+  );
   centerOnAddress();
+  loading.value = false; // ✅ Done loading
 });
 </script>
 
-
 <template>
-  <div class="py-2 px-2">
-    <div class="grid grid-cols-[auto_1fr] gap-2">
-      <div class="flex flex-col gap-2 min-w-70 w-full">
-        <HouseholdPanel @click="centerOnAddress" :name="household.name" :address="household.address" class="cursor-pointer" />
-        <LocationStatus :members="household.members"/>
-        <OtherMembers :id="household.id" :adults="household.unregisteredAdults" :children="household.unregisteredChildren" :pets="household.unregisteredPets"/>
-        <ManageHousehold :household="household"/>
-      </div>
-      <div class="relative h-full w-full rounded-2xl shadow-lg overflow-hidden">
-        <Map class="h-full w-full" />
+  <div v-if="!loading && household">
+    <div class="py-2 px-2">
+      <div class="grid grid-cols-[auto_1fr] gap-2">
+        <div class="flex flex-col gap-2 min-w-70 w-full">
+          <HouseholdPanel @click="centerOnAddress" :name="household.name" :address="household.address" class="cursor-pointer" />
+          <LocationStatus :members="household.members" />
+          <OtherMembers
+              :id="household.id"
+              :adults="household.unregisteredAdults"
+              :children="household.unregisteredChildren"
+              :pets="household.unregisteredPets"
+          />
+          <ManageHousehold :household="household" />
+        </div>
+        <div class="relative h-full w-full rounded-2xl shadow-lg overflow-hidden">
+          <Map class="h-full w-full" />
+        </div>
       </div>
     </div>
   </div>
+  <div v-else>
+    <p>Loading household data...</p>
+  </div>
 </template>
-
-<style scoped>
-</style>

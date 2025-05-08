@@ -2,58 +2,31 @@
 import { useI18n } from "vue-i18n";
 import OtherMembersItem from "@/components/myHome/OtherMembersItem.vue";
 import { updateNonUsers } from "@/services/householdService.js";
-import { ref } from "vue";
+import { ref, watch } from "vue";
 
 const { t } = useI18n();
 
 const props = defineProps({
-  id: {
-    type: Number,
-    required: true,
-  },
-  adults: {
-    type: Number,
-    default: 0,
-  },
-  children: {
-    type: Number,
-    default: 0,
-  },
-  pets: {
-    type: Number,
-    default: 0,
-  },
+  id: Number,
+  adults: Number,
+  children: Number,
+  pets: Number,
 });
 
-// Bind to props
-const adults = ref(props.adults);
-const children = ref(props.children);
-const pets = ref(props.pets);
+const localAdults = ref(props.adults);
+const localChildren = ref(props.children);
+const localPets = ref(props.pets);
 
-const plus = async (type) => {
-  if (type === "adults") adults.value++;
-  else if (type === "children") children.value++;
-  else if (type === "pets") pets.value++;
+// Keep in sync with props
+watch(() => props.adults, (val) => localAdults.value = val);
+watch(() => props.children, (val) => localChildren.value = val);
+watch(() => props.pets, (val) => localPets.value = val);
 
-  await updateNonUsers(adults.value, children.value, pets.value, props.id);
-};
-
-const minus = async (type) => {
-  if (type === "adults") {
-    if (adults.value === 0) return;
-    adults.value--;
-  } else if (type === "children") {
-    if (children.value === 0) return;
-    children.value--;
-  } else if (type === "pets") {
-    if (pets.value === 0) return;
-    pets.value--;
-  }
-
-  await updateNonUsers(adults.value, children.value, pets.value, props.id);
-};
+// Watch for changes to send updates to backend
+watch([localAdults, localChildren, localPets], ([a, c, p]) => {
+  updateNonUsers(a, c, p, props.id);
+});
 </script>
-
 
 <template>
   <div class="bg-kf-white flex flex-col gap-1 items-center shadow-lg rounded-2xl py-2 px-2">
@@ -61,25 +34,16 @@ const minus = async (type) => {
     <div class="flex flex-col gap-1 w-full">
       <OtherMembersItem
           :title="t('my-home.adults')"
-          :plus="() => plus('adults')"
-          :minus="() => minus('adults')"
-          :total="adults"
+          v-model="localAdults"
       />
       <OtherMembersItem
           :title="t('my-home.children')"
-          :plus="() => plus('children')"
-          :minus="() => minus('children')"
-          :total="children"
+          v-model="localChildren"
       />
       <OtherMembersItem
           :title="t('my-home.pets')"
-          :plus="() => plus('pets')"
-          :minus="() => minus('pets')"
-          :total="pets"
+          v-model="localPets"
       />
     </div>
   </div>
 </template>
-
-<style scoped>
-</style>
