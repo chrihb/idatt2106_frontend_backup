@@ -45,9 +45,17 @@
         "privacy-policy": "Privacy Policy"
     },
     "storage-status": {
-        "title": "Storage Status",
-        "desc": "You have storage items that requires attention",
-        "ok": "Your storage looks good!"
+      "level": {
+        "status": "Your storage covers {effectiveDays} days of food and water",
+        "unknown": "Storage status is unknown"
+      },
+      "title": "Emergency Storage Status",
+      "desc": "You have storage items that require attention",
+      "ok": "Your storage looks good!",
+      "food-label": "Food",
+      "water-label": "Water",
+      "days-food": "You have {days} days of food",
+      "days-water": "You have {days} days of water"
     },
     "storage":{
       "title": "Emergency Storage",
@@ -67,10 +75,17 @@
       "item-name": "Item Name",
       "item-amount": "Item Amount",
       "item-expiration": "Expiry",
-      "more-info": "Click for More Info"
+      "more-info": "Click for More Info",
+      "household-list-title": "Your households"
     },
     "news": {
-        "title": "News"
+      "title": "News",
+      "allDistricts": "All Districts",
+      "selectDistrict": "Select District",
+      "noNews": "No news available",
+      "noDetails": "No details available",
+      "date": "Date",
+      "district" : "District"
     },
     "my-home": {
       "title": "My Home",
@@ -81,7 +96,19 @@
       "hospital": "Hospital",
       "distance": "Distance",
       "coordinates": "Coordinates",
-      "manage-storage": "Manage Storage"
+      "manage-storage": "Manage Storage",
+      "join": "Join",
+      "create": "Create",
+      "create-household": "Create Household",
+      "nickname": "Nickname",
+      "nicknameRequired": "Nickname is required",
+      "addressRequired": "Address is required",
+      "join-household": "Join Household",
+      "invite-code": "Invite Code",
+      "invite-codeRequired": "Invite code is required",
+      "or": "or",
+      "available": "Available Households",
+      "create-desc": "a household to manage your storage and household members"
     },
   "login": {
     "title": "Login",
@@ -138,14 +165,19 @@
     "privacyPolicyText": "I accept the ",
     "privacyPolicyRequired": "You must accept the privacy policy.",
     "hasAccount": "Already have an account?",
-    "loginHere": "Login here"
+    "loginHere": "Login here",
+    "admin": {
+      "username": "Username",
+      "usernameRequired": "Username is required",
+      "register-admin": "Register Admin"
+    }
   },
   "register-service": {
     "emailInUse": "Email is already in use.",
     "phoneInUse": "Phone number is already in use.",
     "failedToSendEmail": "Failed to send verification email. Please try again later.",
     "invalidData": "Invalid data. Please check your input and try again.",
-    "error": "An error occurred KYS. Please try again later.",
+    "error": "An error occurred. Please try again later.",
     "networkError": "Network error. Please check your internet connection and try again."
   },
   "login-service": {
@@ -154,5 +186,74 @@
   "auth":{
     "login": "Login",
     "register": "Register"
+  }, 
+  "essential-items": {
+  "title": "Essential Items",
+  "sections": {
+    "food": "Food and Water",
+    "heat": "Heat and Light",
+    "info": "Information and Communication",
+    "health": "Medicine and Hygiene"
+  },
+  "items": {
+    "grill": "Grill",
+    "kokeapparat": "Camping stove",
+    "stormkjøkken": "Storm kitchen",
+    "gassbeholder": "Gas canister",
+    "brennstoff": "Fuel",
+    "varme klær": "Warm clothes",
+    "pledd": "Blanket",
+    "dyne": "Duvet",
+    "sovepose": "Sleeping bag",
+    "fyrstikker": "Matches",
+    "stearinlys": "Candles",
+    "ved": "Firewood",
+    "gassovn": "Gas heater",
+    "parafinovn": "Paraffin heater",
+    "lommelykt": "Flashlight",
+    "hodelykt": "Headlamp",
+    "dab-radio": "DAB Radio",
+    "batterier": "Batteries",
+    "batteribank": "Power bank",
+    "førstehjelp": "First aid",
+    "jodtabletter": "Iodine tablets",
+    "legemidler": "Medicine",
+    "våtservietter": "Wet wipes",
+    "håndsprit": "Hand sanitizer",
+    "bleier": "Diapers",
+    "toalettpapir": "Toilet paper",
+    "bind": "Sanitary pads",
+    "tamponger": "Tampons"
+  }
+},
+  "admin-settings": {
+    "title": "Admin Settings",
+    "map": {
+      "name": "Map",
+      "createNewEmergencyZone": "Create New Emergency Zone"
+    },
+    "news": {
+      "name": "News",
+      "createNewNews": "Create News",
+      "newsTitle": "News Title",
+      "newsTitleRequired": "News title is required",
+      "newsDesc": "News description",
+      "newsDescRequired": "News description is required",
+      "deleteNews": "Delete News"
+    },
+    "household": {
+      "name": "Household",
+      "createNewHousehold": "Create New Household",
+      "householdName": "Household Name",
+      "householdNameRequired": "Household name is required",
+      "householdDesc": "A household to manage your storage and household members"
+    },
+    "storage": {
+      "name": "Storage",
+      "createNewStorage": "Create New Storage",
+      "storageName": "Storage Name",
+      "storageNameRequired": "Storage name is required",
+      "storageDesc": "A storage to manage your storage items"
+    }
   }
 }

@@ -45,9 +45,17 @@
     "privacy-policy": "Personvernserklæring"
   },
   "storage-status": {
-    "title": "Lager Status",
+    "level": {
+        "status": "Lageret ditt dekker {effectiveDays} dager med mat og vann",
+        "unknown": "Lagerstatus er ukjent"
+      },
+    "title": "Beredskapsstatus",
     "desc": "Du har lagringsartikler som krever oppmerksomhet",
-    "ok": "Lageret ditt ser bra ut!"
+    "ok": "Lageret ditt ser bra ut!",
+    "food-label": "Mat",
+    "water-label": "Vann",
+    "days-food": "Du har {days} dager med mat",
+    "days-water": "Du har {days} dager med vann"
   },
   "storage":{
     "title": "Beredskapslager",
@@ -67,10 +75,17 @@
     "item-name": "Navn",
     "item-amount": "Mengde",
     "item-expiration": "Utløpsdato",
-    "more-info": "Trykk for mer info"
+    "more-info": "Trykk for mer info",
+    "household-list-title": "Dine husholdninger"
   },
   "news": {
-    "title": "Nyheter"
+    "title": "Nyheter",
+    "allDistricts": "Alle Distrikter",
+    "selectDistrict": "Velg Distrikt",
+    "noNews": "Ingen nyheter tilgjengelig",
+    "noDetails": "Ingen detaljer tilgjengelig",
+    "date": "Dato",
+    "district" : "Distrikt"
   },
   "my-home": {
     "title": "Mitt Hjem",
@@ -81,7 +96,19 @@
     "hospital": "Sykehus",
     "distance": "Distanse",
     "coordinates": "Koordinater",
-    "manage-storage": "Administrer lager"
+    "manage-storage": "Administrer lager",
+    "join": "Bli Med",
+    "create": "Opprett Ny",
+    "create-household": "Opprett Husstand",
+    "nickname": "Kallenavn",
+    "nicknameRequired": "Kallenavn er påkrevd",
+    "addressRequired": "Adresse er påkrevd",
+    "join-household": "Bli med i husstand",
+    "invite-code": "Invitasjonskode",
+    "invite-codeRequired": "Invitasjonskode er påkrevd",
+    "or": "eller",
+    "available": "Tilgjengelige husstander",
+    "create-desc": "en husstand for å administrere lageret ditt og andre medlemmer"
   },
   "login": {
     "title": "Logg Inn",
@@ -138,7 +165,12 @@
     "privacyPolicyText": "Jeg godtar ",
     "privacyPolicyRequired": "Du må godta personvernserklæringen.",
     "hasAccount": "Har du allerede en bruker?",
-    "loginHere": "Logg inn her"
+    "loginHere": "Logg inn her",
+    "admin": {
+      "username": "Brukernavn",
+      "usernameRequired": "Brukernavn er påkrevd",
+      "register-admin": "Registrer Administrator"
+    }
   },
   "register-service": {
     "emailInUse": "E-post er allerede i bruk.",
@@ -154,5 +186,74 @@
   "auth":{
     "login": "Logg Inn",
     "register": "Registrer"
+  },
+  "essential-items": {
+  "title": "Essensielle Artikler",
+  "sections": {
+    "food": "Mat og Vann",
+    "heat": "Varme og Lys",
+    "info": "Informasjon og Kommunikasjon",
+    "health": "Medisin og Hygiene"
+  },
+  "items": {
+    "grill": "Grill",
+    "kokeapparat": "Kokeapparat",
+    "stormkjøkken": "Stormkjøkken",
+    "gassbeholder": "Gassbeholder",
+    "brennstoff": "Brennstoff",
+    "varme klær": "Varme Klær",
+    "pledd": "Pledd",
+    "dyne": "Dyne",
+    "sovepose": "Sovepose",
+    "fyrstikker": "Fyrstikker",
+    "stearinlys": "Stearinlys",
+    "ved": "Ved",
+    "gassovn": "Gassovn",
+    "parafinovn": "Parafinovn",
+    "lommelykt": "Lommelykt",
+    "hodelykt": "Hodelykt",
+    "dab-radio": "DAB Radio",
+    "batterier": "Batterier",
+    "batteribank": "Batteribank",
+    "førstehjelp": "Førstehjelp",
+    "jodtabletter": "Jodtabletter",
+    "legemidler": "Legemidler",
+    "våtservietter": "Våtservietter",
+    "håndsprit": "Håndsprit",
+    "bleier": "Bleier",
+    "toalettpapir": "Toalettpapir",
+    "bind": "Bind",
+    "tamponger": "Tamponger"
+  }
+},
+  "admin-settings": {
+    "title": "Admin Settings",
+    "map": {
+      "name": "Kart",
+      "createNewEmergencyZone": "Opprett Nytt Kriseområde"
+    },
+    "news": {
+      "name": "Nyheter",
+      "createNewNews": "Opprett Nyhet",
+      "newsTitle": "Nyhetstittel",
+      "newsTitleRequired": "Nyhetstittel er påkrevd",
+      "newsDesc": "En nyhet for å informere brukerne dine om viktige oppdateringer",
+      "newsDescRequired": "Nyhetsbeskrivelse er påkrevd",
+      "deleteNews": "Slett Nyhet"
+    },
+    "household": {
+      "name": "Husstand",
+      "createNewHousehold": "Opprett Ny Husstand",
+      "householdName": "Husstandsnavn",
+      "householdNameRequired": "Navnet på husstanden er påkrevd",
+      "householdDesc": "En husstand for å administrere lageret ditt og husstandsmedlemmer"
+    },
+    "storage": {
+      "name": "Storage",
+      "createNewStorage": "Create New Storage",
+      "storageName": "Storage Name",
+      "storageNameRequired": "Storage name is required",
+      "storageDesc": "A storage to manage your storage items"
+    }
   }
 }

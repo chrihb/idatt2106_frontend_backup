@@ -7,8 +7,11 @@ import PasswordField from "@/components/input/PasswordField.vue";
 import {requestLogin} from '@/services/loginService';
 import {useI18n} from "vue-i18n";
 import router from "@/router/index.js";
+import {useAuthRedirect} from "@/utils/useAuthRedirect.js";
 
 const { t } = useI18n();
+
+const { redirectAfterAuth } = useAuthRedirect()
 
 const {validate, values: form, resetForm} = useForm({
   validationSchema: {
@@ -30,33 +33,35 @@ const successMessage = ref('');
 const errorMessage = ref('');
 
 const handleSubmit = async () => {
-  const result = await validate();
-  if (!result.valid) return;
+  const result = await validate()
+  if (!result.valid) return
 
-  isSubmitting.value = true;
-  successMessage.value = '';
-  errorMessage.value = '';
+  isSubmitting.value = true
+  successMessage.value = ''
+  errorMessage.value = ''
 
   try {
     const loginForm = {
       email: form.email,
       password: form.password,
-    };
-    const response = await requestLogin(loginForm, t);
+    }
+
+    const response = await requestLogin(loginForm, t)
 
     if (response.success) {
-      successMessage.value = 'Login successful! Welcome, ' + form.email + '.';
-      await router.push('/');
-      resetForm();
+      successMessage.value = 'Login successful! Welcome, ' + form.email + '.'
+      resetForm()
+
+      redirectAfterAuth()
     } else {
-      errorMessage.value = response.error || 'Login failed';
+      errorMessage.value = response.error || 'Login failed'
     }
   } catch (error) {
-    errorMessage.value = error.message;
+    errorMessage.value = error.message
   } finally {
-    isSubmitting.value = false;
+    isSubmitting.value = false
   }
-};
+}
 </script>
 
 <template>

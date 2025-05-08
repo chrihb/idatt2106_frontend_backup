@@ -68,14 +68,7 @@ const resetForm = () => {
 };
 
 const loadItemData = async () => {
-  if (categoriesStore.categories.length === 0) {
-    await categoriesStore.fetchCategories();
-  }
   categories.value = categoriesStore.categories;
-
-  if (unitsStore.units.length === 0) {
-    await unitsStore.fetchUnits();
-  }
   units.value = unitsStore.units;
 
   if (props.itemId) {
