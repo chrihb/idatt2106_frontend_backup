@@ -9,19 +9,14 @@ import Map from "@/components/map/Map.vue";
 
 import { useUserStore } from "@/stores/userStore.js";
 import { useMapStore } from "@/stores/mapStore.js";
-import { useMarkersStore } from "@/stores/markersStore.js";
-import { addMarkerToMap, removeMarkerFromMap } from "@/utils/mapUtils.js";
 
 const mapStore = useMapStore();
-const markersStore = useMarkersStore();
 const userStore = useUserStore();
 const route = useRoute();
 
 const household = userStore.householdId.find(
     (household) => household.id === parseInt(route.params.id)
 );
-
-const markerId = `household-${household?.id}`;
 
 function centerOnAddress() {
   if (household.latitude && household.longitude) {
@@ -34,18 +29,7 @@ function centerOnAddress() {
 onMounted(async () => {
   await userStore.fetchHouseholds();
 
-  if (household?.latitude && household?.longitude) {
-    addMarkerToMap({
-      markerId,
-      lat: household.latitude,
-      lng: household.longitude,
-      type: "home",
-    });
-  }
-});
-
-onUnmounted(() => {
-  removeMarkerFromMap(markerId);
+  centerOnAddress();
 });
 </script>
 

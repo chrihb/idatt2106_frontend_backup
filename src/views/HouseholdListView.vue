@@ -3,6 +3,7 @@ import { useRouter } from 'vue-router';
 import { useUserStore} from "@/stores/userStore.js";
 import { useI18n } from 'vue-i18n';
 import HouseholdPanel from "@/components/myHome/HouseholdPanel.vue";
+import HouseholdPanelMembers from "@/components/myHome/HouseholdPanelMembers.vue";
 
 const { t } = useI18n();
 const userStore = useUserStore();
@@ -23,7 +24,7 @@ function goToHousehold(id) {
           @click="goToHousehold(household.id)"
           class="cursor-pointer"
       >
-        <HouseholdPanel :name="household.name" :address="household.address" />
+        <HouseholdPanelMembers :name="household.name" :members="household.members" :address="household.address" />
 
       </div>
     </div>

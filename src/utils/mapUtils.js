@@ -6,6 +6,7 @@ import {emergencyZoneService} from "@/services/emergencyZoneService.js";
 import {useMarkersStore} from "@/stores/markersStore.js";
 import {markerService} from "@/services/markerService.js";
 import {useMarkerStore} from "@/stores/markerStore.js";
+import {useUserStore} from "@/stores/userStore.js";
 
 export const createMarkerPopup = (type, address, description) =>
     `
@@ -259,3 +260,59 @@ export const centerMapOnEmergencyZone = (zoneId) => {
         console.error(`Emergency zone with ID ${zoneId} not found.`);
     }
 }
+
+export const initAccountMarkers = () => {
+    const userStore = useUserStore();
+    const markersStore = useMarkersStore();
+
+    console.log("Adding markers for households and members");
+
+    userStore.householdId.forEach((household) => {
+        const householdMarkerId = `household-${household.id}`;
+        if (household.latitude && household.longitude && !markersStore.getMarkerById(householdMarkerId)) {
+            addMarkerToMap({
+                markerId: householdMarkerId,
+                lat: household.latitude,
+                lng: household.longitude,
+                type: "home",
+            });
+        }
+
+        household.members.forEach((member) => {
+            const memberMarkerId = `member-${member.id}`;
+            if (member.latitude && member.longitude && !markersStore.getMarkerById(memberMarkerId)) {
+                addMarkerToMap({
+                    markerId: memberMarkerId,
+                    lat: member.latitude,
+                    lng: member.longitude,
+                    type: "AndreMedlemmer",
+                });
+            }
+        });
+    });
+};
+
+export const removeAccountMarkers = () => {
+    const mapStore = useMapStore();
+
+    console.log("Removing markers for households and members");
+    for (const type in mapStore.layerGroup) {
+        const layerGroup = mapStore.layerGroup[type];
+
+        const layersToRemove = layerGroup.getLayers().filter(layer =>
+            typeof layer.options.id === 'string' &&
+            (layer.options.id.startsWith("member-") || layer.options.id.startsWith("household-"))
+        );
+
+        for (const layer of layersToRemove) {
+            layerGroup.removeLayer(layer);
+            mapStore.removeMapItemId(layer.options.id);
+        }
+
+        // 🧹 Clean up layer group if empty after removal
+        if (layerGroup.getLayers().length === 0) {
+            layerGroup.remove(); // Remove from map
+            delete mapStore.layerGroup[type]; // Remove from store (removes from toggle bar)
+        }
+    }
+};

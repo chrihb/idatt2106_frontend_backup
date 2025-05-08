@@ -2,6 +2,7 @@ import axios from 'axios';
 import { useUserStore } from '@/stores/userStore';
 import {requestHouseholds} from "@/services/householdService.js";
 import { getUserSettings } from './userSettingsService';
+import {initAccountMarkers} from "@/utils/mapUtils.js";
 
 export const requestLogin = async (loginForm, t) => {
     const userStore = useUserStore();
