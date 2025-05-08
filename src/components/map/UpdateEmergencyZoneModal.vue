@@ -3,7 +3,7 @@ import { computed, ref} from 'vue';
 import { useEmergencyZoneStore } from '@/stores/emergencyZoneStore.js';
 import { useEmergencyZonesStore } from '@/stores/emergencyZonesStore.js';
 import { useI18n } from 'vue-i18n';
-import PolygonMapModal from '@/components/map/PolygonMapModal.vue';
+import CreatePolygonMapModal from '@/components/map/CreatePolygonMapModal.vue';
 import ConfirmationModal from "@/components/common/ConfirmationModal.vue";
 
 const { t } = useI18n();
@@ -190,7 +190,7 @@ const cancelConfirmation = () => {
                    focus:ring-blue-500 text-base"
               ></textarea>
 
-              <PolygonMapModal
+              <CreatePolygonMapModal
                   :isOpen="isMapModalVisible"
                   @onClose="closeMapModal"
                   @coordinatesSelected="handleCoordinatesSelected"
