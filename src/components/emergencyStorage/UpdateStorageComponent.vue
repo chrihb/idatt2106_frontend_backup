@@ -7,7 +7,7 @@ import {useEmergencyItemStore} from '@/stores/emergencyItemStore.js';
 import {useUserStore} from "@/stores/userStore.js";
 import {useI18n} from "vue-i18n";
 
-const {t} = useI18n();
+const {t, locale} = useI18n();
 const props = defineProps(['categoryId', 'unitId', 'itemId', 'display', 'householdId']);
 const emit = defineEmits(['close', 'itemSaved']);
 
@@ -21,6 +21,20 @@ const isUpdate = computed(() => props.itemId !== null);
 
 const categories = ref([]);
 const units = ref([]);
+
+const formattedUnits = computed(() => {
+  return units.value.map(unit => ({
+    id: unit.id,
+    name: unitsStore.getUnitName(unit.id, locale.value)
+  }));
+});
+
+const formattedCategories = computed(() => {
+  return categories.value.map(category => ({
+    id: category.id,
+    name: categoriesStore.getCategoryName(category.id, locale.value)
+  }));
+});
 
 const itemData = ref({
   name: '',
@@ -67,9 +81,9 @@ const resetForm = () => {
       householdId: householdId
     };
 
-    selectedCategory.value = null;
+    selectedCategory.value = 0;
     selectedHousehold.value = null;
-    selectedUnit.value = null;
+    selectedUnit.value = 0;
     formIncomplete.value = false;
 
     currentItemStore.resetState();
@@ -78,9 +92,30 @@ const resetForm = () => {
   }
 };
 
+const loadUnits = async () => {
+  try {
+    if (unitsStore.units.length === 0) {
+      await unitsStore.fetchUnits();
+    }
+    units.value = unitsStore.units;
+  } catch (error) {
+    console.error("Error loading units:", error);
+  }
+};
+
+const loadCategories = async () => {
+  try {
+    if (categoriesStore.categories.length === 0) {
+      await categoriesStore.fetchCategories();
+    }
+    categories.value = categoriesStore.categories;
+  } catch (error) {
+    console.error("Error loading categories:", error);
+  }
+};
+
 const loadItemData = async () => {
-  categories.value = categoriesStore.categories;
-  units.value = unitsStore.units;
+  await Promise.all([loadCategories(), loadUnits()]);
 
   if (props.itemId) {
     try {
@@ -151,7 +186,6 @@ const loadItemData = async () => {
 };
 
 const saveItem = async () => {
-
   if (
       !itemData.value.name.trim() ||
       !itemData.value.amount ||
@@ -177,8 +211,6 @@ const saveItem = async () => {
         : itemData.value.expirationDate.toISOString().split('T')[0];
     currentItemStore.householdIds = selectedHousehold.value;
 
-    console.log(currentItemStore)
-
     await currentItemStore.saveItem();
 
     emit('itemSaved');
@@ -196,13 +228,15 @@ watch(() => unitsStore.units, (newUnits) => {
   units.value = newUnits;
 }, {deep: true});
 
-watch(() => props.display, (newVal) => {
+watch(() => props.display, async (newVal) => {
   if (newVal) {
-    loadItemData();
+    await loadItemData();
   }
 });
 
 onMounted(async () => {
+  await Promise.all([loadCategories(), loadUnits()]);
+
   if (props.display) {
     await loadItemData();
   }
@@ -248,8 +282,9 @@ onMounted(async () => {
                 id="item-category"
                 v-model="selectedCategory"
                 class="border border-gray-300 w-full rounded-lg p-3 text-base text-black focus:ring-2 focus:ring-blue-500 bg-white">
-              <option disabled value="">{{ t("storage.select-category") }}</option>
-              <option v-for="category in categories" :key="category.id" :value="category.id">
+              <option disabled :value="0">{{ t("storage.select-category") }}</option>
+              <option v-for="category in formattedCategories" :key="category.id"
+                      :value="category.id">
                 {{ category.name }}
               </option>
             </select>
@@ -268,8 +303,8 @@ onMounted(async () => {
               <select
                   v-model="selectedUnit"
                   class="border border-gray-300 w-full sm:w-1/4 rounded-lg p-3 text-base text-black focus:ring-2 focus:ring-blue-500 bg-white">
-                <option disabled value="">{{ t("storage.select-unit") }}</option>
-                <option v-for="unit in units" :key="unit.id" :value="unit.id">
+                <option disabled :value="0">{{ t("storage.select-unit") }}</option>
+                <option v-for="unit in formattedUnits" :key="unit.id" :value="unit.id">
                   {{ unit.name }}
                 </option>
               </select>
@@ -290,11 +325,11 @@ onMounted(async () => {
         </div>
 
         <div>
-          <label for="item-category" class="block text-sm font-medium text-gray-700 mb-1">
+          <label for="item-household" class="block text-sm font-medium text-gray-700 mb-1">
             {{ t('storage.select-household') }}
           </label>
           <select
-              id="item-category"
+              id="item-household"
               v-model="selectedHousehold"
               class="border border-gray-300 w-full rounded-lg p-3 text-base text-black focus:ring-2 focus:ring-blue-500 bg-white">
             <option disabled value="">{{ t("storage.select-household") }}</option>
