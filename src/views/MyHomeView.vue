@@ -25,14 +25,6 @@ const markerId = `household-${household?.id}`;
 
 function centerOnAddress() {
   if (household.latitude && household.longitude) {
-    if (!markersStore.getMarkerById(markerId)) {
-      addMarkerToMap({
-        markerId,
-        lat: household.latitude,
-        lng: household.longitude,
-        type: "home",
-      });
-    }
     mapStore.centerMapOnSpecificLocation(household.latitude, household.longitude);
   } else {
     console.error("Household coordinates missing");
@@ -47,7 +39,7 @@ onMounted(async () => {
       markerId,
       lat: household.latitude,
       lng: household.longitude,
-      type: "Hjertestarter",
+      type: "home",
     });
   }
 });

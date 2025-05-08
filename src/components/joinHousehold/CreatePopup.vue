@@ -82,7 +82,7 @@ const handleSubmit = async () => {
       resetForm();
       await userStore.fetchHouseholds()
       const household = userStore.getHouseholdByName(registerForm.nickname);
-      router.push(`/household/${household.id}`);
+      await router.push(`/household/${household.id}`);
     } else {
       if (response.error.includes("Address")) {
         setFieldError("address", response.error);
