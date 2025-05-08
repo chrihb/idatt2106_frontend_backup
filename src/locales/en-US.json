@@ -270,6 +270,7 @@
     "fillAllFields": "Please fill in all the fields",
     "createPolygonOnMap": "Create Zone Coordinates on Map",
     "createZone": "Create Zone on Map",
+    "createZoneDescription": "Click on the map to set pins for the zone. Minimum 3 pins required. Last pin should NOT be connected to the first pin!",
     "clearPoints": "Clear Points",
     "addPoint": "Add Point",
     "removeLastPoint": "Remove Last Point",
