@@ -31,7 +31,7 @@ onMounted(async () => {
       (h) => h.id === parseInt(route.params.id)
   );
   centerOnAddress();
-  loading.value = false; // ✅ Done loading
+  loading.value = false;
 });
 </script>
 
