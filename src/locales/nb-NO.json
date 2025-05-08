@@ -115,7 +115,11 @@
 	"create-desc": "en husstand for å administrere lageret ditt og andre medlemmer",
 	"manage-storage": "Administrer lager",
 	"manage-household": "Administrer husstand",
-	"location-status": "Lokasjonsstatus"
+	"location-status": "Lokasjonsstatus",
+	  "other-members": "Other Members",
+	  "adults": "Adults",
+	  "children": "Children",
+	  "pets": "Pets"
   },
   "household": {
 	"title": "Administrer husstand",

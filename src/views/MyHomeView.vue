@@ -2,7 +2,7 @@
 import { onMounted, onUnmounted } from "vue";
 import { useRoute } from "vue-router";
 import LocationStatus from "@/components/myHome/LocationStatus.vue";
-import Nearest from "@/components/myHome/Nearest.vue";
+import OtherMembers from "@/components/myHome/OtherMembers.vue";
 import ManageHousehold from "@/components/myHome/ManageHousehold.vue";
 import HouseholdPanel from "@/components/myHome/HouseholdPanel.vue";
 import Map from "@/components/map/Map.vue";
@@ -40,7 +40,7 @@ onMounted(async () => {
       <div class="flex flex-col gap-2 min-w-70 w-full">
         <HouseholdPanel @click="centerOnAddress" :name="household.name" :address="household.address" class="cursor-pointer" />
         <LocationStatus :members="household.members"/>
-        <Nearest :latitude="household.latitude" :longitude="household.longitude"/>
+        <OtherMembers :id="household.id" :adults="household.unregisteredAdults" :children="household.unregisteredChildren" :pets="household.unregisteredPets"/>
         <ManageHousehold :household="household"/>
       </div>
       <div class="relative h-full w-full rounded-2xl shadow-lg overflow-hidden">
