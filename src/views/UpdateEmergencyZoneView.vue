@@ -1,7 +1,7 @@
 <script setup>
 import {onMounted, ref} from 'vue';
 import { useEmergencyZonesStore } from '@/stores/emergencyZonesStore.js';
-import UpdateEmergencyZoneComponent from '@/components/map/UpdateEmergencyZoneComponent.vue';
+import UpdateEmergencyZoneModal from '@/components/map/UpdateEmergencyZoneModal.vue';
 import MinimalMap from "@/components/map/MinimalMap.vue";
 import {useI18n} from "vue-i18n";
 import {useEmergencyZoneStore} from "@/stores/emergencyZoneStore.js";
@@ -116,7 +116,7 @@ onMounted(() => {
         </li>
       </ul>
 
-      <UpdateEmergencyZoneComponent
+      <UpdateEmergencyZoneModal
           :zoneId="selectedZoneId"
           :display="isZoneEditorVisible"
           @close="closeZoneEditor"
