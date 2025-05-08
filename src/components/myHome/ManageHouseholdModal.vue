@@ -1,22 +1,22 @@
 <script setup>
-import { computed, onMounted, ref, watch } from "vue";
-import { useI18n } from "vue-i18n";
-import { useRouter } from "vue-router";
+import {onMounted, ref, watch} from "vue";
+import {useI18n} from "vue-i18n";
+import {useRouter} from "vue-router";
 import MemberCard from "@/components/myHome/MemberCard.vue";
 import ConfirmationModal from "@/components/myHome/ConfirmationModal.vue";
 import InviteModal from "@/components/myHome/InviteModal.vue";
-import { XMarkIcon } from "@heroicons/vue/24/solid/index.js";
-import { useUserStore } from "@/stores/userStore.js";
+import {XMarkIcon} from "@heroicons/vue/24/solid/index.js";
+import {useUserStore} from "@/stores/userStore.js";
 import {
   getInviteCode,
+  getPrimaryHousehold,
+  kickUserFromHousehold,
   leaveHouseholdService,
-  verifyIsAdmin,
   setPrimaryHousehold,
-  getPrimaryHousehold
+  verifyIsAdmin
 } from "@/services/householdService.js";
-import { kickUserFromHousehold } from "@/services/householdService.js";
 
-const { t } = useI18n();
+const {t} = useI18n();
 const router = useRouter();
 const userStore = useUserStore();
 
@@ -48,7 +48,7 @@ watch(
         members.value = [...newHousehold.members];
       }
     },
-    { immediate: true, deep: true }
+    {immediate: true, deep: true}
 );
 onMounted(async () => {
   await checkAdminStatus();
@@ -97,9 +97,6 @@ const confirmDelete = (member) => {
 const closeModal = () => {
   selectedMember.value = null;
 };
-
-// In ManageHouseholdPopup.vue, modify the removeMember function:
-
 const removeMember = async () => {
   if (!selectedMember.value) return;
 
@@ -109,17 +106,11 @@ const removeMember = async () => {
     if (response) {
       const removedMemberId = selectedMember.value.id;
 
-      // Close only the confirmation modal (not the entire ManageHousehold modal)
       selectedMember.value = null;
-
-      // Refresh householdId list
       await userStore.fetchHouseholds();
-
-      // Check if the current household still exists for the user
       const householdStillExists = userStore.householdId.some(h => h.id === props.household.id);
 
       if (!householdStillExists) {
-        // If the household no longer exists for the user (e.g., user kicked themselves)
         if (userStore.householdId.length === 0) {
           await router.push("/household/options");
         } else {
@@ -127,10 +118,8 @@ const removeMember = async () => {
         }
         emit("close"); // Close the modal only if the household is inaccessible
       } else {
-        // Update the local members list to reflect the change immediately
         members.value = members.value.filter(m => m.id !== removedMemberId);
-        emit("member-removed"); // Emit event to refresh household data in parent
-        // Do NOT emit "close" here to keep the "Administer hustand" modal open
+        emit("member-removed");
       }
     } else {
       console.error("Failed to remove member");
@@ -177,8 +166,10 @@ const setAsPrimary = async () => {
 
 <template>
   <div v-if="isOpen" class="fixed inset-0 backdrop-blur-sm flex justify-center items-center z-50">
-    <div class="bg-kf-white p-6 rounded-lg shadow-lg relative border border-kf-blue max-w-4xl w-full max-h-[90vh] overflow-y-auto">
-      <XMarkIcon @click="$emit('close')" class="absolute top-2 right-2 cursor-pointer size-6 rounded-full hover:bg-kf-grey text-kf-blue" />
+    <div
+        class="bg-kf-white p-6 rounded-lg shadow-lg relative border border-kf-blue max-w-4xl w-full max-h-[90vh] overflow-y-auto">
+      <XMarkIcon class="absolute top-2 right-2 cursor-pointer size-6 rounded-full hover:bg-kf-grey text-kf-blue"
+                 @click="$emit('close')"/>
 
       <h1 class="text-kf-blue font-bold text-2xl mb-4">{{ t("household.title") }}</h1>
 
@@ -187,9 +178,9 @@ const setAsPrimary = async () => {
         <MemberCard
             v-for="member in members"
             :key="member.id"
-            :member="member"
             :is-admin="isAdmin"
             :is.current-user="member.name === userStore.$id"
+            :member="member"
             @delete="confirmDelete"
         />
       </div>
@@ -197,8 +188,8 @@ const setAsPrimary = async () => {
       <!-- Confirmation Modal -->
       <ConfirmationModal
           v-if="selectedMember"
-          :member="selectedMember"
           :is-admin="isAdmin"
+          :member="selectedMember"
           @close="closeModal"
           @confirm="removeMember"
       />
@@ -206,8 +197,8 @@ const setAsPrimary = async () => {
       <!-- Invite Modal -->
       <InviteModal
           v-if="showInviteModal"
-          :invite-link="inviteLink"
           :invite-code="inviteCode"
+          :invite-link="inviteLink"
           @close="closeInviteModal"
       />
 
@@ -221,8 +212,8 @@ const setAsPrimary = async () => {
         </button>
 
         <button
-            class="bg-kf-link-blue text-white px-4 py-2 rounded hover:bg-kf-white-contrast-8 disabled:opacity-50 disabled:cursor-not-allowed"
             :disabled="isPrimary"
+            class="bg-kf-link-blue text-white px-4 py-2 rounded hover:bg-kf-white-contrast-8 disabled:opacity-50 disabled:cursor-not-allowed"
             @click="setAsPrimary"
         >
           {{ t("household.set-as-primary") }}
