@@ -47,6 +47,13 @@ const router = createRouter({
                         { path: "list", component: HouseholdListView, meta: { requiresHousehold: true } },
                         { path: ":id", component: MyHomeView, meta: { requiresHousehold: true }, props: true },
                     ]},
+                { path: "/admin-settings", component: AdminSettings,
+                    children: [
+                        { path: "createEmergencyZone", component: CreateEmergencyZone },
+                        { path: "createNews", component: CreateNews },
+                        { path: "deleteNews", component: DeleteNews },
+                    ]
+                },
                 { path: "/about-us", component: AboutUsView },
                 { path: "/privacy-policy", component: PrivacyPolicyView },
                 { path: "/map", component: MapView },

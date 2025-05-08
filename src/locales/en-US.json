@@ -256,6 +256,36 @@
 },
   "map": {
     "filter": "Filter"
+  },
+  "admin-settings": {
+    "title": "Admin Settings",
+    "map": {
+      "name": "Map",
+      "createNewEmergencyZone": "Create New Emergency Zone"
+    },
+    "news": {
+      "name": "News",
+      "createNewNews": "Create News",
+      "newsTitle": "News Title",
+      "newsTitleRequired": "News title is required",
+      "newsDesc": "News description",
+      "newsDescRequired": "News description is required",
+      "deleteNews": "Delete News"
+    },
+    "household": {
+      "name": "Household",
+      "createNewHousehold": "Create New Household",
+      "householdName": "Household Name",
+      "householdNameRequired": "Household name is required",
+      "householdDesc": "A household to manage your storage and household members"
+    },
+    "storage": {
+      "name": "Storage",
+      "createNewStorage": "Create New Storage",
+      "storageName": "Storage Name",
+      "storageNameRequired": "Storage name is required",
+      "storageDesc": "A storage to manage your storage items"
+    }
 },
   "admin-settings": {
     "title": "Admin Settings",
