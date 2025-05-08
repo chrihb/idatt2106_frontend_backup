@@ -4,7 +4,7 @@ import {useForm} from 'vee-validate';
 import * as rules from '@vee-validate/rules';
 import FormField from '@/components/input/FormField.vue';
 import PasswordField from "@/components/input/PasswordField.vue";
-import {requestLogin} from '@/services/loginService';
+import {requestLogin} from '@/services/adminLoginService.js';
 import {useI18n} from "vue-i18n";
 import {useAuthRedirect} from "@/utils/useAuthRedirect.js";
 import {useRoute} from "vue-router";
@@ -15,11 +15,6 @@ const { redirectAfterAuth } = useAuthRedirect()
 
 const {validate, values: form, resetForm} = useForm({
   validationSchema: {
-    email: (value) => {
-      if (!value) return  t('login.emailRequired') ;
-      if (!rules.email(value)) return t('login.emailError');
-      return true;
-    },
     password: (value) => {
       if (!value) return t('login.passwordRequired');
       if (value.length < 8) return t('login.passwordLengthError');
@@ -48,17 +43,16 @@ const handleSubmit = async () => {
 
   try {
     const loginForm = {
-      email: form.email,
+      username: form.username,
       password: form.password,
     }
 
     const response = await requestLogin(loginForm, t)
 
     if (response.success) {
-      successMessage.value = 'Login successful! Welcome, ' + form.email + '.'
+      successMessage.value = 'Login successful! Welcome, ' + form.username + '.'
       resetForm()
 
-      redirectAfterAuth()
     } else {
       errorMessage.value = response.error || 'Login failed'
     }
@@ -83,12 +77,11 @@ const handleSubmit = async () => {
           {{ errorMessage }}
         </div>
 
-        <!-- Email Field -->
+        <!-- Username Field -->
         <div class="">
           <FormField
-              field-name="email"
-              :label="t('login.email')"
-              type="email"
+              field-name="username"
+              :label="t('login.username')"
               class="w-full"
           />
         </div>
@@ -121,7 +114,3 @@ const handleSubmit = async () => {
     </div>
   </div>
 </template>
-
-<style scoped>
-
-</style>
