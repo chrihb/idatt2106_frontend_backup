@@ -273,6 +273,8 @@
     "clearPoints": "Clear Points",
     "addPoint": "Add Point",
     "removeLastPoint": "Remove Last Point",
-    "saveCoordinates": "Save Zone Coordinates"
+    "saveCoordinates": "Save Zone Coordinates",
+    "deleteMessage": "Are you sure you want to delete this zone? This action cannot be undone.",
+    "cancel": "Cancel"
   }
 }
