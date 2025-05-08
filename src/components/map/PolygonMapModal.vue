@@ -137,13 +137,13 @@ watch(() => props.isOpen, (newVal) => {
     <div class="fixed inset-0 flex items-center justify-center bg-opacity-50 z-[1050]">
       <div class="bg-white rounded-lg shadow-xl w-full max-w-4xl h-3/4 p-4">
         <div class="flex justify-between items-center mb-4">
-          <h2 class="text-lg font-bold">{{t("zone.createPolygon")}}</h2>
+          <h2 class="text-lg font-bold">{{t("zone.createZone")}}</h2>
           <button @click="closeModal" class="text-gray-500 hover:text-gray-800">✖</button>
         </div>
         <div id="polygon-map" class="h-96 w-full"></div>
         <div class="flex justify-between mt-4">
           <button @click="clearMarkers" class="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600">
-            {{t("zone.clear")}}
+            {{t("zone.clearPoints")}}
           </button>
           <button @click="saveMarker" class="px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600">
             {{t("zone.addPoint")}}
@@ -152,7 +152,7 @@ watch(() => props.isOpen, (newVal) => {
             {{t("zone.removeLastPoint")}}
           </button>
           <button @click="saveCoordinates" class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600">
-            {{t("zone.save")}}
+            {{t("zone.saveCoordinates")}}
           </button>
         </div>
       </div>

@@ -347,7 +347,7 @@
     "emergencyLevel2": "Krise nivå 2",
     "emergencyLevel3": "Krise nivå 2",
     "zoneCoordinates": "Sone Koordinater",
-    "zonePolygonCoordinates": "Sone Polygon Koordinater",
+    "zonePolygonCoordinates": "Sone Koordinater",
     "inputMode": "Inndata Modus",
     "useLatLng": "Bruk Breddegrad og Lengdegrad",
     "useAddress": "Bruk Adresse",
@@ -357,6 +357,11 @@
     "zoneAddress": "Sone Addresse",
     "zoneDescription": "Sone Beskrivelse",
     "fillAllFields": "Vennligst fyll ut alle feltene",
-    "createPolygonOnMap": "Opprett Polygon på Kart"
+    "createPolygonOnMap": "Opprett Sone på Kart",
+    "createZone": "Lag Sone på Map",
+    "clearPoints": "Fjern all punkt",
+    "addPoint": "Legg til punkt",
+    "removeLastPoint": "Fjern siste punkt",
+    "saveCoordinates": "Lagre Sone Koordinater"
   }
 }
