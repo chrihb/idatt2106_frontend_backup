@@ -4,6 +4,7 @@ import HomeView from "@/views/HomeView.vue";
 import EmergencyStorage from "@/views/EmergencyStorage.vue";
 import NewsView from "@/views/NewsView.vue";
 import AccountView from "@/views/AccountView.vue";
+import AdminSettings from "@/components/admin/AdminSettings.vue";
 import AboutUsView from "@/views/AboutUsView.vue";
 import PrivacyPolicyView from "@/views/PrivacyPolicyView.vue";
 import MapView from "@/views/MapView.vue";
@@ -16,8 +17,12 @@ import EmailVerification from "@/components/email/EmailVerification.vue";
 import PasswordResetNewPassword from "@/components/email/passwordReset/PasswordResetNewPassword.vue";
 import SimpleCenteredComponent from "@/views/SimpleCenteredComponent.vue";
 import {useUserStore} from "@/stores/userStore.js";
+import ManageAdmins from "@/components/manageAdmins/ManageAdmins.vue";
 import AdminRegister from "@/components/login/AdminRegister.vue";
 import JoinCreateHousehold from "@/components/joinHousehold/Options.vue";
+import CreateEmergencyZone from "@/components/admin/map/CreateEmergencyZone.vue";
+import CreateNews from "@/components/admin/news/CreateNews.vue";
+import DeleteNews from "@/components/admin/news/DeleteNews.vue";
 import StorageListView from '@/views/StorageListView.vue';
 import HouseholdListView from "@/views/HouseholdListView.vue";
 
@@ -30,6 +35,7 @@ const router = createRouter({
                 { path: "", component: HomeView },
                 { path: "/news", component: NewsView },
                 { path: "/account", component: AccountView, meta: { requiresAuth: true } },
+                { path: "/manage-admins", component: ManageAdmins, meta: { requiresAuth: true } },
                 { path: "/storage", meta: { requiresAuth: true },
                     children: [
                         { path: "list", component: StorageListView, meta: { requiresHousehold: true } },
@@ -44,6 +50,15 @@ const router = createRouter({
                 { path: "/about-us", component: AboutUsView },
                 { path: "/privacy-policy", component: PrivacyPolicyView },
                 { path: "/map", component: MapView },
+                { path: "/my-home", component: MyHomeView, meta: { requiresAuth: true, requiresHousehold: true } },
+                { path: "/admin-settings", component: AdminSettings,
+                    children: [
+                        { path: "createEmergencyZone", component: CreateEmergencyZone },
+                        { path: "createNews", component: CreateNews },
+                        { path: "deleteNews", component: DeleteNews },
+                    ]
+                },
+
             ],
         },
         {
