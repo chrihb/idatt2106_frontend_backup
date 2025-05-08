@@ -102,6 +102,7 @@ const removeMember = async () => {
 
   try {
     const response = await kickUserFromHousehold(props.household.id, selectedMember.value.id);
+    console.log("Removed member:", response);
 
     if (response) {
       const removedMemberId = selectedMember.value.id;
@@ -110,12 +111,11 @@ const removeMember = async () => {
       await userStore.fetchHouseholds();
       const householdStillExists = userStore.householdId.some(h => h.id === props.household.id);
 
+      console.log("Household still exists:", householdStillExists);
+
       if (!householdStillExists) {
-        if (userStore.householdId.length === 0) {
-          await router.push("/household/options");
-        } else {
-          await router.push("/household/list");
-        }
+        console.log("Household no longer exists, redirecting to front page");
+        await router.push("/");
         emit("close"); // Close the modal only if the household is inaccessible
       } else {
         members.value = members.value.filter(m => m.id !== removedMemberId);
@@ -131,14 +131,12 @@ const removeMember = async () => {
 const leaveHousehold = async () => {
   try {
     const response = await leaveHouseholdService(props.household.id);
+
+    console.log("Left household:", response);
     if (response) {
       await userStore.fetchHouseholds();
 
-      if (userStore.householdId.length === 0) {
-        await router.push("/household/options");
-      } else {
-        await router.push("/household/list");
-      }
+      await router.push("/");
 
       console.log("Left household successfully");
       emit("close");

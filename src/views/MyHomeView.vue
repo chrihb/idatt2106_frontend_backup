@@ -14,7 +14,7 @@ const mapStore = useMapStore();
 const userStore = useUserStore();
 const route = useRoute();
 
-const loading = ref(true); // ✅ Local loading state
+const loading = ref(true);
 const household = ref(null);
 
 function centerOnAddress() {
