@@ -280,6 +280,7 @@ onMounted(async () => {
             </label>
             <select
                 id="item-category"
+                data-test="select-category"
                 v-model="selectedCategory"
                 class="border border-gray-300 w-full rounded-lg p-3 text-base text-black focus:ring-2 focus:ring-blue-500 bg-white">
               <option disabled :value="0">{{ t("storage.select-category") }}</option>
@@ -301,6 +302,7 @@ onMounted(async () => {
                   :placeholder="t('storage.item-amount')"
                   class="w-full sm:w-3/4 p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-base">
               <select
+                  data-test="select-unit"
                   v-model="selectedUnit"
                   class="border border-gray-300 w-full sm:w-1/4 rounded-lg p-3 text-base text-black focus:ring-2 focus:ring-blue-500 bg-white">
                 <option disabled :value="0">{{ t("storage.select-unit") }}</option>
@@ -339,7 +341,7 @@ onMounted(async () => {
           </select>
         </div>
 
-        <div v-if="formIncomplete" class="mt-3 mb-1 text-red-600 text-sm text-center">
+        <div data-test="incomplete-form" v-if="formIncomplete" class="mt-3 mb-1 text-red-600 text-sm text-center">
           {{ t("storage.fill-all-fields") }}
         </div>
 
