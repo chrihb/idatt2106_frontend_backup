@@ -267,6 +267,7 @@
     "zoneCoordinatesDescription": "List of coordinates for the zone. Format: lat, lng, lat, lng, lat, lng, ...",
     "zoneAddress": "Zone Address",
     "zoneDescription": "Zone Description",
-    "fillAllFields" : "Please fill in all the fields"
+    "fillAllFields": "Please fill in all the fields",
+    "createPolygonOnMap": "Create Polygon on Map"
   }
 }
