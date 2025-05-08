@@ -291,7 +291,7 @@
       "storageNameRequired": "Storage name is required",
       "storageDesc": "A storage to manage your storage items"
     }
-  }
+  },
   "title": "Essensielle Artikler",
   "sections": {
     "food": "Mat og Vann",

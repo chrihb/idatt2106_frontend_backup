@@ -2,7 +2,7 @@
 import {onMounted, ref} from 'vue';
 import { useEmergencyZonesStore } from '@/stores/emergencyZonesStore.js';
 import UpdateEmergencyZoneModal from '@/components/map/UpdateEmergencyZoneModal.vue';
-import MinimalMap from "@/components/map/MinimalMap.vue";
+import Map from '@/components/map/Map.vue';
 import {useI18n} from "vue-i18n";
 import {useEmergencyZoneStore} from "@/stores/emergencyZoneStore.js";
 import ConfirmationModal from "@/components/common/ConfirmationModal.vue";
@@ -99,7 +99,7 @@ onMounted(() => {
   <div class="pt-2 pb-2 flex h-full w-full">
     <!-- Map Component on left -->
     <div class="w-5/8 h-full pr-4">
-      <MinimalMap />
+      <Map />
     </div>
     <!-- Emergency Zones List on right -->
     <div class="w-3/8 h-full p-4 overflow-y-auto">
