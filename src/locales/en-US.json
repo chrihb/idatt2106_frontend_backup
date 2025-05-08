@@ -258,7 +258,7 @@
     "emergencyLevel2": "Emergency Level 2",
     "emergencyLevel3": "Emergency Level 2",
     "zoneCoordinates": "Zone Coordinates",
-    "zonePolygonCoordinates": "Zone Polygon Coordinates",
+    "zonePolygonCoordinates": "Zone Coordinates",
     "inputMode": "Input Mode",
     "useLatLng": "Use Latitude and Longitude",
     "useAddress": "Use Address",
@@ -268,6 +268,11 @@
     "zoneAddress": "Zone Address",
     "zoneDescription": "Zone Description",
     "fillAllFields": "Please fill in all the fields",
-    "createPolygonOnMap": "Create Polygon on Map"
+    "createPolygonOnMap": "Create Zone Coordinates on Map",
+    "createZone": "Create Zone on Map",
+    "clearPoints": "Clear Points",
+    "addPoint": "Add Point",
+    "removeLastPoint": "Remove Last Point",
+    "saveCoordinates": "Save Zone Coordinates"
   }
 }
