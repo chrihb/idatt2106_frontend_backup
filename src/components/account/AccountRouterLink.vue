@@ -25,7 +25,7 @@ const isAdmin = computed(() => userStore.isAdmin);
 const isSuperUser = computed(() => userStore.isSuperUser);
 
 const shouldDisplay = computed(() => {
-  if (props.setting.superAdminNeeded && !isAdmin.value) return false;
+  if (props.setting.superAdminNeeded && !isSuperUser.value) return false; // Check superAdminNeeded against isSuperUser
   if (props.setting.adminNeeded && !isAdmin.value) return false;
   if (props.setting.superUserNeeded && !isSuperUser.value) return false;
   return true;
