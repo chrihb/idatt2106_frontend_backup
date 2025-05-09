@@ -13,6 +13,7 @@ export const useUserStore = defineStore('user', {
             showHouseholdStatusOnFrontpage: true
         },
         isAdmin: false,
+        adminToken: null
     }),
     actions: {
         async isAuthenticated() {
@@ -24,17 +25,20 @@ export const useUserStore = defineStore('user', {
             }
             this.authenticated = await requestAuthenticationCheck();
         },
-        setCredentials({ token, authenticated, householdId, isAdmin = false } = {}) {
+        setCredentials({ token, authenticated, householdId, adminToken = null, isAdmin = false } = {}) {
             if (token !== undefined) this.token = token;
             if (authenticated !== undefined) this.authenticated = authenticated;
             if (householdId !== undefined) this.householdId = householdId;
             if (isAdmin !== undefined) this.isAdmin = isAdmin;
+            if (adminToken !== undefined) this.adminToken = adminToken;
         }
         ,
         clearToken() {
             this.token = null;
             this.authenticated = false;
             this.householdId = [];
+            this.isAdmin = false;
+            this.adminToken = null;
         },
         clearHouseholdId() {
             this.householdId = [];

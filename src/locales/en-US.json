@@ -149,7 +149,18 @@
     "emailError": "Email must be a valid email address.",
     "emailRequired": "Email is required.",
     "loginError": "Invalid email or password.",
-    "redirectSuccessMessage": "Registration successful. Please check your email to verify your account before logging in"
+    "redirectSuccessMessage": "Registration successful. Please check your email to verify your account before logging in",
+    "adminLogin": "Admin Login",
+    "username": "Username",
+    "twoFactorCode": "Verification Code",
+    "twoFactorRequired": "Verification code is required.",
+    "twoFactorSent": "Verification code has been sent to your email.",
+    "twoFactorError": "Error sending verification code. Please try again.",
+    "twoFactorInstructions": "Enter the verification code sent to your email address.",
+    "loginSuccess": "Login successful! Welcome, {username}.",
+    "sendTwoFactor": "Send Verification Code",
+    "networkError": "Network error. Please check your internet connection and try again.",
+    "failed": "Failed to login. Please try again."
   },
     "password-reset": {
         "title": "Password Reset",
@@ -211,7 +222,10 @@
   },
   "login-service": {
     "invalidCredentials": "Invalid email or password.",
-    "emailNotVerified": "Email not verified. Please check your email for the verification link."
+    "emailNotVerified": "Email not verified. Please check your email for the verification link.",
+    "invalidAdminCredentials": "Invalid admin credentials.",
+    "invalidAdminData": "Invalid admin data, check the verification code.",
+    "serverError": "Server error. Please try again later."
   },
   "auth":{
     "login": "Login",
@@ -257,7 +271,9 @@
   }
 },
   "map": {
-    "filter": "Filter"
+    "filter": "Filter",
+    "address": "Address",
+    "directions": "Directions"
   },
   "admin-settings": {
     "title": "Admin Settings",

@@ -6,16 +6,23 @@ import {emergencyZoneService} from "@/services/emergencyZoneService.js";
 import {useMarkersStore} from "@/stores/markersStore.js";
 import {markerService} from "@/services/markerService.js";
 import {useMarkerStore} from "@/stores/markerStore.js";
+import { usePositionTrackingStore } from "@/stores/positionTrackingStore.js";
+import {nextTick} from "vue";
 import {useUserStore} from "@/stores/userStore.js";
-import {getUserPosition} from "@/services/locationService.js";
 
-export const createMarkerPopup = (type, address, description) =>
+let routeLayerGroup = null;
+
+export const createMarkerPopup = (type, address, markerId) =>
     `
-                <div class="popup">
-                    <h2>${type}</h2>
-                    <p>${address}</p>
-                    <p>${description}</p>
-                </div>
+        <div class="popup text-sm text-gray-800 space-y-1">
+            <h2 class="font-semibold text-base">${type}</h2>
+                <p class="font-medium"> ${address}</p>
+                <p>
+                    <a href="#" class="directions-link text-blue-600 hover:underline font-medium" data-marker-id="${markerId}">
+                        Veibeskrivelse
+                    </a>
+                </p>
+        </div>
     `;
 
 export const createZonePopup = (name, type, level, address, description) =>
@@ -79,13 +86,45 @@ export const addMarkerToMap = (marker) => {
             //const markerDetails = await markerStore.fetchMarkerDetailsById(marker.markerId);
 
             if (markerDetails.success) {
-                const popupContent = createMarkerPopup(marker.type, markerDetails.address, markerDetails.description);
-                mapMarker.bindPopup(popupContent).openPopup();
+                const popupContent = createMarkerPopup(marker.type, markerDetails.address, marker.markerId);
+                if (!mapMarker.getPopup()) {
+                    mapMarker.bindPopup(popupContent);
+                } else {
+                    mapMarker.setPopupContent(popupContent);
+                }
+                mapMarker.openPopup();
+                await nextTick();
+
+                // Hent popup-elementet direkte og bind handleren der
+                const popupEl = mapMarker.getPopup()?.getElement();
+                if (popupEl) {
+                    const link = popupEl.querySelector('.directions-link');
+                    if (link) {
+                        const handler = createDirectionsHandler(marker.lat, marker.lng);
+                        link._directionsHandler = handler;
+                        L.DomEvent.on(link, 'click', handler);
+                    }
+                }
             } else {
             }
         } catch (error) {
         }
     });
+
+
+    mapMarker.on('popupclose', (e) => {
+        const popupEl = e.popup.getElement();
+        if (!popupEl) return;
+    
+        const link = popupEl.querySelector('.directions-link');
+        if (link && link._directionsHandler) {
+            L.DomEvent.off(link, 'click', link._directionsHandler);
+            delete link._directionsHandler;
+        }
+    
+        clearRoute();
+    });
+    
 
     // Check if the layerGroup for the type exists, if not create it
     if (!mapStore.layerGroup[marker.type] || !(mapStore.layerGroup[marker.type] instanceof L.LayerGroup)) {
@@ -249,6 +288,69 @@ export const centerMapOnEmergencyZone = (zoneId) => {
     }
 }
 
+export const drawRoute = async (startLat, startLng, endLat, endLng) => {
+    const mapStore = useMapStore();
+
+    routeLayerGroup = L.layerGroup().addTo(mapStore.map);
+
+    const url = `https://router.project-osrm.org/route/v1/driving/${startLng},${startLat};${endLng},${endLat}?overview=full&geometries=geojson`;
+
+    try {
+        const response = await fetch(url);
+        const data = await response.json();
+
+        if (data.routes && data.routes.length > 0) {
+            const coords = data.routes[0].geometry.coordinates.map(([lng, lat]) => [lat, lng]);
+            const polyline = L.polyline(coords, { color: 'blue' });
+            routeLayerGroup.addLayer(polyline);
+            mapStore.map.fitBounds(polyline.getBounds());
+        } else {
+            console.error('No route found');
+        }
+    } catch (error) {
+        console.error('Failed to fetch route:', error);
+    }
+};
+
+
+export const clearRoute = () => {
+    const mapStore = useMapStore();
+
+    if (routeLayerGroup && mapStore.map.hasLayer(routeLayerGroup)) {
+        mapStore.map.removeLayer(routeLayerGroup);
+        routeLayerGroup = null;
+    }
+};
+
+export const getUserPosition = async () => {
+    const positionTrackingStore = usePositionTrackingStore();
+    const userPos = positionTrackingStore.getPosition;
+
+    if (!userPos) {
+        throw new Error("Brukerens posisjon er ikke tilgjengelig");
+    }
+
+    return userPos;
+}
+
+
+export const requestRouteToMarker = async (targetLat, targetLng) => {
+    try {
+        const userPosition = await getUserPosition();
+        clearRoute(); // fjerner forrige rute, hvis noen
+        await drawRoute(userPosition.lat, userPosition.lng, targetLat, targetLng);
+    } catch (error) {
+        alert(error.message);
+    }
+};
+
+
+const createDirectionsHandler = (lat, lng) => {
+    return (e) => {
+        e.preventDefault();
+        requestRouteToMarker(lat, lng);
+    };
+};
 export const initAccountMarkers = async () => {
     const userStore = useUserStore();
     const markersStore = useMarkersStore();

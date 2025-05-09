@@ -137,20 +137,31 @@
 	"join-success": "Ble med i husstand",
 	"set-as-primary": "Sett som primær"
   },
-  "login": {
-	"title": "Logg Inn",
-	"email": "E-post",
-	"password": "Passord",
-	"login": "Logg Inn",
-	"forgotPassword": "Glemt passord?",
-	"createUser": "Registrer bruker",
-	"passwordLengthError": "Passordet må være 8 tegn langt.",
-	"passwordRequired": "Skriv inn passord.",
-	"emailError": "E-post må være på et gyldig format.",
-	"emailRequired": "Skriv inn e-post.",
-	"loginError": "Ugyldig e-post eller passord.",
-	"redirectSuccessMessage": "Registrering vellykket. Vennligst sjekk e-posten din for å verifisere kontoen din før du logger inn"
-  },
+	"login": {
+		"title": "Logg Inn",
+		"email": "E-post",
+		"password": "Passord",
+		"login": "Logg Inn",
+		"forgotPassword": "Glemt passord?",
+		"createUser": "Registrer bruker",
+		"passwordLengthError": "Passordet må være 8 tegn langt.",
+		"passwordRequired": "Skriv inn passord.",
+		"emailError": "E-post må være på et gyldig format.",
+		"emailRequired": "Skriv inn e-post.",
+		"loginError": "Ugyldig e-post eller passord.",
+		"redirectSuccessMessage": "Registrering vellykket. Vennligst sjekk e-posten din for å verifisere kontoen din før du logger inn",
+		"adminLogin": "Admin Innlogging",
+		"username": "Brukernavn",
+		"twoFactorCode": "Verifiseringskode",
+		"twoFactorRequired": "Verifiseringskode er påkrevd.",
+		"twoFactorSent": "Verifiseringskode er sendt til din e-post.",
+		"twoFactorError": "Feil ved sending av verifiseringskode. Vennligst prøv igjen.",
+		"twoFactorInstructions": "Skriv inn verifiseringskoden som er sendt til din e-postadresse.",
+		"loginSuccess": "Innlogging vellykket! Velkommen, {username}.",
+		"sendTwoFactor": "Send Verifiseringskode",
+		"networkError": "Nettverksfeil. Vennligst sjekk internettforbindelsen din og prøv igjen.",
+		"failed": "Innlogging feilet. Vennligst prøv igjen."
+	},
   "password-reset": {
 	"title": "Tilbakestill Passord",
 	"email": "E-post",
@@ -208,10 +219,13 @@
 	"error": "Det oppstod en feil. Vennligst prøv igjen senere.",
 	"networkError": "Nettverksfeil. Vennligst sjekk internettilkoblingen din og prøv igjen."
   },
-  "login-service": {
-	"invalidCredentials": "Ugyldig brukernavn eller passord.",
-	"emailNotVerified": "E-post ikke bekreftet. Vennligst sjekk e-posten din for bekreftelseslenken"
-  },
+	"login-service": {
+		"invalidCredentials": "Ugyldig e-post eller passord.",
+		"emailNotVerified": "E-post ikke bekreftet. Vennligst sjekk e-posten din for bekreftelseslenken",
+		"invalidAdminCredentials": "Ugyldig admin brukerinformasjon.",
+		"invalidAdminData": "Ugyldig admin data, sjekk verifiseringskoden.",
+		"serverError": "Serverfeil. Vennligst prøv igjen senere."
+	},
   "auth":{
 	"login": "Logg Inn",
 	"register": "Registrer"
@@ -256,7 +270,9 @@
 	}
   },
   "map": {
-	"filter": "Filtrer"
+	"filter": "Filtrer",
+	"address": "Adresse",
+  	"directions": "Veibeskrivelse"
   },
   "admin-settings": {
     "title": "Administrator Innstillinger",

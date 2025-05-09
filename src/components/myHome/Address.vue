@@ -1,7 +1,6 @@
 <script setup>
 import { useI18n } from "vue-i18n";
 import { useUserStore} from "@/stores/userStore.js";
-import { useHomeStore } from "@/stores/homeStore.js";
 
 const userStore = useUserStore();
 const homeStore = useHomeStore();
