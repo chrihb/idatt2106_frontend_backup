@@ -219,7 +219,7 @@
 		"invalidCredentials": "Ugyldig e-post eller passord.",
 		"emailNotVerified": "E-post ikke bekreftet. Vennligst sjekk e-posten din for bekreftelseslenken",
 		"invalidAdminCredentials": "Ugyldig admin brukerinformasjon.",
-		"invalidAdminData": "Ugyldig admin data.",
+		"invalidAdminData": "Ugyldig admin data, sjekk verifiseringskoden.",
 		"serverError": "Serverfeil. Vennligst prøv igjen senere."
 	},
   "auth":{
