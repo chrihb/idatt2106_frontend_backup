@@ -27,7 +27,6 @@ export const useMarkersStore = defineStore('markersStore', {
                 }
 
             } catch (error) {
-                console.error('Error fetching all emergency zones:', error);
                 throw error;
             }
         },
@@ -45,20 +44,17 @@ export const useMarkersStore = defineStore('markersStore', {
                     this.addMarker(marker);
                 }
             } catch (error) {
-                console.error('Error fetching markers');
                 throw error;
             }
         },
 
         addMarker(marker) {
             if (!marker || !marker.markerId) {
-                console.error('Invalid marker data');
                 return;
             }
             if (!this.getMarkerById(marker.markerId)) {
                 this.markers.push(marker);
             } else {
-                console.error('Marker already exists in the store');
             }
         },
 
@@ -67,7 +63,6 @@ export const useMarkersStore = defineStore('markersStore', {
             if (index !== -1) {
                 this.markers[index] = marker;
             } else {
-                console.error('Marker not found in the store');
             }
         },
 
@@ -76,7 +71,6 @@ export const useMarkersStore = defineStore('markersStore', {
             if (index !== -1) {
                 this.markers.splice(index, 1);
             } else {
-                console.error('Marker not found in the store');
             }
         },
 

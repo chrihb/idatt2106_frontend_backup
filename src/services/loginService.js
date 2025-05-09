@@ -13,7 +13,6 @@ export const requestLogin = async (loginForm, t) => {
         });
 
         const data = response.data;
-        console.log('Login response:', data); // Debug the response
 
         if (response.status === 200 && data.token) {
 
@@ -32,7 +31,6 @@ export const requestLogin = async (loginForm, t) => {
             return { error: 'Login failed: Invalid response format from server.' };
         }
     } catch (error) {
-        console.error('Error submitting login:', error);
 
         if (error.response) {
             if (error.response.status === 400 || error.response.status === 404) {

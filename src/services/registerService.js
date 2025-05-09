@@ -34,7 +34,6 @@ export const requestRegister = async (registerForm, t) => {
             }
             return { error: t('register-service.error') };
         } else {
-            console.error('Error submitting registration:', error);
             return { error: t('register-service.networkError') };
         }
     }

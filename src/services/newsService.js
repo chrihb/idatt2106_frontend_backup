@@ -19,13 +19,11 @@ export const getNews = async () => {
             });
             newsStore.noNewsFound = false; // Reset noNewsFound if news is found
         } else {
-            console.error("Invalid news data format:", newsData);
         }
     } catch (error) {
         if (error.response && error.response.status === 404) {
             newsStore.noNewsFound = true; // Set no news flag
         } else {
-            console.error("Error fetching news:", error);
         }
         newsStore.clearNews();
     }
@@ -50,13 +48,10 @@ export const getNewsByDistrict = async (district) => {
             });
             newsStore.noNewsFound = false; // Reset noNewsFound if news is found
         } else {
-            console.error("Invalid news data format:", newsData);
         }
     } catch (error) {
         if (error.response && error.response.status === 404) {
             newsStore.noNewsFound = true; // Set noNewsFound to true if no news is found
-        } else {
-            console.error("Error fetching news by district:", error);
         }
         newsStore.clearNews();
     }
@@ -73,11 +68,7 @@ export const getCaseDetails = async (caseId) => {
 
         if (Array.isArray(caseDetails)) {
             return caseDetails; // Return the array of case details
-        } else {
-            console.error("Invalid case details format:", caseDetails);
         }
     } catch (error) {
-        console.error(`Error fetching case details for caseId ${caseId}:`, error);
-        throw error;
     }
 };

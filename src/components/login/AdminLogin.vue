@@ -6,12 +6,10 @@ import FormField from '@/components/input/FormField.vue';
 import PasswordField from "@/components/input/PasswordField.vue";
 import {request2FA, requestLogin} from '@/services/adminLoginService.js';
 import {useI18n} from "vue-i18n";
-import {useAuthRedirect} from "@/utils/useAuthRedirect.js";
 import {useRoute} from "vue-router";
 
 const { t } = useI18n();
 const route = useRoute();
-const { redirectAfterAuth } = useAuthRedirect();
 
 const {validate, values: form, resetForm} = useForm({
   validationSchema: {

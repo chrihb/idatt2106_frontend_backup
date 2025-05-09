@@ -98,7 +98,6 @@ const fetchCategories = async () => {
       return rest;
     });
   } catch (error) {
-    console.error("Error fetching categories");
   }
 };
 

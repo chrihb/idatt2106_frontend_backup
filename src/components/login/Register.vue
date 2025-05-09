@@ -102,18 +102,15 @@ onMounted(() => {
               recaptchaValue.value = token;
             })
             .catch((error) => {
-              console.error('ReCAPTCHA execution failed:', error);
               setFieldError('recaptcha', 'Failed to verify ReCAPTCHA');
             });
       });
     } else {
-      console.error('ReCAPTCHA script loaded but grecaptcha is not available');
       setFieldError('recaptcha', 'ReCAPTCHA failed to load');
     }
   };
 
   recaptchaScript.value.onerror = () => {
-    console.error('Failed to load ReCAPTCHA script');
     setFieldError('recaptcha', 'ReCAPTCHA failed to load');
   };
 });
@@ -126,7 +123,6 @@ onUnmounted(() => {
 const handleSubmit = async () => {
   const result = await validate()
   if (!result.valid) {
-    console.log('Validation failed:', errors.value)
     return
   }
 
@@ -144,7 +140,6 @@ const handleSubmit = async () => {
       reCaptchaToken: recaptchaToken.value,
     }
 
-    console.log('Submitting registration form:', registerForm)
     const response = await requestRegister(registerForm, t)
 
     if (response.success) {
@@ -167,7 +162,6 @@ const handleSubmit = async () => {
       }
     }
   } catch (error) {
-    console.error('Submission error:', error)
     errorMessage.value = 'An unexpected error occurred. Please try again.'
   } finally {
     isSubmitting.value = false

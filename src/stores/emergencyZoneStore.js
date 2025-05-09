@@ -38,7 +38,6 @@ export const useEmergencyZoneStore = defineStore('emergencyZone', {
                 }
 
             } catch (error) {
-                console.error('Error fetching emergency zone details:', error);
                 throw error;
             }
         },
@@ -98,14 +97,12 @@ export const useEmergencyZoneStore = defineStore('emergencyZone', {
                 }
                 return result;
             } catch (error) {
-                console.error('Error saving emergency zone:', error);
                 throw error;
             }
         },
 
         async deleteEmergencyZone() {
             if (!this.zoneId) {
-                console.warn('Cannot delete: No item ID provided');
                 return;
             }
 
@@ -119,7 +116,6 @@ export const useEmergencyZoneStore = defineStore('emergencyZone', {
                 return result;
 
             } catch (error) {
-                console.error('Error deleting emergency zone:', error);
                 throw error;
             }
         },

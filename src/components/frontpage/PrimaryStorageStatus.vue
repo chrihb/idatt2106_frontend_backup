@@ -15,12 +15,9 @@ onMounted(async () => {
       const match = statusList.find(h => h.id === primary.id);
       if (match) {
         primaryHousehold.value = match;
-      } else {
-        console.warn("Primary household not found in preparedness status list.");
       }
     }
   } catch (error) {
-    console.error("Feil ved henting av beredskapsstatus:", error);
   }
 });
 </script>

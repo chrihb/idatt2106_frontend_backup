@@ -94,7 +94,6 @@ async function refreshEssentials() {
   try {
     essentials.value = await getEssentialItems(props.householdId); 
   } catch (e) {
-    console.error("Kunne ikke hente essential items", e);
   }
 }
 

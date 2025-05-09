@@ -57,13 +57,11 @@ export const createCustomMarkerIcon = (type) => {
 export const addMarkerToMap = (marker) => {
 
     if (!marker || !marker.markerId || !marker.lat || !marker.lng || !marker.type) {
-        console.error('Invalid marker data');
         return;
     }
 
     const markersStore = useMarkersStore();
     if (markersStore.getMarkerById(marker.markerId)) {
-        console.error('Marker already exists on the map');
         return;
     }
 
@@ -108,10 +106,8 @@ export const addMarkerToMap = (marker) => {
                     }
                 }
             } else {
-                console.error('Failed to fetch marker details');
             }
         } catch (error) {
-            console.error('Error fetching marker details:', error);
         }
     });
 
@@ -163,13 +159,11 @@ export const updateMarkerOnMap = (marker) => {
 export const addEmergencyZoneToMap = (emergencyZone) => {
 
     if (!emergencyZone || !emergencyZone.zoneId || !emergencyZone.coordinates || emergencyZone.coordinates.length < 3) {
-        console.error('Invalid emergency zone data');
         return;
     }
 
     const emergencyZonesStore = useEmergencyZonesStore();
     if (emergencyZonesStore.getEmergencyZoneById(emergencyZone.zoneId)) {
-        console.error('Emergency zone already exists on the map');
         return;
     }
 
@@ -200,11 +194,8 @@ export const addEmergencyZoneToMap = (emergencyZone) => {
             if (zoneDetails.success) {
                 const popupContent = createZonePopup(zoneDetails.name, emergencyZone.type, emergencyZone.level, zoneDetails.address, zoneDetails.description);
                 polygon.bindPopup(popupContent).openPopup();
-            } else {
-                console.error('Failed to fetch zone details');
             }
         } catch (error) {
-            console.error('Error fetching zone details:', error);
         }
     });
 
@@ -283,8 +274,6 @@ export const centerMapOnMarker = (id) => {
 
     if (marker) {
         mapStore.centerMapOnSpecificLocation(marker.lat, marker.lng);
-    } else {
-        console.error(`Marker with ${id} not found.`);
     }
 }
 
@@ -296,8 +285,6 @@ export const centerMapOnEmergencyZone = (zoneId) => {
     if (emergencyZone) {
         const bounds = L.latLngBounds(emergencyZone.coordinates);
         mapStore.map.fitBounds(bounds);
-    } else {
-        console.error(`Emergency zone with ID ${zoneId} not found.`);
     }
 }
 
@@ -367,61 +354,57 @@ const createDirectionsHandler = (lat, lng) => {
 export const initAccountMarkers = async () => {
     const userStore = useUserStore();
     const markersStore = useMarkersStore();
-    const userPosition = await getUserPosition();
+    if (await userStore.isAuthenticated()) {
+        const userPosition = await getUserPosition();
 
-    console.log("Adding markers for households and members");
 
-    userStore.householdId.forEach((household) => {
-        const householdMarkerId = `household-${household.id}`;
-        if (
-            household.latitude &&
-            household.longitude &&
-            !markersStore.getMarkerById(householdMarkerId)
-        ) {
-            addMarkerToMap({
-                markerId: householdMarkerId,
-                lat: household.latitude,
-                lng: household.longitude,
-                type: "home",
-            });
-        }
-
-        household.members.forEach((member) => {
-            const memberMarkerId = `member-${member.id}`;
+        userStore.householdId.forEach((household) => {
+            const householdMarkerId = `household-${household.id}`;
             if (
-                member.latitude &&
-                member.longitude &&
-                !markersStore.getMarkerById(memberMarkerId) &&
-                userPosition.id !== member.id
+                household.latitude &&
+                household.longitude &&
+                !markersStore.getMarkerById(householdMarkerId)
             ) {
                 addMarkerToMap({
-                    markerId: memberMarkerId,
-                    lat: member.latitude,
-                    lng: member.longitude,
-                    type: "AndreMedlemmer",
+                    markerId: householdMarkerId,
+                    lat: household.latitude,
+                    lng: household.longitude,
+                    type: "home",
                 });
             }
+
+            household.members.forEach((member) => {
+                const memberMarkerId = `member-${member.id}`;
+                if (
+                    member.latitude &&
+                    member.longitude &&
+                    !markersStore.getMarkerById(memberMarkerId) &&
+                    userPosition.id !== member.id
+                ) {
+                    addMarkerToMap({
+                        markerId: memberMarkerId,
+                        lat: member.latitude,
+                        lng: member.longitude,
+                        type: "AndreMedlemmer",
+                    });
+                }
+            });
         });
-    });
+    }
+
 };
 
 
-export const removeAccountMarkers = async () => {
+export const removeAccountMarkers = () => {
     const mapStore = useMapStore();
-    const userPosition = await getUserPosition();
-
-    console.log("Removing markers for households and members");
 
     for (const type in mapStore.layerGroup) {
         const layerGroup = mapStore.layerGroup[type];
 
         const layersToRemove = layerGroup.getLayers().filter((layer) => {
             const id = layer.options.id;
-            return (
-                typeof id === 'string' &&
-                (id.startsWith("member-") || id.startsWith("household-")) &&
-                id !== `member-${userPosition.id}`
-            );
+            return typeof id === 'string' &&
+                (id.startsWith("member-") || id.startsWith("household-"));
         });
 
         for (const layer of layersToRemove) {
@@ -429,11 +412,12 @@ export const removeAccountMarkers = async () => {
             mapStore.removeMapItemId(layer.options.id);
         }
 
-        // 🧹 Clean up layer group if empty after removal
+        // Clean up empty layer group
         if (layerGroup.getLayers().length === 0) {
             layerGroup.remove();
             delete mapStore.layerGroup[type];
         }
     }
 };
+
 
