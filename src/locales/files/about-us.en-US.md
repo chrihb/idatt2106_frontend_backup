@@ -18,19 +18,16 @@ The project is non-commercial, and all functionality has been developed strictly
 
 This project group consists of:
 
-- [Name 1] – [Role, e.g. frontend, backend]
-- [Name 2] – [Role]
-- [Name 3] – [Role]
-- [Name 4] – [Role]
+- Eide Zindel, Erlend 
+- Bore, Christian Hess
+- Merkesdal, André Wikheim
+- Seime, Konrad Øye
+- Reiher, Jonas
+- Smestu, Eskild
+- Spook, Sigurd
+- Sundvoll Moe, Ole-Thomas
 
-(TODO: Replace the names and roles with actual team members.)
 
-### Contact Us
-
-Do you have questions or want to learn more about the project?
-
-Email: [email@school.no]  
-School: [Name of the school]
 
 ---
 
