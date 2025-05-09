@@ -5,16 +5,12 @@ export const getAllAdmins = async () => {
         const response = await axios.get();
 
         const admins = await response.data;
-        console.log('Fetched admins:', admins);
-
         if (response.status === 200 && Array.isArray(admins)) {
             return { success: true, admins };
         } else {
             return { error: 'Failed to fetch admins: Invalid response format from server.' };
         }
     } catch (error) {
-        console.error('Error fetching admins:', error);
-
         if (error.response) {
             if (error.response.status === 400 || error.response.status === 404) {
                 return { error: 'Failed to fetch admins: Invalid request.' };
@@ -36,8 +32,6 @@ export const addAdministrator = async (email) => {
             return { error: 'Failed to add admin: Invalid response format from server.' };
         }
     } catch (error) {
-        console.error('Error adding admin:', error);
-
         if (error.response) {
             if (error.response.status === 400 || error.response.status === 404) {
                 return { error: 'Failed to add admin: Invalid request.' };
@@ -59,8 +53,6 @@ export const deleteAdministrator = async (adminId) => {
             return { error: 'Failed to delete admin: Invalid response format from server.' };
         }
     } catch (error) {
-        console.error('Error deleting admin:', error);
-
         if (error.response) {
             if (error.response.status === 400 || error.response.status === 404) {
                 return { error: 'Failed to delete admin: Invalid request.' };
@@ -82,7 +74,6 @@ export const passwordResetLinkToAdministrator = async (adminId) => {
             return { error: 'Failed to send password reset link: Invalid response format from server.' };
         }
     } catch (error) {
-        console.error('Error sending password reset link:', error);
 
         if (error.response) {
             if (error.response.status === 400 || error.response.status === 404) {

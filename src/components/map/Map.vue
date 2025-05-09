@@ -66,12 +66,10 @@ onMounted(async () => {
         await emergencyZonesStore.fetchEmergencyZonesArea(bounds, ids);
 
       } catch (error) {
-        console.error('Error fetching markers:', error);
       }
     }, 300));
 
   } catch (error) {
-    console.error('Error initializing map:', error);
   }
 });
 

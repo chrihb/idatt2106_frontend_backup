@@ -88,7 +88,6 @@ const resetForm = () => {
 
     currentItemStore.resetState();
   } catch (error) {
-    console.error("Error resetting form:", error);
   }
 };
 
@@ -99,7 +98,6 @@ const loadUnits = async () => {
     }
     units.value = unitsStore.units;
   } catch (error) {
-    console.error("Error loading units:", error);
   }
 };
 
@@ -110,7 +108,6 @@ const loadCategories = async () => {
     }
     categories.value = categoriesStore.categories;
   } catch (error) {
-    console.error("Error loading categories:", error);
   }
 };
 
@@ -165,7 +162,6 @@ const loadItemData = async () => {
         currentItemStore.setItemData(item);
       }
     } catch (error) {
-      console.error("Error fetching item:", error);
     }
   } else if (props.categoryId || props.unitId || props.householdId) {
     if (props.unitId) {
@@ -216,7 +212,6 @@ const saveItem = async () => {
     emit('itemSaved');
     close();
   } catch (error) {
-    console.error("Error saving item:", error);
   }
 };
 

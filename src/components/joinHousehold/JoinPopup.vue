@@ -42,7 +42,6 @@ const errorMessage = ref("");
 const handleSubmit = async () => {
   const result = await validate();
   if (!result.valid) {
-    console.log("Validation failed:", errors.value); // Debug validation errors
     return;
   }
 
@@ -54,7 +53,6 @@ const handleSubmit = async () => {
     const inviteForm = {
       inviteCode: form.inviteCode,
     };
-    console.log("Submitting registration form:", inviteForm); // Debug the form data
     const response = await joinHousehold(inviteForm.inviteCode);
 
     if (response.success) {
@@ -70,7 +68,6 @@ const handleSubmit = async () => {
       }
     }
   } catch (error) {
-    console.error("Submission error:", error); // Debug submission errors
     errorMessage.value = "An unexpected error occurred. Please try again.";
   } finally {
     isSubmitting.value = false;

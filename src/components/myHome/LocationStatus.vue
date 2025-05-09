@@ -18,7 +18,6 @@ function centerOnMember(member) {
   if (member.latitude && member.longitude) {
     mapStore.centerMapOnSpecificLocation(member.latitude, member.longitude);
   } else {
-    console.error("Member location missing");
   }
 }
 </script>

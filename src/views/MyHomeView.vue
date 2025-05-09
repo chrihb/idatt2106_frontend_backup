@@ -20,8 +20,6 @@ const household = ref(null);
 function centerOnAddress() {
   if (household.value?.latitude && household.value?.longitude) {
     mapStore.centerMapOnSpecificLocation(household.value.latitude, household.value.longitude);
-  } else {
-    console.error("Household coordinates missing");
   }
 }
 
@@ -51,7 +49,7 @@ onMounted(async () => {
           <ManageHousehold :household="household" />
         </div>
         <div class="relative h-full w-full rounded-2xl shadow-lg overflow-hidden">
-          <Map class="h-full w-full" />
+          <Map />
         </div>
       </div>
     </div>

@@ -33,7 +33,6 @@ const fetchAdmins = async () => {
     const response = await getAllAdmins();
     admins.value = response.data;
   } catch (error) {
-    console.error("Error fetching admins:", error);
   }
 };
 
@@ -43,7 +42,6 @@ const addAdmin = handleSubmit(async (values) => {
     addAdminModal.value = false;
     addAdminEmail.value = "";
   } catch (error) {
-    console.error("Error adding admin:", error);
   }
 });
 
@@ -54,7 +52,6 @@ const removeAdmin = (adminId) => {
         fetchAdmins();
       })
       .catch((error) => {
-        console.error("Error removing admin:", error);
       });
   }
 };
@@ -64,8 +61,7 @@ const sendPasswordResetEmail = (adminId) => {
     .then(() => {
       alert(t("manage-admins.password-reset-email-sent"));
     })
-    .catch((error) => {
-      console.error("Error sending password reset email:", error);
+    .catch(() => {
     });
 };
 </script>

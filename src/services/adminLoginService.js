@@ -100,3 +100,7 @@ export const requestLogin = async (loginForm, t) => {
         };
     }
 };
+
+export const setAdminPassword = async (verificationToken, password) => {
+
+}

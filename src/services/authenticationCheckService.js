@@ -7,7 +7,6 @@ export const requestAuthenticationCheck = async () => {
     const router = useRouter();
 
     try {
-        console.log("Sending Request...")
         const response = await axios.post(`${window.backendURL}/api/users/is-auth`, {},
             {
                 headers: {
@@ -17,17 +16,14 @@ export const requestAuthenticationCheck = async () => {
         );
 
 
-        console.log("Response data:", response.status);
         if (response.status !== 200) {
             userStore.clearToken();
             await router.push('/login');
             return false;
         }
 
-        console.log("Response data:", response.data);
         return response.data; // authenticated
     } catch (error) {
-        console.error('Error checking authentication:', error.code);
         userStore.clearToken();
         await router.push('/login');
         return false;

@@ -25,7 +25,6 @@ export const useEmergencyZonesStore = defineStore('emergencyZonesStore', {
                 }
 
             } catch (error) {
-                console.error('Error fetching all emergency zones:', error);
                 throw error;
             }
         },
@@ -43,20 +42,17 @@ export const useEmergencyZonesStore = defineStore('emergencyZonesStore', {
                 }
 
             } catch (error) {
-                console.error('Error fetching emergency zones');
                 throw error;
             }
         },
 
         addEmergencyZone(emergencyZone) {
             if (!emergencyZone || !emergencyZone.zoneId || !emergencyZone.coordinates || emergencyZone.coordinates.length < 3) {
-                console.error('Invalid emergency zone data');
                 return;
             }
             if (!this.getEmergencyZoneById(emergencyZone.zoneId)) {
                 this.emergencyZones.push(emergencyZone);
             } else {
-                console.error('Emergency zone already exists in the store');
             }
         },
 
@@ -65,7 +61,6 @@ export const useEmergencyZonesStore = defineStore('emergencyZonesStore', {
             if (index !== -1) {
                 this.emergencyZones[index] = emergencyZone;
             } else {
-                console.error('Emergency zone not found in the store');
             }
         },
 
@@ -74,7 +69,6 @@ export const useEmergencyZonesStore = defineStore('emergencyZonesStore', {
             if (index !== -1) {
                 this.emergencyZones.splice(index, 1);
             } else {
-                console.error('Emergency zone not found in the store');
             }
         },
 
