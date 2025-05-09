@@ -39,7 +39,14 @@
   },
   "footer": {
 	"about-us": "Om Oss",
-	"privacy-policy": "Personvernserklæring"
+	"privacy-policy": "Personvernserklæring",
+	"general-info": "Generell Informasjon"
+  },
+  "general-info": {
+	"title": "Generell Informasjon"
+  },
+  "before-crisis": {
+	"title": "Før Krisen"
   },
   "storage-status": {
 	"level": {

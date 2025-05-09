@@ -38,8 +38,15 @@
     "email": "Email: "
   },
     "footer": {
-        "about-us": "About Us",
-        "privacy-policy": "Privacy Policy"
+      "about-us": "About Us",
+      "privacy-policy": "Privacy Policy",
+      "general-info": "General Information"
+      },
+    "general-info": {
+    "title": "General Information"
+    },
+    "before-crisis": {
+    "title": "Before Crisis"
     },
     "storage-status": {
       "level": {

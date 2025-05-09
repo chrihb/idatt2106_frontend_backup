@@ -30,6 +30,8 @@ import StorageListView from '@/views/StorageListView.vue';
 import HouseholdListView from "@/views/HouseholdListView.vue";
 import AdminAuthBase from "@/views/AdminAuthBase.vue";
 import AdminLogin from "@/components/login/AdminLogin.vue";
+import GeneralInfoView from "@/views/GeneralInfo/GeneralInfoView.vue";
+import BeforeCrisis from '@/views/GeneralInfo/BeforeCrisis.vue';
 
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
@@ -61,6 +63,8 @@ const router = createRouter({
                 },
                 { path: "/about-us", component: AboutUsView },
                 { path: "/privacy-policy", component: PrivacyPolicyView },
+                { path: "/general-info", component: GeneralInfoView, },
+                { path: "/before-crisis", component: BeforeCrisis, },
                 { path: "/map", component: MapView },
                 { path: "/my-home", component: MyHomeView, meta: { requiresAuth: true, requiresHousehold: true } },
                 { path: "/admin-settings", component: AdminSettings,
