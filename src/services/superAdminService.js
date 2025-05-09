@@ -91,25 +91,32 @@ export const passwordResetLinkToAdministrator = async (email) => {
     try {
         const userStore = useUserStore();
 
-        const response = await axios.post(`${window.backendURL}/api/admin/reset-password`, {}, {
-            headers: {
-                Authorization: `Bearer ${userStore.adminToken}`
+        const response = await axios.post(
+            `${window.backendURL}/api/admin/reset-password`,
+            { email: email },
+            {
+                headers: {
+                    Authorization: `Bearer ${userStore.adminToken}`,
+                    'Content-Type': 'application/json',
+                }
             }
-        });
+        );
 
-        if (response.status === 200) {
+        if (response.status === 200 && response.data === true) {
             return { success: true };
         } else {
-            return { error: 'Failed to send password reset link: Invalid response format from server.' };
+            return { error: 'Failed to send password reset link: Email could not be sent.' };
         }
     } catch (error) {
         if (error.response) {
             if (error.response.status === 400 || error.response.status === 404) {
                 return { error: 'Failed to send password reset link: Invalid request.' };
             }
+            if (error.response.status === 401) {
+                return { error: 'Unauthorized: Invalid or missing token.' };
+            }
             return { error: 'An error occurred. Please try again.' };
         }
-
         return { error: 'Network error. Please try again later.' };
     }
-}
+};

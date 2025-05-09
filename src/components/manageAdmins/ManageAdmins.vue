@@ -1,11 +1,11 @@
 <script setup>
 import { useI18n } from "vue-i18n";
 import { onMounted, ref } from "vue";
+import { XMarkIcon } from "@heroicons/vue/24/solid/index.js";
 import CurrentAdmin from "@/components/manageAdmins/CurrentAdmin.vue";
 import { addAdministrator, deleteAdministrator, passwordResetLinkToAdministrator, getAllAdmins } from "@/services/superAdminService.js";
 import * as rules from "@vee-validate/rules";
 import { useField, useForm } from "vee-validate";
-import { XMarkIcon } from "@heroicons/vue/24/outline";
 
 const { t } = useI18n();
 
@@ -87,9 +87,9 @@ const removeAdmin = async (adminId) => {
     }
 };
 
-const sendPasswordResetEmail = async (adminId) => {
+const sendPasswordResetEmail = async (adminEmail) => {
   try {
-    const response = await passwordResetLinkToAdministrator(adminId);
+    const response = await passwordResetLinkToAdministrator(adminEmail);
     if (response.success) {
       successMsg.value = t("manage-admins.password-reset-email-sent");
 
@@ -204,7 +204,7 @@ onMounted(async () => {
             :key="admin.id"
             :admin="admin"
             @removeAdmin="removeAdmin"
-            @sendPasswordResetEmail="sendPasswordResetEmail"
+            @sendPasswordResetEmail= "sendPasswordResetEmail(admin.email)"
         />
       </div>
     </div>
