@@ -16,14 +16,6 @@ export const toggleableSettingKeys = [
 export const routedSettings = ref([
     {
         id: 1,
-        description: "account-settings.manage-storages",
-        icon: "storage",
-        route: "/storage",
-        adminNeeded: false,
-        superAdminNeeded: false,
-    },
-    {
-        id: 2,
         description: "account-settings.manage-households",
         icon: "home",
         route: "/household/options",
@@ -31,31 +23,7 @@ export const routedSettings = ref([
         superAdminNeeded: false,
     },
     {
-        id: 3,
-        description: "account-settings.find-assembling-areas",
-        icon: "map",
-        route: "/map",
-        adminNeeded: true,
-        superAdminNeeded: false,
-    },
-    {
-        id: 4,
-        description: "account-settings.manage-emergency-groups",
-        icon: "group",
-        route: "/emergency-groups",
-        adminNeeded: false,
-        superAdminNeeded: true,
-    },
-    {
-        id: 5,
-        description: "account-settings.experience-journal",
-        icon: "journal",
-        route: "/experience-journal",
-        adminNeeded: false,
-        superAdminNeeded: false,
-    },
-    {
-        id: 6,
+        id: 2,
         description: "account-settings.admin-settings",
         icon: "settings",
         route: "/admin-settings",
@@ -63,10 +31,10 @@ export const routedSettings = ref([
         superAdminNeeded: false,
     },
     {
-        id: 7,
-        description: "account-settings.invite-admins",
-        icon: "addUser",
-        route: "/invite-admins",
+        id: 3,
+        description: "account-settings.manage-admins",
+        icon: "group",
+        route: "/manage-admins",
         adminNeeded: false,
         superAdminNeeded: true,
     }
@@ -75,12 +43,6 @@ export const routedSettings = ref([
 
 export const iconMap = {
     home: HomeIcon,
-    storage: ArchiveBoxIcon,
-    map: MapIcon,
     group: UserGroupIcon,
-    journal: DocumentTextIcon,
-    notification: BellIcon,
-    location: MapPinIcon,
     settings: CogIcon,
-    addUser: UserPlusIcon,
 };

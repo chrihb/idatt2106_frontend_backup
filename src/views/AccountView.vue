@@ -1,23 +1,23 @@
 <script setup>
-import { useI18n } from "vue-i18n";
+import {useI18n} from "vue-i18n";
 import AccountRouterLink from "@/components/account/AccountRouterLink.vue";
-import { iconMap, routedSettings, toggleableSettingKeys } from "@/utils/settings.js";
+import {iconMap, routedSettings, toggleableSettingKeys} from "@/utils/settings.js";
 import AccountToggleButton from "@/components/account/AccountToggleButton.vue";
-import { useUserStore } from '@/stores/userStore';
-import { saveUserSettings } from '@/services/userSettingsService';
-import { computed } from 'vue';
+import {useUserStore} from '@/stores/userStore';
+import {saveUserSettings} from '@/services/userSettingsService';
+import {computed} from 'vue';
 
 
-const { t } = useI18n();
+const {t} = useI18n();
 
 const userStore = useUserStore();
 
 
 const toggleableSettings = computed(() =>
-  toggleableSettingKeys.map(setting => ({
-    ...setting,
-    toggleState: userStore.userSettings[setting.id]
-  }))
+    toggleableSettingKeys.map(setting => ({
+      ...setting,
+      toggleState: userStore.userSettings[setting.id]
+    }))
 )
 
 const toggleSetting = async (key) => {
@@ -53,8 +53,8 @@ const toggleSetting = async (key) => {
         <AccountRouterLink
             v-for="(setting, index) in routedSettings"
             :key="index"
-            :setting="setting"
             :iconMap="iconMap"
+            :setting="setting"
         />
       </div>
     </div>

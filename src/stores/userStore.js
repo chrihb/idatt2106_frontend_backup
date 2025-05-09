@@ -1,6 +1,7 @@
 import {defineStore} from 'pinia';
 import {requestAuthenticationCheck} from "@/services/authenticationCheckService.js";
 import {requestHouseholds} from "@/services/householdService.js";
+import {removeAccountMarkers} from "@/utils/mapUtils.js";
 
 export const useUserStore = defineStore('user', {
     state: () => ({
@@ -10,7 +11,8 @@ export const useUserStore = defineStore('user', {
         userSettings: {
             showStorageStatusOnFrontpage: true,
             showHouseholdStatusOnFrontpage: true
-        }
+        },
+        isAdmin: false,
     }),
     actions: {
         async isAuthenticated() {
@@ -22,10 +24,15 @@ export const useUserStore = defineStore('user', {
             }
             this.authenticated = await requestAuthenticationCheck();
         },
-        setCredentials({ token, authenticated, householdId } = {}) {
+        setCredentials({ token, authenticated, householdId, isAdmin = false } = {}) {
             if (token !== undefined) this.token = token;
             if (authenticated !== undefined) this.authenticated = authenticated;
             if (householdId !== undefined) this.householdId = householdId;
+            if (isAdmin !== undefined) this.isAdmin = isAdmin;
+            console.log("token: ", this.token);
+            console.log("is auth: ", this.authenticated);
+            console.log("is admin: ", this.isAdmin);
+            console.log("householdId: ", this.householdId);
             console.log(householdId)
         }
         ,
@@ -47,12 +54,19 @@ export const useUserStore = defineStore('user', {
         },
 
         setUserSettings(settings) {
+            if (!settings) {
+                console.error("Invalid settings provided");
+                return;
+            }
             this.userSettings = settings;
         },
     },
     getters: {
         getHouseholdByName: (state) => (name) => {
             return state.householdId.find(h => h.name?.toLowerCase() === name.toLowerCase());
+        },
+        isLoggedIn: (state) => {
+            return !!state.token && state.authenticated;
         }
     },
     persist: {

@@ -1,5 +1,5 @@
 <script setup lang="js">
-import {ref, onMounted, watch} from 'vue';
+import {ref, onMounted, watch, computed} from 'vue';
 import StorageItemMinimized from "@/components/emergencyStorage/StorageItemMinimized.vue";
 import {useCategoriesStore} from '@/stores/categoriesStore.js';
 import {useUnitsStore} from '@/stores/unitsStore.js';
@@ -22,13 +22,17 @@ const props = defineProps({
 });
 
 const emit = defineEmits(['close', 'update', 'create', 'itemUpdated']);
-const {t} = useI18n();
+const {t, locale} = useI18n();
 
 const unitsStore = useUnitsStore();
 const categoriesStore = useCategoriesStore();
 const itemsStore = useEmergencyItemsStore();
 
 const items = ref([]);
+const category = computed(() => {
+  if (!props.categoryId) return '';
+  return categoriesStore.getCategoryName(props.categoryId, locale.value);
+});
 
 const loadItems = async () => {
   if (props.display && props.categoryId) {
@@ -37,7 +41,7 @@ const loadItems = async () => {
 
       items.value = categoryItems.map(item => ({
         ...item,
-        unit: unitsStore.getUnitName(item.unitId)
+        unit: unitsStore.getUnitName(item.unitId, locale.value),
       }));
     } catch (error) {
       console.error('Error loading items for category', error);
@@ -79,6 +83,15 @@ watch(() => props.display, async (newValue) => {
     await loadItems();
   }
 }, {immediate: false});
+
+watch(() => locale.value, async () => {
+  if (items.value.length > 0) {
+    items.value = items.value.map(item => ({
+      ...item,
+      unit: unitsStore.getUnitName(item.unitId, locale.value),
+    }));
+  }
+}, {immediate: false});
 </script>
 
 <template>
@@ -89,7 +102,7 @@ watch(() => props.display, async (newValue) => {
           class="bg-white rounded-lg shadow-xl w-full sm:w-11/12 md:w-4/5 lg:w-3/5 max-h-[90vh] overflow-auto p-4 sm:p-6 max-w-3xl">
         <div class="flex flex-row justify-between items-center mb-4 sm:mb-6 border-b pb-3 sm:pb-4">
           <h1 class="text-xl sm:text-2xl font-bold text-gray-800 truncate">
-            {{ categoriesStore.getCategoryName(categoryId) }}
+            {{ category }}
           </h1>
           <button
               class="text-gray-500 hover:text-gray-800 focus:outline-none transition-colors duration-200 p-2 rounded-full hover:bg-gray-100"

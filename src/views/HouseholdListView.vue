@@ -1,10 +1,10 @@
 <script setup>
-import { useRouter } from 'vue-router';
-import { useUserStore} from "@/stores/userStore.js";
-import { useI18n } from 'vue-i18n';
-import HouseholdPanel from "@/components/myHome/HouseholdPanel.vue";
+import {useRouter} from 'vue-router';
+import {useUserStore} from "@/stores/userStore.js";
+import {useI18n} from 'vue-i18n';
+import HouseholdPanelMembers from "@/components/myHome/HouseholdPanelMembers.vue";
 
-const { t } = useI18n();
+const {t} = useI18n();
 const userStore = useUserStore();
 const router = useRouter();
 
@@ -20,10 +20,10 @@ function goToHousehold(id) {
       <div
           v-for="household in userStore.householdId"
           :key="household.id"
-          @click="goToHousehold(household.id)"
           class="cursor-pointer"
+          @click="goToHousehold(household.id)"
       >
-        <HouseholdPanel :name="household.name" :address="household.address" />
+        <HouseholdPanelMembers :name="household.name" :members="household.members" :address="household.address" />
 
       </div>
     </div>

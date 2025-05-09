@@ -1,7 +1,7 @@
 import { mount, flushPromises } from "@vue/test-utils";
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import UpdateStorage from "@/components/emergencyStorage/UpdateStorageComponent.vue";
-import {createTestingPinia} from "@pinia/testing";
+import { createTestingPinia } from "@pinia/testing";
 
 vi.mock("@/services/emergencyItemService.js", () => ({
   emergencyItemService: vi.fn(() => ({
@@ -22,7 +22,14 @@ vi.mock("@/stores/categoriesStore.js", () => ({
       { id: 1, name: "Food" },
       { id: 2, name: "Water" }
     ],
-    fetchCategories: vi.fn().mockResolvedValue()
+    fetchCategories: vi.fn().mockResolvedValue(),
+    getCategoryName: vi.fn((id) => {
+      const categories = {
+        1: "Food",
+        2: "Water"
+      };
+      return categories[id] || `Category ${id}`;
+    })
   }))
 }));
 
@@ -32,7 +39,53 @@ vi.mock("@/stores/unitsStore.js", () => ({
       { id: 1, name: "kg" },
       { id: 2, name: "L" }
     ],
-    fetchUnits: vi.fn().mockResolvedValue()
+    fetchUnits: vi.fn().mockResolvedValue(),
+    getUnitName: vi.fn((id) => {
+      const units = {
+        1: "kg",
+        2: "L"
+      };
+      return units[id] || `Unit ${id}`;
+    })
+  }))
+}));
+
+vi.mock("@/stores/emergencyItemsStore.js", () => ({
+  useEmergencyItemsStore: vi.fn(() => ({
+    items: [
+      { id: 1, name: "Rice", amount: 5, unitId: 1, categoryId: 1, expirationDate: "2025-12-31", householdId: 1 }
+    ],
+    fetchItemsByCategory: vi.fn().mockResolvedValue(),
+    getItemById: vi.fn((id) => {
+      if (id === 1) {
+        return { id: 1, name: "Rice", amount: 5, unitId: 1, categoryId: 1, expirationDate: "2025-12-31", householdId: 1 };
+      }
+      return null;
+    })
+  }))
+}));
+
+vi.mock("@/stores/emergencyItemStore.js", () => ({
+  useEmergencyItemStore: vi.fn(() => ({
+    itemId: 1,
+    name: "Rice",
+    amount: 5,
+    categoryId: 1,
+    unitId: 1,
+    expirationDate: "2025-12-31",
+    householdIds: 1,
+    fetchItemById: vi.fn().mockResolvedValue(),
+    setItemData: vi.fn(),
+    saveItem: vi.fn().mockResolvedValue(),
+    resetState: vi.fn()
+  }))
+}));
+
+vi.mock("@/stores/userStore.js", () => ({
+  useUserStore: vi.fn(() => ({
+    householdId: [
+      { id: 1, name: "My Household" }
+    ]
   }))
 }));
 
@@ -44,6 +97,7 @@ vi.mock("vue-i18n", () => ({
         "storage.select-category": "Select Category",
         "storage.item-amount": "Amount",
         "storage.select-unit": "Select Unit",
+        "storage.select-household": "Select Household",
         "storage.expiration-date": "Expiration Date",
         "storage.update-item": "Update Item",
         "storage.new-item": "New Item",
@@ -54,7 +108,8 @@ vi.mock("vue-i18n", () => ({
         "storage.quit": "Quit"
       };
       return translations[key] || key;
-    }
+    },
+    locale: { value: 'en' }
   }),
   createI18n: vi.fn(() => ({
     global: {},
@@ -72,11 +127,12 @@ describe('UpdateStorage.vue', () => {
         unitId: null,
         itemId: null,
         display: true,
+        householdId: null,
         ...props
       },
       global: {
+        plugins: [createTestingPinia({ createSpy: vi.fn })],
         stubs: {
-          plugins: [createTestingPinia({ createSpy: vi.fn })],
           Teleport: true
         }
       }
@@ -104,13 +160,15 @@ describe('UpdateStorage.vue', () => {
     expect(wrapper.find('[data-test="save-item"]').text()).toBe('Update Item');
   });
 
-
   it('uses provided categoryId and unitId for new item', async () => {
     wrapper = setupComp({ categoryId: 2, unitId: 2 });
     await flushPromises();
 
-    expect(wrapper.findAll('select')[0].element.value).toBe('2');
-    expect(wrapper.findAll('select')[1].element.value).toBe('2');
+    const categorySelect = wrapper.find('[data-test="select-category"]');
+    const unitSelect = wrapper.find('[data-test="select-unit"]');
+
+    expect(categorySelect.element.value).toBe('2');
+    expect(unitSelect.element.value).toBe('2');
   });
 
   it('shows incomplete form message when trying to save with missing fields', async () => {
@@ -119,8 +177,8 @@ describe('UpdateStorage.vue', () => {
 
     await wrapper.find('[data-test="save-item"]').trigger('click');
 
-    expect(wrapper.find('.text-red-600').exists()).toBeTruthy();
-    expect(wrapper.find('.text-red-600').text()).toContain('Please fill all fields');
+    expect(wrapper.find('[data-test="incomplete-form"]').exists()).toBeTruthy();
+    expect(wrapper.find('[data-test="incomplete-form"]').text()).toContain('Please fill all fields');
   });
 
   it('shows confirmation dialog when trying to close with changes', async () => {

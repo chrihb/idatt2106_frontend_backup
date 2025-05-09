@@ -18,16 +18,24 @@
   "account-settings": {
 	"title": "Brukerinnstillinger",
 	"manage-storages": "Administrer lager",
-	"manage-households": "Administrer husstander",
-	"find-assembling-areas": "Finn møteplasser",
-	"manage-emergency-groups": "Administrer beredskapsgrupper",
-	"experience-journal": "Erfaringsjournal",
+	"manage-households": "Legg til husstand",
 	"enable-notifications": "Aktiver varslinger",
 	"enable-position-sharing": "Skru på posisjonsdeling",
 	"show-storage-on-frontpage": "Vis lagerstatus på forsiden",
 	"show-household-on-frontpage": "Vis husstandsstatus på forsiden",
 	"admin-settings": "Administrator innstillinger",
-	"invite-admins": "Inviter administratorer"
+    "manage-admins": "Administrer administratorer"
+  },
+  "manage-admins": {
+    "title": "Administrer Administratorer",
+    "current-admins": "Nåværende administratorer",
+    "add-admin": "Legg til administrator",
+    "add" : "Legg til",
+    "add-admin-desc": "Legg til en ny administrator ved å oppgi e-postadressen deres.",
+    "remove-admin": "Fjern administrator",
+    "remove": "Fjern",
+    "new-password": "Nytt passord",
+    "email": "E-post: "
   },
   "footer": {
 	"about-us": "Om Oss",
@@ -104,7 +112,11 @@
 	"create-desc": "en husstand for å administrere lageret ditt og andre medlemmer",
 	"manage-storage": "Administrer lager",
 	"manage-household": "Administrer husstand",
-	"location-status": "Lokasjonsstatus"
+	"location-status": "Lokasjonsstatus",
+	"other-members": "Andre Medlemmer",
+	"adults": "Voksne",
+	"children": "Barn",
+	"pets": "Kjæledyr"
   },
   "household": {
 	"title": "Administrer husstand",
@@ -247,5 +259,39 @@
 	"filter": "Filtrer",
 	"address": "Adresse",
   	"directions": "Veibeskrivelse"
+  },
+  "admin-settings": {
+    "title": "Administrator Innstillinger",
+    "map": {
+      "name": "Kart",
+      "createNewEmergencyZone": "Opprett Nytt Kriseområde",
+	  "updateEmergencyZone": "Oppdater Kriseområde",
+	  "deleteEmergencyZone": "Slett Kriseområde",
+	  "addNewMapMarker": "Legg til Nytt Kartmerke",
+	  "addMarkerType": "Legg til Kartmerke Type"
+    },
+    "news": {
+      "name": "Nyheter",
+      "createNewNews": "Opprett Nyhet",
+      "newsTitle": "Nyhetstittel",
+      "newsTitleRequired": "Nyhetstittel er påkrevd",
+      "newsDesc": "En nyhet for å informere brukerne dine om viktige oppdateringer",
+      "newsDescRequired": "Nyhetsbeskrivelse er påkrevd",
+      "deleteNews": "Slett Nyhet"
+    },
+    "household": {
+      "name": "Husstand",
+      "createNewHousehold": "Opprett Ny Husstand",
+      "householdName": "Husstandsnavn",
+      "householdNameRequired": "Navnet på husstanden er påkrevd",
+      "householdDesc": "En husstand for å administrere lageret ditt og husstandsmedlemmer"
+    },
+    "storage": {
+      "name": "Storage",
+      "createNewStorage": "Create New Storage",
+      "storageName": "Storage Name",
+      "storageNameRequired": "Storage name is required",
+      "storageDesc": "A storage to manage your storage items"
+    }
   }
 }

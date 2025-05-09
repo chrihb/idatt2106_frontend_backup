@@ -18,16 +18,24 @@
   "account-settings": {
     "title": "Account Settings",
     "manage-storages": "Manage Storages",
-    "manage-households": "Manage Households",
-    "find-assembling-areas": "Find Assembling Areas",
-    "manage-emergency-groups": "Manage Emergency Groups",
-    "experience-journal": "Experience Journal",
+    "manage-households": "Add household",
     "enable-notifications": "Enable Notifications",
     "enable-position-sharing": "Enable Location Sharing",
     "show-storage-on-frontpage": "Show Storage Status on Frontpage",
     "show-household-on-frontpage": "Show Household Status on Frontpage",
     "admin-settings": "Admin Settings",
-    "invite-admins": "Invite Admins"
+    "manage-admins": "Manage Admins"
+  },
+  "manage-admins": {
+    "title": "Manage Admins",
+    "current-admins": "Current Admins",
+    "add-admin": "Add Admin",
+    "add" : "Add",
+    "add-admin-desc": "Add a new admin by entering their email address.",
+    "remove-admin": "Remove Admin",
+    "remove": "Remove",
+    "new-password": "New Password",
+    "email": "Email: "
   },
     "footer": {
         "about-us": "About Us",
@@ -104,7 +112,11 @@
       "create-desc": "a household to manage your storage and household members",
       "manage-storage": "Manage Storage",
       "manage-household": "Manage Household",
-      "location-status": "Location Status"
+      "location-status": "Location Status",
+      "other-members": "Other Members",
+      "adults": "Adults",
+      "children": "Children",
+      "pets": "Pets"
     },
     "household": {
       "title": "My Household",
@@ -247,5 +259,40 @@
     "filter": "Filter",
     "address": "Address",
     "directions": "Directions"
+  },
+  "admin-settings": {
+    "title": "Admin Settings",
+    "map": {
+      "name": "Map",
+      "createNewEmergencyZone": "Create New Emergency Zone",
+      "updateEmergencyZone": "Update Emergency Zone",
+      "deleteEmergencyZone": "Delete Emergency Zone",
+      "addNewMapMarker": "Add New Map Marker",
+      "addMarkerType": "Add Marker Type"
+    },
+    "news": {
+      "name": "News",
+      "createNewNews": "Create News",
+      "newsTitle": "News Title",
+      "newsTitleRequired": "News title is required",
+      "newsDesc": "News description",
+      "newsDescRequired": "News description is required",
+      "deleteNews": "Delete News"
+    },
+    "household": {
+      "name": "Household",
+      "createNewHousehold": "Create New Household",
+      "householdName": "Household Name",
+      "householdNameRequired": "Household name is required",
+      "householdDesc": "A household to manage your storage and household members"
+    },
+    "storage": {
+      "name": "Storage",
+      "createNewStorage": "Create New Storage",
+      "storageName": "Storage Name",
+      "storageNameRequired": "Storage name is required",
+      "storageDesc": "A storage to manage your storage items"
+    }
   }
 }
+
