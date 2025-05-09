@@ -23,3 +23,17 @@ export const timeSinceEvent = (timestamp) => {
 
     return "akkurat nå";
 };
+
+export const formatDate = (timestamp) => {
+    const isoString = timestamp.replace(' ', 'T').split('.')[0]; // Remove fractional seconds
+    const eventTime = new Date(isoString);
+
+    const hours = String(eventTime.getHours()).padStart(2, '0');
+    const minutes = String(eventTime.getMinutes()).padStart(2, '0');
+    const day = String(eventTime.getDate()).padStart(2, '0');
+    const month = String(eventTime.getMonth() + 1).padStart(2, '0');
+    const year = eventTime.getFullYear();
+
+    return `${hours}:${minutes} ${day}-${month}-${year}`;
+};
+

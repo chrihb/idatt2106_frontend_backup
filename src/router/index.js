@@ -24,7 +24,9 @@ import Options from "@/components/joinHousehold/Options.vue";
 import CreateEmergencyZone
     from "@/components/admin/map/CreateEmergencyZone.vue";
 import CreateNews from "@/components/admin/news/CreateNews.vue";
+import UpdateNews from "@/components/admin/news/UpdateNews.vue";
 import DeleteNews from "@/components/admin/news/DeleteNews.vue";
+import News from "@/components/admin/news/News.vue";
 import StorageListView from '@/views/StorageListView.vue';
 import HouseholdListView from "@/views/HouseholdListView.vue";
 import AdminAuthBase from "@/views/AdminAuthBase.vue";
@@ -61,6 +63,8 @@ const router = createRouter({
                     children: [
                         { path: "createEmergencyZone", component: CreateEmergencyZone },
                         { path: "createNews", component: CreateNews },
+
+                        { path: "news", component: News },
                         { path: "deleteNews", component: DeleteNews },
                     ]
                 },
@@ -73,12 +77,13 @@ const router = createRouter({
                 { path: "/map", component: MapView },
                 { path: "/my-home", component: MyHomeView, meta: { requiresAuth: true, requiresHousehold: true } },
 
-                { path: "/manage-admins", component: ManageAdmins, meta: { requiresAuth: true, requiresAdmin: true } },
-                { path: "/admin-settings", component: AdminSettings, meta: { requiresAuth: true, requiresAdmin: true },
+                { path: "/manage-admins", component: ManageAdmins, meta: { requiresAdmin: true } },
+                { path: "/admin-settings", component: AdminSettings, meta: { requiresAdmin: true },
                     children: [
-                        { path: "createEmergencyZone", component: CreateEmergencyZone, meta: { requiresAuth: true, requiresAdmin: true } },
-                        { path: "createNews", component: CreateNews, meta: { requiresAuth: true, requiresAdmin: true } },
-                        { path: "deleteNews", component: DeleteNews, meta: { requiresAuth: true, requiresAdmin: true } },
+                        { path: "createEmergencyZone", component: CreateEmergencyZone },
+                        { path: "createNews", component: CreateNews },
+                        { path: "updateNews/:caseId", component: UpdateNews, props: true },
+                        { path: "deleteNews/:caseId", component: DeleteNews, props: true },
                     ]
                 },
 

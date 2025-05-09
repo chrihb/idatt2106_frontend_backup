@@ -1,5 +1,7 @@
 import { useNewsStore } from "@/stores/newsStore.js";
 import axios from "axios";
+import { useUserStore } from '@/stores/userStore';
+
 
 /**
  * Fetches news articles from the backend and updates the news store.
@@ -72,3 +74,79 @@ export const getCaseDetails = async (caseId) => {
     } catch (error) {
     }
 };
+
+export const createNews = async (newsForm, t) => {
+  const userStore = useUserStore();
+
+  try {
+    console.log(userStore.adminToken);
+    const response = await axios.post(
+        `${window.backendURL}/api/news/add`,
+        {
+        caseId: newsForm.caseId,
+        title: newsForm.title,
+        content: newsForm.content,
+        latitude: 0,
+        longitude: 0,
+        district: newsForm.district
+      },
+      {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${userStore.adminToken}`
+        }
+      }
+    );
+
+    return { success: true, data: response.data };
+  } catch (error) {
+    console.error('Error creating news:', error);
+
+    if (error.response) {
+      return {
+        success: false,
+        error: error.response.data.message || t('admin-settings.news.createError')
+      };
+    }
+
+    return {
+      success: false,
+      error: t('admin-settings.news.networkError')
+    };
+  }
+};
+
+export const deleteNews = async (caseId, t) => {
+    const userStore = useUserStore();
+  
+    try {
+      console.log(userStore.adminToken);
+      const response = await axios.delete(
+          `${window.backendURL}/api/news/`+caseId,
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${userStore.adminToken}`
+          }
+        }
+      );
+  
+      return { success: true, data: response.data };
+    } catch (error) {
+      console.error('Error deleting news:', error);
+  
+      if (error.response) {
+        return {
+          success: false,
+          error: error.response.data.message || t('admin-settings.news.deleteError')
+        };
+      }
+  
+      return {
+        success: false,
+        error: t('admin-settings.news.networkError')
+      };
+    }
+  };
+  
+  
