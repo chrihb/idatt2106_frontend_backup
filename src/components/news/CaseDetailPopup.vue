@@ -3,7 +3,7 @@ import {onMounted, ref} from "vue";
 import {getCaseDetails} from "@/services/newsService.js";
 import {useI18n} from "vue-i18n";
 import {XMarkIcon} from "@heroicons/vue/24/solid";
-import {timeSinceEvent} from "@/utils/timeFormat.js";
+import {formatDate} from "@/utils/timeFormat.js";
 
 const props = defineProps({
   caseId: {
@@ -48,7 +48,7 @@ onMounted(async () => {
         <h2 class="text-xl font-bold mb-4">{{ caseDetails[0]?.title || 'Case Details' }}</h2>
         <div v-for="(detail) in caseDetails" :key="detail.id" class="mb-4 border-b border-gray-200 pb-2">
           <p class="font-semibold"> {{ detail.content }}</p>
-          <p class="text-gray-600">{{ timeSinceEvent(detail.date) }}</p>
+          <p class="text-gray-600">{{ formatDate(detail.date) }}</p>
           <p class="text-gray-600"> {{ t("news.district") }}: {{ detail.district }}</p>
         </div>
       </div>
