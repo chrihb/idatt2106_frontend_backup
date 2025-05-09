@@ -1,17 +1,16 @@
 <script setup>
-import {ref, onMounted, reactive} from 'vue';
+import {ref, onMounted} from 'vue';
 import {useForm} from 'vee-validate';
 import * as rules from '@vee-validate/rules';
 import FormField from '@/components/input/FormField.vue';
 import PasswordField from "@/components/input/PasswordField.vue";
-import {requestLogin} from '@/services/adminLoginService.js';
+import {request2FA, requestLogin} from '@/services/adminLoginService.js';
 import {useI18n} from "vue-i18n";
 import {useAuthRedirect} from "@/utils/useAuthRedirect.js";
-import {useRoute, useRouter} from "vue-router";
+import {useRoute} from "vue-router";
 
 const { t } = useI18n();
 const route = useRoute();
-const router = useRouter();
 const { redirectAfterAuth } = useAuthRedirect();
 
 const {validate, values: form, resetForm} = useForm({
@@ -21,7 +20,7 @@ const {validate, values: form, resetForm} = useForm({
       return true;
     },
     email: (value) => {
-      if (!value) return  t('login.emailRequired') ;
+      if (!value) return t('login.emailRequired');
       if (!rules.email(value)) return t('login.emailError');
       return true;
     },
@@ -41,7 +40,6 @@ const isSubmitting = ref(false);
 const successMessage = ref('');
 const errorMessage = ref('');
 const twoFactorSent = ref(false);
-const twoFactorCode = ref('');
 
 onMounted(() => {
   if (route.query.success === 'true') {
@@ -51,13 +49,13 @@ onMounted(() => {
 
 const submitForm = async () => {
   if (twoFactorSent.value) {
-    await handleSubmit();
+    await handleLogin();
   } else {
-    await sendTwoFactorCode();
+    await handleSendTwoFactorCode();
   }
 };
 
-const sendTwoFactorCode = async () => {
+const handleSendTwoFactorCode = async () => {
   const result = await validate(['email', 'username', 'password']);
   if (!result.valid) return;
 
@@ -66,30 +64,23 @@ const sendTwoFactorCode = async () => {
   errorMessage.value = '';
 
   try {
-    const response = await fetch(`${window.backendURL}/api/admin/2fa`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({ email: form.email })
-    });
+    const response = await request2FA(form.email);
 
-    if (response.ok) {
+    if (response.success) {
       twoFactorSent.value = true;
       successMessage.value = t('login.twoFactorSent');
     } else {
-      const data = await response.json();
-      errorMessage.value = data.error || t('login.twoFactorError');
+      errorMessage.value = response.error || t('login.twoFactorError');
     }
   } catch (error) {
     console.error("Error sending 2FA code:", error);
-    errorMessage.value = error.message || t('login.twoFactorError');
+    errorMessage.value = t('login.twoFactorError');
   } finally {
     isSubmitting.value = false;
   }
 };
 
-const handleSubmit = async () => {
+const handleLogin = async () => {
   const result = await validate();
   if (!result.valid) return;
 
@@ -119,7 +110,7 @@ const handleSubmit = async () => {
     }
   } catch (error) {
     console.error("Login error:", error);
-    errorMessage.value = error.message || t('login.networkError');
+    errorMessage.value = t('login.networkError');
   } finally {
     isSubmitting.value = false;
   }
