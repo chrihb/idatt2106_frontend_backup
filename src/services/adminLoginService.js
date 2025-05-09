@@ -5,7 +5,7 @@ export const request2FA = async (loginForm, t) => {
     try {
         const response = await axios.post(
             `${window.backendURL}/api/admin/2fa`,
-            { email: loginForm.email },
+            { username: loginForm.username },
             { headers: { 'Content-Type': 'application/json' } }
         );
 
@@ -15,11 +15,18 @@ export const request2FA = async (loginForm, t) => {
         };
     } catch (error) {
         try {
-            await requestLogin(loginForm, t);
-            return {
-                success: true,
-                loggedIn: true,
-            };
+            const login = await requestLogin(loginForm, t);
+            if(login.success) {
+                return {
+                    success: true,
+                    loggedIn: true,
+                };
+            } else {
+                return {
+                    success: false,
+                    error: login.error
+                };
+            }
         } catch (error) {}
 
         console.error('Error requesting 2FA:', error);
@@ -27,11 +34,6 @@ export const request2FA = async (loginForm, t) => {
         return {
             success: false,
             error: t('login.twoFactorError')
-        };
-
-        return {
-            success: false,
-            error: t('login.networkError')
         };
     }
 };
@@ -75,11 +77,6 @@ export const requestLogin = async (loginForm, t) => {
                     return {
                         success: false,
                         error: t('login-service.invalidAdminCredentials')
-                    };
-                case 406:
-                    return {
-                        success: false,
-                        error: t('login-service.emailNotVerified')
                     };
                 case 500:
                     return {
