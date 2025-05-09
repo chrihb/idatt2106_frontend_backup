@@ -40,13 +40,20 @@
     "footer": {
       "about-us": "About Us",
       "privacy-policy": "Privacy Policy",
-      "general-info": "General Information"
+      "general-info": "Info"
       },
     "general-info": {
-    "title": "General Information"
+    "title": "General Information",
+    "find-information": "Below you can find information about what to do before, during and after a crisis:"
     },
     "before-crisis": {
     "title": "Before Crisis"
+    },
+    "during-crisis": {
+    "title": "During Crisis"
+    },
+    "after-crisis": {
+    "title": "After Crisis"
     },
     "storage-status": {
       "level": {

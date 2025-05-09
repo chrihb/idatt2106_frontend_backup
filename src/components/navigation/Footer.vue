@@ -9,7 +9,6 @@ const { t } = useI18n();
     <RouterLink class="hover:text-kf-white" to="/about-us">{{ t("footer.about-us") }}</RouterLink>
     <RouterLink class="hover:text-kf-white" to="/privacy-policy">{{ t("footer.privacy-policy") }}</RouterLink>
     <RouterLink class="hover:text-kf-white" to="/admin-login">{{t("login.adminLogin")}}</RouterLink>
-    <RouterLink class="hover:text-kf-white" to="/general-info">{{t("footer.general-info")}}</RouterLink>
   </div>
 </template>
 

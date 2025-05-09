@@ -17,7 +17,6 @@ Sjekk om familie eller nabo har abonnement tilknyttet et annet mobilnett enn deg
 - Ha en liste på papir med viktige telefonnumre hvis du må låne en telefon.
 - Sjekk med din kommune om de har møteplasser, eller andre ordninger, hvor du kan få informasjon dersom strøm og telekommunikasjon er nede.
 
-
 Kriser er ulike og uforutsigbare. Derfor er det ikke lett å gi noe fasitsvar på hvor det er best å oppholde seg når krisen rammer.  
 
 I mange tilfeller er det tryggeste å holde seg hjemme. Hvis du har fulgt rådene om egenberedskap, har du gode forutsetninger for å klare deg selv i flere dager der du bor. Les mer om egenberedskap for en uke.

@@ -40,13 +40,20 @@
   "footer": {
 	"about-us": "Om Oss",
 	"privacy-policy": "Personvernserklæring",
-	"general-info": "Generell Informasjon"
+	"general-info": "Info"
   },
   "general-info": {
-	"title": "Generell Informasjon"
+	"title": "Generell Informasjon",
+	"find-information": "Under kan du lese om hva du kan bør gjøre før, under og etter en krise:"
   },
   "before-crisis": {
 	"title": "Før Krisen"
+  },
+  "during-crisis": {
+	"title": "Under Krisen"
+  },
+  "after-crisis": {
+	"title": "Etter Krisen"
   },
   "storage-status": {
 	"level": {

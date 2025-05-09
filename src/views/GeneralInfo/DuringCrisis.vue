@@ -10,7 +10,7 @@ const { t } = useI18n()
     <RouterLink to="/general-info" class="text-kf-blue hover:underline">
         ← {{ t('general-info.title') }}
     </RouterLink>
-  <FooterPage :title="t('before-crisis.title')" file="before-crisis" />
+  <FooterPage :title="t('during-crisis.title')" file="during-crisis" />
 </div>
 </template>
 
