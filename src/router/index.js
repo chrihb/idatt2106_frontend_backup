@@ -20,8 +20,6 @@ import PasswordResetNewPassword
 import SimpleCenteredComponent from "@/views/SimpleCenteredComponent.vue";
 import {useUserStore} from "@/stores/userStore.js";
 import ManageAdmins from "@/components/manageAdmins/ManageAdmins.vue";
-import AdminRegister from "@/components/login/AdminRegister.vue";
-import JoinCreateHousehold from "@/components/joinHousehold/Options.vue";
 import CreateEmergencyZone
     from "@/components/admin/map/CreateEmergencyZone.vue";
 import CreateNews from "@/components/admin/news/CreateNews.vue";
@@ -41,6 +39,7 @@ import GeneralInfoView from "@/views/GeneralInfo/GeneralInfoView.vue";
 import BeforeCrisis from '@/views/GeneralInfo/BeforeCrisis.vue';
 import DuringCrisis from '@/views/GeneralInfo/DuringCrisis.vue';
 import AfterCrisis from '@/views/GeneralInfo/AfterCrisis.vue';
+import Options from "@/components/joinHousehold/Options.vue";
 
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
