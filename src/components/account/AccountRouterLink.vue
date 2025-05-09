@@ -12,6 +12,7 @@ const props = defineProps({
     route: String,
     adminNeeded: Boolean,
     superAdminNeeded: Boolean,
+    superUserNeeded: Boolean,
   },
   iconMap: {
     type: [Object]
@@ -21,10 +22,12 @@ const props = defineProps({
 const { t } = useI18n();
 
 const isAdmin = computed(() => userStore.isAdmin);
+const isSuperUser = computed(() => userStore.isSuperUser);
 
 const shouldDisplay = computed(() => {
   if (props.setting.superAdminNeeded && !isAdmin.value) return false;
   if (props.setting.adminNeeded && !isAdmin.value) return false;
+  if (props.setting.superUserNeeded && !isSuperUser.value) return false;
   return true;
 });
 </script>
