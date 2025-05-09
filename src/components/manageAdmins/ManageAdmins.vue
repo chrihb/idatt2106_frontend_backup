@@ -1,10 +1,11 @@
 <script setup>
 import { useI18n } from "vue-i18n";
-import {onMounted, ref} from "vue";
+import { onMounted, ref } from "vue";
 import CurrentAdmin from "@/components/manageAdmins/CurrentAdmin.vue";
 import { addAdministrator, deleteAdministrator, passwordResetLinkToAdministrator, getAllAdmins } from "@/services/superAdminService.js";
 import * as rules from "@vee-validate/rules";
 import { useField, useForm } from "vee-validate";
+import { XMarkIcon } from "@heroicons/vue/24/outline";
 
 const { t } = useI18n();
 
@@ -12,13 +13,18 @@ const admins = ref([]);
 const errorMsg = ref("");
 const successMsg = ref("");
 
-const { handleSubmit, isSubmitting } = useForm();
+const { handleSubmit, isSubmitting } = useForm({
+  initialValues: {
+    email: '',
+    username: ''
+  }
+});
 const { value: addAdminEmail, errorMessage, validate } = useField("email", (value) => {
   if (!value) return t("login.emailRequired");
   if (!rules.email(value)) return t("login.emailError");
   return true;
 });
-
+const { value: addAdminUsername } = useField("username");
 
 const addAdminModal = ref(false);
 
@@ -43,12 +49,11 @@ const fetchAdmins = async () => {
 
 const addAdmin = handleSubmit(async (values) => {
   try {
-    const response = await addAdministrator(values.email);
+    const response = await addAdministrator(values.email, values.username);
     if (response.success) {
       successMsg.value = t("manage-admins.admin-added");
       errorMsg.value = "";
       addAdminModal.value = false;
-      addAdminEmail.value = "";
       await fetchAdmins();
 
       setTimeout(() => {
@@ -64,7 +69,6 @@ const addAdmin = handleSubmit(async (values) => {
 });
 
 const removeAdmin = async (adminId) => {
-
     try {
       const response = await deleteAdministrator(adminId);
       if (response.success) {
@@ -104,7 +108,6 @@ const sendPasswordResetEmail = async (adminId) => {
 onMounted(async () => {
   await fetchAdmins();
 });
-
 </script>
 
 <template>
@@ -114,56 +117,78 @@ onMounted(async () => {
     </div>
 
     <!-- Success/Error Messages -->
-    <div v-if="successMsg" class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-4" role="alert">
+    <div v-if="successMsg" class="text-kf-green text-center mb-4" role="alert">
       {{ successMsg }}
     </div>
-    <div v-if="errorMsg" class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4" role="alert">
+    <div v-if="errorMsg" class="text-kf-red text-center mb-4" role="alert">
       {{ errorMsg }}
     </div>
 
     <div class="flex flex-col gap-4 w-full">
-      <!-- Add New Admin -->
-      <div>
+      <!-- Add New Admin Button -->
+      <div class="flex justify-center">
         <button
             id="add-admin"
             @click="showAddAdminModal"
-            class="bg-kf-blue text-kf-white border-kf-blue border-1 rounded-md p-2 cursor-pointer
-            hover:bg-kf-link-blue hover:shadow-md
-            active:bg-kf-blue active:scale-95
-            focus:outline-none focus:ring-1 focus:ring-kf-blue
-            transition"
+            class="bg-kf-blue text-kf-white py-2 px-4 rounded cursor-pointer hover:bg-kf-link-blue transition"
         >
           {{ t("manage-admins.add-admin") }}
         </button>
+      </div>
 
-        <div v-if="addAdminModal" class="p-4">
-          <form @submit.prevent="addAdmin" class="grid grid-cols-8 grid-rows-3 p-1 gap-1 justify-center items-center">
-            <label class="flex flex-row row-start-1 col-start-3 col-span-4 items-center gap-2">
-              {{ t("manage-admins.add-admin-desc") }}
-            </label>
-            <div class="flex flex-col row-start-2 col-start-3 col-span-3 items-center gap-2">
+      <!-- Add Admin Modal -->
+      <div v-if="addAdminModal" class="fixed inset-0 flex justify-center items-center z-50">
+        <div class="bg-white p-6 rounded-lg shadow-lg w-md relative border border-kf-blue">
+          <XMarkIcon
+              class="absolute top-2 right-2 cursor-pointer size-6 rounded-full text-kf-red hover:bg-kf-grey"
+              @click="showAddAdminModal"
+          />
+
+          <h2 class="text-2xl text-kf-blue font-bold mb-4">{{ t("manage-admins.add-admin") }}</h2>
+          <form @submit.prevent="addAdmin" class="flex flex-col gap-4">
+            <!-- Email Field -->
+            <div>
+              <label for="addAdminEmail" class="block text-sm font-medium mb-1 text-kf-blue">
+                {{ t("login.email") }}
+              </label>
               <input
                   id="addAdminEmail"
                   type="email"
                   v-model="addAdminEmail"
                   @input="validate"
-                  class="border border-kf-blue rounded-md p-1 w-full"
+                  class="w-full p-2 border border-kf-blue rounded focus:outline-none focus:ring-1 focus:ring-kf-blue"
                   :class="{ 'border-red-500': errorMessage }"
+                  placeholder="Enter admin email address"
               />
+              <span v-if="errorMessage" class="text-kf-red text-sm mt-1 block">{{ errorMessage }}</span>
             </div>
-            <span v-if="errorMessage" class="text-red-500 text-sm col-start-3 row-start-3 col-span-3">{{ errorMessage }}</span>
-            <button
-                type="submit"
-                :disabled="isSubmitting || errorMessage"
-                class="bg-kf-white-contrast-4 border-kf-blue border-1 rounded-md p-1 cursor-pointer
-                hover:bg-kf-link-blue hover:text-white hover:shadow-md
-                active:bg-kf-blue active:scale-95
-                focus:outline-none focus:ring-1 focus:ring-kf-blue
-                transition col-start-6 row-start-2 align-top"
-                :class="{ 'opacity-50 cursor-not-allowed': isSubmitting || errorMessage }"
-            >
-              {{ t("manage-admins.add") }}
-            </button>
+
+            <!-- Username Field -->
+            <div>
+              <label for="addAdminUsername" class="block text-sm font-medium mb-1 text-kf-blue">
+                {{ t("manage-admins.username") }}
+              </label>
+              <input
+                  id="addAdminUsername"
+                  type="text"
+                  v-model="addAdminUsername"
+                  class="w-full p-2 border border-kf-blue rounded focus:outline-none focus:ring-1 focus:ring-kf-blue"
+                  :class="{ 'border-red-500': addAdminUsernameError }"
+                  placeholder="Enter admin username"
+              />
+              <span v-if="addAdminUsernameError" class="text-kf-red text-sm mt-1 block">{{ addAdminUsernameError }}</span>
+            </div>
+
+            <!-- Add button -->
+            <div class="flex justify-end gap-2">
+              <button
+                  type="submit"
+                  :disabled="isSubmitting || errorMessage || addAdminUsernameError"
+                  class="bg-kf-red text-kf-white px-4 py-2 rounded disabled:opacity-50 cursor-pointer hover:bg-kf-white-contrast-8"
+              >
+                {{ t("manage-admins.add") }}
+              </button>
+            </div>
           </form>
         </div>
       </div>
@@ -185,3 +210,6 @@ onMounted(async () => {
     </div>
   </div>
 </template>
+
+<style scoped>
+</style>

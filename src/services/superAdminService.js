@@ -27,11 +27,23 @@ export const getAllAdmins = async () => {
     }
 }
 
-export const addAdministrator = async (email) => {
+export const addAdministrator = async (email, username) => {
     try {
-        const response = await axios.post();
+        const userStore = useUserStore();
 
-        if (response.status === 200) {
+        const response = await axios.post(`${window.backendURL}/api/admin/createAdmin`,
+            {
+                username: username,
+                email: email
+            },
+            {
+                headers: {
+                    Authorization: `Bearer ${userStore.adminToken}`
+                }
+            }
+        );
+
+        if (response.status === 200 || response.status === 201) {
             return { success: true };
         } else {
             return { error: 'Failed to add admin: Invalid response format from server.' };
@@ -75,9 +87,15 @@ export const deleteAdministrator = async (adminId) => {
     }
 }
 
-export const passwordResetLinkToAdministrator = async (adminId) => {
+export const passwordResetLinkToAdministrator = async (email) => {
     try {
-        const response = await axios.post();
+        const userStore = useUserStore();
+
+        const response = await axios.post(`${window.backendURL}/api/admin/reset-password`, {}, {
+            headers: {
+                Authorization: `Bearer ${userStore.adminToken}`
+            }
+        });
 
         if (response.status === 200) {
             return { success: true };
@@ -85,7 +103,6 @@ export const passwordResetLinkToAdministrator = async (adminId) => {
             return { error: 'Failed to send password reset link: Invalid response format from server.' };
         }
     } catch (error) {
-
         if (error.response) {
             if (error.response.status === 400 || error.response.status === 404) {
                 return { error: 'Failed to send password reset link: Invalid request.' };
