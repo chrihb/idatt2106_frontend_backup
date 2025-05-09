@@ -1,92 +1,10 @@
 import axios from 'axios';
 
 export const markerService = () => {
-    const baseURL = `${window.backendURL}/api/map/markers`;
-
-    async function getMarkersMock(mapAreaData, mapItemIds) {
-        let markers;
-        const markersInDatabase = [
-            {
-                markerId: 1,
-                lat: 63.423494,
-                lng: 10.424354,
-                type: 'Hjertestarter',
-            },
-            {
-                markerId: 2,
-                lat: 63.421424,
-                lng: 10.400834,
-                type: 'Bunker',
-            },
-            {
-                markerId: 3,
-                lat: 63.421434,
-                lng: 10.440124,
-                type: 'Hjertestarter',
-            },
-            {
-                markerId: 4,
-                lat: 63.425434,
-                lng: 10.442124,
-                type: 'Møteplass',
-            },
-            {
-                markerId: 5,
-                lat: 63.424434,
-                lng: 10.439124,
-                type: 'Matstasjon',
-            }
-
-        ];
-
-       if (mapItemIds && mapItemIds.length > 0) {
-            markers = markersInDatabase.filter(marker => !mapItemIds.includes(marker.markerId));
-       } else {
-            markers = markersInDatabase;
-       }
-
-       return {
-            success: true,
-            markers,
-        }
-    }
-
-    async function getMarkerDetailsMock(markerId) {
-        switch (markerId) {
-            case 1:
-                return {
-                    success: true,
-                    name: 'Test Marker 1',
-                    address: 'Test Address 1',
-                    description: 'Test Description 1',
-                };
-            case 2:
-                return {
-                    success: true,
-                    name: 'Test Marker 2',
-                    address: 'Test Address 2',
-                    description: 'Test Description 2',
-                };
-            case 3:
-                return {
-                    success: true,
-                    name: 'Test Marker 3',
-                    address: 'Test Address 3',
-                    description: 'Test Description 3',
-                };
-            default:
-                return {
-                    success: true,
-                    name: 'Test Marker',
-                    address: 'Test Address',
-                    description: 'Test Description',
-                };
-
-        }
-    }
+    const baseURL = `${window.backendURL}/api/map`;
 
     async function getAllMarkers() {
-        const response = await axios.get(baseURL, {
+        const response = await axios.get(`${baseURL}/markers`, {
             headers: {
                 'Content-Type': 'application/json',
             },
@@ -95,10 +13,7 @@ export const markerService = () => {
     }
 
     async function getMarkersByArea(mapAreaData, mapItemIds) {
-        const response = await axios.post(`${baseURL}/area`, {
-            mapAreaData,
-            mapItemIds,
-        }, {
+        const response = await axios.post(`${baseURL}/markers/in-area`, mapAreaData, mapItemIds, {
             headers: {
                 'Content-Type': 'application/json',
             },
@@ -107,9 +22,7 @@ export const markerService = () => {
     }
 
     async function getMarkerDetailsById(markerId) {
-        const response = await axios.post(`${baseURL}/details`, {
-            markerId,
-        }, {
+        const response = await axios.get(`${baseURL}/description/${markerId}`, {
             headers: {
                 'Content-Type': 'application/json',
             },
@@ -118,7 +31,7 @@ export const markerService = () => {
     }
 
     async function getMarkerById(markerId) {
-        const response = await axios.get(`${baseURL}/${markerId}`, {
+        const response = await axios.get(`${baseURL}/marker/${markerId}`, {
             headers: {
                 'Content-Type': 'application/json',
             },
@@ -127,9 +40,7 @@ export const markerService = () => {
     }
 
     async function createMarker(markerData) {
-        const response = await axios.post(`${baseURL}/create`, {
-            markerData,
-        }, {
+        const response = await axios.post(`${baseURL}/marker/create`, markerData, {
             headers: {
                 'Content-Type': 'application/json',
             },
@@ -137,10 +48,8 @@ export const markerService = () => {
         return response.data;
     }
 
-    async function updateMarker(markerData) {
-        const response = await axios.put(`${baseURL}/update`, {
-            markerData,
-        }, {
+    async function updateMarker(markerData, markerId) {
+        const response = await axios.put(`${baseURL}/marker/update/${markerId}`, markerData,{
             headers: {
                 'Content-Type': 'application/json',
             },
@@ -157,9 +66,21 @@ export const markerService = () => {
         return response.data;
     }
 
+    async function getMarkerTypes() {
+        try {
+            const response = await axios.get(`${baseURL}/marker-types`, {
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            });
+            return response.data;
+        } catch (error) {
+            console.error("Error fetching marker types:", error);
+        }
+
+    }
+
     return {
-        getMarkersMock,
-        getMarkerDetailsMock,
         getAllMarkers,
         getMarkersByArea,
         getMarkerDetailsById,
@@ -167,5 +88,6 @@ export const markerService = () => {
         createMarker,
         updateMarker,
         deleteMarker,
+        getMarkerTypes,
     };
 };

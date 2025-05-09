@@ -1,85 +1,10 @@
 import axios from 'axios';
 
 export const emergencyZoneService = () => {
-    const baseURL = `${window.backendURL}/api/map/zones`;
-
-    async function getEmergencyZonesMock(mapAreaData, zoneIds) {
-        let zones;
-        const zonesInDatabase = [
-            {
-                zoneId: 10,
-                lat: 63.424494,
-                lng: 10.439154,
-                type: 'Strømbrudd',
-                level: 1,
-                coordinates: [
-                    [63.424494, 10.439154],
-                    [63.424694, 10.448154],
-                    [63.404494, 10.449154],
-                    [63.394494, 10.439154],
-                    [63.414494, 10.440154],
-                    [63.413494, 10.442154],
-                ],
-            },
-            {
-                zoneId: 11,
-                lat: 63.424494,
-                lng: 10.439154,
-                type: 'Flom',
-                level: 2,
-                coordinates: [
-                    [63.4155074, 10.3640704],
-                    [63.4124260, 10.3839112],
-                    [63.4051920, 10.3835860],
-                    [63.4097109, 10.3724194],
-                    [63.4090753, 10.3604442],
-                    [63.4148949, 10.3665222],
-                    [63.4187146, 10.3741559],
-                    [63.4132288, 10.3935730],
-                ],
-            },
-            {
-                zoneId: 12,
-                lat: 63.424494,
-                lng: 10.439154,
-                type: 'Atombombe',
-                level: 3,
-                coordinates: [
-                    [63.4015350, 10.4018511],
-                    [63.4015715, 10.4230928],
-                    [63.3950817, 10.4232474],
-                    [63.3887169, 10.4209742],
-                    [63.3959192, 10.4064291],
-                    [63.4055464, 10.4177843],
-                ],
-            },
-        ];
-
-        // Mocking the response for the emergency zones
-        if (zoneIds && zoneIds.length > 0) {
-            zones = zonesInDatabase.filter(zone => !zoneIds.includes(zone.zoneId));
-        } else {
-            zones = zonesInDatabase;
-        }
-
-        return {
-            success: true,
-            zones,
-        }
-    }
-
-    async function getEmergencyZoneDetailsMock(zoneId) {
-        return {
-            success: true,
-            name: 'Test Zone',
-            address: 'Test Address',
-            description: 'Test Description',
-        }
-    }
-
+    const baseURL = `${window.backendURL}/api/map`;
 
     async function getAllEmergencyZones() {
-        const response = await axios.get(baseURL, {
+        const response = await axios.get(`${baseURL}/zones`, {
             headers: {
                 'Content-Type': 'application/json',
             },
@@ -88,10 +13,7 @@ export const emergencyZoneService = () => {
     }
 
     async function getEmergencyZonesByArea(mapAreaData, zoneIds) {
-        const response = await axios.post(`${baseURL}/area`, {
-            mapAreaData,
-            zoneIds,
-        }, {
+        const response = await axios.post(`${baseURL}/zones/in-area`, mapAreaData, zoneIds, {
             headers: {
                 'Content-Type': 'application/json',
             },
@@ -100,9 +22,7 @@ export const emergencyZoneService = () => {
     }
 
     async function getEmergencyZoneDetailsById(zoneId) {
-        const response = await axios.post(`${baseURL}/details`, {
-            zoneId,
-        }, {
+        const response = await axios.get(`${baseURL}/description/${zoneId}`, {
             headers: {
                 'Content-Type': 'application/json',
             },
@@ -111,7 +31,7 @@ export const emergencyZoneService = () => {
     }
 
     async function getEmergencyZoneById(zoneId) {
-        const response = await axios.get(`${baseURL}/${zoneId}`, {
+        const response = await axios.get(`${baseURL}/zone/${zoneId}`, {
             headers: {
                 'Content-Type': 'application/json',
             },
@@ -120,20 +40,21 @@ export const emergencyZoneService = () => {
     }
 
     async function createEmergencyZone(zone) {
-        const response = await axios.post(`${baseURL}/create`,
-            zone,
-            {
+        try {
+            console.log("Payload: ", zone);
+            const response = await axios.post(`${baseURL}/zone/create`, zone, {
                 headers: {
                     'Content-Type': 'application/json',
                 },
-        });
-        return response.data;
+            });
+            return response.data;
+        } catch (error) {
+            console.error(error);
+        }
     }
 
-    async function updateEmergencyZone(zoneData) {
-        const response = await axios.put(`${baseURL}/update`, {
-            zoneData,
-        },  {
+    async function updateEmergencyZone(zoneData, zoneId) {
+        const response = await axios.put(`${baseURL}/zone/update${zoneId}`, zoneData, {
             headers: {
                 'Content-Type': 'application/json',
             },
@@ -142,7 +63,7 @@ export const emergencyZoneService = () => {
     }
 
     async function deleteEmergencyZone(zoneId) {
-        const response = await axios.delete(`${baseUrl}/delete/${zoneId}`, {
+        const response = await axios.delete(`${baseURL}/delete/${zoneId}`, {
             headers: {
                 'Content-Type': 'application/json',
             },
@@ -150,9 +71,21 @@ export const emergencyZoneService = () => {
         return response.data;
     }
 
+    async function getZoneTypes() {
+        try {
+            const response = await axios.get(`${baseURL}/zone-types`, {
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            });
+            return response.data;
+        } catch (error) {
+            console.error("Error fetching zone types:", error);
+        }
+
+    }
+
     return {
-        getEmergencyZonesMock,
-        getEmergencyZoneDetailsMock,
         getAllEmergencyZones,
         getEmergencyZonesByArea,
         getEmergencyZoneDetailsById,
@@ -160,5 +93,6 @@ export const emergencyZoneService = () => {
         createEmergencyZone,
         updateEmergencyZone,
         deleteEmergencyZone,
+        getZoneTypes,
     };
 };

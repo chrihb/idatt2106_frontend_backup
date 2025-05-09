@@ -6,9 +6,7 @@ import {usePositionTrackingStore} from "@/stores/positionTrackingStore.js";
 import {useEmergencyZonesStore} from "@/stores/emergencyZonesStore.js";
 import {debounce} from 'lodash';
 import {useMarkersStore} from "@/stores/markersStore.js";
-import {addMarkerToMap, centerMapOnMarker} from "@/utils/mapUtils.js";
-import {centerMapOnEmergencyZone} from "@/utils/mapUtils.js";
-import {addEmergencyZoneToMap} from "@/utils/mapUtils.js";
+import {addMarkerToMap, addEmergencyZoneToMap} from "@/utils/mapUtils.js";
 
 onMounted(async () => {
 
@@ -32,6 +30,8 @@ onMounted(async () => {
       mapStore.map.invalidateSize();
     }
 
+    await markersStore.fetchAllMarkers();
+    await emergencyZonesStore.fetchAllEmergencyZones();
 
     const emergencyZones = emergencyZonesStore.getEmergencyZones;
     const markers = markersStore.getMarkers;
@@ -62,8 +62,8 @@ onMounted(async () => {
       const ids = mapStore.getMapItemIds();
 
       try {
-        await markersStore.fetchMarkersArea(bounds, ids);
-        await emergencyZonesStore.fetchEmergencyZonesArea(bounds, ids);
+        await markersStore.fetchMarkersArea(bounds);
+        await emergencyZonesStore.fetchEmergencyZonesArea(bounds,true);
 
       } catch (error) {
       }

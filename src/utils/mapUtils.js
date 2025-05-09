@@ -2,9 +2,7 @@ import L from 'leaflet';
 import {useMapStore} from "@/stores/mapStore.js";
 import {useEmergencyZonesStore} from "@/stores/emergencyZonesStore.js";
 import {useEmergencyZoneStore} from "@/stores/emergencyZoneStore.js";
-import {emergencyZoneService} from "@/services/emergencyZoneService.js";
 import {useMarkersStore} from "@/stores/markersStore.js";
-import {markerService} from "@/services/markerService.js";
 import {useMarkerStore} from "@/stores/markerStore.js";
 import { usePositionTrackingStore } from "@/stores/positionTrackingStore.js";
 import {nextTick} from "vue";
@@ -55,7 +53,6 @@ export const createCustomMarkerIcon = (type) => {
 
 // Add a marker to the map
 export const addMarkerToMap = (marker) => {
-
     if (!marker || !marker.markerId || !marker.lat || !marker.lng || !marker.type) {
         return;
     }
@@ -79,13 +76,10 @@ export const addMarkerToMap = (marker) => {
     // Bind a popup to the marker
     mapMarker.on('click', async () => {
         try {
-            const service = markerService();
             const markerStore = useMarkerStore();
-            //TODO: This is a placeholder for the actual service call
-            const markerDetails = await service.getMarkerDetailsMock(marker.markerId)
-            //const markerDetails = await markerStore.fetchMarkerDetailsById(marker.markerId);
+            const markerDetails = await markerStore.fetchMarkerDetailsById(marker.markerId);
 
-            if (markerDetails.success) {
+            if (markerDetails) {
                 const popupContent = createMarkerPopup(marker.type, markerDetails.address, marker.markerId);
                 if (!mapMarker.getPopup()) {
                     mapMarker.bindPopup(popupContent);
@@ -115,16 +109,16 @@ export const addMarkerToMap = (marker) => {
     mapMarker.on('popupclose', (e) => {
         const popupEl = e.popup.getElement();
         if (!popupEl) return;
-    
+
         const link = popupEl.querySelector('.directions-link');
         if (link && link._directionsHandler) {
             L.DomEvent.off(link, 'click', link._directionsHandler);
             delete link._directionsHandler;
         }
-    
+
         clearRoute();
     });
-    
+
 
     // Check if the layerGroup for the type exists, if not create it
     if (!mapStore.layerGroup[marker.type] || !(mapStore.layerGroup[marker.type] instanceof L.LayerGroup)) {
@@ -169,6 +163,10 @@ export const addEmergencyZoneToMap = (emergencyZone) => {
 
     const mapStore = useMapStore();
 
+    if (mapStore.mapItemIds.includes(emergencyZone.zoneId)) {
+        return;
+    }
+
     const layerType = getLayerType(emergencyZone.level);
 
     if (!mapStore.layerGroup[layerType] || !(mapStore.layerGroup[layerType] instanceof L.LayerGroup)) {
@@ -185,13 +183,10 @@ export const addEmergencyZoneToMap = (emergencyZone) => {
 
     polygon.on('click', async () => {
         try {
-            const service = emergencyZoneService();
             const emergencyZoneStore = useEmergencyZoneStore();
-            //TODO: This is a placeholder for the actual service call
-            const zoneDetails = await service.getEmergencyZoneDetailsMock(emergencyZone.zoneId)
-            //const zoneDetails = await emergencyZoneStore.fetchEmergencyZoneDetailsById(emergencyZone.zoneId);
+            const zoneDetails = await emergencyZoneStore.fetchEmergencyZoneDetailsById(emergencyZone.zoneId);
 
-            if (zoneDetails.success) {
+            if (zoneDetails) {
                 const popupContent = createZonePopup(zoneDetails.name, emergencyZone.type, emergencyZone.level, zoneDetails.address, zoneDetails.description);
                 polygon.bindPopup(popupContent).openPopup();
             }

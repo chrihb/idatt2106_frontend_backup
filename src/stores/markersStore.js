@@ -1,6 +1,8 @@
 import { defineStore } from 'pinia';
-import {addMarkerToMap} from "@/utils/mapUtils.js";
+import {addMarkerToMap, updateMarkerOnMap} from "@/utils/mapUtils.js";
 import {markerService} from "@/services/markerService.js";
+import {useMapStore} from "@/stores/mapStore.js";
+import {useMarkerStore} from "@/stores/markerStore.js";
 
 export const useMarkersStore = defineStore('markersStore', {
     state:
@@ -11,19 +13,26 @@ export const useMarkersStore = defineStore('markersStore', {
     getters: {
     },
     actions: {
-        async fetchAllMarkers() {
+        async fetchAllMarkers(addToMap = true) {
             this.error = null;
 
             try {
                 const service = markerService();
+                const markerStore = useMarkerStore();
+
                 const markersData = await service.getAllMarkers();
 
-                if (markersData.success) {
+
+                if (markersData) {
                     this.clearMarkers();
-                    for (const marker of markersData.markers) {
-                        addMarkerToMap(marker);
+                    for (const mrkrData of markersData) {
+                        const marker = markerStore.setMarkerFromBackend(mrkrData);
+                        if (addToMap) {
+                            addMarkerToMap(marker);
+                        }
                         this.addMarker(marker);
                     }
+                    markerStore.clearMarker()
                 }
 
             } catch (error) {
@@ -31,18 +40,22 @@ export const useMarkersStore = defineStore('markersStore', {
             }
         },
 
-        async fetchMarkersArea(mapBounds, mapItemIds) {
+        async fetchMarkersArea(mapBounds, addToMap = true) {
             this.error = null;
 
             try {
                 const service = markerService();
-                // TODO: This is a placeholder for the actual service call
-                const result = await service.getMarkersMock(mapBounds, mapItemIds);
-                // const result = await service.getMarkersByArea(mapBounds, mapItemIds);
-                for (const marker of result.markers) {
-                    addMarkerToMap(marker);
-                    this.addMarker(marker);
+                const mapStore = useMapStore();
+                const markerStore = useMarkerStore();
+                const result = await service.getMarkersByArea(mapBounds, mapStore.getMapItemIds());
+                for (const marker of result) {
+                    const mrkr = markerStore.setMarkerFromBackend(marker);
+                    if (addToMap) {
+                        addMarkerToMap(mrkr);
+                    }
+                    this.addMarker(mrkr);
                 }
+                markerStore.clearMarker()
             } catch (error) {
                 throw error;
             }
@@ -54,7 +67,6 @@ export const useMarkersStore = defineStore('markersStore', {
             }
             if (!this.getMarkerById(marker.markerId)) {
                 this.markers.push(marker);
-            } else {
             }
         },
 
@@ -62,7 +74,7 @@ export const useMarkersStore = defineStore('markersStore', {
             const index = this.markers.findIndex(marker => marker.markerId === marker.markerId);
             if (index !== -1) {
                 this.markers[index] = marker;
-            } else {
+                updateMarkerOnMap(marker)
             }
         },
 
@@ -70,7 +82,6 @@ export const useMarkersStore = defineStore('markersStore', {
             const index = this.markers.findIndex(marker => marker.markerId === markerId);
             if (index !== -1) {
                 this.markers.splice(index, 1);
-            } else {
             }
         },
 

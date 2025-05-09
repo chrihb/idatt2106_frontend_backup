@@ -8,34 +8,16 @@ export const adminSettings = ref([
         children: [
             {
                 id: 1,
-                name: "CreateNewEmergencyZone",
-                desc: "admin-settings.map.createNewEmergencyZone",
-                route: "/admin-settings/createEmergencyZone",
+                name: "AdministerEmergencyZones",
+                desc: "admin-settings.map.adminEmergencyZone",
+                route: "/admin-settings/adminEmergencyZone",
             },
             {
                 id: 2,
-                name: "UpdateExistingEmergencyZone",
-                desc: "admin-settings.map.updateEmergencyZone",
-                route: "/admin-settings/updateEmergencyZone",
+                name: "AdministerEmergencyUtilities",
+                desc: "admin-settings.map.adminEmergencyUtilities",
+                route: "/admin-settings/adminEmergencyUtilities",
             },
-            {
-                id: 3,
-                name: "DeleteEmergencyZone",
-                desc: "admin-settings.map.deleteEmergencyZone",
-                route: "/admin-settings/deleteEmergencyZone",
-            },
-            {
-                id: 4,
-                name: "AddNewMapMarker",
-                desc: "admin-settings.map.addNewMapMarker",
-                route: "/admin-settings/addMapMarker",
-            },
-            {
-                id: 5,
-                name: "AddMarkerType",
-                desc: "admin-settings.map.addMarkerType",
-                route: "/admin-settings/addMarkerType",
-            }
         ]
     },
     {

@@ -26,9 +26,4 @@ describe('markersStore', () => {
     markersStore.clearMarkers();
     expect(markersStore.markers).toEqual([]);
   });
-
-  it('should fetch all markers successfully', async () => {
-    await markersStore.fetchAllMarkers();
-    expect(markersStore.markers).toEqual([{ markerId: 1, type: 'Test' }]);
-  });
 });

@@ -20,7 +20,6 @@ import PasswordResetNewPassword
 import SimpleCenteredComponent from "@/views/SimpleCenteredComponent.vue";
 import {useUserStore} from "@/stores/userStore.js";
 import ManageAdmins from "@/components/manageAdmins/ManageAdmins.vue";
-import Options from "@/components/joinHousehold/Options.vue";
 import CreateEmergencyZone
     from "@/components/admin/map/CreateEmergencyZone.vue";
 import CreateNews from "@/components/admin/news/CreateNews.vue";
@@ -31,6 +30,8 @@ import StorageListView from '@/views/StorageListView.vue';
 import HouseholdListView from "@/views/HouseholdListView.vue";
 import AdminAuthBase from "@/views/AdminAuthBase.vue";
 import AdminLogin from "@/components/login/AdminLogin.vue";
+import UpdateEmergencyZoneView from "@/views/UpdateEmergencyZoneView.vue";
+import UpdateMarkerView from "@/views/UpdateMarkerView.vue";
 import HouseholdOptionsView from "@/views/HouseholdOptionsView.vue";
 import AdminSetPassword from "@/components/login/AdminSetPassword.vue";
 import AdminResetPassword from "@/components/login/AdminResetPassword.vue";
@@ -38,6 +39,7 @@ import GeneralInfoView from "@/views/GeneralInfo/GeneralInfoView.vue";
 import BeforeCrisis from '@/views/GeneralInfo/BeforeCrisis.vue';
 import DuringCrisis from '@/views/GeneralInfo/DuringCrisis.vue';
 import AfterCrisis from '@/views/GeneralInfo/AfterCrisis.vue';
+import Options from "@/components/joinHousehold/Options.vue";
 
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
@@ -61,7 +63,8 @@ const router = createRouter({
                 { path: "/household/:id", component: MyHomeView, meta: { requiresHousehold: true, requiresAuth: true }, props: true },
                 { path: "/admin-settings", component: AdminSettings,
                     children: [
-                        { path: "createEmergencyZone", component: CreateEmergencyZone },
+                        { path: "adminEmergencyZone", component: UpdateEmergencyZoneView },
+                        { path: "adminEmergencyUtilities", component: UpdateMarkerView },
                         { path: "createNews", component: CreateNews },
 
                         { path: "news", component: News },
@@ -81,6 +84,7 @@ const router = createRouter({
                 { path: "/admin-settings", component: AdminSettings, meta: { requiresAdmin: true },
                     children: [
                         { path: "createEmergencyZone", component: CreateEmergencyZone },
+                        { path: "createMarker", component: UpdateMarkerView },
                         { path: "createNews", component: CreateNews },
                         { path: "updateNews/:caseId", component: UpdateNews, props: true },
                         { path: "deleteNews/:caseId", component: DeleteNews, props: true },

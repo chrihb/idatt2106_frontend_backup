@@ -1,12 +1,15 @@
 import { defineStore } from 'pinia';
 import {markerService} from "@/services/markerService.js";
 import {useMarkersStore} from "@/stores/markersStore.js";
+import {useMapStore} from "@/stores/mapStore.js";
+import {addMarkerToMap, removeMarkerFromMap, updateEmergencyZoneOnMap, updateMarkerOnMap} from "@/utils/mapUtils.js";
 
 export const useMarkerStore = defineStore('markerStore', {
 
     state: () => ({
         marker: {
             markerId: null,
+            name: '',
             address: '',
             lat: null,
             lng: null,
@@ -19,22 +22,26 @@ export const useMarkerStore = defineStore('markerStore', {
         getMarker: (state) => {
             return state.marker;
         },
-        getMarkerId: (state) => {
-            return state.marker.markerId;
-        },
     },
 
     actions: {
         async fetchMarkerDetailsById(markerId) {
             this.error = null;
             try {
-                const service = markerService();
-                const markerData = await service.getMarkerDetailsById(markerId);
-
-                if (markerData.success) {
-                    this.setRestOfMarker(markerData);
+                const markersStore = useMarkersStore();
+                const marker = markersStore.getMarkerById(markerId);
+                if (marker.description &&
+                    marker.name &&
+                    marker.address) {
+                    return marker
+                } else {
+                    const service = markerService();
+                    const markerData = await service.getMarkerDetailsById(markerId);
+                    if (markerData) {
+                        this.setRestOfMarker(markerData);
+                    }
+                    return marker;
                 }
-
             } catch (error) {
                 throw error;
             }
@@ -48,11 +55,13 @@ export const useMarkerStore = defineStore('markerStore', {
         },
 
         setRestOfMarker(markerData) {
+            this.name = markerData.name;
             this.address = markerData.address;
             this.description = markerData.description;
         },
 
         setMarker(markerData) {
+            this.name = markerData.name;
             this.markerId = markerData.markerId;
             this.address = markerData.address;
             this.lat = markerData.lat;
@@ -61,27 +70,46 @@ export const useMarkerStore = defineStore('markerStore', {
             this.description = markerData.description;
         },
 
-        async saveMarker(markerData) {
+        setMarkerFromBackend(markerData) {
+            const marker = {
+                markerId: markerData.id,
+                name: markerData.name,
+                address: markerData.address,
+                type: markerData.type,
+                lat: markerData.coordinates.latitude,
+                lng: markerData.coordinates.longitude,
+                description: markerData.description,
+            }
+            return marker;
+        },
+
+        async saveMarker(marker) {
             try {
                 const service = markerService();
                 const markersStore = useMarkersStore();
-
+                const markerId = marker.markerId || null;
                 const markerData = {
-                    markerId: this.markerId || undefined,
-                    address: this.address,
-                    lat: this.lat,
-                    lng: this.lng,
-                    type: this.type,
-                    description: this.description,
+                    name: marker.name,
+                    description: marker.description,
+                    address: marker.address,
+                    type: marker.type,
+                    coordinates: {
+                        latitude: marker.lat,
+                        longitude: marker.lng,
+                    },
                 };
                 let result
-                if (this.markerId) {
-                    result = await service.updateMarker(markerData);
-                    markersStore.updateMarker(result);
+                if (markerId) {
+                    result = await service.updateMarker(markerData, markerId);
+                    markersStore.updateMarker(markerData.value);
+                    updateMarkerOnMap(markerData.value)
                 } else {
                     result = await service.createMarker(markerData);
-                    this.markerId = result.markerId;
-                    markersStore.addMarker(result);
+                    if (result.success) {
+                        markerData.markerId = result.markerId;
+                        markersStore.addMarker(markerData.value);
+                        addMarkerToMap(markerData.value)
+                    }
                 }
                 return result;
             } catch (error) {
@@ -89,8 +117,8 @@ export const useMarkerStore = defineStore('markerStore', {
             }
         },
 
-        async deleteMarker() {
-            if (!this.markerId) {
+        async deleteMarker(markerId) {
+            if (markerId) {
                 return;
             }
 
@@ -98,9 +126,9 @@ export const useMarkerStore = defineStore('markerStore', {
             try {
                 const markersStore = useMarkersStore();
                 const service = markerService();
-                const result = await service.deleteMarker(this.markerId);
-                markersStore().deleteMarker(this.markerId);
-                this.clearMarker();
+                const result = await service.deleteMarker(markerId);
+                removeMarkerFromMap(markerId)
+                markersStore.deleteMarker(markerId);
                 return result;
 
             } catch (error) {
@@ -110,6 +138,7 @@ export const useMarkerStore = defineStore('markerStore', {
 
         clearMarker() {
             this.markerId = null;
+            this.name = '';
             this.address = '';
             this.lat = null;
             this.lng = null;
