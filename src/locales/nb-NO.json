@@ -270,7 +270,9 @@
 	}
   },
   "map": {
-	"filter": "Filtrer"
+	"filter": "Filtrer",
+	"address": "Adresse",
+  	"directions": "Veibeskrivelse"
   },
   "admin-settings": {
     "title": "Administrator Innstillinger",

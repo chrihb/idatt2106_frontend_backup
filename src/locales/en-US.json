@@ -270,7 +270,9 @@
   }
 },
   "map": {
-    "filter": "Filter"
+    "filter": "Filter",
+    "address": "Address",
+    "directions": "Directions"
   },
   "admin-settings": {
     "title": "Admin Settings",

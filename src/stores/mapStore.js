@@ -6,6 +6,7 @@ export const useMapStore = defineStore('mapStore', {
         map: null,
         layerGroup: {},
         mapItemIds: [],
+        currentRoute: null,
     }),
     getters: {
         getLayerGroup: (state) => state.layerGroup,
@@ -20,7 +21,12 @@ export const useMapStore = defineStore('mapStore', {
                 return
             }
             // set its view to a specific location
-            this.map = L.map('map').setView([63.422464, 10.410394], 15);
+            //this.map = L.map('map').setView([63.422464, 10.410394], 15);
+            this.map = L.map('map', {
+                zoomAnimation: false,
+                markerZoomAnimation: false,
+                fadeAnimation: true, 
+            }).setView([63.422464, 10.410394], 15);
 
             // Add a tile layer to the map
             L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
