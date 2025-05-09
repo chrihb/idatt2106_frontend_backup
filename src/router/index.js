@@ -30,6 +30,8 @@ import HouseholdListView from "@/views/HouseholdListView.vue";
 import AdminAuthBase from "@/views/AdminAuthBase.vue";
 import AdminLogin from "@/components/login/AdminLogin.vue";
 import HouseholdOptionsView from "@/views/HouseholdOptionsView.vue";
+import AdminSetPassword from "@/components/login/AdminSetPassword.vue";
+import AdminResetPassword from "@/components/login/AdminResetPassword.vue";
 
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
@@ -89,6 +91,8 @@ const router = createRouter({
         {
             path: "/", component: SimpleCenteredComponent,
             children: [
+                { path: "/admin-activation", name: "AdminActivation", component: AdminSetPassword },
+                { path: "/admin-password-reset", name: "AdminPasswordReset", component: AdminResetPassword },
                 { path: "/password-reset-request", name: "PasswordResetRequest", component: PasswordResetRequest },
                 { path: "/password-reset/:token", name: "PasswordReset", component: PasswordResetNewPassword },
                 { path: "/email-verification/:token", name: "EmailVerification", component: EmailVerification },

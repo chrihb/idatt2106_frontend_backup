@@ -44,7 +44,7 @@ const handleSubmit = async () => {
       password: form.password,
       repeatPassword: form.repeatPassword,
     };
-    const verificationToken = route.params.token;
+    const verificationToken = route.query.token;
     const response = await setAdminPassword(verificationToken, newPasswordForm.password);
 
     if (response) {
