@@ -9,7 +9,6 @@ import {useMarkerStore} from "@/stores/markerStore.js";
 import { usePositionTrackingStore } from "@/stores/positionTrackingStore.js";
 import {nextTick} from "vue";
 import {useUserStore} from "@/stores/userStore.js";
-import {getUserPosition} from "@/services/locationService.js";
 
 let routeLayerGroup = null;
 
@@ -365,7 +364,6 @@ const createDirectionsHandler = (lat, lng) => {
         requestRouteToMarker(lat, lng);
     };
 };
-=======
 export const initAccountMarkers = async () => {
     const userStore = useUserStore();
     const markersStore = useMarkersStore();
