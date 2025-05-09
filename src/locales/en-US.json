@@ -244,6 +244,8 @@
   }
 },
   "map": {
-    "filter": "Filter"
+    "filter": "Filter",
+    "address": "Address",
+    "directions": "Directions"
   }
 }

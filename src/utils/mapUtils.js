@@ -9,12 +9,13 @@ import {useMarkerStore} from "@/stores/markerStore.js";
 import { usePositionTrackingStore } from "@/stores/positionTrackingStore.js";
 import {nextTick} from "vue";
 
-export const createMarkerPopup = (type, address, description, markerId) =>
+let routeLayerGroup = null;
+
+export const createMarkerPopup = (type, address, markerId) =>
     `
         <div class="popup text-sm text-gray-800 space-y-1">
             <h2 class="font-semibold text-base">${type}</h2>
-                <p><span class="font-medium">Adresse:</span> ${address}</p>
-                <p>${description}</p>
+                <p class="font-medium"> ${address}</p>
                 <p>
                     <a href="#" class="directions-link text-blue-600 hover:underline font-medium" data-marker-id="${markerId}">
                         Veibeskrivelse
@@ -86,15 +87,24 @@ export const addMarkerToMap = (marker) => {
             //const markerDetails = await markerStore.fetchMarkerDetailsById(marker.markerId);
 
             if (markerDetails.success) {
-                const popupContent = createMarkerPopup(marker.type, markerDetails.address, markerDetails.description, marker.markerId);
-                mapMarker.bindPopup(popupContent).openPopup();
+                const popupContent = createMarkerPopup(marker.type, markerDetails.address, marker.markerId);
+                if (!mapMarker.getPopup()) {
+                    mapMarker.bindPopup(popupContent);
+                } else {
+                    mapMarker.setPopupContent(popupContent);
+                }
+                mapMarker.openPopup();
                 await nextTick();
-                const link = document.querySelector('.directions-link');
-                if (link) {
-                    link.addEventListener('click', (e) => {
-                        e.preventDefault();
-                        handleGetDirections(marker.lat, marker.lng);
-                    });
+
+                // Hent popup-elementet direkte og bind handleren der
+                const popupEl = mapMarker.getPopup()?.getElement();
+                if (popupEl) {
+                    const link = popupEl.querySelector('.directions-link');
+                    if (link) {
+                        const handler = createDirectionsHandler(marker.lat, marker.lng);
+                        link._directionsHandler = handler;
+                        L.DomEvent.on(link, 'click', handler);
+                    }
                 }
             } else {
                 console.error('Failed to fetch marker details');
@@ -104,9 +114,20 @@ export const addMarkerToMap = (marker) => {
         }
     });
 
-    mapMarker.on('popupclose', () => {
+
+    mapMarker.on('popupclose', (e) => {
+        const popupEl = e.popup.getElement();
+        if (!popupEl) return;
+    
+        const link = popupEl.querySelector('.directions-link');
+        if (link && link._directionsHandler) {
+            L.DomEvent.off(link, 'click', link._directionsHandler);
+            delete link._directionsHandler;
+        }
+    
         clearRoute();
-    }); 
+    });
+    
 
     // Check if the layerGroup for the type exists, if not create it
     if (!mapStore.layerGroup[marker.type] || !(mapStore.layerGroup[marker.type] instanceof L.LayerGroup)) {
@@ -281,6 +302,12 @@ export const centerMapOnEmergencyZone = (zoneId) => {
 
 export const drawRoute = async (startLat, startLng, endLat, endLng) => {
     const mapStore = useMapStore();
+
+    // Recreate layer group every time
+    //clearRoute(); // fjerner gammel gruppe og setter routeLayerGroup = null
+
+    routeLayerGroup = L.layerGroup().addTo(mapStore.map);
+
     const url = `https://router.project-osrm.org/route/v1/driving/${startLng},${startLat};${endLng},${endLat}?overview=full&geometries=geojson`;
 
     try {
@@ -288,15 +315,10 @@ export const drawRoute = async (startLat, startLng, endLat, endLng) => {
         const data = await response.json();
 
         if (data.routes && data.routes.length > 0) {
-            const coords = data.routes[0].geometry.coordinates.map(coord => [coord[1], coord[0]]);
-            const routeLine = L.polyline(coords, { color: 'blue' });
-
-            clearRoute(); // Fjern eksisterende
-
-            routeLine.addTo(mapStore.map);
-            mapStore.map.fitBounds(routeLine.getBounds());
-
-            mapStore.currentRoute = routeLine;  // Lagre direkte polyline
+            const coords = data.routes[0].geometry.coordinates.map(([lng, lat]) => [lat, lng]);
+            const polyline = L.polyline(coords, { color: 'blue' });
+            routeLayerGroup.addLayer(polyline);
+            mapStore.map.fitBounds(polyline.getBounds());
         } else {
             console.error('No route found');
         }
@@ -308,31 +330,39 @@ export const drawRoute = async (startLat, startLng, endLat, endLng) => {
 
 export const clearRoute = () => {
     const mapStore = useMapStore();
-    const map = mapStore.map;
-    const route = mapStore.currentRoute;
 
-    if (!map || !route) return;
-
-    try {
-        route.remove(); // Fjern polyline
-        mapStore.currentRoute = null;
-    } catch (e) {
-        console.warn("Feil ved fjerning av rute:", e);
+    if (routeLayerGroup && mapStore.map.hasLayer(routeLayerGroup)) {
+        mapStore.map.removeLayer(routeLayerGroup);
+        routeLayerGroup = null;
     }
 };
 
-
-export const handleGetDirections = async (targetLat, targetLng) => {
+export const getUserPosition = async () => {
     const positionTrackingStore = usePositionTrackingStore();
     const userPos = positionTrackingStore.getPosition;
 
     if (!userPos) {
-        alert("Brukerens posisjon er ikke tilgjengelig");
-        return;
+        throw new Error("Brukerens posisjon er ikke tilgjengelig");
     }
 
-    clearRoute();
+    return userPos;
+}
 
-    // Bruk drawRoute med brukerens posisjon
-    await drawRoute(userPos.lat, userPos.lng, targetLat, targetLng);
+
+export const requestRouteToMarker = async (targetLat, targetLng) => {
+    try {
+        const userPosition = await getUserPosition();
+        clearRoute(); // fjerner forrige rute, hvis noen
+        await drawRoute(userPosition.lat, userPosition.lng, targetLat, targetLng);
+    } catch (error) {
+        alert(error.message);
+    }
+};
+
+
+const createDirectionsHandler = (lat, lng) => {
+    return (e) => {
+        e.preventDefault();
+        requestRouteToMarker(lat, lng);
+    };
 };
