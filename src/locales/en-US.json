@@ -292,7 +292,16 @@
       "newsTitleRequired": "News title is required",
       "newsDesc": "News description",
       "newsDescRequired": "News description is required",
-      "deleteNews": "Delete News"
+      "deleteNews": "Delete News",
+      "news": "News",
+      "updateTitle": "Update News",
+      "update": "Update",
+      "delete": "Delete",
+      "createError": "Failed to create news.",
+      "deleteError": "Failed to delete news.",
+      "networkError": "A network error occurred.",
+      "createdSuccess": "News created successfully!",
+      "updatedSuccess": "News updated successfully!"
     },
     "household": {
       "name": "Household",

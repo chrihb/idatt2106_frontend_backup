@@ -291,7 +291,17 @@
       "newsTitleRequired": "Nyhetstittel er påkrevd",
       "newsDesc": "En nyhet for å informere brukerne dine om viktige oppdateringer",
       "newsDescRequired": "Nyhetsbeskrivelse er påkrevd",
-      "deleteNews": "Slett Nyhet"
+      "deleteNews": "Slett Nyhet",
+	  "news": "Nyheter",
+	  "updateTitle": "Oppdater nyhet",
+	  "update": "Oppdater",
+	  "delete": "Slett",
+	  "createError": "Kunne ikke opprette nyhet.",
+	  "deleteError": "Kunne ikke slette nyhet.",
+	  "networkError": "En nettverksfeil oppstod.",
+	  "createdSuccess": "Nyheten ble opprettet!",
+	  "updatedSuccess": "Nyheten ble oppdatert!"
+
     },
     "household": {
       "name": "Husstand",

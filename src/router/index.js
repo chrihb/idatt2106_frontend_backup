@@ -24,7 +24,9 @@ import Options from "@/components/joinHousehold/Options.vue";
 import CreateEmergencyZone
     from "@/components/admin/map/CreateEmergencyZone.vue";
 import CreateNews from "@/components/admin/news/CreateNews.vue";
+import UpdateNews from "@/components/admin/news/UpdateNews.vue";
 import DeleteNews from "@/components/admin/news/DeleteNews.vue";
+import News from "@/components/admin/news/News.vue";
 import StorageListView from '@/views/StorageListView.vue';
 import HouseholdListView from "@/views/HouseholdListView.vue";
 import AdminAuthBase from "@/views/AdminAuthBase.vue";
@@ -56,6 +58,8 @@ const router = createRouter({
                     children: [
                         { path: "createEmergencyZone", component: CreateEmergencyZone },
                         { path: "createNews", component: CreateNews },
+
+                        { path: "news", component: News },
                         { path: "deleteNews", component: DeleteNews },
                     ]
                 },
@@ -67,7 +71,8 @@ const router = createRouter({
                     children: [
                         { path: "createEmergencyZone", component: CreateEmergencyZone },
                         { path: "createNews", component: CreateNews },
-                        { path: "deleteNews", component: DeleteNews },
+                        { path: "updateNews/:caseId", component: UpdateNews, props: true },
+                        { path: "deleteNews/:caseId", component: DeleteNews, props: true },
                     ]
                 },
 
