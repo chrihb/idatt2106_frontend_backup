@@ -1,11 +1,11 @@
 import axios from 'axios';
 import { useUserStore } from '@/stores/userStore';
 
-export const request2FA = async (email) => {
+export const request2FA = async (loginForm, t) => {
     try {
         const response = await axios.post(
             `${window.backendURL}/api/admin/2fa`,
-            { email },
+            { email: loginForm.email },
             { headers: { 'Content-Type': 'application/json' } }
         );
 
@@ -14,14 +14,20 @@ export const request2FA = async (email) => {
             ...response.data
         };
     } catch (error) {
+        try {
+            await requestLogin(loginForm, t);
+            return {
+                success: true,
+                loggedIn: true,
+            };
+        } catch (error) {}
+
         console.error('Error requesting 2FA:', error);
 
-        if (error.response) {
-            return {
-                success: false,
-                error: t('login.twoFactorError')
-            };
-        }
+        return {
+            success: false,
+            error: t('login.twoFactorError')
+        };
 
         return {
             success: false,

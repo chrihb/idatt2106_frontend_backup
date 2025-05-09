@@ -64,11 +64,24 @@ const handleSendTwoFactorCode = async () => {
   errorMessage.value = '';
 
   try {
-    const response = await request2FA(form.email);
+    const loginForm = {
+      username: form.username,
+      email: form.email,
+      password: form.password
+    };
+
+    const response = await request2FA(loginForm, t);
 
     if (response.success) {
       twoFactorSent.value = true;
       successMessage.value = t('login.twoFactorSent');
+      if(response.loggedIn) {
+        successMessage.value = t('login.loginSuccess');
+        resetForm();
+        setTimeout(() => {
+          redirectAfterAuth('/');
+        }, 1500);
+      }
     } else {
       errorMessage.value = response.error || t('login.twoFactorError');
     }
