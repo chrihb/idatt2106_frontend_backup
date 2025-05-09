@@ -70,6 +70,7 @@ watchEffect(() => {
         <RouterLink to="/household/list" class="text-kf-blue hover:bg-kf-grey rounded cursor-pointer transition-colors duration-150 px-0.5" >{{ t("navbar.my-home") }}</RouterLink>
         <RouterLink to="/news" class="text-kf-blue hover:bg-kf-grey rounded cursor-pointer transition-colors duration-150 px-0.5" >{{ t("navbar.news") }}</RouterLink>
         <RouterLink to="/map" class="text-kf-blue hover:bg-kf-grey rounded cursor-pointer transition-colors duration-150 px-0.5" >{{ t("navbar.map") }}</RouterLink>
+        <RouterLink to="/general-info" class="text-kf-blue hover:bg-kf-grey rounded cursor-pointer transition-colors duration-150 px-0.5" >{{t("footer.general-info")}}</RouterLink>
       </div>
 
       <Bars3Icon @click="toggleMenuDropdown" class="block md:hidden size-10 text-kf-blue hover:bg-kf-grey rounded cursor-pointer transition-colors duration-150" />
@@ -79,6 +80,7 @@ watchEffect(() => {
         <RouterLink to="/household/list" class="block px-4 py-2 hover:bg-kf-grey">{{ t("navbar.my-home") }}</RouterLink>
         <RouterLink to="/news" class="block px-4 py-2 hover:bg-kf-grey">{{ t("navbar.news") }}</RouterLink>
         <RouterLink to="/map" class="block px-4 py-2 hover:bg-kf-grey">{{ t("navbar.map") }}</RouterLink>
+        <RouterLink to="/general-info" class="block px-4 py-2 hover:bg-kf-grey">{{t("footer.general-info")}}</RouterLink>
       </div>
 
       <!-- Dropdown -->

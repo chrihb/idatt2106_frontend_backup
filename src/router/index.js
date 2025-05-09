@@ -32,6 +32,10 @@ import AdminLogin from "@/components/login/AdminLogin.vue";
 import HouseholdOptionsView from "@/views/HouseholdOptionsView.vue";
 import AdminSetPassword from "@/components/login/AdminSetPassword.vue";
 import AdminResetPassword from "@/components/login/AdminResetPassword.vue";
+import GeneralInfoView from "@/views/GeneralInfo/GeneralInfoView.vue";
+import BeforeCrisis from '@/views/GeneralInfo/BeforeCrisis.vue';
+import DuringCrisis from '@/views/GeneralInfo/DuringCrisis.vue';
+import AfterCrisis from '@/views/GeneralInfo/AfterCrisis.vue';
 
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
@@ -62,6 +66,10 @@ const router = createRouter({
                 },
                 { path: "/about-us", component: AboutUsView },
                 { path: "/privacy-policy", component: PrivacyPolicyView },
+                { path: "/general-info", component: GeneralInfoView, },
+                { path: "/before-crisis", component: BeforeCrisis, },
+                { path: "/during-crisis", component: DuringCrisis,},
+                { path: "/after-crisis", component: AfterCrisis, },
                 { path: "/map", component: MapView },
                 { path: "/my-home", component: MyHomeView, meta: { requiresAuth: true, requiresHousehold: true } },
 

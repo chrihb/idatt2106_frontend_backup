@@ -7,14 +7,13 @@ import PasswordField from "@/components/input/PasswordField.vue";
 import {request2FA, requestLogin} from '@/services/adminLoginService.js';
 import {useI18n} from "vue-i18n";
 import {useRoute, useRouter} from "vue-router";
+import {useAuthRedirect} from "@/utils/useAuthRedirect.js";
 
 const { t } = useI18n();
 const route = useRoute();
 const router = useRouter();
 
-const redirectAfterAuth = (path) => {
-  router.push(path);
-};
+const { redirectAfterAuth } = useAuthRedirect();
 
 const {validate, values: form, resetForm} = useForm({
   validationSchema: {
@@ -75,9 +74,7 @@ const handleSendTwoFactorCode = async () => {
       if(response.loggedIn) {
         successMessage.value = t('login.loginSuccess');
         resetForm();
-        setTimeout(() => {
-          redirectAfterAuth('/');
-        }, 1500);
+        redirectAfterAuth();
       }
     } else {
       errorMessage.value = response.error || t('login.twoFactorError');
