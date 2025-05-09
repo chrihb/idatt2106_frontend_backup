@@ -25,7 +25,7 @@ export const useUserStore = defineStore('user', {
             }
             this.authenticated = await requestAuthenticationCheck();
         },
-        setCredentials({ token, authenticated, householdId, adminToken = null, isAdmin = false } = {}) {
+        setCredentials({ token, authenticated, householdId, adminToken, isAdmin } = {}) {
             if (token !== undefined) this.token = token;
             if (authenticated !== undefined) this.authenticated = authenticated;
             if (householdId !== undefined) this.householdId = householdId;

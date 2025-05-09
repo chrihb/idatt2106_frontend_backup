@@ -6,20 +6,19 @@ import FormField from '@/components/input/FormField.vue';
 import PasswordField from "@/components/input/PasswordField.vue";
 import {request2FA, requestLogin} from '@/services/adminLoginService.js';
 import {useI18n} from "vue-i18n";
-import {useRoute} from "vue-router";
+import {useRoute, useRouter} from "vue-router";
+import {useAuthRedirect} from "@/utils/useAuthRedirect.js";
 
 const { t } = useI18n();
 const route = useRoute();
+const router = useRouter();
+
+const { redirectAfterAuth } = useAuthRedirect();
 
 const {validate, values: form, resetForm} = useForm({
   validationSchema: {
     username: (value) => {
       if (!value) return t('register.admin.usernameRequired');
-      return true;
-    },
-    email: (value) => {
-      if (!value) return t('login.emailRequired');
-      if (!rules.email(value)) return t('login.emailError');
       return true;
     },
     password: (value) => {
@@ -54,7 +53,7 @@ const submitForm = async () => {
 };
 
 const handleSendTwoFactorCode = async () => {
-  const result = await validate(['email', 'username', 'password']);
+  const result = await validate(['username', 'password']);
   if (!result.valid) return;
 
   isSubmitting.value = true;
@@ -64,7 +63,6 @@ const handleSendTwoFactorCode = async () => {
   try {
     const loginForm = {
       username: form.username,
-      email: form.email,
       password: form.password
     };
 
@@ -76,9 +74,7 @@ const handleSendTwoFactorCode = async () => {
       if(response.loggedIn) {
         successMessage.value = t('login.loginSuccess');
         resetForm();
-        setTimeout(() => {
-          redirectAfterAuth('/');
-        }, 1500);
+        redirectAfterAuth();
       }
     } else {
       errorMessage.value = response.error || t('login.twoFactorError');
@@ -102,7 +98,6 @@ const handleLogin = async () => {
   try {
     const loginForm = {
       username: form.username,
-      email: form.email,
       password: form.password,
       twoFactorCode: form.twoFactorCode
     };
@@ -148,17 +143,6 @@ const handleLogin = async () => {
           <FormField
               field-name="username"
               :label="t('register.admin.username')"
-              class="w-full"
-              :disabled="twoFactorSent"
-          />
-        </div>
-
-        <!-- Email Field -->
-        <div class="">
-          <FormField
-              field-name="email"
-              :label="t('login.email')"
-              type="email"
               class="w-full"
               :disabled="twoFactorSent"
           />
