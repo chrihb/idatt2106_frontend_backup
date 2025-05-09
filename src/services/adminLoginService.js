@@ -104,7 +104,7 @@ export const setAdminPassword = async (verificationToken, password) => {
             `${window.backendURL}/api/admin/activate/${verificationToken}?newPassword=${password}`,
             {
                 headers: {
-                    Authorization: `Bearer ${userStore.adminToken}`, // Included for consistency, remove if not required
+                    Authorization: `Bearer ${userStore.adminToken}`,
                     'Content-Type': 'application/json'
                 }
             }
@@ -137,7 +137,7 @@ export const resetAdminPassword = async (verificationToken, password) => {
             `${window.backendURL}/api/admin/reset-password/${verificationToken}?newPassword=${password}`,
             {
                 headers: {
-                    Authorization: `Bearer ${userStore.adminToken}`, // Included for consistency, remove if not required
+                    Authorization: `Bearer ${userStore.adminToken}`,
                     'Content-Type': 'application/json'
                 }
             }
