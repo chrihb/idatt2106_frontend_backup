@@ -13,7 +13,7 @@ const { t } = useI18n();
 const route = useRoute();
 const router = useRouter();
 
-const { redirectAfterAuth } = useAuthRedirect();
+const { redirectAfterAuth } = useAuthRedirect('/admin-settings');
 
 const {validate, values: form, resetForm} = useForm({
   validationSchema: {
@@ -174,7 +174,7 @@ const handleLogin = async () => {
             type="submit"
             class="w-full bg-kf-red text-kf-white py-2 rounded disabled:opacity-50 cursor-pointer"
         >
-          <span v-if="!twoFactorSent">{{ t('login.sendTwoFactor') }}</span>
+          <span v-if="!twoFactorSent">{{ t('login.login') }}</span>
           <span v-else>{{ t('login.login') }}</span>
         </button>
 
