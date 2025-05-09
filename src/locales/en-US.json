@@ -155,7 +155,8 @@
     "twoFactorInstructions": "Enter the verification code sent to your email address.",
     "loginSuccess": "Login successful! Welcome, {username}.",
     "sendTwoFactor": "Send Verification Code",
-    "networkError": "Network error. Please check your internet connection and try again."
+    "networkError": "Network error. Please check your internet connection and try again.",
+    "failed": "Failed to login. Please try again."
   },
     "password-reset": {
         "title": "Password Reset",

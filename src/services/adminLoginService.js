@@ -19,13 +19,13 @@ export const request2FA = async (email) => {
         if (error.response) {
             return {
                 success: false,
-                error: error.response.data?.error || 'Failed to send 2FA code'
+                error: t('login.twoFactorError')
             };
         }
 
         return {
             success: false,
-            error: 'Network error. Please check your connection and try again.'
+            error: t('login.networkError')
         };
     }
 };
@@ -53,7 +53,7 @@ export const requestLogin = async (loginForm, t) => {
 
         return {
             success: false,
-            error: 'Login failed: Invalid response format from server.'
+            error: t('login.failed')
         };
     } catch (error) {
         console.error('Error submitting login:', error);
@@ -90,7 +90,7 @@ export const requestLogin = async (loginForm, t) => {
 
         return {
             success: false,
-            error: 'Network error. Please try again later.'
+            error: t('login.networkError')
         };
     }
 };

@@ -155,7 +155,8 @@
 		"twoFactorInstructions": "Skriv inn verifiseringskoden som er sendt til din e-postadresse.",
 		"loginSuccess": "Innlogging vellykket! Velkommen, {username}.",
 		"sendTwoFactor": "Send Verifiseringskode",
-		"networkError": "Nettverksfeil. Vennligst sjekk internettforbindelsen din og prøv igjen."
+		"networkError": "Nettverksfeil. Vennligst sjekk internettforbindelsen din og prøv igjen.",
+		"failed": "Innlogging feilet. Vennligst prøv igjen."
 	},
   "password-reset": {
 	"title": "Tilbakestill Passord",
