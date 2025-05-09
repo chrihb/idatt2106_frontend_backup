@@ -6,7 +6,7 @@ import PasswordField from "@/components/input/PasswordField.vue";
 import {useI18n} from "vue-i18n";
 import {executePasswordReset} from "@/services/emailService.js";
 import { useRoute, useRouter } from "vue-router";
-import {setAdminPassword} from "@/services/adminLoginService.js";
+import {resetAdminPassword, setAdminPassword} from "@/services/adminLoginService.js";
 
 const { t } = useI18n();
 const router = useRouter();
@@ -44,13 +44,13 @@ const handleSubmit = async () => {
       password: form.password,
       repeatPassword: form.repeatPassword,
     };
-    const verificationToken = route.params.token;
-    const response = await setAdminPassword(verificationToken, newPasswordForm.password);
+    const verificationToken = route.query.token;
+    const response = await resetAdminPassword(verificationToken, newPasswordForm.password);
 
     if (response) {
       successMessage.value = 'Password set successful! You can now log in with your password.';
       resetForm();
-      await router.push('/login');
+      await router.push('/admin-login');
     } else {
       errorMessage.value = response.error || 'Failed to reset password';
     }

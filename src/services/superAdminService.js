@@ -1,12 +1,17 @@
 import axios from "axios";
-
+import { useUserStore } from "@/stores/userStore";
 export const getAllAdmins = async () => {
     try {
-        const response = await axios.get();
+        const userStore = useUserStore();
 
-        const admins = await response.data;
-        if (response.status === 200 && Array.isArray(admins)) {
-            return { success: true, admins };
+        const response = await axios.get(`${window.backendURL}/api/admin`, {
+            headers: {
+                Authorization: `Bearer ${userStore.adminToken}`
+            }
+        });
+
+        if (response.status === 200 && Array.isArray(response.data)) {
+            return { success: true, data: response.data };
         } else {
             return { error: 'Failed to fetch admins: Invalid response format from server.' };
         }
@@ -22,11 +27,23 @@ export const getAllAdmins = async () => {
     }
 }
 
-export const addAdministrator = async (email) => {
+export const addAdministrator = async (email, username) => {
     try {
-        const response = await axios.post();
+        const userStore = useUserStore();
 
-        if (response.status === 200) {
+        const response = await axios.post(`${window.backendURL}/api/admin/createAdmin`,
+            {
+                username: username,
+                email: email
+            },
+            {
+                headers: {
+                    Authorization: `Bearer ${userStore.adminToken}`
+                }
+            }
+        );
+
+        if (response.status === 200 || response.status === 201) {
             return { success: true };
         } else {
             return { error: 'Failed to add admin: Invalid response format from server.' };
@@ -45,9 +62,15 @@ export const addAdministrator = async (email) => {
 
 export const deleteAdministrator = async (adminId) => {
     try {
-        const response = await axios.delete();
+        const userStore = useUserStore();
 
-        if (response.status === 200) {
+        const response = await axios.delete(`${window.backendURL}/api/admin/delete/${adminId}`, {
+            headers: {
+                Authorization: `Bearer ${userStore.adminToken}`
+            }
+        });
+
+        if (response.status === 200 || response.status === 204) {
             return { success: true };
         } else {
             return { error: 'Failed to delete admin: Invalid response format from server.' };
@@ -64,24 +87,36 @@ export const deleteAdministrator = async (adminId) => {
     }
 }
 
-export const passwordResetLinkToAdministrator = async (adminId) => {
+export const passwordResetLinkToAdministrator = async (email) => {
     try {
-        const response = await axios.post();
+        const userStore = useUserStore();
 
-        if (response.status === 200) {
+        const response = await axios.post(
+            `${window.backendURL}/api/admin/reset-password`,
+            { email: email },
+            {
+                headers: {
+                    Authorization: `Bearer ${userStore.adminToken}`,
+                    'Content-Type': 'application/json',
+                }
+            }
+        );
+
+        if (response.status === 200 && response.data === true) {
             return { success: true };
         } else {
-            return { error: 'Failed to send password reset link: Invalid response format from server.' };
+            return { error: 'Failed to send password reset link: Email could not be sent.' };
         }
     } catch (error) {
-
         if (error.response) {
             if (error.response.status === 400 || error.response.status === 404) {
                 return { error: 'Failed to send password reset link: Invalid request.' };
             }
+            if (error.response.status === 401) {
+                return { error: 'Unauthorized: Invalid or missing token.' };
+            }
             return { error: 'An error occurred. Please try again.' };
         }
-
         return { error: 'Network error. Please try again later.' };
     }
-}
+};
