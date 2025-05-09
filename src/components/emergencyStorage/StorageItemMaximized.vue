@@ -5,6 +5,7 @@ import {useCategoriesStore} from '@/stores/categoriesStore.js';
 import {useUnitsStore} from '@/stores/unitsStore.js';
 import {useEmergencyItemsStore} from '@/stores/emergencyItemsStore.js';
 import {useI18n} from "vue-i18n";
+import {XMarkIcon} from "@heroicons/vue/24/solid/index.js";
 
 const props = defineProps({
   categoryId: {
@@ -95,19 +96,15 @@ watch(() => locale.value, async () => {
 <template>
   <Teleport to="body">
     <div v-if="display"
-         class="fixed inset-0 flex items-center justify-center z-50 p-3 sm:p-0">
+         class="fixed backdrop-blur-sm inset-0 flex items-center justify-center z-50 p-3 sm:p-0">
       <div
           class="bg-white rounded-lg shadow-xl w-full sm:w-11/12 md:w-4/5 lg:w-3/5 max-h-[90vh] overflow-auto p-4 sm:p-6 max-w-3xl">
         <div class="flex flex-row justify-between items-center mb-4 sm:mb-6 border-b pb-3 sm:pb-4">
           <h1 class="text-xl sm:text-2xl font-bold text-gray-800 truncate">
             {{ category }}
           </h1>
-          <button
-              class="text-gray-500 hover:text-gray-800 focus:outline-none transition-colors duration-200 p-2 rounded-full hover:bg-gray-100"
-              @click="close"
-          >
-            ✖
-          </button>
+          <XMarkIcon class="w-8 h-8 cursor-pointer text-red-500"
+                     @click="close"/>
         </div>
 
         <div v-if="items.length === 0" class="py-6 sm:py-10 text-center text-gray-500">
