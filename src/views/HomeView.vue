@@ -24,7 +24,7 @@ onMounted(async () => {
           primary = firstHousehold;
         }
       } catch (e) {
-        console.warn("Failed to set default primary household:", e);
+
       }
     }
 
@@ -32,8 +32,6 @@ onMounted(async () => {
       const matched = userStore.householdId.find(h => h.id === primary.id);
       if (matched) {
         household.value = matched;
-      } else {
-        console.warn("Primary household ID not found in user store.");
       }
     }
   }

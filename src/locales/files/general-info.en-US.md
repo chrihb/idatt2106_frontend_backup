@@ -1,0 +1,10 @@
+## How You Can Contribute to Norway’s Emergency Preparedness
+
+How would you and your nearest family manage if the electricity supply was cut off for a longer period? What would you do if the water supply failed? What if you could not do any shopping for a week? Emergency preparedness means being ready to manage these types of situations.
+The Norwegian authorities recommend that as many people as possible be prepared to be self-sustained for one week. This is because, in a crisis situation, municipalities and emergency agencies will have to prioritise those who cannot manage without help. If more of us can look after ourselves and our immediate families, Norway’s overall defences will be strengthened, i.e. the sum of public resources for preventing and managing crises and war.
+#### What could happen?
+We live in an increasingly turbulent world – among other things due to climate change, war and digital threats. Even though in Norway most things generally function as they normally would, we must remain aware that extreme weather, pandemics, accidents, sabotage – and in the worst case acts of war – can impact us.
+These types of crises can have huge consequences. For example, a failure in electricity supplies can mean that domestic water supplies, sewage systems, payment systems, the Internet, mobile telephones and food preparation do not function normally.
+#### Improve your emergency preparedness!
+Good emergency preparedness is an investment in the safety of yourself and your family. If you follow the advice in this brochure, you will be better able to manage situations - everything from minor disturbances in everyday life to more serious crises. In addition, you will assist the authorities in prioritising those who need help the most.
+Remember – even a little preparedness is much better than none at all!

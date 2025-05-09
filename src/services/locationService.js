@@ -26,7 +26,6 @@ export const startLocationTracking = () => {
   const token = userStore.token || sessionStorage.getItem("token");
 
   if (!token) {
-    console.warn("No token found, skipping location tracking");
     return;
   }
 
@@ -35,12 +34,9 @@ export const startLocationTracking = () => {
       async (position) => {
         const { latitude, longitude } = position.coords;
         await updateUserLocation(latitude, longitude);
-        console.log("Location updated:", latitude, longitude);
       },
       (error) => {
-        console.warn("Error getting location:", error);
         if (error.code === error.PERMISSION_DENIED) {
-          console.warn("Permission denied, stopping tracking");
           stopLocationTracking();
         }
       },
@@ -70,7 +66,6 @@ export const getUserPosition = async () => {
 
     return response.data;
   } catch (error) {
-    console.error('Error joining household:', error);
     return { success: false };
   }
 };

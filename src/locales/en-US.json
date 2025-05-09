@@ -30,16 +30,41 @@
     "title": "Manage Admins",
     "current-admins": "Current Admins",
     "add-admin": "Add Admin",
-    "add" : "Add",
+    "add": "Add",
     "add-admin-desc": "Add a new admin by entering their email address.",
     "remove-admin": "Remove Admin",
     "remove": "Remove",
     "new-password": "New Password",
-    "email": "Email: "
+    "email": "Email: ",
+    "username": "Username",
+    "no-admins": "No admins available",
+    "fetch-failed": "Failed to fetch administrators",
+    "admin-added": "Administrator successfully added",
+    "add-failed": "Failed to add administrator",
+    "admin-removed": "Administrator successfully removed",
+    "remove-failed": "Failed to remove administrator",
+    "password-reset-email-sent": "Password reset email has been sent",
+    "reset-failed": "Failed to send password reset email",
+    "reset-password": "Reset Password",
+    "confirm-remove": "Are you sure you want to remove this administrator?"
   },
     "footer": {
-        "about-us": "About Us",
-        "privacy-policy": "Privacy Policy"
+      "about-us": "About Us",
+      "privacy-policy": "Privacy Policy",
+      "general-info": "Info"
+      },
+    "general-info": {
+    "title": "General Information",
+    "find-information": "Below you can find information about what to do before, during and after a crisis:"
+    },
+    "before-crisis": {
+    "title": "Before Crisis"
+    },
+    "during-crisis": {
+    "title": "During Crisis"
+    },
+    "after-crisis": {
+    "title": "After Crisis"
     },
     "storage-status": {
       "level": {
@@ -149,7 +174,18 @@
     "emailError": "Email must be a valid email address.",
     "emailRequired": "Email is required.",
     "loginError": "Invalid email or password.",
-    "redirectSuccessMessage": "Registration successful. Please check your email to verify your account before logging in"
+    "redirectSuccessMessage": "Registration successful. Please check your email to verify your account before logging in",
+    "adminLogin": "Admin Login",
+    "username": "Username",
+    "twoFactorCode": "Verification Code",
+    "twoFactorRequired": "Verification code is required.",
+    "twoFactorSent": "Verification code has been sent to your email.",
+    "twoFactorError": "Error sending verification code. Please try again.",
+    "twoFactorInstructions": "Enter the verification code sent to your email address.",
+    "loginSuccess": "Login successful! Welcome, {username}.",
+    "sendTwoFactor": "Send Verification Code",
+    "networkError": "Network error. Please check your internet connection and try again.",
+    "failed": "Failed to login. Please try again."
   },
     "password-reset": {
         "title": "Password Reset",
@@ -192,6 +228,7 @@
     "registerSuccess": "Registration successful. Please check your email to verify your account.",
     "privacyPolicyText": "I accept the ",
     "privacyPolicyRequired": "You must accept the privacy policy.",
+    "recaptchaRequired": "Please complete the reCAPTCHA.",
     "hasAccount": "Already have an account?",
     "loginHere": "Login here",
     "admin": {
@@ -210,7 +247,10 @@
   },
   "login-service": {
     "invalidCredentials": "Invalid email or password.",
-    "emailNotVerified": "Email not verified. Please check your email for the verification link."
+    "emailNotVerified": "Email not verified. Please check your email for the verification link.",
+    "invalidAdminCredentials": "Invalid admin credentials.",
+    "invalidAdminData": "Invalid admin data, check the verification code.",
+    "serverError": "Server error. Please try again later."
   },
   "auth":{
     "login": "Login",
@@ -256,7 +296,9 @@
   }
 },
   "map": {
-    "filter": "Filter"
+    "filter": "Filter",
+    "address": "Address",
+    "directions": "Directions"
   },
   "admin-settings": {
     "title": "Admin Settings",
@@ -272,7 +314,16 @@
       "newsTitleRequired": "News title is required",
       "newsDesc": "News description",
       "newsDescRequired": "News description is required",
-      "deleteNews": "Delete News"
+      "deleteNews": "Delete News",
+      "news": "News",
+      "updateTitle": "Update News",
+      "update": "Update",
+      "delete": "Delete",
+      "createError": "Failed to create news.",
+      "deleteError": "Failed to delete news.",
+      "networkError": "A network error occurred.",
+      "createdSuccess": "News created successfully!",
+      "updatedSuccess": "News updated successfully!"
     },
     "household": {
       "name": "Household",

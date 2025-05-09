@@ -11,7 +11,6 @@ onMounted(async () => {
   try {
     households.value = await getPreparednessStatus(); // [{ id, householdName, status }]
   } catch (e) {
-    console.error("Feil ved henting av husholdningsstatus:", e);
   }
 });
 

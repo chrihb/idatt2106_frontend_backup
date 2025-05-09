@@ -33,9 +33,9 @@ export const adminSettings = ref([
             },
             {
                 id: 2,
-                name: "DeleteNews",
-                desc: "admin-settings.news.deleteNews",
-                route: "/admin-settings/deleteNews",
+                name: "News",
+                desc: "admin-settings.news.news",
+                route: "/admin-settings/news",
             }
         ]
     },

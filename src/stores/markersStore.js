@@ -21,14 +21,12 @@ export const useMarkersStore = defineStore('markersStore', {
                 const markerStore = useMarkerStore();
 
                 const markersData = await service.getAllMarkers();
-                console.log("MarkerData: ",markersData);
 
 
                 if (markersData) {
                     this.clearMarkers();
                     for (const mrkrData of markersData) {
                         const marker = markerStore.setMarkerFromBackend(mrkrData);
-                        console.log("mrkrData: ", marker)
                         if (addToMap) {
                             addMarkerToMap(marker);
                         }
@@ -38,7 +36,6 @@ export const useMarkersStore = defineStore('markersStore', {
                 }
 
             } catch (error) {
-                console.error('Error fetching all emergency zones:', error);
                 throw error;
             }
         },
@@ -60,14 +57,12 @@ export const useMarkersStore = defineStore('markersStore', {
                 }
                 markerStore.clearMarker()
             } catch (error) {
-                console.error('Error fetching markers');
                 throw error;
             }
         },
 
         addMarker(marker) {
             if (!marker || !marker.markerId) {
-                console.error('Invalid marker data');
                 return;
             }
             if (!this.getMarkerById(marker.markerId)) {
@@ -80,8 +75,6 @@ export const useMarkersStore = defineStore('markersStore', {
             if (index !== -1) {
                 this.markers[index] = marker;
                 updateMarkerOnMap(marker)
-            } else {
-                console.error('Marker not found in the store');
             }
         },
 
@@ -89,8 +82,6 @@ export const useMarkersStore = defineStore('markersStore', {
             const index = this.markers.findIndex(marker => marker.markerId === markerId);
             if (index !== -1) {
                 this.markers.splice(index, 1);
-            } else {
-                console.error('Marker not found in the store');
             }
         },
 

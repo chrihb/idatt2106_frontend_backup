@@ -44,7 +44,6 @@ const loadItems = async () => {
         unit: unitsStore.getUnitName(item.unitId, locale.value),
       }));
     } catch (error) {
-      console.error('Error loading items for category', error);
     }
   }
 };
@@ -70,7 +69,6 @@ const handleDelete = async (id) => {
     await loadItems();
     emit('itemUpdated', id);
   } catch (error) {
-    console.error('Error deleting item', error);
   }
 };
 

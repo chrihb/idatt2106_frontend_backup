@@ -13,33 +13,35 @@ export const useUserStore = defineStore('user', {
             showHouseholdStatusOnFrontpage: true
         },
         isAdmin: false,
+        adminToken: null,
+        isSuperUser: false
     }),
     actions: {
         async isAuthenticated() {
-            console.log("checking...");
+
             if (!this.token) {
-                console.log("no token");
+
                 this.authenticated = false;
                 return false;
             }
             this.authenticated = await requestAuthenticationCheck();
         },
-        setCredentials({ token, authenticated, householdId, isAdmin = false } = {}) {
+        setCredentials({ token, authenticated, householdId, adminToken, isAdmin, isSuperUser } = {}) {
             if (token !== undefined) this.token = token;
             if (authenticated !== undefined) this.authenticated = authenticated;
             if (householdId !== undefined) this.householdId = householdId;
             if (isAdmin !== undefined) this.isAdmin = isAdmin;
-            console.log("token: ", this.token);
-            console.log("is auth: ", this.authenticated);
-            console.log("is admin: ", this.isAdmin);
-            console.log("householdId: ", this.householdId);
-            console.log(householdId)
+            if (adminToken !== undefined) this.adminToken = adminToken;
+            if (isSuperUser !== undefined) this.isSuperUser = isSuperUser;
         }
         ,
         clearToken() {
             this.token = null;
             this.authenticated = false;
             this.householdId = [];
+            this.isAdmin = false;
+            this.adminToken = null;
+            this.isSuperUser = false;
         },
         clearHouseholdId() {
             this.householdId = [];
@@ -49,13 +51,11 @@ export const useUserStore = defineStore('user', {
                 const households = await requestHouseholds();
                 this.setCredentials({ householdId: households });
             } catch (error) {
-                console.error("Error fetching households:", error);
             }
         },
 
         setUserSettings(settings) {
             if (!settings) {
-                console.error("Invalid settings provided");
                 return;
             }
             this.userSettings = settings;

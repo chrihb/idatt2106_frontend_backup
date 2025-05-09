@@ -60,7 +60,6 @@ function selectSuggestion(suggestion) {
 const handleSubmit = async () => {
   const result = await validate();
   if (!result.valid) {
-    console.log("Validation failed:", errors.value); // Debug validation errors
     return;
   }
 
@@ -74,7 +73,6 @@ const handleSubmit = async () => {
       lat: form.lat,
       lon: form.lon,
     };
-    console.log("Submitting registration form:", registerForm);
     const response = await createHousehold(registerForm.nickname, registerForm.lat, registerForm.lon);
 
     if (response.success) {
@@ -91,7 +89,6 @@ const handleSubmit = async () => {
       }
     }
   } catch (error) {
-    console.error("Submission error:", error); // Debug submission errors
     errorMessage.value = "An unexpected error occurred. Please try again.";
   } finally {
     isSubmitting.value = false;

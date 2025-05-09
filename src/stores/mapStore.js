@@ -6,6 +6,7 @@ export const useMapStore = defineStore('mapStore', {
         map: null,
         layerGroup: {},
         mapItemIds: [],
+        currentRoute: null,
     }),
     getters: {
         getLayerGroup: (state) => state.layerGroup,
@@ -16,11 +17,15 @@ export const useMapStore = defineStore('mapStore', {
         initMap() {
             // Check if the map is already initialized
             if (this.map) {
-                console.error("Map is already initialized");
                 return
             }
             // set its view to a specific location
-            this.map = L.map('map').setView([63.422464, 10.410394], 15);
+            //this.map = L.map('map').setView([63.422464, 10.410394], 15);
+            this.map = L.map('map', {
+                zoomAnimation: false,
+                markerZoomAnimation: false,
+                fadeAnimation: true, 
+            }).setView([63.422464, 10.410394], 15);
 
             // Add a tile layer to the map
             L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -53,7 +58,6 @@ export const useMapStore = defineStore('mapStore', {
             if (!this.mapItemIds.includes(mapItemId)) {
                 this.mapItemIds.push(mapItemId);
             } else {
-                console.error(`Map item ID ${mapItemId} already exists in the mapItemIds array.`);
             }
         },
 
@@ -62,7 +66,6 @@ export const useMapStore = defineStore('mapStore', {
             if (index > -1) {
                 this.mapItemIds.splice(index, 1);
             } else {
-                console.error(`Map item ID ${mapItemId} not found in the mapItemIds array.`);
             }
         },
 
@@ -70,7 +73,6 @@ export const useMapStore = defineStore('mapStore', {
             if (this.map) {
                 this.map.setView([lat, lng], 15);
             } else {
-                console.error("Map is not initialized");
             }
         },
     },

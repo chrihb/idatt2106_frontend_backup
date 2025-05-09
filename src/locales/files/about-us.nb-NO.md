@@ -18,19 +18,14 @@ Krisefikser.no skiller seg fra eksisterende løsninger ved å samle alt brukeren
 
 Prosjektgruppen består av:
 
-- [Navn 1] – [Rolle, f.eks. frontend, backend]
-- [Navn 2] – [Rolle]
-- [Navn 3] – [Rolle]
-- [Navn 4] – [Rolle]
-
-(TODO: Erstatt navnene og rollene med faktiske medlemmer.)
-
-### Kontakt oss
-
-Har du spørsmål eller ønsker å vite mer om prosjektet?
-
-E-post: [epostadresse@skole.no]  
-Skole: [Skolens navn]
+- Eide Zindel, Erlend
+- Bore, Christian Hess
+- Merkesdal, André Wikheim
+- Øye Seime, Konrad
+- Reiher, Jonas
+- Smestu, Eskild
+- Spook, Sigurd
+- Sundvoll Moe, Ole-Thomas
 
 ---
 

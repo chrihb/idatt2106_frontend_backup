@@ -26,7 +26,6 @@ export const useEmergencyItemsStore = defineStore("items", {
         this.items = await service.getEmergencyItems(householdId);
         return this.items;
       } catch (error) {
-        console.error('Error fetching all emergency items:');
       }
     },
 
@@ -40,7 +39,6 @@ export const useEmergencyItemsStore = defineStore("items", {
 
         return categoryItems;
       } catch (error) {
-        console.error('Error fetching items for category');
       }
     },
 
@@ -51,7 +49,6 @@ export const useEmergencyItemsStore = defineStore("items", {
         this.items.push(newItem);
         return newItem;
       } catch (error) {
-        console.error('Error creating emergency item');
         throw error;
       }
     },
@@ -68,7 +65,6 @@ export const useEmergencyItemsStore = defineStore("items", {
 
         return updatedItem;
       } catch (error) {
-        console.error('Error updating item');
         throw error;
       }
     },
@@ -81,7 +77,6 @@ export const useEmergencyItemsStore = defineStore("items", {
         this.items = this.items.filter(item => item.id !== itemId);
         return true;
       } catch (error) {
-        console.error('Error deleting item');
         throw error;
       }
     },

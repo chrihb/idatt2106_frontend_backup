@@ -25,13 +25,22 @@ import JoinCreateHousehold from "@/components/joinHousehold/Options.vue";
 import CreateEmergencyZone
     from "@/components/admin/map/CreateEmergencyZone.vue";
 import CreateNews from "@/components/admin/news/CreateNews.vue";
+import UpdateNews from "@/components/admin/news/UpdateNews.vue";
 import DeleteNews from "@/components/admin/news/DeleteNews.vue";
+import News from "@/components/admin/news/News.vue";
 import StorageListView from '@/views/StorageListView.vue';
 import HouseholdListView from "@/views/HouseholdListView.vue";
 import AdminAuthBase from "@/views/AdminAuthBase.vue";
 import AdminLogin from "@/components/login/AdminLogin.vue";
 import UpdateEmergencyZoneView from "@/views/UpdateEmergencyZoneView.vue";
 import UpdateMarkerView from "@/views/UpdateMarkerView.vue";
+import HouseholdOptionsView from "@/views/HouseholdOptionsView.vue";
+import AdminSetPassword from "@/components/login/AdminSetPassword.vue";
+import AdminResetPassword from "@/components/login/AdminResetPassword.vue";
+import GeneralInfoView from "@/views/GeneralInfo/GeneralInfoView.vue";
+import BeforeCrisis from '@/views/GeneralInfo/BeforeCrisis.vue';
+import DuringCrisis from '@/views/GeneralInfo/DuringCrisis.vue';
+import AfterCrisis from '@/views/GeneralInfo/AfterCrisis.vue';
 
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
@@ -42,36 +51,44 @@ const router = createRouter({
                 { path: "", component: HomeView },
                 { path: "/news", component: NewsView },
                 { path: "/account", component: AccountView, meta: { requiresAuth: true } },
-                { path: "/manage-admins", component: ManageAdmins, meta: { requiresAuth: true } },
                 { path: "/storage", meta: { requiresAuth: true },
                     children: [
                         { path: "list", component: StorageListView, meta: { requiresHousehold: true } },
                         { path: ":id", component: EmergencyStorage, meta: { requiresHousehold: true }, props: true },
                     ]},
-                { path: "/household", meta: { requiresAuth: true },
+                { path: "/household", component: HouseholdOptionsView, meta: { requiresAuth: true },
                     children: [
-                        { path: "options", component: JoinCreateHousehold },
+                        { path: "options", component: Options },
                         { path: "list", component: HouseholdListView, meta: { requiresHousehold: true } },
-                        { path: ":id", component: MyHomeView, meta: { requiresHousehold: true }, props: true },
                     ]},
+                { path: "/household/:id", component: MyHomeView, meta: { requiresHousehold: true, requiresAuth: true }, props: true },
                 { path: "/admin-settings", component: AdminSettings,
                     children: [
                         { path: "adminEmergencyZone", component: UpdateEmergencyZoneView },
                         { path: "adminEmergencyUtilities", component: UpdateMarkerView },
                         { path: "createNews", component: CreateNews },
+
+                        { path: "news", component: News },
                         { path: "deleteNews", component: DeleteNews },
                     ]
                 },
                 { path: "/about-us", component: AboutUsView },
                 { path: "/privacy-policy", component: PrivacyPolicyView },
+                { path: "/general-info", component: GeneralInfoView, },
+                { path: "/before-crisis", component: BeforeCrisis, },
+                { path: "/during-crisis", component: DuringCrisis,},
+                { path: "/after-crisis", component: AfterCrisis, },
                 { path: "/map", component: MapView },
                 { path: "/my-home", component: MyHomeView, meta: { requiresAuth: true, requiresHousehold: true } },
-                { path: "/admin-settings", component: AdminSettings,
+
+                { path: "/manage-admins", component: ManageAdmins, meta: { requiresSuperUser: true } },
+                { path: "/admin-settings", component: AdminSettings, meta: { requiresAdmin: true },
                     children: [
                         { path: "createEmergencyZone", component: CreateEmergencyZone },
                         { path: "createMarker", component: UpdateMarkerView },
                         { path: "createNews", component: CreateNews },
-                        { path: "deleteNews", component: DeleteNews },
+                        { path: "updateNews/:caseId", component: UpdateNews, props: true },
+                        { path: "deleteNews/:caseId", component: DeleteNews, props: true },
                     ]
                 },
 
@@ -82,7 +99,6 @@ const router = createRouter({
             children: [
                 { path: "/login", name: "Login", component: Login,},
                 { path: "/register-account", name: "Register",component: Register },
-                { path: "/register-admin", name: "Register Admin",component: AdminRegister, meta: { requiresAuth: true } },
             ],
         },
         {
@@ -94,6 +110,8 @@ const router = createRouter({
         {
             path: "/", component: SimpleCenteredComponent,
             children: [
+                { path: "/admin-activation", name: "AdminActivation", component: AdminSetPassword },
+                { path: "/admin-password-reset", name: "AdminPasswordReset", component: AdminResetPassword },
                 { path: "/password-reset-request", name: "PasswordResetRequest", component: PasswordResetRequest },
                 { path: "/password-reset/:token", name: "PasswordReset", component: PasswordResetNewPassword },
                 { path: "/email-verification/:token", name: "EmailVerification", component: EmailVerification },
@@ -106,6 +124,22 @@ const router = createRouter({
 
 router.beforeEach(async (to, from, next) => {
     const userStore = useUserStore();
+
+    const requiresAdmin = to.path.startsWith('/admin-settings') ||
+        to.path.startsWith('/manage-admins');
+
+    if (requiresAdmin) {
+        if (!userStore.isAdmin) {
+            return next('/');
+        }
+    }
+
+    const requiresSuperUser = to.path.startsWith('/manage-admins');
+    if (requiresSuperUser) {
+        if (!userStore.isSuperUser) {
+            return next('/');
+        }
+    }
 
     if (!to.meta.requiresAuth && !to.meta.requiresHousehold) {
         return next();

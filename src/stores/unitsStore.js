@@ -29,7 +29,6 @@ export const useUnitsStore = defineStore("units", {
         const service = emergencyItemService();
         this.units = await service.getEmergencyItemUnits();
       } catch (error) {
-        console.error('Error fetching emergency item units');
       }
     }
   }

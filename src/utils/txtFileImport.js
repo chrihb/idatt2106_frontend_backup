@@ -11,7 +11,6 @@ const fileImport = async (props, locale) => {
   if (importer) {
     return await importer()
   } else {
-    console.error('Filen finnes ikke:', filename)
     return 'Content not available.'
   }
 }

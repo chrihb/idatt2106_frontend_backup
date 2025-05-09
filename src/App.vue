@@ -22,9 +22,8 @@ onMounted(async () => {
   await nextTick()
 
   if (success) {
-    console.log('User is authenticated, starting tracking')
     await userStore.fetchHouseholds()
-    initAccountMarkers()
+    await initAccountMarkers()
     startLocationTracking()
   }
 })
@@ -35,10 +34,10 @@ watch(
     async (isAuthed) => {
       if (isAuthed) {
         await userStore.fetchHouseholds()
-        initAccountMarkers()
+        await initAccountMarkers()
         startLocationTracking()
       } else {
-        removeAccountMarkers()
+        await removeAccountMarkers()
         stopLocationTracking()
       }
     },

@@ -16,7 +16,6 @@ export const useCategoriesStore = defineStore("categories", {
       if (!category) {
         return 'Unknown Category';
       }
-      console.log(locale)
       return locale === 'nb-NO' ? category.norwegianName : category.englishName;
     },
   },
@@ -27,7 +26,6 @@ export const useCategoriesStore = defineStore("categories", {
         const service = emergencyItemService();
         this.categories = await service.getEmergencyItemCategories();
       } catch (error) {
-        console.error('Error fetching emergency item categories:', error);
       }
     }
   }

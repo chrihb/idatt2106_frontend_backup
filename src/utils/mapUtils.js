@@ -4,16 +4,23 @@ import {useEmergencyZonesStore} from "@/stores/emergencyZonesStore.js";
 import {useEmergencyZoneStore} from "@/stores/emergencyZoneStore.js";
 import {useMarkersStore} from "@/stores/markersStore.js";
 import {useMarkerStore} from "@/stores/markerStore.js";
+import { usePositionTrackingStore } from "@/stores/positionTrackingStore.js";
+import {nextTick} from "vue";
 import {useUserStore} from "@/stores/userStore.js";
-import {getUserPosition} from "@/services/locationService.js";
 
-export const createMarkerPopup = (type, address, description) =>
+let routeLayerGroup = null;
+
+export const createMarkerPopup = (type, address, markerId) =>
     `
-                <div class="popup">
-                    <h2>${type}</h2>
-                    <p>${address}</p>
-                    <p>${description}</p>
-                </div>
+        <div class="popup text-sm text-gray-800 space-y-1">
+            <h2 class="font-semibold text-base">${type}</h2>
+                <p class="font-medium"> ${address}</p>
+                <p>
+                    <a href="#" class="directions-link text-blue-600 hover:underline font-medium" data-marker-id="${markerId}">
+                        Veibeskrivelse
+                    </a>
+                </p>
+        </div>
     `;
 
 export const createZonePopup = (name, type, level, address, description) =>
@@ -46,9 +53,7 @@ export const createCustomMarkerIcon = (type) => {
 
 // Add a marker to the map
 export const addMarkerToMap = (marker) => {
-    console.log("mapMarker:", marker);
     if (!marker || !marker.markerId || !marker.lat || !marker.lng || !marker.type) {
-        console.error('Invalid marker data');
         return;
     }
 
@@ -75,15 +80,45 @@ export const addMarkerToMap = (marker) => {
             const markerDetails = await markerStore.fetchMarkerDetailsById(marker.markerId);
 
             if (markerDetails) {
-                const popupContent = createMarkerPopup(marker.type, markerDetails.address, markerDetails.description);
-                mapMarker.bindPopup(popupContent).openPopup();
+                const popupContent = createMarkerPopup(marker.type, markerDetails.address, marker.markerId);
+                if (!mapMarker.getPopup()) {
+                    mapMarker.bindPopup(popupContent);
+                } else {
+                    mapMarker.setPopupContent(popupContent);
+                }
+                mapMarker.openPopup();
+                await nextTick();
+
+                // Hent popup-elementet direkte og bind handleren der
+                const popupEl = mapMarker.getPopup()?.getElement();
+                if (popupEl) {
+                    const link = popupEl.querySelector('.directions-link');
+                    if (link) {
+                        const handler = createDirectionsHandler(marker.lat, marker.lng);
+                        link._directionsHandler = handler;
+                        L.DomEvent.on(link, 'click', handler);
+                    }
+                }
             } else {
-                console.error('Failed to fetch marker details');
             }
         } catch (error) {
-            console.error('Error fetching marker details:', error);
         }
     });
+
+
+    mapMarker.on('popupclose', (e) => {
+        const popupEl = e.popup.getElement();
+        if (!popupEl) return;
+
+        const link = popupEl.querySelector('.directions-link');
+        if (link && link._directionsHandler) {
+            L.DomEvent.off(link, 'click', link._directionsHandler);
+            delete link._directionsHandler;
+        }
+
+        clearRoute();
+    });
+
 
     // Check if the layerGroup for the type exists, if not create it
     if (!mapStore.layerGroup[marker.type] || !(mapStore.layerGroup[marker.type] instanceof L.LayerGroup)) {
@@ -118,7 +153,11 @@ export const updateMarkerOnMap = (marker) => {
 export const addEmergencyZoneToMap = (emergencyZone) => {
 
     if (!emergencyZone || !emergencyZone.zoneId || !emergencyZone.coordinates || emergencyZone.coordinates.length < 3) {
-        console.error('Invalid emergency zone data');
+        return;
+    }
+
+    const emergencyZonesStore = useEmergencyZonesStore();
+    if (emergencyZonesStore.getEmergencyZoneById(emergencyZone.zoneId)) {
         return;
     }
 
@@ -150,11 +189,8 @@ export const addEmergencyZoneToMap = (emergencyZone) => {
             if (zoneDetails) {
                 const popupContent = createZonePopup(zoneDetails.name, emergencyZone.type, emergencyZone.level, zoneDetails.address, zoneDetails.description);
                 polygon.bindPopup(popupContent).openPopup();
-            } else {
-                console.error('Failed to fetch zone details');
             }
         } catch (error) {
-            console.error('Error fetching zone details:', error);
         }
     });
 
@@ -233,8 +269,6 @@ export const centerMapOnMarker = (id) => {
 
     if (marker) {
         mapStore.centerMapOnSpecificLocation(marker.lat, marker.lng);
-    } else {
-        console.error(`Marker with ${id} not found.`);
     }
 }
 
@@ -246,69 +280,126 @@ export const centerMapOnEmergencyZone = (zoneId) => {
     if (emergencyZone) {
         const bounds = L.latLngBounds(emergencyZone.coordinates);
         mapStore.map.fitBounds(bounds);
-    } else {
-        console.error(`Emergency zone with ID ${zoneId} not found.`);
     }
 }
 
-export const initAccountMarkers = async () => {
-    const userStore = useUserStore();
-    const markersStore = useMarkersStore();
-    const userPosition = await getUserPosition();
+export const drawRoute = async (startLat, startLng, endLat, endLng) => {
+    const mapStore = useMapStore();
 
-    console.log("Adding markers for households and members");
+    routeLayerGroup = L.layerGroup().addTo(mapStore.map);
 
-    userStore.householdId.forEach((household) => {
-        const householdMarkerId = `household-${household.id}`;
-        if (
-            household.latitude &&
-            household.longitude &&
-            !markersStore.getMarkerById(householdMarkerId)
-        ) {
-            addMarkerToMap({
-                markerId: householdMarkerId,
-                lat: household.latitude,
-                lng: household.longitude,
-                type: "home",
-            });
+    const url = `https://router.project-osrm.org/route/v1/driving/${startLng},${startLat};${endLng},${endLat}?overview=full&geometries=geojson`;
+
+    try {
+        const response = await fetch(url);
+        const data = await response.json();
+
+        if (data.routes && data.routes.length > 0) {
+            const coords = data.routes[0].geometry.coordinates.map(([lng, lat]) => [lat, lng]);
+            const polyline = L.polyline(coords, { color: 'blue' });
+            routeLayerGroup.addLayer(polyline);
+            mapStore.map.fitBounds(polyline.getBounds());
+        } else {
+            console.error('No route found');
         }
-
-        household.members.forEach((member) => {
-            const memberMarkerId = `member-${member.id}`;
-            if (
-                member.latitude &&
-                member.longitude &&
-                !markersStore.getMarkerById(memberMarkerId) &&
-                userPosition.id !== member.id
-            ) {
-                addMarkerToMap({
-                    markerId: memberMarkerId,
-                    lat: member.latitude,
-                    lng: member.longitude,
-                    type: "AndreMedlemmer",
-                });
-            }
-        });
-    });
+    } catch (error) {
+        console.error('Failed to fetch route:', error);
+    }
 };
 
 
-export const removeAccountMarkers = async () => {
+export const clearRoute = () => {
     const mapStore = useMapStore();
-    const userPosition = await getUserPosition();
 
-    console.log("Removing markers for households and members");
+    if (routeLayerGroup && mapStore.map.hasLayer(routeLayerGroup)) {
+        mapStore.map.removeLayer(routeLayerGroup);
+        routeLayerGroup = null;
+    }
+};
+
+export const getUserPosition = async () => {
+    const positionTrackingStore = usePositionTrackingStore();
+    const userPos = positionTrackingStore.getPosition;
+
+    if (!userPos) {
+        throw new Error("Brukerens posisjon er ikke tilgjengelig");
+    }
+
+    return userPos;
+}
+
+
+export const requestRouteToMarker = async (targetLat, targetLng) => {
+    try {
+        const userPosition = await getUserPosition();
+        clearRoute(); // fjerner forrige rute, hvis noen
+        await drawRoute(userPosition.lat, userPosition.lng, targetLat, targetLng);
+    } catch (error) {
+        alert(error.message);
+    }
+};
+
+
+const createDirectionsHandler = (lat, lng) => {
+    return (e) => {
+        e.preventDefault();
+        requestRouteToMarker(lat, lng);
+    };
+};
+export const initAccountMarkers = async () => {
+    const userStore = useUserStore();
+    const markersStore = useMarkersStore();
+    if (await userStore.isAuthenticated()) {
+        const userPosition = await getUserPosition();
+
+
+        userStore.householdId.forEach((household) => {
+            const householdMarkerId = `household-${household.id}`;
+            if (
+                household.latitude &&
+                household.longitude &&
+                !markersStore.getMarkerById(householdMarkerId)
+            ) {
+                addMarkerToMap({
+                    markerId: householdMarkerId,
+                    lat: household.latitude,
+                    lng: household.longitude,
+                    type: "home",
+                });
+            }
+
+            household.members.forEach((member) => {
+                const memberMarkerId = `member-${member.id}`;
+                if (
+                    member.latitude &&
+                    member.longitude &&
+                    !markersStore.getMarkerById(memberMarkerId) &&
+                    userPosition.id !== member.id
+                ) {
+                    addMarkerToMap({
+                        markerId: memberMarkerId,
+                        lat: member.latitude,
+                        lng: member.longitude,
+                        type: "AndreMedlemmer",
+                    });
+                }
+            });
+        });
+    }
+
+};
+
+
+export const removeAccountMarkers = () => {
+    const mapStore = useMapStore();
 
     for (const type in mapStore.layerGroup) {
         const layerGroup = mapStore.layerGroup[type];
 
         const layersToRemove = layerGroup.getLayers().filter((layer) => {
             const id = layer.options.id;
-            return (
-                typeof id === 'string' &&
-                (id.startsWith("member-") || id.startsWith("household-")) &&
-                id !== `member-${userPosition.id}`
-            );
+            return typeof id === 'string' &&
+                (id.startsWith("member-") || id.startsWith("household-"));
         });
 
         for (const layer of layersToRemove) {
@@ -316,11 +407,12 @@ export const removeAccountMarkers = async () => {
             mapStore.removeMapItemId(layer.options.id);
         }
 
-        // 🧹 Clean up layer group if empty after removal
+        // Clean up empty layer group
         if (layerGroup.getLayers().length === 0) {
             layerGroup.remove();
             delete mapStore.layerGroup[type];
         }
     }
 };
+
 

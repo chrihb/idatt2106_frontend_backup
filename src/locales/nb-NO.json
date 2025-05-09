@@ -26,20 +26,45 @@
 	"admin-settings": "Administrator innstillinger",
     "manage-admins": "Administrer administratorer"
   },
-  "manage-admins": {
-    "title": "Administrer Administratorer",
-    "current-admins": "Nåværende administratorer",
-    "add-admin": "Legg til administrator",
-    "add" : "Legg til",
-    "add-admin-desc": "Legg til en ny administrator ved å oppgi e-postadressen deres.",
-    "remove-admin": "Fjern administrator",
-    "remove": "Fjern",
-    "new-password": "Nytt passord",
-    "email": "E-post: "
-  },
+	"manage-admins": {
+		"title": "Administrer Administratorer",
+		"current-admins": "Nåværende administratorer",
+		"add-admin": "Legg til administrator",
+		"add": "Legg til",
+		"add-admin-desc": "Legg til en ny administrator ved å oppgi e-postadressen deres.",
+		"remove-admin": "Fjern administrator",
+		"remove": "Fjern",
+		"new-password": "Nytt passord",
+		"email": "E-post: ",
+		"username": "Brukernavn",
+		"no-admins": "Ingen administratorer tilgjengelig",
+		"fetch-failed": "Kunne ikke hente administratorer",
+		"admin-added": "Administrator ble lagt til",
+		"add-failed": "Kunne ikke legge til administrator",
+		"admin-removed": "Administrator ble fjernet",
+		"remove-failed": "Kunne ikke fjerne administrator",
+		"password-reset-email-sent": "E-post for tilbakestilling av passord er sendt",
+		"reset-failed": "Kunne ikke sende e-post for tilbakestilling av passord",
+		"reset-password": "Tilbakestill passord",
+		"confirm-remove": "Er du sikker på at du vil fjerne denne administratoren?"
+	},
   "footer": {
 	"about-us": "Om Oss",
-	"privacy-policy": "Personvernserklæring"
+	"privacy-policy": "Personvernserklæring",
+	"general-info": "Info"
+  },
+  "general-info": {
+	"title": "Generell Informasjon",
+	"find-information": "Under kan du lese om hva du kan bør gjøre før, under og etter en krise:"
+  },
+  "before-crisis": {
+	"title": "Før Krisen"
+  },
+  "during-crisis": {
+	"title": "Under Krisen"
+  },
+  "after-crisis": {
+	"title": "Etter Krisen"
   },
   "storage-status": {
 	"level": {
@@ -137,20 +162,31 @@
 	"join-success": "Ble med i husstand",
 	"set-as-primary": "Sett som primær"
   },
-  "login": {
-	"title": "Logg Inn",
-	"email": "E-post",
-	"password": "Passord",
-	"login": "Logg Inn",
-	"forgotPassword": "Glemt passord?",
-	"createUser": "Registrer bruker",
-	"passwordLengthError": "Passordet må være 8 tegn langt.",
-	"passwordRequired": "Skriv inn passord.",
-	"emailError": "E-post må være på et gyldig format.",
-	"emailRequired": "Skriv inn e-post.",
-	"loginError": "Ugyldig e-post eller passord.",
-	"redirectSuccessMessage": "Registrering vellykket. Vennligst sjekk e-posten din for å verifisere kontoen din før du logger inn"
-  },
+	"login": {
+		"title": "Logg Inn",
+		"email": "E-post",
+		"password": "Passord",
+		"login": "Logg Inn",
+		"forgotPassword": "Glemt passord?",
+		"createUser": "Registrer bruker",
+		"passwordLengthError": "Passordet må være 8 tegn langt.",
+		"passwordRequired": "Skriv inn passord.",
+		"emailError": "E-post må være på et gyldig format.",
+		"emailRequired": "Skriv inn e-post.",
+		"loginError": "Ugyldig e-post eller passord.",
+		"redirectSuccessMessage": "Registrering vellykket. Vennligst sjekk e-posten din for å verifisere kontoen din før du logger inn",
+		"adminLogin": "Admin Innlogging",
+		"username": "Brukernavn",
+		"twoFactorCode": "Verifiseringskode",
+		"twoFactorRequired": "Verifiseringskode er påkrevd.",
+		"twoFactorSent": "Verifiseringskode er sendt til din e-post.",
+		"twoFactorError": "Feil ved sending av verifiseringskode. Vennligst prøv igjen.",
+		"twoFactorInstructions": "Skriv inn verifiseringskoden som er sendt til din e-postadresse.",
+		"loginSuccess": "Innlogging vellykket! Velkommen, {username}.",
+		"sendTwoFactor": "Send Verifiseringskode",
+		"networkError": "Nettverksfeil. Vennligst sjekk internettforbindelsen din og prøv igjen.",
+		"failed": "Innlogging feilet. Vennligst prøv igjen."
+	},
   "password-reset": {
 	"title": "Tilbakestill Passord",
 	"email": "E-post",
@@ -208,10 +244,13 @@
 	"error": "Det oppstod en feil. Vennligst prøv igjen senere.",
 	"networkError": "Nettverksfeil. Vennligst sjekk internettilkoblingen din og prøv igjen."
   },
-  "login-service": {
-	"invalidCredentials": "Ugyldig brukernavn eller passord.",
-	"emailNotVerified": "E-post ikke bekreftet. Vennligst sjekk e-posten din for bekreftelseslenken"
-  },
+	"login-service": {
+		"invalidCredentials": "Ugyldig e-post eller passord.",
+		"emailNotVerified": "E-post ikke bekreftet. Vennligst sjekk e-posten din for bekreftelseslenken",
+		"invalidAdminCredentials": "Ugyldig admin brukerinformasjon.",
+		"invalidAdminData": "Ugyldig admin data, sjekk verifiseringskoden.",
+		"serverError": "Serverfeil. Vennligst prøv igjen senere."
+	},
   "auth":{
 	"login": "Logg Inn",
 	"register": "Registrer"
@@ -256,7 +295,9 @@
 	}
   },
   "map": {
-	"filter": "Filtrer"
+	"filter": "Filtrer",
+	"address": "Adresse",
+  	"directions": "Veibeskrivelse"
   },
   "admin-settings": {
     "title": "Administrator Innstillinger",
@@ -272,7 +313,17 @@
       "newsTitleRequired": "Nyhetstittel er påkrevd",
       "newsDesc": "En nyhet for å informere brukerne dine om viktige oppdateringer",
       "newsDescRequired": "Nyhetsbeskrivelse er påkrevd",
-      "deleteNews": "Slett Nyhet"
+      "deleteNews": "Slett Nyhet",
+	  "news": "Nyheter",
+	  "updateTitle": "Oppdater nyhet",
+	  "update": "Oppdater",
+	  "delete": "Slett",
+	  "createError": "Kunne ikke opprette nyhet.",
+	  "deleteError": "Kunne ikke slette nyhet.",
+	  "networkError": "En nettverksfeil oppstod.",
+	  "createdSuccess": "Nyheten ble opprettet!",
+	  "updatedSuccess": "Nyheten ble oppdatert!"
+
     },
     "household": {
       "name": "Husstand",
