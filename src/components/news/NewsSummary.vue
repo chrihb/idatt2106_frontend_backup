@@ -24,13 +24,12 @@ const props = defineProps({
 </script>
 
 <template>
-  <div class="bg-kf-white w-full gap-6 grid grid-cols-[auto_1fr_auto] py-1 px-1 drop-shadow-md rounded-md items-center">
-    <p class="text-1xl">{{ timeSinceEvent(props.date) }}</p>
+  <div class="bg-kf-white w-full gap-6 grid grid-cols-[auto_1fr] py-1 px-1 drop-shadow-md rounded-md items-center">
+    <p class="text-1xl w-35">{{ timeSinceEvent(props.date) }}</p>
     <div class="text-1xl truncate">
       <span class="text-1xl font-bold">{{ props.title }}</span>
       <span> - {{ props.content }}</span>
     </div>
-    <p class="text-1xl">{{ props.location }}</p>
   </div>
 </template>
 

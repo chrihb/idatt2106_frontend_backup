@@ -48,7 +48,7 @@ onMounted(async () => {
         <h2 class="text-xl font-bold mb-4">{{ caseDetails[0]?.title || 'Case Details' }}</h2>
         <div v-for="(detail) in caseDetails" :key="detail.id" class="mb-4 border-b border-gray-200 pb-2">
           <p class="font-semibold"> {{ detail.content }}</p>
-          <p class="text-gray-600">{{ t("news.date") }}: {{ timeSinceEvent(detail.date) }}</p>
+          <p class="text-gray-600">{{ timeSinceEvent(detail.date) }}</p>
           <p class="text-gray-600"> {{ t("news.district") }}: {{ detail.district }}</p>
         </div>
       </div>
