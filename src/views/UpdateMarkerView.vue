@@ -19,7 +19,7 @@ const markerToDelete = ref(null);
 
 const fetchMarkers = async () => {
   try {
-    await markersStore.fetchAllMarkers(false);
+    await markersStore.fetchAllMarkers(true);
     markers.value = markersStore.getMarkers();
   } catch (error) {
     console.error('Error fetching markers:', error);
@@ -51,9 +51,17 @@ const closeMarkerEditor = () => {
 };
 
 const handleMarkerSaved = async () => {
-  console.log('Marker saved successfully!');
   await fetchMarkers();
   closeMarkerEditor();
+};
+
+const removeMarker = async (markerId) => {
+  try {
+    await markerStore.deleteMarker(markerId)
+    await fetchMarkers();
+  } catch (error) {
+    console.error('Error deleting marker:', error);
+  }
 };
 
 const confirmDeleteMarker = (markerId) => {
@@ -63,16 +71,10 @@ const confirmDeleteMarker = (markerId) => {
 
 const handleDeleteConfirmed = async () => {
   if (markerToDelete.value) {
-    try {
-      await markerStore.deleteMarker(markerToDelete.value);
-      await fetchMarkers();
-      console.log(`Marker with ID ${markerToDelete.value} removed successfully.`);
-    } catch (error) {
-      console.error('Error removing marker:', error);
-    }
+      await removeMarker(markerToDelete.value);
+      markerToDelete.value = null;
   }
   showDeleteConfirmation.value = false;
-  markerToDelete.value = null;
 };
 
 const handleDeleteCancelled = () => {

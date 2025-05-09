@@ -2,13 +2,10 @@ import L from 'leaflet';
 import {useMapStore} from "@/stores/mapStore.js";
 import {useEmergencyZonesStore} from "@/stores/emergencyZonesStore.js";
 import {useEmergencyZoneStore} from "@/stores/emergencyZoneStore.js";
-import {emergencyZoneService} from "@/services/emergencyZoneService.js";
 import {useMarkersStore} from "@/stores/markersStore.js";
-import {markerService} from "@/services/markerService.js";
 import {useMarkerStore} from "@/stores/markerStore.js";
 import {useUserStore} from "@/stores/userStore.js";
 import {getUserPosition} from "@/services/locationService.js";
-import {marker} from "leaflet/src/layer/index.js";
 
 export const createMarkerPopup = (type, address, description) =>
     `
@@ -49,7 +46,7 @@ export const createCustomMarkerIcon = (type) => {
 
 // Add a marker to the map
 export const addMarkerToMap = (marker) => {
-
+    console.log("mapMarker:", marker);
     if (!marker || !marker.markerId || !marker.lat || !marker.lng || !marker.type) {
         console.error('Invalid marker data');
         return;
@@ -57,7 +54,6 @@ export const addMarkerToMap = (marker) => {
 
     const markersStore = useMarkersStore();
     if (markersStore.getMarkerById(marker.markerId)) {
-        console.error('Marker already exists on the map');
         return;
     }
 
@@ -75,13 +71,10 @@ export const addMarkerToMap = (marker) => {
     // Bind a popup to the marker
     mapMarker.on('click', async () => {
         try {
-            const service = markerService();
             const markerStore = useMarkerStore();
-            //TODO: This is a placeholder for the actual service call
-            const markerDetails = await service.getMarkerDetailsMock(marker.markerId)
-            //const markerDetails = await markerStore.fetchMarkerDetailsById(marker.markerId);
+            const markerDetails = await markerStore.fetchMarkerDetailsById(marker.markerId);
 
-            if (markerDetails.success) {
+            if (markerDetails) {
                 const popupContent = createMarkerPopup(marker.type, markerDetails.address, markerDetails.description);
                 mapMarker.bindPopup(popupContent).openPopup();
             } else {
@@ -132,10 +125,8 @@ export const addEmergencyZoneToMap = (emergencyZone) => {
     const mapStore = useMapStore();
 
     if (mapStore.mapItemIds.includes(emergencyZone.zoneId)) {
-        console.error('Emergency zone already exists on the map');
         return;
     }
-
 
     const layerType = getLayerType(emergencyZone.level);
 
@@ -153,13 +144,10 @@ export const addEmergencyZoneToMap = (emergencyZone) => {
 
     polygon.on('click', async () => {
         try {
-            const service = emergencyZoneService();
             const emergencyZoneStore = useEmergencyZoneStore();
-            //TODO: This is a placeholder for the actual service call
-            const zoneDetails = await service.getEmergencyZoneDetailsMock(emergencyZone.zoneId)
-            //const zoneDetails = await emergencyZoneStore.fetchEmergencyZoneDetailsById(emergencyZone.zoneId);
+            const zoneDetails = await emergencyZoneStore.fetchEmergencyZoneDetailsById(emergencyZone.zoneId);
 
-            if (zoneDetails.success) {
+            if (zoneDetails) {
                 const popupContent = createZonePopup(zoneDetails.name, emergencyZone.type, emergencyZone.level, zoneDetails.address, zoneDetails.description);
                 polygon.bindPopup(popupContent).openPopup();
             } else {

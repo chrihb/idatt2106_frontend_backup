@@ -20,6 +20,8 @@ const props = defineProps({
   },
 });
 
+const emit = defineEmits(['close', 'zoneSaved']);
+
 const zoneData = ref({
   name: '',
   type: '',
@@ -30,8 +32,6 @@ const zoneData = ref({
   coordinates: [],
   description: '',
 });
-
-const emit = defineEmits(['close', 'zoneSaved']);
 
 const emergencyZoneStore = useEmergencyZoneStore();
 const emergencyZonesStore = useEmergencyZonesStore();
@@ -147,7 +147,7 @@ const handleSubmit = async () => {
     formError.value = ''
     const response = await emergencyZoneStore.saveEmergencyZone(zoneData);
 
-    if (response.success) {
+    if (response) {
       formIncomplete.value = false;
       resetForm();
       emit('zoneSaved', zoneData.value);

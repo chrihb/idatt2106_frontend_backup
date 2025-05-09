@@ -7,18 +7,19 @@ import {useI18n} from "vue-i18n";
 import {useEmergencyZoneStore} from "@/stores/emergencyZoneStore.js";
 import ConfirmationModal from "@/components/common/ConfirmationModal.vue";
 
-const showDeleteConfirmation = ref(false);
-const zoneToDelete = ref(null);
 const { t } = useI18n();
 const emergencyZonesStore = useEmergencyZonesStore();
 const emergencyZoneStore = useEmergencyZoneStore();
+
 const emergencyZones = ref([]);
 const isZoneEditorVisible = ref(false);
 const selectedZoneId = ref(null);
+const showDeleteConfirmation = ref(false);
+const zoneToDelete = ref(null);
 
 const fetchZones = async () => {
   try {
-    await emergencyZonesStore.fetchAllEmergencyZones(false);
+    await emergencyZonesStore.fetchAllEmergencyZones(true);
     emergencyZones.value = emergencyZonesStore.getEmergencyZones()
   } catch (error) {
     console.error('Error fetching emergency zones:', error);
@@ -50,19 +51,14 @@ const closeZoneEditor = () => {
 };
 
 const handleZoneSaved = async () => {
-  console.log('Zone saved successfully!');
   await fetchZones();
   closeZoneEditor();
 };
 
 const removeZone = async (zoneId) => {
   try {
-    console.log("ZoneID: ", zoneId);
-    const zone = emergencyZonesStore.getEmergencyZoneById(zoneId);
-    emergencyZoneStore.setEmergencyZone(zone);
     await emergencyZoneStore.deleteEmergencyZone(zoneId);
     await fetchZones();
-    console.log(`Zone with ID ${zoneId} removed successfully.`);
   } catch (error) {
     console.error('Error removing zone:', error);
   }

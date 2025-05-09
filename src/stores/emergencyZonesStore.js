@@ -1,6 +1,8 @@
 import { defineStore } from 'pinia';
 import {emergencyZoneService} from "@/services/emergencyZoneService.js";
-import {addEmergencyZoneToMap} from "@/utils/mapUtils.js";
+import {addEmergencyZoneToMap, updateEmergencyZoneOnMap} from "@/utils/mapUtils.js";
+import {useMapStore} from "@/stores/mapStore.js";
+import {useEmergencyZoneStore} from "@/stores/emergencyZoneStore.js";
 
 export const useEmergencyZonesStore = defineStore('emergencyZonesStore', {
     state:
@@ -14,20 +16,21 @@ export const useEmergencyZonesStore = defineStore('emergencyZonesStore', {
 
             try {
                 const service = emergencyZoneService();
+                const emergencyZoneStore = useEmergencyZoneStore();
 
-                //TODO: This is a placeholder for the actual service call
-                //const emergencyZonesData = await service.getAllEmergencyZones();
-                const emergencyZonesData = await service.getAllEmergencyZonesMock();
+                const emergencyZonesData = await service.getAllEmergencyZones();
 
-                if (emergencyZonesData.success) {
+                 if (emergencyZonesData) {
                     this.clearEmergencyZones();
-                    for (const zone of emergencyZonesData.zones) {
+                    for (const zoneData of emergencyZonesData) {
+                        const zone = emergencyZoneStore.setEmergencyZoneFromBackend(zoneData);
                         if (addToMap) {
                             addEmergencyZoneToMap(zone);
                         }
                         this.addEmergencyZone(zone);
                     }
-                }
+                    emergencyZoneStore.clearEmergencyZoneState();
+                 }
 
             } catch (error) {
                 console.error('Error fetching all emergency zones:', error);
@@ -35,20 +38,22 @@ export const useEmergencyZonesStore = defineStore('emergencyZonesStore', {
             }
         },
 
-        async fetchEmergencyZonesArea(mapBounds, zoneIds, addToMap = true) {
+        async fetchEmergencyZonesArea(mapBounds, addToMap = true) {
             this.error = null;
 
             try {
                 const service = emergencyZoneService();
-                // TODO: This is a placeholder for the actual service call
-                const result = await service.getEmergencyZonesMock(mapBounds, zoneIds);
-                for (const zone of result.zones) {
+                const mapStore = useMapStore();
+                const emergencyZoneStore = useEmergencyZoneStore();
+                const result = await service.getEmergencyZonesByArea(mapBounds, mapStore.getMapItemIds());
+                for (const zone of result) {
+                    const emergencyZone = emergencyZoneStore.setEmergencyZoneFromBackend(zone);
                     if (addToMap) {
-                        addEmergencyZoneToMap(zone);
+                        addEmergencyZoneToMap(emergencyZone);
                     }
-                    this.addEmergencyZone(zone);
+                    this.addEmergencyZone(emergencyZone);
                 }
-
+                emergencyZoneStore.clearEmergencyZoneState();
             } catch (error) {
                 console.error('Error fetching emergency zones');
                 throw error;
@@ -69,6 +74,7 @@ export const useEmergencyZonesStore = defineStore('emergencyZonesStore', {
             const index = this.emergencyZones.findIndex(zone => zone.zoneId === emergencyZone.zoneId);
             if (index !== -1) {
                 this.emergencyZones[index] = emergencyZone;
+                updateEmergencyZoneOnMap(emergencyZone);
             } else {
                 console.error('Emergency zone not found in the store');
             }

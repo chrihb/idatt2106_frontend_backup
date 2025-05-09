@@ -1,8 +1,7 @@
 import {defineStore} from "pinia";
 import {emergencyZoneService} from "@/services/emergencyZoneService.js";
 import {useEmergencyZonesStore} from "@/stores/emergencyZonesStore.js";
-import {removeEmergencyZoneFromMap} from "@/utils/mapUtils.js";
-import {integer} from "@vee-validate/rules";
+import {addEmergencyZoneToMap, removeEmergencyZoneFromMap, updateEmergencyZoneOnMap} from "@/utils/mapUtils.js";
 
 
 export const useEmergencyZoneStore = defineStore('emergencyZone', {
@@ -24,21 +23,25 @@ export const useEmergencyZoneStore = defineStore('emergencyZone', {
         getEmergencyZone: (state) => {
             return state.emergencyZone;
         },
-        getEmergencyZoneId: (state) => {
-            return state.emergencyZone.zoneId;
-        },
     },
     actions: {
         async fetchEmergencyZoneDetailsById(zoneId) {
             this.error = null;
             try {
-                const service = emergencyZoneService();
-                const emergencyZoneData = await service.getEmergencyZoneDetailsById(zoneId);
-
-                if (emergencyZoneData.success) {
-                    this.setRestOfEmergencyZone(emergencyZonedata);
+                const emergencyZonesStore = useEmergencyZonesStore();
+                const zone = emergencyZonesStore.getEmergencyZoneById(zoneId);
+                if (zone.description &&
+                    zone.name &&
+                    zone.address) {
+                    return zone;
+                } else {
+                    const service = emergencyZoneService();
+                    const emergencyZoneData = await service.getEmergencyZoneDetailsById(zoneId);
+                    if (emergencyZoneData) {
+                        this.setRestOfEmergencyZone(emergencyZonedata);
+                    }
+                    return emergencyZoneData;
                 }
-
             } catch (error) {
                 console.error('Error fetching emergency zone details:', error);
                 throw error;
@@ -70,14 +73,29 @@ export const useEmergencyZoneStore = defineStore('emergencyZone', {
             this.level = emergencyZoneData.level;
             this.description = emergencyZoneData.description;
             this.coordinates = emergencyZoneData.coordinates;
+        },
 
+        setEmergencyZoneFromBackend(emergencyZoneData) {
+            const emergencyZone = {
+                zoneId: emergencyZoneData.id,
+                name: emergencyZoneData.name,
+                address: emergencyZoneData.address,
+                lat: emergencyZoneData.coordinates.latitude,
+                lng: emergencyZoneData.coordinates.longitude,
+                type: emergencyZoneData.type,
+                level: emergencyZoneData.severityLevel,
+                description: emergencyZoneData.description,
+                coordinates: JSON.parse(emergencyZoneData.polygonCoordinateList),
+            }
+            return emergencyZone;
         },
 
         async saveEmergencyZone(zoneData) {
             try {
                 const service = emergencyZoneService();
                 const emergencyZonesStore = useEmergencyZonesStore();
-                console.log(zoneData.value);
+
+                const zoneId = zoneData.value.zoneId || null;
                 const emergencyZoneData = {
                     name: zoneData.value.name,
                     description: zoneData.value.description,
@@ -90,16 +108,19 @@ export const useEmergencyZoneStore = defineStore('emergencyZone', {
                     },
                     polygonCoordinateList: JSON.stringify(zoneData.value.coordinates)
                 };
-                const zoneId = zoneData.value.zoneId || null;
-                console.log(emergencyZoneData);
+
                 let result
                 if (zoneId) {
-                    result = await service.updateEmergencyZone(emergencyZoneData, emergencyZoneData.zoneId);
-                    emergencyZonesStore.updateEmergencyZone(result);
+                    result = await service.updateEmergencyZone(emergencyZoneData, zoneId);
+                    emergencyZonesStore.updateEmergencyZone(zoneData.value);
+                    updateEmergencyZoneOnMap(zoneData.value)
                 } else {
                     result = await service.createEmergencyZone(emergencyZoneData);
-                    this.zoneId = result.zoneId;
-                    emergencyZonesStore.addEmergencyZone(result);
+                    if (result.success) {
+                        zoneData.zoneId = result.zoneId;
+                        emergencyZonesStore.addEmergencyZone(zoneData.value);
+                        addEmergencyZoneToMap(zoneData.value)
+                    }
                 }
                 return result;
             } catch (error) {
@@ -108,8 +129,8 @@ export const useEmergencyZoneStore = defineStore('emergencyZone', {
             }
         },
 
-        async deleteEmergencyZone() {
-            if (!this.zoneId) {
+        async deleteEmergencyZone(zoneId) {
+            if (!zoneId) {
                 console.warn('Cannot delete: No item ID provided');
                 return;
             }
@@ -118,11 +139,9 @@ export const useEmergencyZoneStore = defineStore('emergencyZone', {
             try {
                 const emergencyZonesStore = useEmergencyZonesStore();
                 const service = emergencyZoneService();
-                const result = await service.deleteEmergencyZone(this.zoneId);
-
-                removeEmergencyZoneFromMap(this.zoneId);
-                emergencyZonesStore.deleteEmergencyZone(this.zoneId);
-                this.clearEmergencyZoneState();
+                const result = await service.deleteEmergencyZone(zoneId);
+                removeEmergencyZoneFromMap(zoneId);
+                emergencyZonesStore.deleteEmergencyZone(zoneId);
                 return result;
 
             } catch (error) {

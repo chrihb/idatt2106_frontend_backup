@@ -6,6 +6,7 @@ import { useI18n } from 'vue-i18n';
 import ConfirmationModal from '@/components/common/ConfirmationModal.vue';
 import GetCoordinatesMapModal from "@/components/map/GetCoordinatesMapModal.vue";
 import {markerService} from "@/services/markerService.js";
+import {getAddress} from "@/utils/addressTranslationUtil.js";
 
 const { t } = useI18n();
 const props = defineProps({
@@ -27,14 +28,17 @@ const markerData = ref({
   lat: null,
   lng: null,
   description: '',
+  address: '',
 });
 
+const mrkrService = markerService();
 const markerStore = useMarkerStore();
 const markersStore = useMarkersStore();
 const isUpdate = computed(() => props.markerId !== null);
 
 const formError = ref('');
 const showConfirmation = ref(false);
+const markerTypes = ref([])
 
 const validateData = (data) => {
   if (!data.name) return { valid: false, error: t('marker.nameRequired') };
@@ -45,6 +49,14 @@ const validateData = (data) => {
 };
 
 const handleSubmit = async () => {
+  const address = await getAddress(markerData.value.lat, markerData.value.lng);
+  console.log(address);
+  if (address) {
+    markerData.address = address;
+  }  else {
+    console.error(t('marker.coordinatesNotFound'));
+  }
+
   const result = validateData(markerData.value);
   if (!result.valid) {
     formError.value = result.error;
@@ -123,13 +135,13 @@ const handleCoordinateSelected = (coordinate) => {
 };
 
 const fetchMarkerTypes = async () => {
-  const types = await markerService.getMarkerTypes();
+  const types = await mrkrService.getMarkerTypes();
   markerTypes.value = types.map((type) => type.type);
 }
 
-onMounted(() => {
-  loadMarkerData();
-
+onMounted(async () => {
+  await loadMarkerData();
+  await fetchMarkerTypes();
 });
 </script>
 
@@ -151,7 +163,16 @@ onMounted(() => {
 
         <div class="mb-3">
           <label for="markerType" class="block text-sm font-medium text-gray-700 mb-1">{{ t('marker.markerType') }}</label>
-          <input id="markerType" v-model="markerData.type" type="text" :placeholder="t('marker.markerType')" class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-base" />
+          <select
+              id="markerType"
+              v-model="markerData.type"
+              class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2
+       focus:ring-blue-500 text-base"
+          >
+            <option v-for="type in markerTypes" :key="type" :value="type">
+              {{ type }}
+            </option>
+          </select>
         </div>
 
         <div class="mb-3">
