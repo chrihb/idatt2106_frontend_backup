@@ -5,7 +5,7 @@ export const request2FA = async (loginForm, t) => {
     try {
         const response = await axios.post(
             `${window.backendURL}/api/admin/2fa`,
-            { email: loginForm.email },
+            { username: loginForm.username },
             { headers: { 'Content-Type': 'application/json' } }
         );
 
@@ -75,11 +75,6 @@ export const requestLogin = async (loginForm, t) => {
                     return {
                         success: false,
                         error: t('login-service.invalidAdminCredentials')
-                    };
-                case 406:
-                    return {
-                        success: false,
-                        error: t('login-service.emailNotVerified')
                     };
                 case 500:
                     return {
