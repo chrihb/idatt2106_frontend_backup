@@ -1,42 +1,48 @@
 import axios from 'axios';
-import { useUserStore } from '@/stores/userStore';
+import {useUserStore} from '@/stores/userStore';
 import {requestHouseholds} from "@/services/householdService.js";
-import { getUserSettings } from './userSettingsService';
+import {getUserSettings} from './userSettingsService';
 
 export const requestLogin = async (loginForm, t) => {
     const userStore = useUserStore();
+    let adminUsername = "";
+    let adminPassword = "";
 
     try {
-        const response = await axios.post(`${window.backendURL}/api/admin/login`, loginForm, {
-            headers: { 'Content-Type': 'application/json' },
+        adminUsername = loginForm.username;
+        adminPassword = loginForm.password;
+
+        const tokenResponse = await axios.post(
+            `${window.backendURL}/api/admin/2fa`,
+            { email: loginForm.email },
+            { headers: {'Content-Type': 'application/json'} }
+        );
+
+        const loginResponse = await axios.post(`${window.backendURL}/api/admin/login`, loginForm, {
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${tokenResponse.data}`
+            },
         });
 
-        const data = response.data;
-        console.log('Login response:', data);
+        const data = loginResponse.data;
 
-        switch (response.status) {
+        switch (loginResponse.status) {
             case 200:
                 if (data) {
-
-                    userStore.setCredentials({ token: data, authenticated: true, isAdmin: true });
-
-                    const households = await requestHouseholds();
-
-                    userStore.setCredentials({ householdId: households });
-
-                    const settings = await getUserSettings();
-
-                    userStore.setUserSettings(settings);
+                    userStore.setCredentials({ adminToken: data, isAdmin: true });
 
                     return { success: true };
                 }
                 break;
             case 400:
-                return { error: t('login-service.twoFactor') };
+                return {error: t('login-service.invalidAdminData')};
             case 404:
                 return { error: t('login-service.invalidAdminCredentials') };
             case 500:
                 return { error: t('login-service.serverError') };
+            default:
+                return { error: t('login-service.unknownError') };
         }
 
         return { error: 'Login failed: Invalid response format from server.' };
