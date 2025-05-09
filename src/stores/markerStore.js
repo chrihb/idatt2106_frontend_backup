@@ -91,14 +91,14 @@ export const useMarkerStore = defineStore('markerStore', {
                 console.log(marker);
                 const markerId = marker.markerId || null;
                 const markerData = {
-                    name: marker.value.name,
-                    address: marker.value.address,
+                    name: marker.name,
+                    description: marker.description,
+                    address: marker.address,
+                    type: marker.type,
                     coordinates: {
-                        latitude: marker.value.lat,
-                        longitude: marker.value.lng,
+                        latitude: marker.lat,
+                        longitude: marker.lng,
                     },
-                    type: marker.value.type,
-                    description: marker.value.description,
                 };
                 let result
                 if (markerId) {

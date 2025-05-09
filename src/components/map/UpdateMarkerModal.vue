@@ -66,7 +66,7 @@ const handleSubmit = async () => {
     formError.value = '';
     console.log(markerData.value);
     const response = await markerStore.saveMarker(markerData.value);
-    if (response.success) {
+    if (response) {
       emit('markerSaved', markerData.value);
       close();
     } else {
