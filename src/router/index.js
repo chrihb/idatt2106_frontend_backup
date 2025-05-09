@@ -77,7 +77,7 @@ const router = createRouter({
                 { path: "/map", component: MapView },
                 { path: "/my-home", component: MyHomeView, meta: { requiresAuth: true, requiresHousehold: true } },
 
-                { path: "/manage-admins", component: ManageAdmins, meta: { requiresAdmin: true } },
+                { path: "/manage-admins", component: ManageAdmins, meta: { requiresSuperUser: true } },
                 { path: "/admin-settings", component: AdminSettings, meta: { requiresAdmin: true },
                     children: [
                         { path: "createEmergencyZone", component: CreateEmergencyZone },
@@ -125,6 +125,13 @@ router.beforeEach(async (to, from, next) => {
 
     if (requiresAdmin) {
         if (!userStore.isAdmin) {
+            return next('/');
+        }
+    }
+
+    const requiresSuperUser = to.path.startsWith('/manage-admins');
+    if (requiresSuperUser) {
+        if (!userStore.isSuperUser) {
             return next('/');
         }
     }

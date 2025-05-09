@@ -55,7 +55,9 @@ export const requestLogin = async (loginForm, t) => {
         const data = loginResponse.data;
 
         if (loginResponse.status === 200 && data) {
-            userStore.setCredentials({ adminToken: data, isAdmin: true });
+            console.log(data)
+            console.log(data.isSuperUser)
+            userStore.setCredentials({ adminToken: data.token, isAdmin: true, isSuperUser: data.superUser });
             return { success: true };
         }
 
