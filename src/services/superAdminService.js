@@ -1,12 +1,17 @@
 import axios from "axios";
-
+import { useUserStore } from "@/stores/userStore";
 export const getAllAdmins = async () => {
     try {
-        const response = await axios.get();
+        const userStore = useUserStore();
 
-        const admins = await response.data;
-        if (response.status === 200 && Array.isArray(admins)) {
-            return { success: true, admins };
+        const response = await axios.get(`${window.backendURL}/api/admin`, {
+            headers: {
+                Authorization: `Bearer ${userStore.adminToken}`
+            }
+        });
+
+        if (response.status === 200 && Array.isArray(response.data)) {
+            return { success: true, data: response.data };
         } else {
             return { error: 'Failed to fetch admins: Invalid response format from server.' };
         }
@@ -45,9 +50,15 @@ export const addAdministrator = async (email) => {
 
 export const deleteAdministrator = async (adminId) => {
     try {
-        const response = await axios.delete();
+        const userStore = useUserStore();
 
-        if (response.status === 200) {
+        const response = await axios.delete(`${window.backendURL}/api/admin/delete/${adminId}`, {
+            headers: {
+                Authorization: `Bearer ${userStore.adminToken}`
+            }
+        });
+
+        if (response.status === 200 || response.status === 204) {
             return { success: true };
         } else {
             return { error: 'Failed to delete admin: Invalid response format from server.' };
