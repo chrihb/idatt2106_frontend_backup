@@ -97,5 +97,67 @@ export const requestLogin = async (loginForm, t) => {
 };
 
 export const setAdminPassword = async (verificationToken, password) => {
+    try {
+        const userStore = useUserStore();
 
-}
+        const response = await axios.put(
+            `${window.backendURL}/api/admin/activate/${verificationToken}?newPassword=${password}`,
+            {
+                headers: {
+                    Authorization: `Bearer ${userStore.adminToken}`, // Included for consistency, remove if not required
+                    'Content-Type': 'application/json'
+                }
+            }
+        );
+
+        if (response.status === 200 && response.data === true) {
+            return { success: true };
+        } else {
+            return { error: 'Failed to activate admin account: Invalid response from server.' };
+        }
+    } catch (error) {
+        if (error.response) {
+            if (error.response.status === 400 || error.response.status === 404) {
+                return { error: 'Failed to activate admin account: Invalid request or token.' };
+            }
+            if (error.response.status === 401) {
+                return { error: 'Unauthorized: Invalid or missing token.' };
+            }
+            return { error: 'An error occurred. Please try again.' };
+        }
+        return { error: 'Network error. Please try again later.' };
+    }
+};
+
+export const resetAdminPassword = async (verificationToken, password) => {
+    try {
+        const userStore = useUserStore();
+
+        const response = await axios.put(
+            `${window.backendURL}/api/admin/reset-password/${verificationToken}?newPassword=${password}`,
+            {
+                headers: {
+                    Authorization: `Bearer ${userStore.adminToken}`, // Included for consistency, remove if not required
+                    'Content-Type': 'application/json'
+                }
+            }
+        );
+
+        if (response.status === 200 && response.data === true) {
+            return { success: true };
+        } else {
+            return { error: 'Failed to reset admin password: Invalid response from server.' };
+        }
+    } catch (error) {
+        if (error.response) {
+            if (error.response.status === 400 || error.response.status === 404) {
+                return { error: 'Failed to reset admin password: Invalid request or token.' };
+            }
+            if (error.response.status === 401) {
+                return { error: 'Unauthorized: Invalid or missing token.' };
+            }
+            return { error: 'An error occurred. Please try again.' };
+        }
+        return { error: 'Network error. Please try again later.' };
+    }
+};

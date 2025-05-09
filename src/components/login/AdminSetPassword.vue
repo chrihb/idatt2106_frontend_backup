@@ -50,7 +50,7 @@ const handleSubmit = async () => {
     if (response) {
       successMessage.value = 'Password set successful! You can now log in with your password.';
       resetForm();
-      await router.push('/login');
+      await router.push('/admin-login');
     } else {
       errorMessage.value = response.error || 'Failed to reset password';
     }
