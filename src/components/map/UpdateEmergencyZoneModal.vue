@@ -6,6 +6,7 @@ import { useI18n } from 'vue-i18n';
 import CreatePolygonMapModal from '@/components/map/CreatePolygonMapModal.vue';
 import ConfirmationModal from "@/components/common/ConfirmationModal.vue";
 import { getAddressSuggestions, getAddress} from "@/utils/addressTranslationUtil.js";
+import {emergencyZoneService} from "@/services/emergencyZoneService.js";
 
 const { t } = useI18n();
 const props = defineProps({
@@ -34,6 +35,7 @@ const emit = defineEmits(['close', 'zoneSaved']);
 
 const emergencyZoneStore = useEmergencyZoneStore();
 const emergencyZonesStore = useEmergencyZonesStore();
+const zoneService = emergencyZoneService();
 const isUpdate = computed(() => props.zoneId !== null);
 
 const addressSuggestions = ref([]);
@@ -42,6 +44,7 @@ const formIncomplete = ref(false);
 const showConfirmation = ref(false);
 const isMapModalVisible = ref(false);
 const formError = ref('');
+const zoneTypes = ref([]);
 
 const openMapModal = () => {
   isMapModalVisible.value = true;
@@ -118,8 +121,6 @@ const validateData = (data) => {
 const handleSubmit = async () => {
   try {
     if (isAddressMode.value) {
-      console.log("Address: ", zoneData.value.address);
-
       const result = await getAddressSuggestions(zoneData.value.address);
       if (result.length > 0) {
         zoneData.value.lat = result[0].lat;
@@ -144,7 +145,7 @@ const handleSubmit = async () => {
       return;
     }
     formError.value = ''
-    const response = await emergencyZoneStore.saveEmergencyZone();
+    const response = await emergencyZoneStore.saveEmergencyZone(zoneData);
 
     if (response.success) {
       formIncomplete.value = false;
@@ -230,8 +231,18 @@ const selectSuggestion = (suggestion) => {
   addressSuggestions.value = [];
 };
 
-onMounted(() => {
-  loadZoneData();
+const fetchZoneTypes = async () => {
+  const types = await zoneService.getZoneTypes();
+  zoneTypes.value = types.map((type) => type.type);
+}
+
+onMounted(async () => {
+  try {
+    await loadZoneData();
+    await fetchZoneTypes();
+  } catch (error) {
+    console.error("Error in onMounted", error);
+  }
 });
 </script>
 
@@ -278,14 +289,17 @@ onMounted(() => {
               <label for="zoneType" class="block text-sm font-medium text-gray-700 mb-1">
                 {{ t('zone.zoneType') }}
               </label>
-              <input
+              <select
                   id="zoneType"
                   v-model="zoneData.type"
-                  type="text"
-                  :placeholder="t('zone.zoneType')"
                   class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2
-                   focus:ring-blue-500 text-base"
-              />
+       focus:ring-blue-500 text-base"
+              >
+                <option v-for="type in zoneTypes" :key="type" :value="type">
+                  {{ type }}
+                </option>
+              </select>
+
             </div>
 
             <!-- Emergency Level -->

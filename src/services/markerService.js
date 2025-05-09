@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 export const markerService = () => {
-    const baseURL = `${window.backendURL}/api/map/markers`;
+    const baseURL = `${window.backendURL}/api/map`;
 
     async function getMarkersMock(mapAreaData, mapItemIds) {
         let markers;
@@ -140,7 +140,7 @@ export const markerService = () => {
     }
 
     async function getAllMarkers() {
-        const response = await axios.get(baseURL, {
+        const response = await axios.get(`${baseURL}/markers`, {
             headers: {
                 'Content-Type': 'application/json',
             },
@@ -149,10 +149,7 @@ export const markerService = () => {
     }
 
     async function getMarkersByArea(mapAreaData, mapItemIds) {
-        const response = await axios.post(`${baseURL}/area`, {
-            mapAreaData,
-            mapItemIds,
-        }, {
+        const response = await axios.get(`${baseURL}/markers/${mapAreaData}/${mapItemIds}`, {
             headers: {
                 'Content-Type': 'application/json',
             },
@@ -161,9 +158,7 @@ export const markerService = () => {
     }
 
     async function getMarkerDetailsById(markerId) {
-        const response = await axios.post(`${baseURL}/details`, {
-            markerId,
-        }, {
+        const response = await axios.get(`${baseURL}/description/${markerId}`, {
             headers: {
                 'Content-Type': 'application/json',
             },
@@ -172,7 +167,7 @@ export const markerService = () => {
     }
 
     async function getMarkerById(markerId) {
-        const response = await axios.get(`${baseURL}/${markerId}`, {
+        const response = await axios.get(`${baseURL}/marker/${markerId}`, {
             headers: {
                 'Content-Type': 'application/json',
             },
@@ -181,7 +176,7 @@ export const markerService = () => {
     }
 
     async function createMarker(markerData) {
-        const response = await axios.post(`${baseURL}/create`, {
+        const response = await axios.post(`${baseURL}/marker/create`, {
             markerData,
         }, {
             headers: {
@@ -191,8 +186,8 @@ export const markerService = () => {
         return response.data;
     }
 
-    async function updateMarker(markerData) {
-        const response = await axios.put(`${baseURL}/update`, {
+    async function updateMarker(markerData, markerId) {
+        const response = await axios.put(`${baseURL}/marker/update/${markerId}`, {
             markerData,
         }, {
             headers: {
@@ -209,6 +204,20 @@ export const markerService = () => {
             },
         });
         return response.data;
+    }
+
+    async function getMarkerTypes() {
+        try {
+            const response = await axios.get(`${baseURL}/marker-types`, {
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            });
+            return response.data;
+        } catch (error) {
+            console.error("Error fetching marker types:", error);
+        }
+
     }
 
     return {

@@ -62,27 +62,33 @@ export const useMarkerStore = defineStore('markerStore', {
             this.description = markerData.description;
         },
 
-        async saveMarker(markerData) {
+        async saveMarker(marker) {
             try {
                 const service = markerService();
                 const markersStore = useMarkersStore();
 
+                const markerId = marker.markerId || null;
                 const markerData = {
-                    markerId: this.markerId || undefined,
-                    address: this.address,
-                    lat: this.lat,
-                    lng: this.lng,
-                    type: this.type,
-                    description: this.description,
+                    address: marker.address,
+                    coordinates: {
+                        latitude: marker.lat,
+                        longitude: marker.lng,
+                    },
+                    type: marker.type,
+                    description: marker.description,
                 };
                 let result
-                if (this.markerId) {
-                    result = await service.updateMarker(markerData);
-                    markersStore.updateMarker(result);
+                if (markerId) {
+                    result = await service.updateMarker(markerData, markerId);
+                    if (result.success) {
+                        markersStore.updateMarker(markerData);
+                    }
                 } else {
                     result = await service.createMarker(markerData);
-                    this.markerId = result.markerId;
-                    markersStore.addMarker(result);
+                    if (result.success) {
+                        markerData.markerId = result.markerId;
+                        markersStore.addMarker(markerData);
+                    }
                 }
                 return result;
             } catch (error) {
@@ -91,8 +97,8 @@ export const useMarkerStore = defineStore('markerStore', {
             }
         },
 
-        async deleteMarker() {
-            if (!this.markerId) {
+        async deleteMarker(markerId) {
+            if (markerId) {
                 console.warn('Cannot delete: No item ID provided');
                 return;
             }
@@ -101,9 +107,11 @@ export const useMarkerStore = defineStore('markerStore', {
             try {
                 const markersStore = useMarkersStore();
                 const service = markerService();
-                const result = await service.deleteMarker(this.markerId);
-                markersStore().deleteMarker(this.markerId);
-                this.clearMarker();
+                const result = await service.deleteMarker(markerId);
+                if (result.success) {
+                    markersStore.deleteMarker(markerId);
+                    this.clearMarker();
+                }
                 return result;
 
             } catch (error) {

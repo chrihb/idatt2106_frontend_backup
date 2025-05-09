@@ -5,6 +5,7 @@ import { useMarkersStore } from '@/stores/markersStore.js';
 import { useI18n } from 'vue-i18n';
 import ConfirmationModal from '@/components/common/ConfirmationModal.vue';
 import GetCoordinatesMapModal from "@/components/map/GetCoordinatesMapModal.vue";
+import {markerService} from "@/services/markerService.js";
 
 const { t } = useI18n();
 const props = defineProps({
@@ -121,8 +122,14 @@ const handleCoordinateSelected = (coordinate) => {
   closeMapModal();
 };
 
+const fetchMarkerTypes = async () => {
+  const types = await markerService.getMarkerTypes();
+  markerTypes.value = types.map((type) => type.type);
+}
+
 onMounted(() => {
   loadMarkerData();
+
 });
 </script>
 

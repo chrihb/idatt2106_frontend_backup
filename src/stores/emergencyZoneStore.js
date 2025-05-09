@@ -2,6 +2,7 @@ import {defineStore} from "pinia";
 import {emergencyZoneService} from "@/services/emergencyZoneService.js";
 import {useEmergencyZonesStore} from "@/stores/emergencyZonesStore.js";
 import {removeEmergencyZoneFromMap} from "@/utils/mapUtils.js";
+import {integer} from "@vee-validate/rules";
 
 
 export const useEmergencyZoneStore = defineStore('emergencyZone', {
@@ -72,24 +73,27 @@ export const useEmergencyZoneStore = defineStore('emergencyZone', {
 
         },
 
-        async saveEmergencyZone() {
+        async saveEmergencyZone(zoneData) {
             try {
                 const service = emergencyZoneService();
                 const emergencyZonesStore = useEmergencyZonesStore();
-
+                console.log(zoneData.value);
                 const emergencyZoneData = {
-                    zoneId: this.zoneId || undefined,
-                    name: this.name,
-                    address: this.address,
-                    lat: this.lat,
-                    lng: this.lng,
-                    type: this.type,
-                    level: this.level,
-                    description: this.description,
-                    coordinates: this.coordinates,
+                    name: zoneData.value.name,
+                    description: zoneData.value.description,
+                    address: zoneData.value.address,
+                    severityLevel: parseInt(zoneData.value.level, 10),
+                    type: zoneData.value.type,
+                    coordinates: {
+                        latitude: zoneData.value.lat,
+                        longitude: zoneData.value.lng,
+                    },
+                    polygonCoordinateList: JSON.stringify(zoneData.value.coordinates)
                 };
+                const zoneId = zoneData.value.zoneId || null;
+                console.log(emergencyZoneData);
                 let result
-                if (this.zoneId) {
+                if (zoneId) {
                     result = await service.updateEmergencyZone(emergencyZoneData, emergencyZoneData.zoneId);
                     emergencyZonesStore.updateEmergencyZone(result);
                 } else {
