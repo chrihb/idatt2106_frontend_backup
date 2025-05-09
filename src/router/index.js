@@ -42,7 +42,6 @@ const router = createRouter({
                 { path: "", component: HomeView },
                 { path: "/news", component: NewsView },
                 { path: "/account", component: AccountView, meta: { requiresAuth: true } },
-                { path: "/manage-admins", component: ManageAdmins, meta: { requiresAuth: true } },
                 { path: "/storage", meta: { requiresAuth: true },
                     children: [
                         { path: "list", component: StorageListView, meta: { requiresHousehold: true } },
@@ -65,11 +64,13 @@ const router = createRouter({
                 { path: "/privacy-policy", component: PrivacyPolicyView },
                 { path: "/map", component: MapView },
                 { path: "/my-home", component: MyHomeView, meta: { requiresAuth: true, requiresHousehold: true } },
-                { path: "/admin-settings", component: AdminSettings,
+
+                { path: "/manage-admins", component: ManageAdmins, meta: { requiresAuth: true, requiresAdmin: true } },
+                { path: "/admin-settings", component: AdminSettings, meta: { requiresAuth: true, requiresAdmin: true },
                     children: [
-                        { path: "createEmergencyZone", component: CreateEmergencyZone },
-                        { path: "createNews", component: CreateNews },
-                        { path: "deleteNews", component: DeleteNews },
+                        { path: "createEmergencyZone", component: CreateEmergencyZone, meta: { requiresAuth: true, requiresAdmin: true } },
+                        { path: "createNews", component: CreateNews, meta: { requiresAuth: true, requiresAdmin: true } },
+                        { path: "deleteNews", component: DeleteNews, meta: { requiresAuth: true, requiresAdmin: true } },
                     ]
                 },
 
@@ -105,6 +106,15 @@ const router = createRouter({
 
 router.beforeEach(async (to, from, next) => {
     const userStore = useUserStore();
+
+    const requiresAdmin = to.path.startsWith('/admin-settings') ||
+        to.path.startsWith('/manage-admins');
+
+    if (requiresAdmin) {
+        if (!userStore.isAdmin) {
+            return next('/');
+        }
+    }
 
     if (!to.meta.requiresAuth && !to.meta.requiresHousehold) {
         return next();
