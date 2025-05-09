@@ -21,7 +21,6 @@ export const useEmergencyItemStore = defineStore("emergencyItem", {
         this.setItemData(item);
         return item;
       } catch (error) {
-        console.error('Error fetching item by ID');
         throw error;
       }
     },
@@ -78,14 +77,12 @@ export const useEmergencyItemStore = defineStore("emergencyItem", {
 
         return result;
       } catch (error) {
-        console.error('Error saving item');
         throw error;
       }
     },
 
     async deleteItem() {
       if (!this.itemId) {
-        console.warn('Cannot delete: No item ID provided');
         return;
       }
 
@@ -95,7 +92,6 @@ export const useEmergencyItemStore = defineStore("emergencyItem", {
         this.resetState();
         return result;
       } catch (error) {
-        console.error('Error deleting item');
         throw error;
       }
     }

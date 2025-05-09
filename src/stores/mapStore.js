@@ -16,7 +16,6 @@ export const useMapStore = defineStore('mapStore', {
         initMap() {
             // Check if the map is already initialized
             if (this.map) {
-                console.error("Map is already initialized");
                 return
             }
             // set its view to a specific location
@@ -53,7 +52,6 @@ export const useMapStore = defineStore('mapStore', {
             if (!this.mapItemIds.includes(mapItemId)) {
                 this.mapItemIds.push(mapItemId);
             } else {
-                console.error(`Map item ID ${mapItemId} already exists in the mapItemIds array.`);
             }
         },
 
@@ -62,7 +60,6 @@ export const useMapStore = defineStore('mapStore', {
             if (index > -1) {
                 this.mapItemIds.splice(index, 1);
             } else {
-                console.error(`Map item ID ${mapItemId} not found in the mapItemIds array.`);
             }
         },
 
@@ -70,7 +67,6 @@ export const useMapStore = defineStore('mapStore', {
             if (this.map) {
                 this.map.setView([lat, lng], 15);
             } else {
-                console.error("Map is not initialized");
             }
         },
     },

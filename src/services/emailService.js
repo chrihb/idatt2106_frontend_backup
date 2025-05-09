@@ -23,7 +23,6 @@ export const requestPasswordReset = async (email) => {
             }
             return { error: 'An error occurred. Please try again.' };
         }
-        console.error('Error submitting password reset:', error);
         return { error: 'Network error. Please try again later.' };
     }
 }
@@ -49,7 +48,6 @@ export const requestEmailVerification = async (token) => {
             }
             return { error: 'An error occurred. Please try again.' };
         }
-        console.error('Error submitting email verification:', error);
         return { error: 'Network error. Please try again later.' };
     }
 }
@@ -75,7 +73,6 @@ export const executePasswordReset = async (token, password) => {
             }
             return { error: 'An error occurred. Please try again.' };
         }
-        console.error('Error submitting password reset:', error);
         return { error: 'Network error. Please try again later.' };
     }
 

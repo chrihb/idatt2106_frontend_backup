@@ -192,6 +192,7 @@
     "registerSuccess": "Registration successful. Please check your email to verify your account.",
     "privacyPolicyText": "I accept the ",
     "privacyPolicyRequired": "You must accept the privacy policy.",
+    "recaptchaRequired": "Please complete the reCAPTCHA.",
     "hasAccount": "Already have an account?",
     "loginHere": "Login here",
     "admin": {

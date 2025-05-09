@@ -82,7 +82,6 @@ const fetchAndCacheAddressData = async (lat, lng) => {
 
         return addr;
     } catch (error) {
-        console.error(`Location fetch failed (${lat}, ${lng}):`, error.message);
         return {};
     }
 };
@@ -114,7 +113,6 @@ const getCoordinates = async (address) => {
             };
         }
 
-        console.warn('Street address not found, searching by postal code and city...');
 
         // Then try with just postal code and city
         response = await axios.get('https://nominatim.openstreetmap.org/search', {
@@ -135,7 +133,6 @@ const getCoordinates = async (address) => {
 
         return { status: 'not found' };
     } catch (error) {
-        console.error('Error getting coordinates:', error);
         return { status: 'not found' };
     }
 };
@@ -191,7 +188,6 @@ const fetchAndFormatSuggestions = async (query) => {
             })
             .filter((s) => s.displayName && s.displayName.length > 1);
     } catch (error) {
-        console.error("Error fetching address suggestions:", error);
         return [];
     }
 };

@@ -69,19 +69,15 @@ const checkIfPrimary = async () => {
     const primary = await getPrimaryHousehold();
     isPrimary.value = primary?.id === props.household.id;
   } catch (error) {
-    console.error("Failed to verify primary household:", error);
   }
 };
 
 const openInviteModal = async () => {
-  console.log("Opening invite modal");
   const code = await getInviteCode(props.household.id);
   if (code) {
     inviteCode.value = code.inviteCode || code;
     inviteLink.value = `${window.location.origin}/household/options/?inviteCode=${inviteCode.value}`;
     showInviteModal.value = true;
-  } else {
-    console.error("Failed to get invite code");
   }
 };
 
@@ -102,7 +98,6 @@ const removeMember = async () => {
 
   try {
     const response = await kickUserFromHousehold(props.household.id, selectedMember.value.id);
-    console.log("Removed member:", response);
 
     if (response) {
       const removedMemberId = selectedMember.value.id;
@@ -111,40 +106,29 @@ const removeMember = async () => {
       await userStore.fetchHouseholds();
       const householdStillExists = userStore.householdId.some(h => h.id === props.household.id);
 
-      console.log("Household still exists:", householdStillExists);
 
       if (!householdStillExists) {
-        console.log("Household no longer exists, redirecting to front page");
         await router.push("/");
         emit("close"); // Close the modal only if the household is inaccessible
       } else {
         members.value = members.value.filter(m => m.id !== removedMemberId);
         emit("member-removed");
       }
-    } else {
-      console.error("Failed to remove member");
     }
-  } catch (error) {
-    console.error("Error removing member:", error);
-  }
+  } catch (error) {}
 };
 const leaveHousehold = async () => {
   try {
     const response = await leaveHouseholdService(props.household.id);
 
-    console.log("Left household:", response);
     if (response) {
       await userStore.fetchHouseholds();
 
       await router.push("/");
 
-      console.log("Left household successfully");
       emit("close");
-    } else {
-      console.error("Failed to leave household");
     }
   } catch (error) {
-    console.error("Error leaving household:", error);
   }
 };
 
@@ -153,11 +137,8 @@ const setAsPrimary = async () => {
     const success = await setPrimaryHousehold(props.household.id);
     if (success) {
       await checkIfPrimary();
-    } else {
-      console.error("Failed to set as primary");
     }
   } catch (error) {
-    console.error("Error setting household as primary:", error);
   }
 };
 </script>

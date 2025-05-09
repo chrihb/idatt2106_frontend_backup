@@ -36,7 +36,6 @@ export const useMarkerStore = defineStore('markerStore', {
                 }
 
             } catch (error) {
-                console.error('Error fetching marker details:', error);
                 throw error;
             }
         },
@@ -86,14 +85,12 @@ export const useMarkerStore = defineStore('markerStore', {
                 }
                 return result;
             } catch (error) {
-                console.error('Error saving marker', error);
                 throw error;
             }
         },
 
         async deleteMarker() {
             if (!this.markerId) {
-                console.warn('Cannot delete: No item ID provided');
                 return;
             }
 
@@ -107,7 +104,6 @@ export const useMarkerStore = defineStore('markerStore', {
                 return result;
 
             } catch (error) {
-                console.error('Error deleting marker', error);
                 throw error;
             }
         },

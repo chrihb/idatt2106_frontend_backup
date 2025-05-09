@@ -47,10 +47,8 @@ onMounted(async () => {
       daysFood.value = match.status.daysOfFood;
       daysWater.value = match.status.daysOfWater;
     } else {
-      console.warn('Fant ingen matching household status');
     }
   } catch (error) {
-    console.error("Feil ved henting av status:", error);
     daysFood.value = 0;
     daysWater.value = 0;
   }

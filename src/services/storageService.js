@@ -15,6 +15,5 @@ export const getPreparednessStatus = async () => {
         }
     });
 
-    console.log('Preparedness status response:', response.data);
     return response.data; // List of { id, householdName, {daysOfFood, daysOfWater} }
 };

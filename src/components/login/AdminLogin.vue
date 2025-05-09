@@ -11,7 +11,7 @@ import {useRoute} from "vue-router";
 
 const { t } = useI18n();
 const route = useRoute();
-const { redirectAfterAuth } = useAuthRedirect()
+
 
 const {validate, values: form, resetForm} = useForm({
   validationSchema: {

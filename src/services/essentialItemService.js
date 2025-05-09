@@ -16,8 +16,6 @@ export const getEssentialItems = async (householdId) => {
       householdId: householdId,
     },
   });
-  console.log('Essential items response:', response.data);
-
   return response.data;
 };
 

@@ -12,7 +12,6 @@ export const requestLogin = async (loginForm, t) => {
         });
 
         const data = response.data;
-        console.log('Login response:', data);
 
         switch (response.status) {
             case 200:
@@ -41,8 +40,6 @@ export const requestLogin = async (loginForm, t) => {
 
         return { error: 'Login failed: Invalid response format from server.' };
     } catch (error) {
-        console.error('Error submitting login:', error);
-
         if (error.response) {
             if (error.response.status === 400 || error.response.status === 404) {
                 return { error: t('login-service.invalidCredentials') };
@@ -56,3 +53,7 @@ export const requestLogin = async (loginForm, t) => {
         return { error: 'Network error. Please try again later.' };
     }
 };
+
+export const setAdminPassword = async (verificationToken, password) => {
+
+}

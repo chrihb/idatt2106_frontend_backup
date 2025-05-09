@@ -46,7 +46,6 @@ export const usePositionTrackingStore = defineStore("positionTrackingStore", {
                     }
                 },
                 (error) => {
-                    console.error('Geolocation error:', error);
                 }
             );
         },
@@ -91,7 +90,6 @@ export const usePositionTrackingStore = defineStore("positionTrackingStore", {
             if (this.latitude !== null && this.longitude !== null) {
                 mapStore.centerMapOnSpecificLocation(this.latitude, this.longitude);
             } else {
-                console.error("User location is not available.");
             }
         },
     },

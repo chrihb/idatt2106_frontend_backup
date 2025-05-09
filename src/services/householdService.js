@@ -30,7 +30,6 @@ export const requestHouseholds = async () => {
 
         return response.data;
     } catch (error) {
-        console.error('Error fetching households:', error);
         return [];
     }
 };
@@ -48,7 +47,6 @@ export const joinHousehold = async (inviteCode) => {
         userStore.setCredentials({ householdId: households });
         return { success: true };
     } catch (error) {
-        console.error('Error joining household:', error);
         return { success: false };
     }
 };
@@ -68,7 +66,6 @@ export const createHousehold = async (name, lat, lon) => {
         userStore.setCredentials({ householdId: households });
         return { success: true };
     } catch (error) {
-        console.error('Error creating household:', error);
         return null;
     }
 };
@@ -83,7 +80,6 @@ export const getInviteCode = async (id) => {
         if (response.status !== 200) return null;
         return response.data;
     } catch (error) {
-        console.error('Error getting invite code:', error);
         return null;
     }
 };
@@ -108,7 +104,6 @@ export const kickUserFromHousehold = async (householdId, userId) => {
         }
         return response.data;
     } catch (error) {
-        console.error('Error kicking user:', error);
         return null;
     }
 };
@@ -125,7 +120,6 @@ export const leaveHouseholdService = async (householdId) => {
         userStore.setCredentials({ householdId: [] });
         return response.data;
     } catch (error) {
-        console.error('Error leaving household:', error);
         return null;
     }
 };
@@ -140,7 +134,6 @@ export const verifyIsAdmin = async (householdId) => {
         if (response.status !== 200) return null;
         return response.data;
     } catch (error) {
-        console.error('Error verifying admin status:', error);
         return null;
     }
 };
@@ -153,7 +146,6 @@ export const setPrimaryHousehold = async (householdId) => {
         });
         return response.status === 200;
     } catch (error) {
-        console.error('Error setting primary household:', error);
         return null;
     }
 };
@@ -166,7 +158,6 @@ export const getPrimaryHousehold = async () => {
         });
         return response.status === 200 ? response.data : null;
     } catch (error) {
-        console.error('Error fetching primary household:', error);
         return null;
     }
 };
@@ -184,7 +175,6 @@ export const updateNonUsers = async (adults, children, pets, householdId) => {
         });
         return response.status === 200 ? response.data : null;
     } catch (error) {
-        console.error('Error fetching primary household:', error);
         return null;
     }
 };

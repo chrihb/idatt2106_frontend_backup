@@ -16,9 +16,9 @@ export const useUserStore = defineStore('user', {
     }),
     actions: {
         async isAuthenticated() {
-            console.log("checking...");
+
             if (!this.token) {
-                console.log("no token");
+
                 this.authenticated = false;
                 return false;
             }
@@ -29,11 +29,6 @@ export const useUserStore = defineStore('user', {
             if (authenticated !== undefined) this.authenticated = authenticated;
             if (householdId !== undefined) this.householdId = householdId;
             if (isAdmin !== undefined) this.isAdmin = isAdmin;
-            console.log("token: ", this.token);
-            console.log("is auth: ", this.authenticated);
-            console.log("is admin: ", this.isAdmin);
-            console.log("householdId: ", this.householdId);
-            console.log(householdId)
         }
         ,
         clearToken() {
@@ -49,13 +44,11 @@ export const useUserStore = defineStore('user', {
                 const households = await requestHouseholds();
                 this.setCredentials({ householdId: households });
             } catch (error) {
-                console.error("Error fetching households:", error);
             }
         },
 
         setUserSettings(settings) {
             if (!settings) {
-                console.error("Invalid settings provided");
                 return;
             }
             this.userSettings = settings;
