@@ -262,11 +262,8 @@
     "title": "Admin Settings",
     "map": {
       "name": "Map",
-      "createNewEmergencyZone": "Create New Emergency Zone",
-      "updateEmergencyZone": "Update Emergency Zone",
-      "deleteEmergencyZone": "Delete Emergency Zone",
-      "addNewMapMarker": "Add New Map Marker",
-      "addMarkerType": "Add Marker Type"
+      "adminEmergencyZone": "Administer Emergency Zones",
+      "adminEmergencyUtilities": "Administer Emergency Utilities"
     },
     "news": {
       "name": "News",

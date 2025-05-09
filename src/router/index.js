@@ -56,7 +56,8 @@ const router = createRouter({
                     ]},
                 { path: "/admin-settings", component: AdminSettings,
                     children: [
-                        { path: "createEmergencyZone", component: UpdateEmergencyZoneView},
+                        { path: "adminEmergencyZone", component: UpdateEmergencyZoneView },
+                        { path: "adminEmergencyUtilities", component: UpdateMarkerView },
                         { path: "createNews", component: CreateNews },
                         { path: "deleteNews", component: DeleteNews },
                     ]

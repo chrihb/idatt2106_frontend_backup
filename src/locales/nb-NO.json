@@ -261,12 +261,9 @@
   "admin-settings": {
     "title": "Administrator Innstillinger",
     "map": {
-      "name": "Kart",
-      "createNewEmergencyZone": "Opprett Nytt Kriseområde",
-	  "updateEmergencyZone": "Oppdater Kriseområde",
-	  "deleteEmergencyZone": "Slett Kriseområde",
-	  "addNewMapMarker": "Legg til Nytt Kartmerke",
-	  "addMarkerType": "Legg til Kartmerke Type"
+      	"name": "Kart",
+		"adminEmergencyZone": "Administrer Kirse Soner",
+		"adminEmergencyUtilities": "Administrer Krise Tjenester"
     },
     "news": {
       "name": "Nyheter",

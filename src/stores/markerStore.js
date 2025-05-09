@@ -88,7 +88,7 @@ export const useMarkerStore = defineStore('markerStore', {
             try {
                 const service = markerService();
                 const markersStore = useMarkersStore();
-
+                console.log(marker);
                 const markerId = marker.markerId || null;
                 const markerData = {
                     name: marker.value.name,

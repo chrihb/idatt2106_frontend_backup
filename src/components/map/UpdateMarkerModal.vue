@@ -49,10 +49,9 @@ const validateData = (data) => {
 };
 
 const handleSubmit = async () => {
-  const address = await getAddress(markerData.value.lat, markerData.value.lng);
-  console.log(address);
+  const address = await getAddress(markerData.value.lat, markerData.value.lng, true);
   if (address) {
-    markerData.address = address;
+    markerData.value.address = address;
   }  else {
     console.error(t('marker.coordinatesNotFound'));
   }
@@ -65,6 +64,7 @@ const handleSubmit = async () => {
 
   try {
     formError.value = '';
+    console.log(markerData.value);
     const response = await markerStore.saveMarker(markerData.value);
     if (response.success) {
       emit('markerSaved', markerData.value);
@@ -102,6 +102,7 @@ const resetForm = () => {
     lng: null,
     description: '',
   };
+  formIncomplete.value = false;
 };
 
 const handleCancel = () => {
